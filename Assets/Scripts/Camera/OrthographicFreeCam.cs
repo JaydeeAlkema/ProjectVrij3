@@ -20,15 +20,12 @@ public class OrthographicFreeCam : MonoBehaviour
 		float finalMoveSpeed = moveSpeed;
 		inputHorizontal = Input.GetAxisRaw("Horizontal");
 		inputVertical = Input.GetAxisRaw("Vertical");
-		Vector3 input = new Vector3(inputHorizontal, inputVertical, 0f);
+		Vector3 input = new(inputHorizontal, inputVertical, 0f);
 
-		if (Input.GetKey(KeyCode.LeftShift))
-		{
-			finalMoveSpeed *= moveSpeedMultiplier;
-		}
+		if (Input.GetKey(KeyCode.LeftShift)) finalMoveSpeed *= moveSpeedMultiplier;
 
 		mainCam.orthographicSize -= Input.mouseScrollDelta.y;
 
-		transform.position += input.normalized * finalMoveSpeed * Time.deltaTime;
+		transform.position += finalMoveSpeed * Time.deltaTime * input.normalized;
 	}
 }
