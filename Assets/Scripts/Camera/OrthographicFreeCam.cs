@@ -1,21 +1,34 @@
-using NaughtyAttributes;
 using UnityEngine;
 
 public class OrthographicFreeCam : MonoBehaviour
 {
-	[SerializeField, BoxGroup("This is now a BoxGroup"), Label("This now has a label")] private float moveSpeed = 1f;
+	[SerializeField] private float moveSpeed = 1f;
+	[SerializeField] private float moveSpeedMultiplier = 2f;
 
-	public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+	private float inputHorizontal = 0f;
+	private float inputVertical = 0f;
 
-	// Start is called before the first frame update
-	void Start()
+	private Camera mainCam;
+
+	private void Awake()
 	{
-
+		mainCam = Camera.main;
 	}
 
-	// Update is called once per frame
-	void Update()
+	private void Update()
 	{
+		float finalMoveSpeed = moveSpeed;
+		inputHorizontal = Input.GetAxisRaw("Horizontal");
+		inputVertical = Input.GetAxisRaw("Vertical");
+		Vector3 input = new Vector3(inputHorizontal, inputVertical, 0f);
 
+		if (Input.GetKey(KeyCode.LeftShift))
+		{
+			finalMoveSpeed *= moveSpeedMultiplier;
+		}
+
+		mainCam.orthographicSize -= Input.mouseScrollDelta.y;
+
+		transform.position += input.normalized * finalMoveSpeed * Time.deltaTime;
 	}
 }
