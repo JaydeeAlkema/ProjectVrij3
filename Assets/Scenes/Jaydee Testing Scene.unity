@@ -168,11 +168,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  roomCount: {x: 6, y: 10}
-  roomSize: {x: 7, y: 11}
-  pathwayLength: {x: 11, y: 14}
+  roomCount: {x: 30, y: 30}
+  roomSize: {x: 10, y: 16}
+  pathwayLength: {x: 17, y: 23}
   pathwaySize: {x: 1, y: 1}
   mainLevelAssetsParent: {fileID: 1726747652}
+  occupiedRoomTileCoordinates: []
+  pathwayGizmoPlacementSpeed: 0.02
+  roomGizmoTilePlacementSpeed: 0.004
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
