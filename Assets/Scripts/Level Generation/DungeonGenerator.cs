@@ -198,7 +198,7 @@ public class DungeonGenerator : MonoBehaviour
 
 			foreach (Vector2Int occupiedRoomTileCoordinate in occupiedRoomTileCoordinates)
 			{
-				Gizmos.DrawCube(new Vector2(occupiedRoomTileCoordinate.x, occupiedRoomTileCoordinate.y), Vector2.one);
+				Gizmos.DrawWireCube(new Vector2(occupiedRoomTileCoordinate.x, occupiedRoomTileCoordinate.y), Vector2.one);
 			}
 		}
 	}
