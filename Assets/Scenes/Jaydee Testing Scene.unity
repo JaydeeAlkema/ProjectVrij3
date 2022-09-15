@@ -168,10 +168,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  roomCount: {x: 14, y: 20}
-  roomSize: {x: 9, y: 15}
-  pathwayLength: {x: 11, y: 15}
-  pathwaySize: {x: 3, y: 3}
+  roomCount: {x: 6, y: 10}
+  roomSize: {x: 7, y: 11}
+  pathwayLength: {x: 11, y: 14}
+  pathwaySize: {x: 1, y: 1}
+  mainLevelAssetsParent: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +244,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -260,7 +261,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 6
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -303,8 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e41c9c5d67b52d4bbd7945911bbff11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
-  moveSpeedMultiplier: 2
+  moveSpeed: 30
+  moveSpeedMultiplier: 3
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

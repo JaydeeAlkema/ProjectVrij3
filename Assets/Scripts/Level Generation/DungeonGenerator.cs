@@ -7,20 +7,33 @@ public class DungeonGenerator : MonoBehaviour
 {
 	[Header("Generation Configuration")]
 	[SerializeField] private int seed = 0;
-	[SerializeField, MinMaxSlider(5, 20)] private Vector2Int roomCount = new Vector2Int();
-	[SerializeField, MinMaxSlider(5, 20)] private Vector2Int roomSize = new Vector2Int();
-	[SerializeField, MinMaxSlider(5, 15)] private Vector2Int pathwayLength = new Vector2Int();
+	[SerializeField, MinMaxSlider(5, 30)] private Vector2Int roomCount = new Vector2Int();
+	[SerializeField, MinMaxSlider(5, 30)] private Vector2Int roomSize = new Vector2Int();
+	[SerializeField, MinMaxSlider(5, 30)] private Vector2Int pathwayLength = new Vector2Int();
 	[SerializeField, MinMaxSlider(1, 5)] private Vector2Int pathwaySize = new Vector2Int();
 
-	private List<Vector2> walkerPathCoordinates = new List<Vector2>();
-	private List<Vector2> walkerRoomCoordinates = new List<Vector2>();
+	[Header("References")]
+	[SerializeField] private Transform mainLevelAssetsParent = default;
+
+	[Header("Runtime Assets/References")]
+	[SerializeField] private Dictionary<GameObject, List<Vector2Int>> rooms = new Dictionary<GameObject, List<Vector2Int>>();
+
+	private List<Vector2Int> walkerPathCoordinates = new List<Vector2Int>();
+	private List<Vector2Int> walkerRoomOriginCoordinates = new List<Vector2Int>();
 
 	private void Start()
 	{
 		seed = seed == 0 ? Random.Range(0, int.MaxValue) : seed;
 
 		Random.InitState(seed);
-		StartCoroutine(GenerateLevelLayout());
+		StartCoroutine(GenerateLevel());
+	}
+
+	private IEnumerator GenerateLevel()
+	{
+		yield return StartCoroutine(GenerateLevelLayout());
+		yield return StartCoroutine(GenerateLevelRooms());
+
 	}
 
 	/// <summary>
@@ -37,7 +50,7 @@ public class DungeonGenerator : MonoBehaviour
 		// Store the previous pathway direction so we dont get overlapping pathways.
 		int previousPathwayDirection = 1;
 
-		walkerRoomCoordinates.Add(walkerGO.transform.position);
+		walkerRoomOriginCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y));
 
 		int finalRoomCount = Random.Range(roomCount.x, roomCount.y);
 		for (int r = 0; r < finalRoomCount; r++)
@@ -51,7 +64,6 @@ public class DungeonGenerator : MonoBehaviour
 			{
 				newPathwayDirection = Random.Range(1, 5);
 			}
-
 
 			// Set coordinates direction.
 			Vector3 newDirection = newPathwayDirection switch
@@ -76,14 +88,50 @@ public class DungeonGenerator : MonoBehaviour
 				walkerGO.transform.position += walkerGO.transform.right;
 				if (p == pathwayLength - 1)
 				{
-					walkerRoomCoordinates.Add(walkerGO.transform.position);
+					walkerRoomOriginCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y));
 				}
 				else
 				{
-					walkerPathCoordinates.Add(walkerGO.transform.position);
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y));
 				}
-				yield return new WaitForSeconds(0.1f);
+				yield return new WaitForSeconds(0.05f);
 			}
+		}
+	}
+
+	/// <summary>
+	/// Generates all the level rooms with each a random size.
+	/// </summary>
+	/// <returns></returns>
+	private IEnumerator GenerateLevelRooms()
+	{
+		foreach (Vector2 roomOriginCoordinate in walkerRoomOriginCoordinates)
+		{
+			int finalRoomSize = Random.Range(roomSize.x, roomSize.y);
+			GameObject roomParent = new GameObject("Room " + rooms.Count);
+			roomParent.transform.parent = mainLevelAssetsParent;
+
+			List<Vector2Int> roomTileCoordinates = new List<Vector2Int>();
+
+			// Make room uneven. Why? Because an even room does not have a center tile.
+			if (finalRoomSize % 2 == 0)
+			{
+				finalRoomSize -= 1;
+			}
+
+			// Generate the actual room tile coordinates.
+			for (int x = 0; x < finalRoomSize; x++)
+			{
+				for (int y = 0; y < finalRoomSize; y++)
+				{
+					Vector2Int tilePos = new Vector2Int((int)roomOriginCoordinate.x - (finalRoomSize / 2) + x, (int)roomOriginCoordinate.y - (finalRoomSize / 2) + y);
+					roomTileCoordinates.Add(tilePos);
+				}
+			}
+
+			// Add them all to the list for later use.
+			rooms.Add(roomParent, roomTileCoordinates);
+			yield return new WaitForSeconds(0.5f);
 		}
 	}
 
@@ -92,23 +140,23 @@ public class DungeonGenerator : MonoBehaviour
 		// Draw path
 		if (walkerPathCoordinates.Count > 0)
 		{
+			Gizmos.color = Color.white;
 			foreach (Vector2 coordinate in walkerPathCoordinates)
 			{
-				Gizmos.color = Color.white;
 				Gizmos.DrawCube(coordinate, Vector2.one);
 			}
 		}
 
 		// Draw room origin points.
-		if (walkerRoomCoordinates.Count > 0)
+		if (walkerRoomOriginCoordinates.Count > 0)
 		{
-			foreach (Vector2 coordinate in walkerRoomCoordinates)
+			foreach (Vector2 coordinate in walkerRoomOriginCoordinates)
 			{
-				if (coordinate == walkerRoomCoordinates[0])
+				if (coordinate == walkerRoomOriginCoordinates[0])
 				{
 					Gizmos.color = Color.green;
 				}
-				else if (coordinate == walkerRoomCoordinates[walkerRoomCoordinates.Count - 1])
+				else if (coordinate == walkerRoomOriginCoordinates[walkerRoomOriginCoordinates.Count - 1])
 				{
 					Gizmos.color = Color.red;
 				}
@@ -118,6 +166,19 @@ public class DungeonGenerator : MonoBehaviour
 				}
 
 				Gizmos.DrawCube(coordinate, Vector2.one);
+			}
+		}
+
+		// Draw room tiles.
+		if (rooms.Count > 0)
+		{
+			Gizmos.color = Color.grey;
+			foreach (KeyValuePair<GameObject, List<Vector2Int>> room in rooms)
+			{
+				foreach (Vector2Int roomTile in room.Value)
+				{
+					Gizmos.DrawWireCube(new Vector2(roomTile.x, roomTile.y), Vector2.one);
+				}
 			}
 		}
 	}
