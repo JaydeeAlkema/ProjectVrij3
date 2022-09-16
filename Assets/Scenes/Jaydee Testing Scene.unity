@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1197919917
-  roomCount: {x: 8, y: 14}
+  roomCount: {x: 24, y: 30}
   roomWidth: {x: 9, y: 17}
   roomHeight: {x: 9, y: 17}
   pathwayLength: {x: 18, y: 23}
@@ -181,9 +181,9 @@ MonoBehaviour:
   outerCornerWallSprites:
   - {fileID: 21300000, guid: 4fa51ec8ac209c04a9359c21651821b1, type: 3}
   mainDungeonAssetsParent: {fileID: 1726747652}
-  drawGizmos: 0
-  pathwayGizmoPlacementSpeed: 0
-  roomGizmoTilePlacementSpeed: 0
+  drawGizmos: 1
+  pathwayGizmoPlacementSpeed: 0.04
+  roomGizmoTilePlacementSpeed: 0.001
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

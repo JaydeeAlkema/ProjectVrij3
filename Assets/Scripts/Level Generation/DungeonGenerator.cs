@@ -42,7 +42,7 @@ public class DungeonGenerator : MonoBehaviour
 
 	private void Start()
 	{
-		seed = seed == 0 ? Random.Range(0, int.MaxValue) : seed;
+		if (seed == 0) { seed = Random.Range(0, int.MaxValue); }
 
 		Random.InitState(seed);
 		StartCoroutine(GenerateDungeon());
@@ -109,6 +109,14 @@ public class DungeonGenerator : MonoBehaviour
 				if (p == pathwayLength - 1)
 				{
 					walkerRoomOriginCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x - 1, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x - 2, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x + 1, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x + 2, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y - 1));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y - 2));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y + 1));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y + 2));
 				}
 				else
 				{
