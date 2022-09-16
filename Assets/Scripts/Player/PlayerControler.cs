@@ -16,7 +16,7 @@ public class PlayerControler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();   
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -24,8 +24,6 @@ public class PlayerControler : MonoBehaviour
     {
         horizontal = ( int )Input.GetAxisRaw( "Horizontal" );
         vertical = ( int )Input.GetAxisRaw( "Vertical" );
-
-        transform.position = new Vector3( transform.position.x, transform.position.y, transform.position.y );
 
         rb2d.velocity = new Vector3( horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime ).normalized * moveSpeed;
         vel = rb2d.velocity.magnitude;
