@@ -114,13 +114,19 @@ public class DungeonGenerator : MonoBehaviour
 				{
 					//TODO: Find a better way of doing this... This is very shoddy, but the end product works :P
 					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y));
-					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x - 1, (int)walkerGO.transform.position.y - 1));
-					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x + 1, (int)walkerGO.transform.position.y + 1));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x - 1, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x - 2, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x + 1, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x + 2, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y - 1));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y - 2));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y + 1));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y + 2));
 				}
 
 				if (pathwayGizmoPlacementSpeed == 0)
 				{
-					yield return null;
+					yield return new WaitForEndOfFrame();
 				}
 				else
 				{
@@ -167,7 +173,7 @@ public class DungeonGenerator : MonoBehaviour
 
 					if (roomGizmoTilePlacementSpeed == 0)
 					{
-						yield return null;
+						yield return new WaitForEndOfFrame();
 					}
 					else
 					{
@@ -189,7 +195,7 @@ public class DungeonGenerator : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator GenerateDungeonAssets()
 	{
-		// Generate all the tile objects. For now these objects are all empty.
+		// Generate all rooms. For now these objects are all empty.
 		foreach (KeyValuePair<GameObject, List<Vector2Int>> room in rooms)
 		{
 			int tileIndex = 0;
@@ -208,6 +214,29 @@ public class DungeonGenerator : MonoBehaviour
 				{
 					yield return null;
 				}
+			}
+		}
+
+		GameObject pathwayTilesParent = new GameObject("Pathway Tiles");
+		pathwayTilesParent.transform.parent = mainDungeonAssetsParent;
+		int pathwayTileIndex = 0;
+
+		// Generate all pathways. We do this last as to avoid the rooms generating ontop of the pathways.
+		// We do a simple check to see if the tile we want the pathways on is already occupied or not, if so we ignore it and move on.
+		foreach (Vector2Int pathwayTileCoordinate in walkerPathCoordinates)
+		{
+			if (!occupiedTiles.ContainsValue(pathwayTileCoordinate))
+			{
+				GameObject tileGO = new GameObject($"Tile {pathwayTileIndex}");
+				tileGO.transform.position = new Vector3(pathwayTileCoordinate.x, pathwayTileCoordinate.y, 0);
+				tileGO.transform.parent = pathwayTilesParent.transform;
+
+				occupiedTiles.Add(tileGO, pathwayTileCoordinate);
+				pathwayTileIndex++;
+			}
+			else
+			{
+				yield return null;
 			}
 		}
 
@@ -311,7 +340,6 @@ public class DungeonGenerator : MonoBehaviour
 			{
 				spriteRenderer.sprite = groundSprites[Random.Range(0, groundSprites.Count)];
 			}
-			// Walls
 			else
 			{
 				// We still check for separate directions (top, right, bottom and left) because later we might have different looking sprites for each direction.
