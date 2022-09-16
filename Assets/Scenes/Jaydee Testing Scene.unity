@@ -167,16 +167,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e817404c63c0fbc4e8711b3cd265498c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 0
-  roomCount: {x: 30, y: 30}
+  seed: 1197919917
+  roomCount: {x: 8, y: 14}
   roomWidth: {x: 9, y: 17}
   roomHeight: {x: 9, y: 17}
-  pathwayLength: {x: 15, y: 22}
-  pathwaySize: {x: 1, y: 1}
-  mainLevelAssetsParent: {fileID: 1726747652}
-  occupiedRoomTileCoordinates: []
-  pathwayGizmoPlacementSpeed: 0.02
-  roomGizmoTilePlacementSpeed: 0.003
+  pathwayLength: {x: 18, y: 23}
+  groundSprites:
+  - {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
+  wallSprites:
+  - {fileID: 21300000, guid: d6ccebcb9a2a9594f980bda944759e09, type: 3}
+  innerCornerWallSprites:
+  - {fileID: 21300000, guid: 845fef7591ce91242994bc292ab90509, type: 3}
+  outerCornerWallSprites:
+  - {fileID: 21300000, guid: 4fa51ec8ac209c04a9359c21651821b1, type: 3}
+  mainDungeonAssetsParent: {fileID: 1726747652}
+  drawGizmos: 0
+  pathwayGizmoPlacementSpeed: 0
+  roomGizmoTilePlacementSpeed: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

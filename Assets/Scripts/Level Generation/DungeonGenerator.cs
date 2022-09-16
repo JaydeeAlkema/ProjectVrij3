@@ -1,7 +1,11 @@
 using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+//TODO:
+// 1. Change algorithm in such a way that the rooms may never overlap. May result in more boring maps.
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -11,16 +15,25 @@ public class DungeonGenerator : MonoBehaviour
 	[SerializeField, MinMaxSlider(5, 30)] private Vector2Int roomWidth = new Vector2Int();
 	[SerializeField, MinMaxSlider(5, 30)] private Vector2Int roomHeight = new Vector2Int();
 	[SerializeField, MinMaxSlider(5, 30)] private Vector2Int pathwayLength = new Vector2Int();
-	[SerializeField, MinMaxSlider(1, 5)] private Vector2Int pathwaySize = new Vector2Int();
+	[Space(10)]
+
+	[Header("Generation Assets")]
+	[SerializeField] private List<Sprite> groundSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> wallSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> innerCornerWallSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> outerCornerWallSprites = new List<Sprite>();
 
 	[Header("References")]
-	[SerializeField] private Transform mainLevelAssetsParent = default;
+	[SerializeField] private Transform mainDungeonAssetsParent = default;
+	[Space(10)]
 
 	[Header("Runtime Assets/References")]
 	[SerializeField] private Dictionary<GameObject, List<Vector2Int>> rooms = new Dictionary<GameObject, List<Vector2Int>>();
-	[SerializeField] private List<Vector2Int> occupiedRoomTileCoordinates = new List<Vector2Int>();
+	[SerializeField] private Dictionary<GameObject, Vector2Int> occupiedTiles = new Dictionary<GameObject, Vector2Int>();
+	[Space(10)]
 
 	[Header("Debug Settings")]
+	[SerializeField] private bool drawGizmos = true;
 	[SerializeField, Tooltip("Default = 0.05f")] private float pathwayGizmoPlacementSpeed = 0.05f;
 	[SerializeField, Tooltip("Default = 0.01f")] private float roomGizmoTilePlacementSpeed = 0.01f;
 
@@ -32,22 +45,23 @@ public class DungeonGenerator : MonoBehaviour
 		seed = seed == 0 ? Random.Range(0, int.MaxValue) : seed;
 
 		Random.InitState(seed);
-		StartCoroutine(GenerateLevel());
+		StartCoroutine(GenerateDungeon());
 	}
 
-	private IEnumerator GenerateLevel()
+	private IEnumerator GenerateDungeon()
 	{
-		yield return StartCoroutine(GenerateLevelLayout());
-		yield return StartCoroutine(GenerateLevelRooms());
-
+		yield return StartCoroutine(GenerateDungeonLayout());
+		yield return StartCoroutine(GenerateDungeonRooms());
+		yield return StartCoroutine(GenerateDungeonAssets());
 	}
 
+	#region Dungeon Layout
 	/// <summary>
 	/// This functions generates the layout of the dungeon. This is done with the help of a "walker"
 	/// This walker will "walk" a path, everytime this walker reaches it target distance, it takes a turn and marks the tile as a room origin.
 	/// After the walker is done walking it's path, every room origin tiles will get saved and used later on in the generator to generate rooms upon.
 	/// </summary>
-	private IEnumerator GenerateLevelLayout()
+	private IEnumerator GenerateDungeonLayout()
 	{
 		// Create the walker gameobject.
 		GameObject walkerGO = new GameObject("Walker");
@@ -98,25 +112,38 @@ public class DungeonGenerator : MonoBehaviour
 				}
 				else
 				{
+					//TODO: Find a better way of doing this... This is very shoddy, but the end product works :P
 					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x, (int)walkerGO.transform.position.y));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x - 1, (int)walkerGO.transform.position.y - 1));
+					walkerPathCoordinates.Add(new Vector2Int((int)walkerGO.transform.position.x + 1, (int)walkerGO.transform.position.y + 1));
 				}
-				yield return new WaitForSeconds(pathwayGizmoPlacementSpeed);
+
+				if (pathwayGizmoPlacementSpeed == 0)
+				{
+					yield return null;
+				}
+				else
+				{
+					yield return new WaitForSeconds(pathwayGizmoPlacementSpeed);
+				}
 			}
 		}
+		walkerPathCoordinates = walkerPathCoordinates.Distinct().ToList();
 	}
 
 	/// <summary>
-	/// Generates all the level rooms with each a random size.
+	/// Generates all the Dungeon rooms with each a random size.
 	/// </summary>
 	/// <returns></returns>
-	private IEnumerator GenerateLevelRooms()
+	private IEnumerator GenerateDungeonRooms()
 	{
 		foreach (Vector2 roomOriginCoordinate in walkerRoomOriginCoordinates)
 		{
 			int finalRoomWidth = Random.Range(roomWidth.x, roomWidth.y);
 			int finalRoomHeight = Random.Range(roomHeight.x, roomHeight.y);
 			GameObject roomParent = new GameObject("Room " + rooms.Count);
-			roomParent.transform.parent = mainLevelAssetsParent;
+			roomParent.transform.position = roomOriginCoordinate;
+			roomParent.transform.parent = mainDungeonAssetsParent;
 
 			List<Vector2Int> roomTileCoordinates = new List<Vector2Int>();
 
@@ -137,11 +164,15 @@ public class DungeonGenerator : MonoBehaviour
 				{
 					Vector2Int tilePos = new Vector2Int((int)roomOriginCoordinate.x - (finalRoomWidth / 2) + x, (int)roomOriginCoordinate.y - (finalRoomHeight / 2) + y);
 					roomTileCoordinates.Add(tilePos);
-					if (!occupiedRoomTileCoordinates.Contains(tilePos))
+
+					if (roomGizmoTilePlacementSpeed == 0)
 					{
-						occupiedRoomTileCoordinates.Add(tilePos);
+						yield return null;
 					}
-					yield return new WaitForSeconds(roomGizmoTilePlacementSpeed);
+					else
+					{
+						yield return new WaitForSeconds(roomGizmoTilePlacementSpeed);
+					}
 				}
 			}
 
@@ -149,9 +180,224 @@ public class DungeonGenerator : MonoBehaviour
 			rooms.Add(roomParent, roomTileCoordinates);
 		}
 	}
+	#endregion
 
-	private void OnDrawGizmosSelected()
+	#region Dungeon Asset Placement
+	/// <summary>
+	/// Generate the actual assets for in the Dungeon. For example: Walls, Floors, Decoration, etc.
+	/// </summary>
+	/// <returns></returns>
+	private IEnumerator GenerateDungeonAssets()
 	{
+		// Generate all the tile objects. For now these objects are all empty.
+		foreach (KeyValuePair<GameObject, List<Vector2Int>> room in rooms)
+		{
+			int tileIndex = 0;
+			foreach (Vector2Int coordinate in room.Value)
+			{
+				if (!occupiedTiles.ContainsValue(coordinate))
+				{
+					GameObject tileGO = new GameObject($"Tile {tileIndex}");
+					tileGO.transform.position = new Vector3(coordinate.x, coordinate.y, 0);
+					tileGO.transform.parent = room.Key.transform;
+
+					occupiedTiles.Add(tileGO, coordinate);
+					tileIndex++;
+				}
+				else
+				{
+					yield return null;
+				}
+			}
+		}
+
+		// Loop through all the occupied tiles and get their neighbouring tiles.
+		// This is an pretty expensive operation, but very much needed.
+		foreach (KeyValuePair<GameObject, Vector2Int> occupiedTile in occupiedTiles)
+		{
+			// Tile Setup
+			GameObject tileGO = occupiedTile.Key;
+			Vector2Int tileCoordinate = occupiedTile.Value;
+
+			// All occupied tiles require atleast an SpriteRenderer.
+			tileGO.AddComponent(typeof(SpriteRenderer));
+			SpriteRenderer spriteRenderer = tileGO.GetComponent<SpriteRenderer>();
+
+			// Neighbouring tile coordinates (Clockwise, starting from the top neighbour)
+			Vector2Int topNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x, tileCoordinate.y + 1);
+			Vector2Int topRightNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x + 1, tileCoordinate.y + 1);
+			Vector2Int rightNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x + 1, tileCoordinate.y);
+			Vector2Int bottomRightNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x + 1, tileCoordinate.y - 1);
+			Vector2Int bottomNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x, tileCoordinate.y - 1);
+			Vector2Int bottomLeftNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x - 1, tileCoordinate.y - 1);
+			Vector2Int leftNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x - 1, tileCoordinate.y);
+			Vector2Int topLeftNeighbourTileCoordinate = new Vector2Int(tileCoordinate.x - 1, tileCoordinate.y + 1);
+
+			// Neighbouring tile GameObject references.
+			GameObject topNeighbourGO = null;
+			GameObject topRightNeighbourGO = null;
+			GameObject rightNeighbourGO = null;
+			GameObject bottomRightNeighbourGO = null;
+			GameObject bottomNeighbourGO = null;
+			GameObject bottomLeftNeighbourGO = null;
+			GameObject leftNeighbourGO = null;
+			GameObject topLeftNeighbourGO = null;
+
+			int neighbourCount = 0;
+			//string neighbours = "";
+
+			// Get all neighbouring tiles.
+			foreach (KeyValuePair<GameObject, Vector2Int> occupiedNeighbourTile in occupiedTiles)
+			{
+				Vector2Int neighbourTileCoordinate = occupiedNeighbourTile.Value;
+
+				// Try to fetch neighbour tiles from list (Clockwise, starting from the top)
+				if (neighbourTileCoordinate == topNeighbourTileCoordinate)
+				{
+					topNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "top - ";
+				}
+				else if (neighbourTileCoordinate == topRightNeighbourTileCoordinate)
+				{
+					topRightNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "topRight - ";
+				}
+				else if (neighbourTileCoordinate == rightNeighbourTileCoordinate)
+				{
+					rightNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "right - ";
+				}
+				else if (neighbourTileCoordinate == bottomRightNeighbourTileCoordinate)
+				{
+					bottomRightNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "bottomRight - ";
+				}
+				else if (neighbourTileCoordinate == bottomNeighbourTileCoordinate)
+				{
+					bottomNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "bottom - ";
+				}
+				else if (neighbourTileCoordinate == bottomLeftNeighbourTileCoordinate)
+				{
+					bottomLeftNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "bottomLeft - ";
+				}
+				else if (neighbourTileCoordinate == leftNeighbourTileCoordinate)
+				{
+					leftNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "left - ";
+				}
+				else if (neighbourTileCoordinate == topLeftNeighbourTileCoordinate)
+				{
+					topLeftNeighbourGO = occupiedTile.Key;
+					neighbourCount++;
+					//neighbours += "topLeft - ";
+				}
+			}
+
+			//Debug.Log(neighbourCount + " - " + neighbours, tileGO);
+
+			// Adding the actual sprites to the gameobjects.
+
+			// If the tile has 8 neighbours, it means it is surrounded, thus it can only be a ground tile.
+			if (neighbourCount == 8)
+			{
+				spriteRenderer.sprite = groundSprites[Random.Range(0, groundSprites.Count)];
+			}
+			// Walls
+			else
+			{
+				// We still check for separate directions (top, right, bottom and left) because later we might have different looking sprites for each direction.
+
+				// TOP
+				if (leftNeighbourGO && bottomNeighbourGO && rightNeighbourGO && !topNeighbourGO)
+				{
+					spriteRenderer.sprite = wallSprites[Random.Range(0, wallSprites.Count)];
+				}
+				// RIGHT
+				else if (topNeighbourGO && leftNeighbourGO && bottomNeighbourGO && !rightNeighbourGO)
+				{
+					spriteRenderer.sprite = wallSprites[Random.Range(0, wallSprites.Count)];
+				}
+				// BOTTOM
+				else if (leftNeighbourGO && topNeighbourGO && rightNeighbourGO && !bottomNeighbourGO)
+				{
+					spriteRenderer.sprite = wallSprites[Random.Range(0, wallSprites.Count)];
+				}
+				// LEFT
+				else if (topNeighbourGO && rightNeighbourGO && bottomNeighbourGO && !leftNeighbourGO)
+				{
+					spriteRenderer.sprite = wallSprites[Random.Range(0, wallSprites.Count)];
+				}
+
+				// Outer Corners
+				// TOP LEFT
+				else if (rightNeighbourGO && bottomRightNeighbourGO && bottomNeighbourGO && !leftNeighbourGO && !topLeftNeighbourGO && !topNeighbourGO)
+				{
+					spriteRenderer.sprite = innerCornerWallSprites[Random.Range(0, innerCornerWallSprites.Count)];
+				}
+				// TOP RIGHT
+				else if (leftNeighbourGO && bottomLeftNeighbourGO && bottomNeighbourGO && !topNeighbourGO && !topRightNeighbourGO && !rightNeighbourGO)
+				{
+					spriteRenderer.sprite = innerCornerWallSprites[Random.Range(0, innerCornerWallSprites.Count)];
+					spriteRenderer.flipX = true;
+				}
+				// BOTTOM RIGHT
+				else if (topNeighbourGO && topLeftNeighbourGO && leftNeighbourGO && !bottomNeighbourGO && !bottomRightNeighbourGO && !rightNeighbourGO)
+				{
+					spriteRenderer.sprite = innerCornerWallSprites[Random.Range(0, innerCornerWallSprites.Count)];
+					spriteRenderer.flipX = true;
+					spriteRenderer.flipY = true;
+				}
+				// BOTTOM LEFT
+				else if (topNeighbourGO && topRightNeighbourGO && rightNeighbourGO && !leftNeighbourGO && !bottomLeftNeighbourGO && !bottomNeighbourGO)
+				{
+					spriteRenderer.sprite = innerCornerWallSprites[Random.Range(0, innerCornerWallSprites.Count)];
+					spriteRenderer.flipY = true;
+				}
+
+				// Inner Corners
+				// TOP LEFT
+				else if (topNeighbourGO && topRightNeighbourGO && rightNeighbourGO && bottomRightNeighbourGO && bottomNeighbourGO && bottomLeftNeighbourGO && leftNeighbourGO && !topLeftNeighbourGO)
+				{
+					spriteRenderer.sprite = outerCornerWallSprites[Random.Range(0, outerCornerWallSprites.Count)];
+					spriteRenderer.flipX = true;
+					spriteRenderer.flipY = true;
+				}
+				// TOP RIGHT
+				else if (rightNeighbourGO && bottomRightNeighbourGO && bottomNeighbourGO && bottomLeftNeighbourGO && leftNeighbourGO && topLeftNeighbourGO && topNeighbourGO && !topRightNeighbourGO)
+				{
+					spriteRenderer.sprite = outerCornerWallSprites[Random.Range(0, outerCornerWallSprites.Count)];
+					spriteRenderer.flipY = true;
+				}
+				// BOTTOM RIGHT
+				else if (bottomNeighbourGO && bottomLeftNeighbourGO && leftNeighbourGO && topLeftNeighbourGO && topNeighbourGO && topRightNeighbourGO && rightNeighbourGO && !bottomRightNeighbourGO)
+				{
+					spriteRenderer.sprite = outerCornerWallSprites[Random.Range(0, outerCornerWallSprites.Count)];
+				}
+				// BOTTOM LEFT
+				else if (leftNeighbourGO && topLeftNeighbourGO && topNeighbourGO && topRightNeighbourGO && rightNeighbourGO && bottomRightNeighbourGO && bottomNeighbourGO && !bottomLeftNeighbourGO)
+				{
+					spriteRenderer.sprite = outerCornerWallSprites[Random.Range(0, outerCornerWallSprites.Count)];
+					spriteRenderer.flipX = true;
+				}
+			}
+		}
+		yield return null;
+	}
+	#endregion
+
+	private void OnDrawGizmos()
+	{
+		if (drawGizmos == false) return;
+
 		// Draw path
 		if (walkerPathCoordinates.Count > 0)
 		{
@@ -185,21 +431,21 @@ public class DungeonGenerator : MonoBehaviour
 		}
 
 		// Draw room tiles.
-		if (occupiedRoomTileCoordinates.Count > 0)
+		if (rooms.Count > 0)
 		{
 			Gizmos.color = Color.grey;
-			//foreach (KeyValuePair<GameObject, List<Vector2Int>> room in rooms)
-			//{
-			//	foreach (Vector2Int roomTile in room.Value)
-			//	{
-			//		Gizmos.DrawWireCube(new Vector2(roomTile.x, roomTile.y), Vector2.one);
-			//	}
-			//}
-
-			foreach (Vector2Int occupiedRoomTileCoordinate in occupiedRoomTileCoordinates)
+			foreach (KeyValuePair<GameObject, List<Vector2Int>> room in rooms)
 			{
-				Gizmos.DrawWireCube(new Vector2(occupiedRoomTileCoordinate.x, occupiedRoomTileCoordinate.y), Vector2.one);
+				foreach (Vector2Int roomTile in room.Value)
+				{
+					Gizmos.DrawWireCube(new Vector2(roomTile.x, roomTile.y), Vector2.one);
+				}
 			}
+
+			//foreach (Vector2Int occupiedRoomTileCoordinate in occupiedRoomTileCoordinates)
+			//{
+			//	Gizmos.DrawWireCube(new Vector2(occupiedRoomTileCoordinate.x, occupiedRoomTileCoordinate.y), Vector2.one);
+			//}
 		}
 	}
 }
