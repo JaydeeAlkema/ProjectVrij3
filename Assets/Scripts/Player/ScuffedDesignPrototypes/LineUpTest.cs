@@ -14,39 +14,27 @@ public class LineUpTest : MonoBehaviour
 	public GameObject hands;
 	public float angle;
 	public Vector2 boxSize = new Vector2(4, 6);
+	public float circleSize = 3f;
 	public Vector2 lookDir;
 	public LayerMask layerMask;
-	void Start()
-	{
-
-	}
-
 
 	void Update()
 	{
 
 		MouseLook();
 		Debug.DrawRay(player.position, lookDir, Color.magenta);
-		if (Input.GetKeyDown(KeyCode.Space))
+
+		if (Input.GetKeyDown(KeyCode.E))
 		{
-			Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll(player.transform.position + hands.transform.up * 3, boxSize, angle, layerMask);
-			Debug.Log("Enemies: " + enemiesInBox.Length);
+			LineUp();
+		}
 
-			foreach (Collider2D enemy in enemiesInBox)
-			{
-				Vector3 abNormal = lookDir.normalized;
-				Vector3 enemyVec = enemy.transform.position - player.transform.position;
-
-				float dotP = Vector2.Dot(enemyVec, abNormal);
-
-				newPoint = player.transform.position + (abNormal * dotP);
-				enemy.GetComponent<ICrowdControllable>()?.Pull(newPoint);
-			}
-
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			BlackHole();
 		}
 
 	}
-
 	public void MouseLook()
 	{
 		mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -55,10 +43,44 @@ public class LineUpTest : MonoBehaviour
 		hands.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 	}
 
+	public void LineUp()
+	{
+		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll(player.transform.position + hands.transform.up * 3, boxSize, angle, layerMask);
+		Debug.Log("Enemies: " + enemiesInBox.Length);
+
+		foreach (Collider2D enemy in enemiesInBox)
+		{
+			Vector3 abNormal = lookDir.normalized;
+			Vector3 enemyVec = enemy.transform.position - player.transform.position;
+
+			float dotP = Vector2.Dot(enemyVec, abNormal);
+
+			newPoint = player.transform.position + (abNormal * dotP);
+			enemy.GetComponent<ICrowdControllable>()?.Pull(newPoint);
+		}
+	}
+
+	public void BlackHole()
+	{
+		Vector2 circlePos = player.transform.position + hands.transform.up * 5;
+		Collider2D[] enemiesInCircle = Physics2D.OverlapCircleAll(circlePos, circleSize, layerMask);
+		Debug.Log("Enemies: " + enemiesInCircle.Length);
+
+		foreach (Collider2D enemy in enemiesInCircle)
+		{
+			newPoint = circlePos;
+			enemy.GetComponent<ICrowdControllable>()?.Pull(newPoint);
+		}
+
+	}
+
 	public void OnDrawGizmos()
 	{
 		Gizmos.color = Color.blue;
 		Gizmos.matrix = Matrix4x4.TRS(player.transform.position + hands.transform.up * 3, hands.transform.rotation, boxSize);
 		Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+		Gizmos.color = Color.red;
+		Gizmos.matrix = Matrix4x4.TRS(player.transform.position + hands.transform.up * 5, hands.transform.rotation, new Vector3(circleSize, circleSize, 0));
+		Gizmos.DrawWireSphere(Vector3.zero, 1);
 	}
 }
