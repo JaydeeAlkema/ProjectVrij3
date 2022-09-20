@@ -167,9 +167,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e42f3fb90bde74e9f5eb3aa764b35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seed: 0
   chunkSize: 50
-  chunkGridSize: {x: 10, y: 10}
+  chunkGridSize: {x: 5, y: 5}
   chunks: []
+  path: []
   levelAssetsParent: {fileID: 1726747652}
 --- !u!1 &264922598
 GameObject:
