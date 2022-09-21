@@ -73,16 +73,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator CreatePath()
 	{
-		Chunk currentChunk = chunks[(chunks.Count / 2) - 1];
+		Chunk currentChunk = chunks[chunks.FindIndex(GetChunkByCoordinates(new Vector2Int(chunks[chunks.Count].Coordinates.x / 2, chunks[chunks.Count].Coordinates.y / 2)))];
 		currentChunk.Occupied = true;
 
-		int triesFailsafe = 1000;
-		int tries = 0;
+		path.Add(currentChunk);
 
-		while (path.Count != chunks.Count && tries < triesFailsafe)
+		while (true)
 		{
-			tries++;
-
 			List<Chunk> neighbours = GetNeighbouringChunks(currentChunk.Coordinates);
 
 			if (neighbours.Count > 0)
@@ -90,16 +87,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 				int randNeighbour = Random.Range(0, neighbours.Count);
 				Chunk nextChunk = neighbours[randNeighbour];
 
-				if (nextChunk.gameObject != null && nextChunk.Coordinates != Vector2Int.zero && nextChunk.Occupied == false)
-				{
-					nextChunk.Occupied = true;
-					path.Add(nextChunk);
-					currentChunk = nextChunk;
-				}
+				nextChunk.Occupied = true;
+				path.Add(nextChunk);
+				currentChunk = nextChunk;
 			}
 			else
 			{
-				tries = triesFailsafe;
+				break;
 			}
 		}
 
