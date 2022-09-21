@@ -22,7 +22,7 @@ public class PlayerControler : MonoBehaviour
     private Vector2 boxSize = new Vector2( 4, 6 );
     [SerializeField]
     private float circleSize = 3f;
-
+    [SerializeField]
     private Rigidbody2D rb2d = default;
     
     // Start is called before the first frame update
