@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,10 +10,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[Header("Level Generation Settings")]
 	[SerializeField] private int seed;
 	[SerializeField] private int chunkSize = 20;
-	[SerializeField] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
+	[SerializeField, InfoBox("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
+	[SerializeField] private List<GameObject> roomPrefabs = new List<GameObject>();
 	[Space]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
+	[SerializeField] private List<GameObject> rooms = new List<GameObject>();
 	[Space(10)]
 
 	[Header("References")]
@@ -37,6 +40,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		yield return StartCoroutine(CreateChunks());
 		yield return StartCoroutine(CreatePath());
+		yield return StartCoroutine(CreateEmptyRooms());
 
 		executionTime.Stop();
 		Debug.Log($"Level Generation took: {executionTime.ElapsedMilliseconds}ms");
@@ -48,6 +52,18 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator CreateChunks()
 	{
+		if (chunkGridSize.x < 3) chunkGridSize.x = 3;
+		if (chunkGridSize.y < 3) chunkGridSize.y = 3;
+
+		if (chunkGridSize.x > 19) chunkGridSize.x = 19;
+		if (chunkGridSize.y > 19) chunkGridSize.y = 19;
+
+		// The grid size may NEVER be divisible by 2, this will cause an even grid without a center chunk... We must always have a center chunk!
+		if (chunkGridSize.x % 2 == 0) chunkGridSize.x -= 1;
+		if (chunkGridSize.y % 2 == 0) chunkGridSize.y -= 1;
+
+
+
 		for (int x = 0; x < chunkGridSize.x; x++)
 		{
 			for (int y = 0; y < chunkGridSize.y; y++)
@@ -73,7 +89,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator CreatePath()
 	{
-		Chunk currentChunk = chunks[chunks.FindIndex(GetChunkByCoordinates(new Vector2Int(chunks[chunks.Count].Coordinates.x / 2, chunks[chunks.Count].Coordinates.y / 2)))];
+		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
+		Chunk currentChunk = GetChunkByCoordinates(middleChunkCoordinates);
 		currentChunk.Occupied = true;
 
 		path.Add(currentChunk);
@@ -100,6 +117,28 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 	}
 
+	private IEnumerator CreateEmptyRooms()
+	{
+		foreach (Chunk chunk in path)
+		{
+			GameObject randRoomPrefab = roomPrefabs[Random.Range(0, roomPrefabs.Count)];
+			Vector2Int randRoomCoordinates = new Vector2Int(Random.Range(chunk.Coordinates.x - (chunkSize / 2), chunk.Coordinates.x + (chunkSize / 2)), Random.Range(chunk.Coordinates.y - (chunkSize / 2), chunk.Coordinates.y + (chunkSize / 2)));
+
+			int tempRoomSize = 20;
+
+			if (randRoomCoordinates.x + tempRoomSize >= chunk.Coordinates.x + chunkSize / 2) randRoomCoordinates.x -= 20;
+			if (randRoomCoordinates.x - tempRoomSize <= chunk.Coordinates.x - chunkSize / 2) randRoomCoordinates.x += 20;
+			if (randRoomCoordinates.y + tempRoomSize >= chunk.Coordinates.y + chunkSize / 2) randRoomCoordinates.y -= 20;
+			if (randRoomCoordinates.y - tempRoomSize <= chunk.Coordinates.y - chunkSize / 2) randRoomCoordinates.y += 20;
+
+			GameObject newRoomGO = Instantiate(randRoomPrefab, new Vector2(randRoomCoordinates.x, randRoomCoordinates.y), Quaternion.identity);
+			rooms.Add(newRoomGO);
+		}
+
+		yield return new WaitForEndOfFrame();
+	}
+
+	#region Helpers
 	/// <summary>
 	/// Get a random chunk.
 	/// </summary>
@@ -142,6 +181,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 		return null;
 	}
+	#endregion
 
 	private void OnDrawGizmosSelected()
 	{
