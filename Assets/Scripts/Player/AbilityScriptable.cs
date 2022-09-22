@@ -26,14 +26,29 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField]
 	private LayerMask layerMask;
 
-	private void DealDamage(GameObject target)
+	private Vector3 mousePos = default;
+	private float angle = default;
+	[SerializeField]
+	private Camera cam = default;
+	private Vector2 lookDir = default;
+	[SerializeField]
+	private Rigidbody2D rb2d = default;
+	[SerializeField]
+	private Transform castFromPoint = default;
+	[SerializeField]
+	private Ability ability;
+
+	public void CastAbility()
 	{
-		//target.hp -- damage;
+		ability.AbilityBehavior();
 	}
 
-	private void Move(float dis, Vector3 dir, float spd)
+	void MouseLook()
 	{
-		//this.rb2d.velocity += movement;
+		mousePos = cam.ScreenToWorldPoint( Input.mousePosition );
+		lookDir = mousePos - rb2d.transform.position;
+		angle = Mathf.Atan2( lookDir.y, lookDir.x ) * Mathf.Rad2Deg - 90f;
+		castFromPoint.transform.rotation = Quaternion.Euler( 0f, 0f, angle );
 	}
 
 	public void LineUp(Rigidbody2D player, Transform castFromPoint, float angle, Vector2 lookDir)

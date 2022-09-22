@@ -24,6 +24,9 @@ public class PlayerControler : MonoBehaviour
     private float circleSize = 3f;
     [SerializeField]
     private Rigidbody2D rb2d = default;
+
+    [SerializeField]
+    AbilityScriptable meleeAttack;
     
     // Start is called before the first frame update
     void Start()
@@ -43,9 +46,11 @@ public class PlayerControler : MonoBehaviour
         MouseLook();
         Debug.DrawRay( rb2d.position, lookDir, Color.magenta );
 
+        MeleeAttack();
+
     }
 
-    public void MouseLook()
+    void MouseLook()
     {
         mousePos = cam.ScreenToWorldPoint( Input.mousePosition );
         lookDir = mousePos - rb2d.transform.position;
@@ -53,7 +58,7 @@ public class PlayerControler : MonoBehaviour
         castFromPoint.transform.rotation = Quaternion.Euler( 0f, 0f, angle );
     }
 
-    public void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.matrix = Matrix4x4.TRS( rb2d.transform.position + castFromPoint.transform.up * 3, castFromPoint.transform.rotation, boxSize );
@@ -63,4 +68,11 @@ public class PlayerControler : MonoBehaviour
         Gizmos.DrawWireSphere( Vector3.zero, 1 );
     }
 
+    void MeleeAttack()
+    {
+        if(Input.GetMouseButtonDown( 1 ))
+        {
+            //meleeAttack;
+		}
+	}
 }
