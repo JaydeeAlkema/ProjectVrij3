@@ -5,17 +5,25 @@ using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
+public enum RoomType
+{
+	Generic,
+	Treassure,
+	Boss,
+	Spawn
+}
+
 public class LevelGeneratorV2 : MonoBehaviour
 {
 	[Header("Level Generation Settings")]
 	[SerializeField] private int seed;
 	[SerializeField] private int chunkSize = 20;
 	[SerializeField, InfoBox("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
-	[SerializeField] private List<GameObject> roomPrefabs = new List<GameObject>();
+	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[Space]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
-	[SerializeField] private List<GameObject> rooms = new List<GameObject>();
+	[SerializeField] private List<Room> rooms = new List<Room>();
 	[Space(10)]
 
 	[Header("References")]
@@ -119,9 +127,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	private IEnumerator CreateEmptyRooms()
 	{
+		// Spawn the rooms within the chunk borders.
 		foreach (Chunk chunk in path)
 		{
-			GameObject randRoomPrefab = roomPrefabs[Random.Range(0, roomPrefabs.Count)];
+			ScriptableRoom randRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
 			Vector2Int randRoomCoordinates = new Vector2Int(Random.Range(chunk.Coordinates.x - (chunkSize / 2), chunk.Coordinates.x + (chunkSize / 2)), Random.Range(chunk.Coordinates.y - (chunkSize / 2), chunk.Coordinates.y + (chunkSize / 2)));
 
 			int tempRoomSize = 20;
@@ -131,8 +140,21 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (randRoomCoordinates.y + tempRoomSize >= chunk.Coordinates.y + chunkSize / 2) randRoomCoordinates.y -= 20;
 			if (randRoomCoordinates.y - tempRoomSize <= chunk.Coordinates.y - chunkSize / 2) randRoomCoordinates.y += 20;
 
-			GameObject newRoomGO = Instantiate(randRoomPrefab, new Vector2(randRoomCoordinates.x, randRoomCoordinates.y), Quaternion.identity);
-			rooms.Add(newRoomGO);
+			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(randRoomCoordinates.x, randRoomCoordinates.y), Quaternion.identity, levelAssetsParent);
+			Room room = newRoomGO.GetComponent<Room>();
+			chunk.Room = room;
+
+			rooms.Add(room);
+		}
+
+		// Assign connected rooms for each room.
+		int roomIndex = 0;
+		foreach (Room room in rooms)
+		{
+			if (roomIndex - 1 >= 0 && path[roomIndex - 1].Room != null) room.AddConnectedRoom(path[roomIndex - 1].Room);
+			if (roomIndex + 1 < path.Count && path[roomIndex + 1].Room != null) room.AddConnectedRoom(path[roomIndex + 1].Room);
+
+			roomIndex++;
 		}
 
 		yield return new WaitForEndOfFrame();
@@ -183,7 +205,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	}
 	#endregion
 
-	private void OnDrawGizmosSelected()
+	private void OnDrawGizmos()
 	{
 		if (chunks.Count > 0)
 		{
@@ -211,7 +233,9 @@ public class Chunk : MonoBehaviour
 {
 	[SerializeField] private Vector2Int coordinates = new Vector2Int();
 	[SerializeField] private bool occupied = false;
+	[SerializeField] private Room room;
 
 	public Vector2Int Coordinates { get => coordinates; set => coordinates = value; }
 	public bool Occupied { get => occupied; set => occupied = value; }
+	public Room Room { get => room; set => room = value; }
 }
