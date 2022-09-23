@@ -6,7 +6,7 @@ public class CastTestScuffed : MonoBehaviour
 {
 	public GameObject projectilePrefab;
 	public Transform castFromPoint;
-	public float projectileLifeSpan = 1f;
+	public float projectileLifeSpan = 10f;
 	public float projectileForce = 30f;
 
 	void Start()
