@@ -17,7 +17,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 {
 	[Header("Level Generation Settings")]
 	[SerializeField] private int seed;
-	[SerializeField] private int chunkSize = 20;
+	[SerializeField] private int chunkSize = 35;
+	[SerializeField] private int tempRoomSize = 20;
+	[SerializeField] private int extraPadding = 2;
 	[SerializeField, InfoBox("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[Space]
@@ -47,8 +49,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 		executionTime.Start();
 
 		yield return StartCoroutine(CreateChunks());
-		yield return StartCoroutine(CreatePath());
+		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
+		yield return StartCoroutine(ConnectEmptyRooms());
 
 		executionTime.Stop();
 		Debug.Log($"Level Generation took: {executionTime.ElapsedMilliseconds}ms");
@@ -95,7 +98,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// Create a path through the chunks, these chunks that are in the path will be used later to spawn rooms in.
 	/// </summary>
 	/// <returns></returns>
-	private IEnumerator CreatePath()
+	private IEnumerator CreatePathThroughChunks()
 	{
 		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
 		Chunk currentChunk = GetChunkByCoordinates(middleChunkCoordinates);
@@ -125,22 +128,25 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 	}
 
+	/// <summary>
+	/// Instantiate empty tooms within the borders of the chunks and setup the rooms for later use.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator CreateEmptyRooms()
 	{
 		// Spawn the rooms within the chunk borders.
 		foreach (Chunk chunk in path)
 		{
 			ScriptableRoom randRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
-			Vector2Int randRoomCoordinates = new Vector2Int(Random.Range(chunk.Coordinates.x - (chunkSize / 2), chunk.Coordinates.x + (chunkSize / 2)), Random.Range(chunk.Coordinates.y - (chunkSize / 2), chunk.Coordinates.y + (chunkSize / 2)));
 
-			int tempRoomSize = 20;
+			int chunkSizeHalf = (chunkSize / 2);
+			int tempRoomsizeHalf = tempRoomSize / 2;
 
-			if (randRoomCoordinates.x + tempRoomSize >= chunk.Coordinates.x + chunkSize / 2) randRoomCoordinates.x -= 20;
-			if (randRoomCoordinates.x - tempRoomSize <= chunk.Coordinates.x - chunkSize / 2) randRoomCoordinates.x += 20;
-			if (randRoomCoordinates.y + tempRoomSize >= chunk.Coordinates.y + chunkSize / 2) randRoomCoordinates.y -= 20;
-			if (randRoomCoordinates.y - tempRoomSize <= chunk.Coordinates.y - chunkSize / 2) randRoomCoordinates.y += 20;
+			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + tempRoomsizeHalf + extraPadding, chunk.Coordinates.x + chunkSizeHalf - tempRoomsizeHalf - extraPadding);
+			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + tempRoomsizeHalf + extraPadding, chunk.Coordinates.y + chunkSizeHalf - tempRoomsizeHalf - extraPadding);
 
-			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(randRoomCoordinates.x, randRoomCoordinates.y), Quaternion.identity, levelAssetsParent);
+			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(randX, randY), Quaternion.identity, levelAssetsParent);
+			newRoomGO.name = $"Room [{rooms.Count + 1}]";
 			Room room = newRoomGO.GetComponent<Room>();
 			chunk.Room = room;
 
@@ -155,6 +161,45 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (roomIndex + 1 < path.Count && path[roomIndex + 1].Room != null) room.AddConnectedRoom(path[roomIndex + 1].Room);
 
 			roomIndex++;
+		}
+
+		yield return new WaitForEndOfFrame();
+	}
+
+	private IEnumerator ConnectEmptyRooms()
+	{
+		for (int r = 0; r < rooms.Count; r++)
+		{
+			Room room = rooms[r];
+			Room roomToConnectTo = room.ConnectedRooms[room.ConnectedRooms.Count - 1];
+			GameObject pathwayStartPoint = null;
+			GameObject pathwayEndPoint = null;
+			//Debug.Log($"Connecting {room.name} to {roomToConnectTo.name}");
+
+			// Get nearest pathwayConnectionPoint from own room to the room to connect to.
+			float nearestDistance = Mathf.Infinity;
+			foreach (GameObject pathwayConnectionPoint in room.PathwayEntries)
+			{
+				float distance = Vector2.Distance(roomToConnectTo.transform.position, pathwayConnectionPoint.transform.position);
+				if (distance < nearestDistance)
+				{
+					nearestDistance = distance;
+					pathwayStartPoint = pathwayConnectionPoint;
+				}
+			}
+
+			// Now we do the same, but from the connecting room to our own.
+			nearestDistance = Mathf.Infinity;
+			foreach (GameObject pathwayConnectionPoint in roomToConnectTo.PathwayEntries)
+			{
+				float distance = Vector2.Distance(room.transform.position, pathwayConnectionPoint.transform.position);
+				if (distance < nearestDistance)
+				{
+					nearestDistance = distance;
+					pathwayEndPoint = pathwayConnectionPoint;
+				}
+			}
+			Debug.Log($"Connecting {pathwayStartPoint.name} to {pathwayEndPoint.name}");
 		}
 
 		yield return new WaitForEndOfFrame();

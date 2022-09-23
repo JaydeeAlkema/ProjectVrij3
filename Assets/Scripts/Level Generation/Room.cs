@@ -10,6 +10,9 @@ public class Room : MonoBehaviour
 	[Space]
 	[SerializeField, ReadOnly] private List<Room> connectedRooms = new List<Room>();
 
+	public List<GameObject> PathwayEntries { get => pathwayEntries; set => pathwayEntries = value; }
+	public List<Room> ConnectedRooms { get => connectedRooms; set => connectedRooms = value; }
+
 	public void TogglePathwayEntry(int index, bool toggle)
 	{
 		pathwayEntries[index].gameObject.SetActive(toggle);
