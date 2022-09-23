@@ -25,9 +25,19 @@ public class PlayerControler : MonoBehaviour
     [SerializeField]
     private Rigidbody2D rb2d = default;
 
-    [SerializeField]
+    [Header("Abilities")]
+	#region ability fields
+	[SerializeField]
     private AbilityScriptable meleeAttack;
-
+    [SerializeField]
+    private AbilityScriptable rangedAttack;
+    [SerializeField]
+    private AbilityScriptable ability1;
+    [SerializeField]
+    private AbilityScriptable ability2;
+    [SerializeField]
+    private AbilityScriptable ability3;
+	#endregion
 
 
 	// Start is called before the first frame update
@@ -49,7 +59,11 @@ public class PlayerControler : MonoBehaviour
         MouseLook();
         Debug.DrawRay( rb2d.position, lookDir, Color.magenta );
 
-        MeleeAttack();
+        if(Input.GetMouseButtonDown(0)) MeleeAttack();
+        if( Input.GetMouseButtonDown( 1 ) ) RangedAttack();
+        if( Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
+        if( Input.GetKeyDown( KeyCode.E ) ) AbilityTwoAttack();
+        if( Input.GetKeyDown( KeyCode.R ) ) AbilityThreeAttack();
     }
 
 	void MouseLook()
@@ -72,12 +86,30 @@ public class PlayerControler : MonoBehaviour
 
     void MeleeAttack()
     {
-        if(Input.GetMouseButtonDown( 0 ))
-        {
-            meleeAttack.Ability.SetScriptable( meleeAttack );
-            meleeAttack.Ability.AbilityBehavior();
-		}
+        meleeAttack.Ability.SetScriptable( meleeAttack );
+        meleeAttack.Ability.AbilityBehavior();
 	}
+
+    void RangedAttack()
+    {
+        rangedAttack.Ability.SetScriptable( rangedAttack );
+        rangedAttack.Ability.AbilityBehavior();
+	}
+
+    void AbilityOneAttack()
+    {
+
+	}
+
+    void AbilityTwoAttack()
+    {
+
+    }
+
+    void AbilityThreeAttack()
+    {
+
+    }
 
     void CheckAbilityUpdate()
     {
