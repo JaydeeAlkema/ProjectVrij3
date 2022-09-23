@@ -11,7 +11,6 @@ public class EnemyDummy : MonoBehaviour, IDamageable
 
 	public void Update()
 	{
-        Hp -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine( FlashColor() );
 		foreach (IStatusEffect statusEffect in statusEffects)
