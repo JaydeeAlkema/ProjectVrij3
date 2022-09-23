@@ -21,8 +21,19 @@ public class LineUpAbility : Ability
 		}
 	}
 
-	public void SetAbilityStats(Rigidbody2D AbilityRB2D)
+	public void SetAbilityStats(Rigidbody2D AbilityRB2D, Transform CastFromPoint, Vector2 BoxSize, Vector2 LookDir, float Angle, LayerMask layer)
 	{
 		rb2d = AbilityRB2D;
+		castFromPoint = CastFromPoint;
+		boxSize = BoxSize;
+		angle = Angle;
+		layerMask = layer;
+		lookDir = LookDir;
+	}
+
+	public override void SetScriptable( AbilityScriptable scriptable )
+	{
+		abilityScriptable = scriptable;
+		SetAbilityStats(scriptable.Rb2d, scriptable.CastFromPoint, scriptable.BoxSize, scriptable.LookDir, scriptable.Angle, scriptable.Layer);
 	}
 }

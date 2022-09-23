@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
   m_Name: Random Ability
   m_EditorClassIdentifier: 
-  damaging: 0
-  moving: 0
   coolDown: 0
   damage: 0
-  shape: {fileID: 7150330352552761257, guid: 96839f4b569a4f2408320b0b1c6f6c11, type: 3}
   distance: 0
+  boxSize: {x: 4, y: 6}
+  circleSize: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rb2d: {fileID: 0}
+  ability: {fileID: -4561911951927855742, guid: 0cbdc48ea9e51234eac8f4344f6758ab, type: 3}

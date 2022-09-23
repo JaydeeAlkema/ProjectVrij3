@@ -7,65 +7,48 @@ using UnityEngine;
 public class AbilityScriptable : ScriptableObject
 {
 	[SerializeField]
-	private bool damaging = false;
-	[SerializeField]
-	private bool moving = false;
-
-	[SerializeField]
 	private float coolDown = 0f;
+	public float CoolDown { get => coolDown; set => coolDown = value; }
 	[SerializeField]
 	private float damage = 0f;
-	[SerializeField]
-	private EdgeCollider2D shape;
+	public float Damage { get => damage; set => damage = value; }
 	[SerializeField]
 	private float distance = 0f;
+	public float Distance { get => distance; set => distance = value; }
 	[SerializeField]
 	private Vector2 boxSize = new Vector2( 4, 6 );
+	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
 	[SerializeField]
 	private float circleSize = 0f;
+	public float CircleSize { get => circleSize; set => circleSize = value; }
 	[SerializeField]
 	private LayerMask layerMask;
+	public LayerMask Layer { get => layerMask; set => layerMask = value; }
 
-	private Vector3 mousePos = default;
 	private float angle = default;
+	public float Angle { get => angle; set => angle = value; }
 	[SerializeField]
 	private Camera cam = default;
+	public Camera Cam { get => cam; set => cam = value; }
 	private Vector2 lookDir = default;
+	public Vector2 LookDir { get => lookDir; set => lookDir = value; }
 	[SerializeField]
 	private Rigidbody2D rb2d = default;
+	public Rigidbody2D Rb2d { get => rb2d; set => rb2d = value; }
 	[SerializeField]
 	private Transform castFromPoint = default;
+	public Transform CastFromPoint { get => castFromPoint; set => castFromPoint = value; }
+	private Vector3 mousePos = default;
+	public Vector3 MousePos { get => mousePos; set => mousePos = value; }
 	[SerializeField]
 	private Ability ability;
 
-	public void CastAbility()
+	public Ability Ability { get => ability; set => ability =  value ; }
+
+
+	private void OnEnable()
 	{
-		ability.AbilityBehavior();
-	}
-
-	void MouseLook()
-	{
-		mousePos = cam.ScreenToWorldPoint( Input.mousePosition );
-		lookDir = mousePos - rb2d.transform.position;
-		angle = Mathf.Atan2( lookDir.y, lookDir.x ) * Mathf.Rad2Deg - 90f;
-		castFromPoint.transform.rotation = Quaternion.Euler( 0f, 0f, angle );
-	}
-
-	public void LineUp(Rigidbody2D player, Transform castFromPoint, float angle, Vector2 lookDir)
-	{
-		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( player.transform.position + castFromPoint.transform.up * 3, boxSize, angle, layerMask );
-		Debug.Log( "Enemies: " + enemiesInBox.Length );
-
-		foreach( Collider2D enemy in enemiesInBox )
-		{
-			Vector3 abNormal = lookDir.normalized;
-			Vector3 enemyVec = enemy.transform.position - player.transform.position;
-
-			float dotP = Vector2.Dot( enemyVec, abNormal );
-
-			Vector3 newPoint = player.transform.position + ( abNormal * dotP );
-			enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
-		}
+		cam = Camera.main;
 	}
 
 	public void BlackHole( Rigidbody2D player, Transform castFromPoint, float angle, Vector2 lookDir )

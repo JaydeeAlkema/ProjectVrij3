@@ -13,8 +13,8 @@ public class PlayerControler : MonoBehaviour
 
     private Vector3 mousePos;
     private float angle;
-    [SerializeField]
-    private Camera cam;
+    //[SerializeField]
+    //private Camera cam;
     private Vector2 lookDir;
     [SerializeField]
     private Transform castFromPoint;
@@ -26,10 +26,12 @@ public class PlayerControler : MonoBehaviour
     private Rigidbody2D rb2d = default;
 
     [SerializeField]
-    AbilityScriptable meleeAttack;
-    
-    // Start is called before the first frame update
-    void Start()
+    private AbilityScriptable meleeAttack;
+
+
+
+	// Start is called before the first frame update
+	void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
     }
@@ -37,6 +39,7 @@ public class PlayerControler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckAbilityUpdate();
         horizontal = ( int )Input.GetAxisRaw( "Horizontal" );
         vertical = ( int )Input.GetAxisRaw( "Vertical" );
 
@@ -47,18 +50,17 @@ public class PlayerControler : MonoBehaviour
         Debug.DrawRay( rb2d.position, lookDir, Color.magenta );
 
         MeleeAttack();
-
     }
 
-    void MouseLook()
-    {
-        mousePos = cam.ScreenToWorldPoint( Input.mousePosition );
-        lookDir = mousePos - rb2d.transform.position;
-        angle = Mathf.Atan2( lookDir.y, lookDir.x ) * Mathf.Rad2Deg - 90f;
-        castFromPoint.transform.rotation = Quaternion.Euler( 0f, 0f, angle );
-    }
+	void MouseLook()
+	{
+		mousePos = Camera.main.ScreenToWorldPoint( Input.mousePosition );
+		lookDir = mousePos - rb2d.transform.position;
+		angle = Mathf.Atan2( lookDir.y, lookDir.x ) * Mathf.Rad2Deg - 90f;
+		castFromPoint.transform.rotation = Quaternion.Euler( 0f, 0f, angle );
+	}
 
-    void OnDrawGizmos()
+	void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.matrix = Matrix4x4.TRS( rb2d.transform.position + castFromPoint.transform.up * 3, castFromPoint.transform.rotation, boxSize );
@@ -70,9 +72,20 @@ public class PlayerControler : MonoBehaviour
 
     void MeleeAttack()
     {
-        if(Input.GetMouseButtonDown( 1 ))
+        if(Input.GetMouseButtonDown( 0 ))
         {
-            //meleeAttack;
+            meleeAttack.Ability.SetScriptable( meleeAttack );
+            meleeAttack.Ability.AbilityBehavior();
 		}
 	}
+
+    void CheckAbilityUpdate()
+    {
+        meleeAttack.Rb2d = rb2d;
+        meleeAttack.CastFromPoint = castFromPoint;
+        meleeAttack.MousePos = mousePos;
+        meleeAttack.LookDir = lookDir;
+        meleeAttack.Angle = angle;
+        meleeAttack.Ability.SetScriptable(meleeAttack);
+    }
 }

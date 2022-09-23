@@ -17,6 +17,9 @@ public abstract class Ability : MonoBehaviour
 	protected Vector2 lookDir;
 	protected Rigidbody2D rb2d;
 	protected Transform castFromPoint;
+	protected AbilityScriptable abilityScriptable;
 
 	public abstract void AbilityBehavior();
+	public abstract void SetScriptable(AbilityScriptable scriptable);
+
 }

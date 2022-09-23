@@ -18,9 +18,13 @@ public class EnemyClassTest : MonoBehaviour, ICrowdControllable
 
     void Update()
     {
-        if (beingCrowdControlled)
+        if( beingCrowdControlled )
         {
             beingDisplaced();
+        }
+        else
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
         }
         
     }
