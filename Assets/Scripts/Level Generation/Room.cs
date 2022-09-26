@@ -32,7 +32,7 @@ public class Room : MonoBehaviour
 		if (roomSize != Vector2.zero)
 		{
 			Gizmos.color = Color.blue;
-			Gizmos.DrawWireCube(transform.position, new Vector2(roomSize.x, roomSize.y));
+			Gizmos.DrawWireCube(Vector3.zero, new Vector2(roomSize.x, roomSize.y));
 		}
 	}
 }

@@ -20,7 +20,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private int chunkSize = 35;
 	[SerializeField] private int extraPadding = 2;
 	[SerializeField] private int maxRooms = 10;
-	[SerializeField, InfoBox("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
+	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[Space]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
@@ -154,12 +154,15 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room room = newRoomGO.GetComponent<Room>();
 			chunk.Room = room;
 
-			int chunkSizeHalf = (chunkSize / 2);
+			int randRot = Random.Range(0, 4);
+			newRoomGO.transform.Rotate(new Vector3(0, 0, randRot * 90));
+
+			int chunkSizeHalf = chunkSize / 2;
 			int roomsizeHalfX = room.RoomSize.x / 2;
 			int roomsizeHalfY = room.RoomSize.y / 2;
 
-			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + extraPadding, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfY - extraPadding);
-			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfX + extraPadding, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY - extraPadding);
+			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + extraPadding, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX - extraPadding);
+			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + extraPadding, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY - extraPadding);
 
 			newRoomGO.transform.position = new Vector2(randX, randY);
 
