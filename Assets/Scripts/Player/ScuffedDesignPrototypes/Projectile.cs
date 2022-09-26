@@ -28,6 +28,15 @@ public class Projectile : MonoBehaviour
 		}
 	}
 
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if(collision.gameObject.layer == 7 || collision.gameObject.layer == 6)
+		{
+			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(20f);
+			Destroy(this.gameObject);
+		}
+	}
+
 	private void OnDestroy()
 	{
 		trail.transform.parent = null;
