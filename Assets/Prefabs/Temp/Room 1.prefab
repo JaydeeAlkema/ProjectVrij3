@@ -23652,11 +23652,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomType: 0
+  roomSize: {x: 22, y: 22}
   pathwayEntries:
   - {fileID: 1842476436933910494}
   - {fileID: 473593266222625561}
   - {fileID: 7543646989902518536}
   - {fileID: 1604212977573075822}
+  connectedRooms: []
 --- !u!1 &4996751686889197357
 GameObject:
   m_ObjectHideFlags: 0

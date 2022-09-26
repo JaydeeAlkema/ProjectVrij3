@@ -20,6 +20,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private int chunkSize = 35;
 	[SerializeField] private int tempRoomSize = 20;
 	[SerializeField] private int extraPadding = 2;
+	[SerializeField] private int maxRooms = 10;
 	[SerializeField, InfoBox("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[Space]
@@ -123,6 +124,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 			{
 				break;
 			}
+
+			if (path.Count >= maxRooms) break;
 		}
 
 		yield return new WaitForEndOfFrame();
@@ -139,16 +142,20 @@ public class LevelGeneratorV2 : MonoBehaviour
 		{
 			ScriptableRoom randRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
 
-			int chunkSizeHalf = (chunkSize / 2);
-			int tempRoomsizeHalf = tempRoomSize / 2;
 
-			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + tempRoomsizeHalf + extraPadding, chunk.Coordinates.x + chunkSizeHalf - tempRoomsizeHalf - extraPadding);
-			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + tempRoomsizeHalf + extraPadding, chunk.Coordinates.y + chunkSizeHalf - tempRoomsizeHalf - extraPadding);
-
-			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(randX, randY), Quaternion.identity, levelAssetsParent);
+			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity, levelAssetsParent);
 			newRoomGO.name = $"Room [{rooms.Count + 1}]";
 			Room room = newRoomGO.GetComponent<Room>();
 			chunk.Room = room;
+
+			int chunkSizeHalf = (chunkSize / 2);
+			int roomsizeHalfX = room.RoomSize.x / 2;
+			int roomsizeHalfY = room.RoomSize.y / 2;
+
+			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + extraPadding, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfY - extraPadding);
+			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfX + extraPadding, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY - extraPadding);
+
+			newRoomGO.transform.position = new Vector2(randX, randY);
 
 			rooms.Add(room);
 		}
@@ -166,6 +173,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 	}
 
+	/// <summary>
+	/// Connects the empty rooms to eachother.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator ConnectEmptyRooms()
 	{
 		for (int r = 0; r < rooms.Count; r++)
@@ -199,7 +210,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathwayEndPoint = pathwayConnectionPoint;
 				}
 			}
-			Debug.Log($"Connecting {pathwayStartPoint.name} to {pathwayEndPoint.name}");
+			//Debug.Log($"Connecting {pathwayStartPoint.name} to {pathwayEndPoint.name}");
 		}
 
 		yield return new WaitForEndOfFrame();
