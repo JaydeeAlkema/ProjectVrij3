@@ -45,16 +45,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	private IEnumerator GenerateLevel()
 	{
-		Stopwatch executionTime = new Stopwatch();
-		executionTime.Start();
-
 		yield return StartCoroutine(CreateChunks());
 		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
 		yield return StartCoroutine(ConnectEmptyRooms());
-
-		executionTime.Stop();
-		Debug.Log($"Level Generation took: {executionTime.ElapsedMilliseconds}ms");
 	}
 
 	/// <summary>
@@ -63,6 +57,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator CreateChunks()
 	{
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
+
 		if (chunkGridSize.x < 3) chunkGridSize.x = 3;
 		if (chunkGridSize.y < 3) chunkGridSize.y = 3;
 
@@ -72,8 +69,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 		// The grid size may NEVER be divisible by 2, this will cause an even grid without a center chunk... We must always have a center chunk!
 		if (chunkGridSize.x % 2 == 0) chunkGridSize.x -= 1;
 		if (chunkGridSize.y % 2 == 0) chunkGridSize.y -= 1;
-
-
 
 		for (int x = 0; x < chunkGridSize.x; x++)
 		{
@@ -91,6 +86,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 				chunks.Add(chunk);
 			}
 		}
+
+		executionTime.Stop();
+		Debug.Log($"Chunk Generation took: {executionTime.ElapsedMilliseconds}ms");
+
 		yield return new WaitForEndOfFrame();
 	}
 
@@ -100,6 +99,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator CreatePathThroughChunks()
 	{
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
+
 		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
 		Chunk currentChunk = GetChunkByCoordinates(middleChunkCoordinates);
 		currentChunk.Occupied = true;
@@ -127,6 +129,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (path.Count >= maxRooms) break;
 		}
 
+		executionTime.Stop();
+		Debug.Log($"Chunk path generation took: {executionTime.ElapsedMilliseconds}ms");
+
 		yield return new WaitForEndOfFrame();
 	}
 
@@ -136,6 +141,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator CreateEmptyRooms()
 	{
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
+
 		// Spawn the rooms within the chunk borders.
 		foreach (Chunk chunk in path)
 		{
@@ -168,6 +176,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 			roomIndex++;
 		}
 
+		executionTime.Stop();
+		Debug.Log($"Empty rooms generation took: {executionTime.ElapsedMilliseconds}ms");
+
 		yield return new WaitForEndOfFrame();
 	}
 
@@ -177,6 +188,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator ConnectEmptyRooms()
 	{
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
+
 		for (int r = 0; r < rooms.Count; r++)
 		{
 			Room room = rooms[r];
@@ -281,6 +295,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 				pathPoint.transform.parent = pathParent.transform;
 			}
 		}
+
+		executionTime.Stop();
+		Debug.Log($"Connecting empty rooms took: {executionTime.ElapsedMilliseconds}ms");
 
 		yield return new WaitForEndOfFrame();
 	}
