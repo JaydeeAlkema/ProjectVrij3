@@ -40,21 +40,30 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		IDamageable damageable = collision.GetComponent<IDamageable>();
-		foreach (IStatusEffect statusEffect in statusEffects)
+		if (collision.GetComponent<IDamageable>() != null)
 		{
-			if (statusEffect == null) return;
-			damageable.ApplyStatusEffect(statusEffect);
+			IDamageable damageable = collision.GetComponent<IDamageable>();
+			foreach (IStatusEffect statusEffect in statusEffects)
+			{
+				if (statusEffect == null) return;
+				damageable.ApplyStatusEffect(statusEffect);
+			}
 		}
+
 	}
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		IDamageable damageable = collision.GetComponent<IDamageable>();
-		foreach (IStatusEffect statusEffect in statusEffects)
+		if (collision.GetComponent<IDamageable>() != null)
 		{
-			if (statusEffect == null) return;
-			damageable.RemoveStatusEffect(statusEffect);
+			IDamageable damageable = collision.GetComponent<IDamageable>();
+			foreach (IStatusEffect statusEffect in statusEffects)
+			{
+				if (statusEffect != null)
+				{
+					damageable.RemoveStatusEffect(statusEffect);
+				}
+			}
 		}
 	}
 }
