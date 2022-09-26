@@ -7,21 +7,26 @@ public class Projectile : MonoBehaviour
 	private float counter = 0f;
 	public float lifeSpan;
 	public TrailRenderer trail = null;
+	private float force;
+	public float Force { get => force; set => force = value; }
 
 	private void Awake()
 	{
-		if (GetComponentInChildren<TrailRenderer>() == null) return;
-		trail = GetComponentInChildren<TrailRenderer>();
+		if( GetComponentInChildren<TrailRenderer>() != null )
+		{
+			trail = GetComponentInChildren<TrailRenderer>();
+		}
 	}
 
-	void Update()
+	private void FixedUpdate()
 	{
-		LifeTime(lifeSpan);
+		LifeTime( lifeSpan );
+		transform.Translate( transform.up * force * Time.fixedDeltaTime );
 	}
 
 	void LifeTime(float lifeSpan)
 	{
-		counter += Time.deltaTime;
+		counter += Time.fixedDeltaTime;
 		if (counter >= lifeSpan)
 		{
 			Destroy(this.gameObject);
@@ -39,8 +44,11 @@ public class Projectile : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		trail.transform.parent = null;
-		trail.autodestruct = true;
-		trail.GetComponent<TrailWithTrigger>().enabled = true;
+		if( trail != null )
+		{
+			trail.transform.parent = null;
+			trail.autodestruct = true;
+			trail.GetComponent<TrailWithTrigger>().enabled = true;
+		}
 	}
 }

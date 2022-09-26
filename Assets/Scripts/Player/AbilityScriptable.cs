@@ -41,6 +41,16 @@ public class AbilityScriptable : ScriptableObject
 	private Vector3 mousePos = default;
 	public Vector3 MousePos { get => mousePos; set => mousePos = value; }
 	[SerializeField]
+	private GameObject castObject;
+	public GameObject CastObject { get => castObject; set => castObject = value; }
+	[SerializeField]
+	private float lifeSpan = 10f;
+	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
+	[SerializeField]
+	private float force = 30f;
+	public float Force { get => lifeSpan; set => lifeSpan = value; }
+
+	[SerializeField]
 	private Ability ability;
 
 	public Ability Ability { get => ability; set => ability =  value ; }

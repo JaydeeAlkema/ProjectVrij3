@@ -18,6 +18,9 @@ public abstract class Ability : MonoBehaviour
 	protected Rigidbody2D rb2d;
 	protected Transform castFromPoint;
 	protected AbilityScriptable abilityScriptable;
+	protected GameObject castObject;
+	protected float lifeSpan = 10f;
+	protected float force = 30f;
 
 	public abstract void AbilityBehavior();
 	public abstract void SetScriptable(AbilityScriptable scriptable);

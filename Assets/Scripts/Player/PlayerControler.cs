@@ -113,11 +113,54 @@ public class PlayerControler : MonoBehaviour
 
     void CheckAbilityUpdate()
     {
-        meleeAttack.Rb2d = rb2d;
-        meleeAttack.CastFromPoint = castFromPoint;
-        meleeAttack.MousePos = mousePos;
-        meleeAttack.LookDir = lookDir;
-        meleeAttack.Angle = angle;
-        meleeAttack.Ability.SetScriptable(meleeAttack);
+        if( meleeAttack != null )
+        {
+            meleeAttack.Rb2d = rb2d;
+            meleeAttack.CastFromPoint = castFromPoint;
+            meleeAttack.MousePos = mousePos;
+            meleeAttack.LookDir = lookDir;
+            meleeAttack.Angle = angle;
+            meleeAttack.Ability.SetScriptable( meleeAttack );
+        }
+
+        if( rangedAttack != null )
+        {
+            rangedAttack.Rb2d = rb2d;
+            rangedAttack.CastFromPoint = castFromPoint;
+            rangedAttack.MousePos = mousePos;
+            rangedAttack.LookDir = lookDir;
+            rangedAttack.Angle = angle;
+            rangedAttack.Ability.SetScriptable( rangedAttack );
+        }
+
+        if( ability1 != null )
+        {
+            ability1.Rb2d = rb2d;
+            ability1.CastFromPoint = castFromPoint;
+            ability1.MousePos = mousePos;
+            ability1.LookDir = lookDir;
+            ability1.Angle = angle;
+            ability1.Ability.SetScriptable( rangedAttack );
+        }
+
+        if( ability2 != null )
+        {
+            ability2.Rb2d = rb2d;
+            ability2.CastFromPoint = castFromPoint;
+            ability2.MousePos = mousePos;
+            ability2.LookDir = lookDir;
+            ability2.Angle = angle;
+            ability2.Ability.SetScriptable( rangedAttack );
+        }
+
+        if( ability3 != null )
+        {
+            ability3.Rb2d = rb2d;
+            ability3.CastFromPoint = castFromPoint;
+            ability3.MousePos = mousePos;
+            ability3.LookDir = lookDir;
+            ability3.Angle = angle;
+            ability3.Ability.SetScriptable( rangedAttack );
+        }
     }
 }
