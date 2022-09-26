@@ -18,7 +18,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[Header("Level Generation Settings")]
 	[SerializeField] private int seed;
 	[SerializeField] private int chunkSize = 35;
-	[SerializeField] private int tempRoomSize = 20;
 	[SerializeField] private int extraPadding = 2;
 	[SerializeField] private int maxRooms = 10;
 	[SerializeField, InfoBox("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
@@ -142,7 +141,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 		{
 			ScriptableRoom randRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
 
-
 			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity, levelAssetsParent);
 			newRoomGO.name = $"Room [{rooms.Count + 1}]";
 			Room room = newRoomGO.GetComponent<Room>();
@@ -210,7 +208,78 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathwayEndPoint = pathwayConnectionPoint;
 				}
 			}
-			//Debug.Log($"Connecting {pathwayStartPoint.name} to {pathwayEndPoint.name}");
+
+			// Actually build the pathways here...
+			Vector2Int startPos = new Vector2Int((int)pathwayStartPoint.transform.position.x, (int)pathwayStartPoint.transform.position.y);
+			Vector2Int endPos = new Vector2Int((int)pathwayEndPoint.transform.position.x, (int)pathwayEndPoint.transform.position.y);
+			Vector2Int currentPos = startPos;
+			List<Vector2Int> pathPoints = new List<Vector2Int>();
+
+			// We need to start of by adjusting the starting position by 1.
+			// This is done by checking in which way we need to start to make our path.
+			float angle = GetAngle(startPos, endPos);
+			//Debug.Log(angle);
+			if (Between(angle, 60, 120))
+			{
+				currentPos.y += 1;
+			}
+			else if (Between(angle, 240, 300))
+			{
+				currentPos.y -= 1;
+			}
+			else if (Between(angle, 330, 360) || Between(angle, 0, 30))
+			{
+				currentPos.x += 1;
+			}
+			else if (Between(angle, 150, 210))
+			{
+				currentPos.x -= 1;
+			}
+			pathPoints.Add(currentPos);
+
+			// Build the path from start to end
+			while (currentPos != endPos)
+			{
+				// We break early. because we already know the endpoint, we dont want to add it to the list of the path.
+				if (currentPos.x < endPos.x)
+				{
+					currentPos.x += 1;
+					pathPoints.Add(currentPos);
+				}
+				if (currentPos.x > endPos.x)
+				{
+					currentPos.x -= 1;
+					pathPoints.Add(currentPos);
+				}
+				if (currentPos.y < endPos.y)
+				{
+					currentPos.y += 1;
+					pathPoints.Add(currentPos);
+				}
+				if (currentPos.y > endPos.y)
+				{
+					currentPos.y -= 1;
+					pathPoints.Add(currentPos);
+				}
+
+				// clean up
+				if (currentPos == endPos)
+				{
+					pathPoints.Remove(currentPos);
+					break;
+				}
+			}
+
+			// Instantiate empty pathway tiles.
+			GameObject pathParent = new GameObject($"Pathway [{r}]");
+			pathParent.transform.parent = levelAssetsParent;
+			for (int pp = 0; pp < pathPoints.Count; pp++)
+			{
+				Vector2Int point = pathPoints[pp];
+				GameObject pathPoint = new GameObject($"Point [{pp}]");
+				pathPoint.transform.position = new Vector3(point.x, point.y, 0);
+				pathPoint.transform.parent = pathParent.transform;
+			}
 		}
 
 		yield return new WaitForEndOfFrame();
@@ -258,6 +327,33 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 		}
 		return null;
+	}
+
+	// https://answers.unity.com/questions/444414/get-angle-between-2-vector2s.html
+	public float GetAngle(Vector2 A, Vector2 B)
+	{
+		//difference
+		var Delta = B - A;
+		//use atan2 to get the angle; Atan2 returns radians
+		var angleRadians = Mathf.Atan2(Delta.y, Delta.x);
+
+		//convert to degrees
+		var angleDegrees = angleRadians * Mathf.Rad2Deg;
+
+		//angleDegrees will be in the range (-180,180].
+		//I like normalizing to [0,360) myself, but this is optional..
+		if (angleDegrees < 0)
+			angleDegrees += 360;
+
+		return angleDegrees;
+	}
+	bool Between(float angle, float A, float B)
+	{
+		if (angle < B && angle > A)
+		{
+			return true;
+		}
+		return false;
 	}
 	#endregion
 
