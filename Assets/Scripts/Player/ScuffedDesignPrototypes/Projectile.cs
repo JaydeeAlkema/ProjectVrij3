@@ -9,6 +9,8 @@ public class Projectile : MonoBehaviour
 	public TrailRenderer trail = null;
 	private float force;
 	public float Force { get => force; set => force = value; }
+	private float damage;
+	public float Damage { get => damage; set => damage = value; }
 
 	private void Awake()
 	{
@@ -21,7 +23,7 @@ public class Projectile : MonoBehaviour
 	private void FixedUpdate()
 	{
 		LifeTime( lifeSpan );
-		transform.Translate( transform.up * force * Time.fixedDeltaTime );
+		transform.Translate( Vector3.up * force * Time.fixedDeltaTime, Space.Self );
 	}
 
 	void LifeTime(float lifeSpan)
@@ -33,12 +35,12 @@ public class Projectile : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
+	private void OnTriggerEnter2D( Collider2D collision )
 	{
-		if(collision.gameObject.layer == 7 || collision.gameObject.layer == 6)
+		if( collision.gameObject.layer == 7 || collision.gameObject.layer == 6 )
 		{
-			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(20f);
-			Destroy(this.gameObject);
+			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage( damage );
+			Destroy( this.gameObject );
 		}
 	}
 
