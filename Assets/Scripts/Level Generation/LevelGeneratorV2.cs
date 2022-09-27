@@ -49,7 +49,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return StartCoroutine(CreateChunks());
 		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
-		yield return StartCoroutine(ConnectEmptyRooms());
+		yield return StartCoroutine(GeneratePathwaysBetweenEmptyRooms());
 	}
 
 	/// <summary>
@@ -162,8 +162,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + 1, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
 			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + 1, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
 
-			Debug.Log($"X {randX}, Y {randY}");
-
 			newRoomGO.transform.position = new Vector2(randX, randY);
 
 			int randRot = Random.Range(0, 4);
@@ -190,10 +188,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Connects the empty rooms to eachother.
+	/// Generate pathways between empty rooms
 	/// </summary>
 	/// <returns></returns>
-	private IEnumerator ConnectEmptyRooms()
+	private IEnumerator GeneratePathwaysBetweenEmptyRooms()
 	{
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
@@ -204,7 +202,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room roomToConnectTo = room.ConnectedRooms[room.ConnectedRooms.Count - 1];
 			GameObject pathwayStartPoint = null;
 			GameObject pathwayEndPoint = null;
-			//Debug.Log($"Connecting {room.name} to {roomToConnectTo.name}");
 
 			// Get nearest pathwayConnectionPoint from own room to the room to connect to.
 			float nearestDistance = Mathf.Infinity;
@@ -261,21 +258,29 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (Between(angle, 45, 135))
 			{
 				currentPos.y += 1;
+				pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+				pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
 			}
 			// East
 			else if (Between(angle, 315, 360) || Between(angle, 0, 45))
 			{
 				currentPos.x += 1;
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
 			}
 			// South
 			else if (Between(angle, 225, 315))
 			{
 				currentPos.y -= 1;
+				pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+				pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
 			}
 			// West
 			else if (Between(angle, 135, 225))
 			{
 				currentPos.x -= 1;
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
 			}
 			pathPoints.Add(currentPos);
 
@@ -287,21 +292,29 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					currentPos.x += 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
 				}
 				if (currentPos.x > endPos.x)
 				{
 					currentPos.x -= 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
 				}
 				if (currentPos.y < endPos.y)
 				{
 					currentPos.y += 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+					pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
 				}
 				if (currentPos.y > endPos.y)
 				{
 					currentPos.y -= 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+					pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
 				}
 
 				// clean up
@@ -339,7 +352,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 
 		executionTime.Stop();
-		Debug.Log($"Connecting empty rooms took: {executionTime.ElapsedMilliseconds}ms");
+		Debug.Log($"Generating pathways between empty rooms took: {executionTime.ElapsedMilliseconds}ms");
 
 		yield return new WaitForEndOfFrame();
 	}
