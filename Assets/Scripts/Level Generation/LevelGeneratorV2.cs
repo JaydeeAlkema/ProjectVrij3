@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -17,7 +18,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[Header("Level Generation Settings")]
 	[SerializeField] private int seed;
 	[SerializeField] private int chunkSize = 35;
-	[SerializeField] private int extraPadding = 2;
 	[SerializeField] private int maxRooms = 10;
 	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
@@ -245,83 +245,92 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 
 			// Actually build the pathways here...
-			Vector2Int startPos = new Vector2Int((int)pathwayStartPoint.transform.position.x, (int)pathwayStartPoint.transform.position.y);
-			Vector2Int endPos = new Vector2Int((int)pathwayEndPoint.transform.position.x, (int)pathwayEndPoint.transform.position.y);
+			Vector2Int startPos = new Vector2Int(Mathf.RoundToInt(pathwayStartPoint.transform.position.x), Mathf.RoundToInt(pathwayStartPoint.transform.position.y));
+			Vector2Int endPos = new Vector2Int(Mathf.RoundToInt(pathwayEndPoint.transform.position.x), Mathf.RoundToInt(pathwayEndPoint.transform.position.y));
 			Vector2Int currentPos = startPos;
 			List<Vector2Int> pathPoints = new List<Vector2Int>();
+
+			//TODO:
+			// 1: The current way of making the pathways wider, is a bit of a shitty way to do it. This should honestly just be a single line of code, with the ability to instantly decide the width of the pathway.
 
 			// We need to start of by adjusting the starting position by 1.
 			// This is done by checking in which way we need to start to make our path.
 			float angle = GetAngle(room.transform.position, roomToConnectTo.transform.position);
-			//Debug.Log(angle);
-			// North
 			if (Between(angle, 45, 135))
 			{
 				currentPos.y += 1;
+				pathPoints.Add(currentPos);
+				pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
 				pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+				pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
 				pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
 			}
-			// East
-			else if (Between(angle, 315, 360) || Between(angle, 0, 45))
-			{
-				currentPos.x += 1;
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
-			}
-			// South
 			else if (Between(angle, 225, 315))
 			{
 				currentPos.y -= 1;
+				pathPoints.Add(currentPos);
+				pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
 				pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+				pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
 				pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
 			}
-			// West
+			else if (Between(angle, 315, 360) || Between(angle, 0, 45))
+			{
+				currentPos.x += 1;
+				pathPoints.Add(currentPos);
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
+			}
 			else if (Between(angle, 135, 225))
 			{
 				currentPos.x -= 1;
+				pathPoints.Add(currentPos);
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
 				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
 				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
 			}
-			pathPoints.Add(currentPos);
 
 			// Build the path from start to end
 			while (currentPos != endPos)
 			{
-				// We break early. because we already know the endpoint, we dont want to add it to the list of the path.
 				if (currentPos.x < endPos.x)
 				{
 					currentPos.x += 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
 					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
 					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
 				}
 				if (currentPos.x > endPos.x)
 				{
 					currentPos.x -= 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
 					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
+					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
 					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
 				}
 				if (currentPos.y < endPos.y)
 				{
 					currentPos.y += 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
 					pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+					pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
 					pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
 				}
 				if (currentPos.y > endPos.y)
 				{
 					currentPos.y -= 1;
 					pathPoints.Add(currentPos);
+					pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
 					pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
+					pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
 					pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
-				}
-
-				// clean up
-				if (currentPos == endPos)
-				{
-					pathPoints.Remove(currentPos);
-					break;
 				}
 			}
 
@@ -339,6 +348,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 			int centerY = totalY / pathPoints.Count;
 			pathParent.transform.position = new Vector2(centerX, centerY);
 
+			// Remove all duplicates. Maybe use a HashSet in the future.
+			pathPoints = pathPoints.Distinct().ToList();
 			for (int pp = 0; pp < pathPoints.Count; pp++)
 			{
 				Vector2Int point = pathPoints[pp];
@@ -348,6 +359,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 				SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
 				spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+				if (pp == 0)
+				{
+					spriteRenderer.color = Color.red;
+				}
 			}
 		}
 
