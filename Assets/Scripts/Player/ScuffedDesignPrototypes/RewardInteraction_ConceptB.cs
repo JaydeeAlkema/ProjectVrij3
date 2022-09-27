@@ -27,7 +27,7 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collision.CompareTag("Player"))
+		if (collision.GetComponent<PlayerControler>())
 		{
 			canInteract = true;
 			buttonPrompt.gameObject.SetActive(true);
@@ -36,7 +36,7 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		if (collision.CompareTag("Player"))
+		if ( collision.GetComponent<PlayerControler>() )
 		{
 			canInteract = false;
 			buttonPrompt.gameObject.SetActive(false);
