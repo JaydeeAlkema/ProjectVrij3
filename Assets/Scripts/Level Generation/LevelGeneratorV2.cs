@@ -21,6 +21,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private int maxRooms = 10;
 	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
+	[SerializeField] private List<Sprite> pathGroundTileSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> pathWallTileSprites = new List<Sprite>();
 	[Space]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
@@ -165,7 +167,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			newRoomGO.transform.position = new Vector2(randX, randY);
 
 			int randRot = Random.Range(0, 4);
-			//newRoomGO.transform.Rotate(new Vector3(0, 0, randRot * 90));
+			newRoomGO.transform.Rotate(new Vector3(0, 0, randRot * 90));
 
 			newRoomGO.transform.parent = levelAssetsParent;
 			rooms.Add(room);
@@ -292,6 +294,17 @@ public class LevelGeneratorV2 : MonoBehaviour
 			// Instantiate empty pathway tiles.
 			GameObject pathParent = new GameObject($"Pathway [{r}]");
 			pathParent.transform.parent = levelAssetsParent;
+			int totalX = 0;
+			int totalY = 0;
+			foreach (Vector2Int pathPoint in pathPoints)
+			{
+				totalX += pathPoint.x;
+				totalY += pathPoint.y;
+			}
+			int centerX = totalX / pathPoints.Count;
+			int centerY = totalY / pathPoints.Count;
+			pathParent.transform.position = new Vector2(centerX, centerY);
+
 			for (int pp = 0; pp < pathPoints.Count; pp++)
 			{
 				Vector2Int point = pathPoints[pp];
