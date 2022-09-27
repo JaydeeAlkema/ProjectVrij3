@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -80,8 +79,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 				chunk.Coordinates = new Vector2Int(x * chunkSize, y * chunkSize);
 				chunk.Occupied = false;
 
+				chunk.gameObject.transform.position = new Vector2(x * chunkSize, y * chunkSize);
 				chunk.gameObject.transform.parent = levelAssetsParent;
-				chunk.gameObject.transform.localPosition = new Vector2(x * chunkSize, y * chunkSize);
 
 				chunks.Add(chunk);
 			}
@@ -149,23 +148,26 @@ public class LevelGeneratorV2 : MonoBehaviour
 		{
 			ScriptableRoom randRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
 
-			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity, levelAssetsParent);
+			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity);
 			newRoomGO.name = $"Room [{rooms.Count + 1}]";
 			Room room = newRoomGO.GetComponent<Room>();
 			chunk.Room = room;
-
-			int randRot = Random.Range(0, 4);
-			newRoomGO.transform.Rotate(new Vector3(0, 0, randRot * 90));
 
 			int chunkSizeHalf = chunkSize / 2;
 			int roomsizeHalfX = room.RoomSize.x / 2;
 			int roomsizeHalfY = room.RoomSize.y / 2;
 
-			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + extraPadding, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX - extraPadding);
-			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + extraPadding, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY - extraPadding);
+			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + 1, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
+			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + 1, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
+
+			Debug.Log($"X {randX}, Y {randY}");
 
 			newRoomGO.transform.position = new Vector2(randX, randY);
 
+			int randRot = Random.Range(0, 4);
+			//newRoomGO.transform.Rotate(new Vector3(0, 0, randRot * 90));
+
+			newRoomGO.transform.parent = levelAssetsParent;
 			rooms.Add(room);
 		}
 
