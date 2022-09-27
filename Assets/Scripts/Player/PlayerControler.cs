@@ -25,6 +25,8 @@ public class PlayerControler : MonoBehaviour
 	[SerializeField]
 	private Rigidbody2D rb2d = default;
 	[SerializeField] SpriteRenderer Sprite;
+	[SerializeField] GameObject AttackAnimation;
+	[SerializeField] Animator anim;
 
 
 	[Header("Abilities")]
@@ -77,6 +79,7 @@ public class PlayerControler : MonoBehaviour
 		lookDir = mousePos - rb2d.transform.position;
 		angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
 		castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+		AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
 	}
 
 	void OnDrawGizmos()
@@ -93,6 +96,7 @@ public class PlayerControler : MonoBehaviour
 	{
 		meleeAttack.Ability.SetScriptable(meleeAttack);
 		meleeAttack.Ability.AbilityBehavior();
+		anim.SetTrigger("MeleeAttack1");
 	}
 
 	void RangedAttack()
