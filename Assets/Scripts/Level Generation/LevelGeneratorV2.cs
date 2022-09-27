@@ -198,7 +198,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
-		for (int r = 0; r < rooms.Count; r++)
+		for (int r = 0; r < rooms.Count - 1; r++)
 		{
 			Room room = rooms[r];
 			Room roomToConnectTo = room.ConnectedRooms[room.ConnectedRooms.Count - 1];
@@ -230,6 +230,23 @@ public class LevelGeneratorV2 : MonoBehaviour
 				}
 			}
 
+			// Disable starting pathway opening
+			foreach (GameObject pathwayOpening in room.PathwayEntries)
+			{
+				if (pathwayOpening == pathwayStartPoint)
+				{
+					pathwayStartPoint.SetActive(false);
+				}
+			}
+			// Disable ending pathway opening
+			foreach (GameObject pathwayOpening in roomToConnectTo.PathwayEntries)
+			{
+				if (pathwayOpening == pathwayEndPoint)
+				{
+					pathwayEndPoint.SetActive(false);
+				}
+			}
+
 			// Actually build the pathways here...
 			Vector2Int startPos = new Vector2Int((int)pathwayStartPoint.transform.position.x, (int)pathwayStartPoint.transform.position.y);
 			Vector2Int endPos = new Vector2Int((int)pathwayEndPoint.transform.position.x, (int)pathwayEndPoint.transform.position.y);
@@ -238,21 +255,25 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			// We need to start of by adjusting the starting position by 1.
 			// This is done by checking in which way we need to start to make our path.
-			float angle = GetAngle(startPos, endPos);
+			float angle = GetAngle(room.transform.position, roomToConnectTo.transform.position);
 			//Debug.Log(angle);
-			if (Between(angle, 60, 120))
+			// North
+			if (Between(angle, 45, 135))
 			{
 				currentPos.y += 1;
 			}
-			else if (Between(angle, 240, 300))
-			{
-				currentPos.y -= 1;
-			}
-			else if (Between(angle, 330, 360) || Between(angle, 0, 30))
+			// East
+			else if (Between(angle, 315, 360) || Between(angle, 0, 45))
 			{
 				currentPos.x += 1;
 			}
-			else if (Between(angle, 150, 210))
+			// South
+			else if (Between(angle, 225, 315))
+			{
+				currentPos.y -= 1;
+			}
+			// West
+			else if (Between(angle, 135, 225))
 			{
 				currentPos.x -= 1;
 			}
@@ -311,6 +332,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 				GameObject pathPoint = new GameObject($"Point [{pp}]");
 				pathPoint.transform.position = new Vector3(point.x, point.y, 0);
 				pathPoint.transform.parent = pathParent.transform;
+
+				SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
+				spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
 			}
 		}
 
