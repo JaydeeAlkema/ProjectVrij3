@@ -249,6 +249,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Vector2Int endPos = new Vector2Int(Mathf.RoundToInt(pathwayEndPoint.transform.position.x), Mathf.RoundToInt(pathwayEndPoint.transform.position.y));
 			Vector2Int currentPos = startPos;
 			List<Vector2Int> pathPoints = new List<Vector2Int>();
+			int pathWidth = 5;
 
 			//TODO:
 			// 1: The current way of making the pathways wider, is a bit of a shitty way to do it. This should honestly just be a single line of code, with the ability to instantly decide the width of the pathway.
@@ -259,38 +260,22 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (Between(angle, 45, 135))
 			{
 				currentPos.y += 1;
-				pathPoints.Add(currentPos);
-				pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
-				pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
-				pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
-				pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
+				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
 			}
 			else if (Between(angle, 225, 315))
 			{
 				currentPos.y -= 1;
-				pathPoints.Add(currentPos);
-				pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
-				pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
-				pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
-				pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
+				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
 			}
 			else if (Between(angle, 315, 360) || Between(angle, 0, 45))
 			{
 				currentPos.x += 1;
-				pathPoints.Add(currentPos);
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
+				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
 			}
 			else if (Between(angle, 135, 225))
 			{
 				currentPos.x -= 1;
-				pathPoints.Add(currentPos);
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
+				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
 			}
 
 			// Build the path from start to end
@@ -299,38 +284,22 @@ public class LevelGeneratorV2 : MonoBehaviour
 				if (currentPos.x < endPos.x)
 				{
 					currentPos.x += 1;
-					pathPoints.Add(currentPos);
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
+					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
 				}
 				if (currentPos.x > endPos.x)
 				{
 					currentPos.x -= 1;
-					pathPoints.Add(currentPos);
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 2));
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + 1));
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 2));
-					pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y - 1));
+					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
 				}
 				if (currentPos.y < endPos.y)
 				{
 					currentPos.y += 1;
-					pathPoints.Add(currentPos);
-					pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
-					pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
-					pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
-					pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
+					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
 				}
 				if (currentPos.y > endPos.y)
 				{
 					currentPos.y -= 1;
-					pathPoints.Add(currentPos);
-					pathPoints.Add(new Vector2Int(currentPos.x + 2, currentPos.y));
-					pathPoints.Add(new Vector2Int(currentPos.x + 1, currentPos.y));
-					pathPoints.Add(new Vector2Int(currentPos.x - 2, currentPos.y));
-					pathPoints.Add(new Vector2Int(currentPos.x - 1, currentPos.y));
+					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
 				}
 			}
 
@@ -350,6 +319,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			// Remove all duplicates. Maybe use a HashSet in the future.
 			pathPoints = pathPoints.Distinct().ToList();
+			for (int p = pathPoints.Count - 1; p >= 0; p--)
+			{
+				Vector2Int pathPoint = pathPoints[p];
+				Collider2D[] colliders = Physics2D.OverlapBoxAll(new Vector2Int(pathPoint.x, pathPoint.y), new Vector2(0.75f, 0.75f), 0f);
+				if (colliders.Length > 0)
+				{
+					pathPoints.Remove(pathPoint);
+				}
+			}
+
 			for (int pp = 0; pp < pathPoints.Count; pp++)
 			{
 				Vector2Int point = pathPoints[pp];
@@ -359,10 +338,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 				SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
 				spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-				if (pp == 0)
-				{
-					spriteRenderer.color = Color.red;
-				}
+				//if (pp % pathWidth * 2 == 0)
+				//{
+				//	spriteRenderer.color = Color.red;
+				//}
 			}
 		}
 
@@ -371,6 +350,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		yield return new WaitForEndOfFrame();
 	}
+
+
 
 	#region Helpers
 	/// <summary>
@@ -414,6 +395,38 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 		}
 		return null;
+	}
+
+	/// <summary>
+	/// Adds extra pathPoints to the path tiles list to widen the path.
+	/// </summary>
+	/// <param name="currentPos"> Current pathPoint position.</param>
+	/// <param name="pathPoints"> List to add the new positions to.</param>
+	/// <param name="pathWidth"> Width of the path</param>
+	/// <returns></returns>
+	private static Vector2Int AddPathTiles(Vector2Int currentPos, List<Vector2Int> pathPoints, int pathWidth, Vector2Int dir)
+	{
+		//pathPoints.Add(currentPos);
+
+		if (dir.x != 0)
+		{
+			for (int x = -pathWidth; x <= pathWidth; x++)
+			{
+				//Debug.Log(x);
+				pathPoints.Add(new Vector2Int(currentPos.x + x, currentPos.y));
+			}
+		}
+
+		if (dir.y != 0)
+		{
+			for (int y = -pathWidth; y <= pathWidth; y++)
+			{
+				//Debug.Log(y);
+				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + y));
+			}
+		}
+
+		return currentPos;
 	}
 
 	// https://answers.unity.com/questions/444414/get-angle-between-2-vector2s.html
