@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControler : MonoBehaviour
+public class PlayerControler : MonoBehaviour , IDamageable
 {
     private int horizontal = 0;
     private int vertical = 0;
@@ -24,6 +24,8 @@ public class PlayerControler : MonoBehaviour
     private float circleSize = 3f;
     [SerializeField]
     private Rigidbody2D rb2d = default;
+
+    [SerializeField] private float healthPoints = 500;
 
     [Header("Abilities")]
 	#region ability fields
@@ -163,4 +165,19 @@ public class PlayerControler : MonoBehaviour
             ability3.Ability.SetScriptable( rangedAttack );
         }
     }
+
+	public void TakeDamage( float damage )
+	{
+        healthPoints -= damage;
+	}
+
+	public void ApplyStatusEffect( IStatusEffect statusEffect )
+	{
+
+	}
+
+	public void RemoveStatusEffect( IStatusEffect statusEffect )
+	{
+
+	}
 }
