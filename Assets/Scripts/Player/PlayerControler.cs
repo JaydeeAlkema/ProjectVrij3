@@ -26,7 +26,9 @@ public class PlayerControler : MonoBehaviour
 	private Rigidbody2D rb2d = default;
 	[SerializeField] SpriteRenderer Sprite;
 	[SerializeField] GameObject AttackAnimation;
-	[SerializeField] Animator anim;
+	[SerializeField] Animator animAttack;
+	[SerializeField] Animator animPlayer;
+	private bool isAttacking = false;
 
 
 	[Header("Abilities")]
@@ -63,6 +65,7 @@ public class PlayerControler : MonoBehaviour
 		MouseLook();
 
 		Sprite.flipX = lookDir.x > 0 ? true : false;
+		AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 
@@ -75,11 +78,23 @@ public class PlayerControler : MonoBehaviour
 
 	void MouseLook()
 	{
-		mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		lookDir = mousePos - rb2d.transform.position;
-		angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-		castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-		AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
+		if (animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
+		{
+			isAttacking = true;
+		}
+		else
+		{
+			isAttacking = false;
+		}
+
+		if (!isAttacking)
+		{
+			mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			lookDir = mousePos - rb2d.transform.position;
+			angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+			AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
+		}
 	}
 
 	void OnDrawGizmos()
@@ -96,7 +111,8 @@ public class PlayerControler : MonoBehaviour
 	{
 		meleeAttack.Ability.SetScriptable(meleeAttack);
 		meleeAttack.Ability.AbilityBehavior();
-		anim.SetTrigger("MeleeAttack1");
+		animAttack.SetTrigger("MeleeAttack1");
+		animPlayer.SetTrigger("isAttacking");
 	}
 
 	void RangedAttack()
