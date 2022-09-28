@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour
 	public float Force { get => force; set => force = value; }
 	private float damage;
 	public float Damage { get => damage; set => damage = value; }
+	[SerializeField] private int typeOfLayer = 6;
 
 	private void Awake()
 	{
@@ -37,7 +38,7 @@ public class Projectile : MonoBehaviour
 
 	private void OnTriggerEnter2D( Collider2D collision )
 	{
-		if( collision.gameObject.layer == 7 || collision.gameObject.layer == 6 )
+		if( collision.gameObject.layer == 7 || collision.gameObject.layer == typeOfLayer )
 		{
 			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage( damage );
 			Destroy( this.gameObject );
