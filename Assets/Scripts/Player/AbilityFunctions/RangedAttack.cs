@@ -9,7 +9,7 @@ public class RangedAttack : Ability
 		GameObject Projectile = Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
 		Projectile.transform.SetParent( null );
 		Projectile.GetComponent<Projectile>().Damage = damage;
-		Projectile.GetComponent<Projectile>().lifeSpan = lifeSpan;
+		Projectile.GetComponent<Projectile>().LifeSpan = lifeSpan;
 		Projectile.GetComponent<Projectile>().Force = force;
 	}
 

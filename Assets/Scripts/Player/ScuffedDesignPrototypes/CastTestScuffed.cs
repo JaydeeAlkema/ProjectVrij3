@@ -26,7 +26,7 @@ public class CastTestScuffed : MonoBehaviour
 	{
 		GameObject Projectile = Instantiate(projectilePrefab, castFromPoint.transform.position, castFromPoint.transform.rotation);
 		Rigidbody2D rbProjectile = Projectile.GetComponent<Rigidbody2D>();
-		rbProjectile.GetComponent<Projectile>().lifeSpan = projectileLifeSpan;
+		rbProjectile.GetComponent<Projectile>().LifeSpan = projectileLifeSpan;
 		rbProjectile.AddForce(castFromPoint.up * projectileForce, ForceMode2D.Impulse);
 	}
 }

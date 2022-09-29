@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControler : MonoBehaviour
+public class PlayerControler : MonoBehaviour , IDamageable
 {
 	private int horizontal = 0;
 	private int vertical = 0;
@@ -30,8 +30,9 @@ public class PlayerControler : MonoBehaviour
 	[SerializeField] Animator animPlayer;
 	private bool isAttacking = false;
 
+    [SerializeField] private float healthPoints = 500;
 
-	[Header("Abilities")]
+    [Header("Abilities")]
 	#region ability fields
 	[SerializeField]
 	private AbilityScriptable meleeAttack;
@@ -178,14 +179,29 @@ public class PlayerControler : MonoBehaviour
 			ability2.Ability.SetScriptable(rangedAttack);
 		}
 
-		if (ability3 != null)
-		{
-			ability3.Rb2d = rb2d;
-			ability3.CastFromPoint = castFromPoint;
-			ability3.MousePos = mousePos;
-			ability3.LookDir = lookDir;
-			ability3.Angle = angle;
-			ability3.Ability.SetScriptable(rangedAttack);
-		}
+        if( ability3 != null )
+        {
+            ability3.Rb2d = rb2d;
+            ability3.CastFromPoint = castFromPoint;
+            ability3.MousePos = mousePos;
+            ability3.LookDir = lookDir;
+            ability3.Angle = angle;
+            ability3.Ability.SetScriptable( rangedAttack );
+        }
+    }
+
+	public void TakeDamage( float damage )
+	{
+        healthPoints -= damage;
+	}
+
+	public void ApplyStatusEffect( IStatusEffect statusEffect )
+	{
+
+	}
+
+	public void RemoveStatusEffect( IStatusEffect statusEffect )
+	{
+
 	}
 }
