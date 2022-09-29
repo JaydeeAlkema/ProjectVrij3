@@ -19,6 +19,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private int seed;
 	[SerializeField] private int chunkSize = 35;
 	[SerializeField] private int maxRooms = 10;
+	[SerializeField] private int pathWidth = 3;
 	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[SerializeField] private List<Sprite> pathGroundTileSprites = new List<Sprite>();
@@ -249,7 +250,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Vector2Int endPos = new Vector2Int(Mathf.RoundToInt(pathwayEndPoint.transform.position.x), Mathf.RoundToInt(pathwayEndPoint.transform.position.y));
 			Vector2Int currentPos = startPos;
 			List<Vector2Int> pathPoints = new List<Vector2Int>();
-			int pathWidth = 5;
+
 
 			//TODO:
 			// 1: The current way of making the pathways wider, is a bit of a shitty way to do it. This should honestly just be a single line of code, with the ability to instantly decide the width of the pathway.
@@ -351,8 +352,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 	}
 
-
-
 	#region Helpers
 	/// <summary>
 	/// Get a random chunk.
@@ -406,24 +405,15 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private static Vector2Int AddPathTiles(Vector2Int currentPos, List<Vector2Int> pathPoints, int pathWidth, Vector2Int dir)
 	{
-		//pathPoints.Add(currentPos);
-
-		if (dir.x != 0)
+		for (int x = -pathWidth; x <= pathWidth; x++)
 		{
-			for (int x = -pathWidth; x <= pathWidth; x++)
-			{
-				//Debug.Log(x);
-				pathPoints.Add(new Vector2Int(currentPos.x + x, currentPos.y));
-			}
+			//Debug.Log(x);
+			pathPoints.Add(new Vector2Int(currentPos.x + x, currentPos.y));
 		}
-
-		if (dir.y != 0)
+		for (int y = -pathWidth; y <= pathWidth; y++)
 		{
-			for (int y = -pathWidth; y <= pathWidth; y++)
-			{
-				//Debug.Log(y);
-				pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + y));
-			}
+			//Debug.Log(y);
+			pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + y));
 		}
 
 		return currentPos;
