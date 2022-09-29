@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 	private float counter = 0f;
-	[SerializeField] private float lifeSpan;
+	private float lifeSpan;
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	[SerializeField] private TrailRenderer trail = null;
 	[SerializeField] private bool trailUpgrade = false;
@@ -15,12 +15,13 @@ public class Projectile : MonoBehaviour
 	private float damage;
 	public float Damage { get => damage; set => damage = value; }
 	[SerializeField] private int typeOfLayer = 6;
+	private GameObject addedTrail = null;
 
 	private void Awake()
 	{
 		if(trailUpgrade)
 		{
-			Instantiate( trail.gameObject, this.transform.position, this.transform.rotation, this.transform );
+			addedTrail = Instantiate( trail.gameObject, this.transform.position, this.transform.rotation, this.transform );
 		}
 	}
 
@@ -52,9 +53,9 @@ public class Projectile : MonoBehaviour
 	{
 		if( trailUpgrade )
 		{
-			trail.transform.parent = null;
-			trail.autodestruct = true;
-			trail.GetComponent<TrailWithTrigger>().enabled = true;
+			addedTrail.transform.parent = null;
+			addedTrail.GetComponent<TrailRenderer>().autodestruct = true;
+			addedTrail.GetComponent<TrailWithTrigger>().enabled = true;
 		}
 	}
 }
