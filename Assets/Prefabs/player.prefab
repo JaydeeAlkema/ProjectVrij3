@@ -31,6 +31,38 @@ Transform:
   m_Father: {fileID: 4729987391402745379}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &459409311148317048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5991089748869372926}
+  m_Layer: 0
+  m_Name: Pivot_AttackAnim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5991089748869372926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459409311148317048}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2447453126962804676}
+  m_Father: {fileID: 4729987391402745379}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2562181291164557956
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,12 +88,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2562181291164557956}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4729987391402745379}
+  m_Father: {fileID: 5991089748869372926}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5619753553904217311
@@ -110,7 +142,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -394,7 +426,7 @@ Transform:
   - {fileID: 4729987390537786979}
   - {fileID: 316848616}
   - {fileID: 3654675852546308300}
-  - {fileID: 2447453126962804676}
+  - {fileID: 5991089748869372926}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -470,9 +502,11 @@ MonoBehaviour:
   circleSize: 3
   rb2d: {fileID: 4729987391402745382}
   Sprite: {fileID: 5849170758635047400}
+  Pivot_AttackAnimation: {fileID: 459409311148317048}
   AttackAnimation: {fileID: 2562181291164557956}
   animAttack: {fileID: 3861236493606765911}
   animPlayer: {fileID: 1544735143011069060}
+  healthPoints: 500
   meleeAttack: {fileID: 11400000, guid: dc3562ba9d4445e47a5c799a36545391, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
   ability1: {fileID: 0}
