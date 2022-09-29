@@ -101,11 +101,11 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	void OnDrawGizmos()
 	{
 		Gizmos.color = Color.blue;
-		Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 3, castFromPoint.transform.rotation, boxSize);
+		Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * meleeAttack.Distance, castFromPoint.transform.rotation, meleeAttack.BoxSize);
 		Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-		Gizmos.color = Color.red;
-		Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 5, castFromPoint.transform.rotation, new Vector3(circleSize, circleSize, 0));
-		Gizmos.DrawWireSphere(Vector3.zero, 1);
+		//Gizmos.color = Color.red;
+		//Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 5, castFromPoint.transform.rotation, new Vector3(circleSize, circleSize, 0));
+		//Gizmos.DrawWireSphere(Vector3.zero, 1);
 	}
 
 	void MeleeAttack()
