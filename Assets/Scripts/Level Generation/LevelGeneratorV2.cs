@@ -13,12 +13,19 @@ public enum RoomType
 	Spawn
 }
 
+public enum PathwayGenerationType
+{
+	Organic,
+	Straight
+}
+
 public class LevelGeneratorV2 : MonoBehaviour
 {
 	[Header("Level Generation Settings")]
 	[SerializeField] private int seed;
 	[SerializeField] private int chunkSize = 35;
 	[SerializeField] private int maxRooms = 10;
+	[SerializeField] private PathwayGenerationType pathwayGenerationType = PathwayGenerationType.Organic;
 	[SerializeField] private int pathWidth = 3;
 	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
@@ -295,26 +302,56 @@ public class LevelGeneratorV2 : MonoBehaviour
 			// Build the path from start to end
 			while (currentPos != endPos)
 			{
-				if (currentPos.x < endPos.x)
+				switch (pathwayGenerationType)
 				{
-					currentPos.x += 1;
-					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+					case PathwayGenerationType.Organic:
+						if (currentPos.x < endPos.x)
+						{
+							currentPos.x += 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+						}
+						if (currentPos.x > endPos.x)
+						{
+							currentPos.x -= 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+						}
+						if (currentPos.y < endPos.y)
+						{
+							currentPos.y += 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+						}
+						if (currentPos.y > endPos.y)
+						{
+							currentPos.y -= 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+						}
+						break;
+					case PathwayGenerationType.Straight:
+						if (currentPos.x < endPos.x)
+						{
+							currentPos.x += 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+						}
+						else if (currentPos.x > endPos.x)
+						{
+							currentPos.x -= 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+						}
+						else if (currentPos.y < endPos.y)
+						{
+							currentPos.y += 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+						}
+						else if (currentPos.y > endPos.y)
+						{
+							currentPos.y -= 1;
+							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+						}
+						break;
+					default:
+						break;
 				}
-				else if (currentPos.x > endPos.x)
-				{
-					currentPos.x -= 1;
-					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-				}
-				else if (currentPos.y < endPos.y)
-				{
-					currentPos.y += 1;
-					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-				}
-				else if (currentPos.y > endPos.y)
-				{
-					currentPos.y -= 1;
-					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-				}
+
 			}
 
 			// Instantiate empty pathway tiles.
