@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coolDown: 0
   damage: 10
-  distance: 0
+  distance: 3
   boxSize: {x: 4, y: 2.5}
   circleSize: 0
   layerMask:
@@ -23,4 +23,7 @@ MonoBehaviour:
   cam: {fileID: 0}
   rb2d: {fileID: 0}
   castFromPoint: {fileID: 0}
+  castObject: {fileID: 0}
+  lifeSpan: 10
+  force: 30
   ability: {fileID: 5931165756625859170, guid: dbb136ce9400c714d974afc9f6468e87, type: 3}
