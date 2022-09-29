@@ -5,8 +5,10 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 	private float counter = 0f;
-	public float lifeSpan;
-	public TrailRenderer trail = null;
+	[SerializeField] private float lifeSpan;
+	[SerializeField] private TrailRenderer trail = null;
+	[SerializeField] private bool trailUpgrade = false;
+	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	private float force;
 	public float Force { get => force; set => force = value; }
 	private float damage;
@@ -15,9 +17,9 @@ public class Projectile : MonoBehaviour
 
 	private void Awake()
 	{
-		if( GetComponentInChildren<TrailRenderer>() != null )
+		if(trailUpgrade)
 		{
-			trail = GetComponentInChildren<TrailRenderer>();
+			Instantiate( trail.gameObject, this.transform.position, this.transform.rotation, this.transform );
 		}
 	}
 
@@ -47,7 +49,7 @@ public class Projectile : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		if( trail != null )
+		if( trailUpgrade )
 		{
 			trail.transform.parent = null;
 			trail.autodestruct = true;
