@@ -177,6 +177,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14383afd7cabf874b95581c1b59291b5, type: 2}
   - {fileID: 11400000, guid: 8261924b6bb16ab4eb9d3fc5fa694a9e, type: 2}
   - {fileID: 11400000, guid: 3df7e0f1a45ff4b4e9dd403b35c775de, type: 2}
+  - {fileID: 11400000, guid: 002c1019b13591f4fb64140219944294, type: 2}
+  - {fileID: 11400000, guid: 46c550f53f66761479c7bb4a9f444d66, type: 2}
+  - {fileID: 11400000, guid: 4f1990784a94f41458352e027d22265d, type: 2}
   pathGroundTileSprites:
   - {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
   pathWallTileSprites:
@@ -185,6 +188,8 @@ MonoBehaviour:
   path: []
   rooms: []
   levelAssetsParent: {fileID: 1726747652}
+  diagnosticTimes: []
+  totalGenerationTimeInMilliseconds: 0
 --- !u!1 &264922598
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,8 +249,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4fa51ec8ac209c04a9359c21651821b1, type: 3}
   mainDungeonAssetsParent: {fileID: 1726747652}
   drawGizmos: 1
-  pathwayGizmoPlacementSpeed: 0.04
-  roomGizmoTilePlacementSpeed: 0.001
+  pathwayGizmoPlacementSpeed: 0
+  roomGizmoTilePlacementSpeed: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

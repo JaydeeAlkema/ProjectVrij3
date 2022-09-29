@@ -300,17 +300,17 @@ public class LevelGeneratorV2 : MonoBehaviour
 					currentPos.x += 1;
 					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
 				}
-				if (currentPos.x > endPos.x)
+				else if (currentPos.x > endPos.x)
 				{
 					currentPos.x -= 1;
 					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
 				}
-				if (currentPos.y < endPos.y)
+				else if (currentPos.y < endPos.y)
 				{
 					currentPos.y += 1;
 					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
 				}
-				if (currentPos.y > endPos.y)
+				else if (currentPos.y > endPos.y)
 				{
 					currentPos.y -= 1;
 					currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
@@ -417,13 +417,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 	{
 		for (int x = -pathWidth; x <= pathWidth; x++)
 		{
-			//Debug.Log(x);
-			pathPoints.Add(new Vector2Int(currentPos.x + x, currentPos.y));
-		}
-		for (int y = -pathWidth; y <= pathWidth; y++)
-		{
-			//Debug.Log(y);
-			pathPoints.Add(new Vector2Int(currentPos.x, currentPos.y + y));
+			for (int y = -pathWidth; y <= pathWidth; y++)
+			{
+				pathPoints.Add(new Vector2Int(currentPos.x + x, currentPos.y + y));
+			}
 		}
 
 		return currentPos;
