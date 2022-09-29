@@ -8,12 +8,27 @@ public class Room : MonoBehaviour
 	[SerializeField] private Vector2Int roomSize = Vector2Int.one;
 	[Space]
 	[SerializeField] private List<GameObject> pathwayEntries = new List<GameObject>();
+	[SerializeField] private Transform wallTilesParent = default;
 	[Space]
 	[SerializeField, ReadOnly] private List<Room> connectedRooms = new List<Room>();
+	[SerializeField, ReadOnly] private List<Vector2Int> wallTileCoordinates = new List<Vector2Int>();
 
 	public List<GameObject> PathwayEntries { get => pathwayEntries; set => pathwayEntries = value; }
 	public List<Room> ConnectedRooms { get => connectedRooms; set => connectedRooms = value; }
 	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
+	public List<Vector2Int> WallTileCoordinates { get => wallTileCoordinates; set => wallTileCoordinates = value; }
+
+	private void Start()
+	{
+		foreach (Transform child in wallTilesParent.GetComponentsInChildren<Transform>())
+		{
+			if (child != wallTilesParent)
+			{
+				Vector2Int coordinates = new Vector2Int(Mathf.RoundToInt(child.transform.position.x), Mathf.RoundToInt(child.transform.position.y));
+				WallTileCoordinates.Add(coordinates);
+			}
+		}
+	}
 
 	public void TogglePathwayEntry(int index, bool toggle)
 	{
