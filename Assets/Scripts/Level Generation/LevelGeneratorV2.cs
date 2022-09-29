@@ -33,6 +33,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[Header("References")]
 	[SerializeField] private Transform levelAssetsParent = default;
 
+	[Header("Debugging")]
+	[SerializeField] private List<string> diagnosticTimes = new List<string>();
+	[SerializeField] private long totalGenerationTimeInMilliseconds = 0;
+
 	private void Start()
 	{
 		if (seed == 0)
@@ -51,6 +55,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
 		yield return StartCoroutine(GeneratePathwaysBetweenEmptyRooms());
+
+		foreach (string diagnosticTime in diagnosticTimes)
+		{
+			Debug.Log(diagnosticTime);
+		}
+		Debug.Log($"Level Generation took in total: {totalGenerationTimeInMilliseconds}ms");
 	}
 
 	/// <summary>
@@ -90,7 +100,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 
 		executionTime.Stop();
-		Debug.Log($"Chunk Generation took: {executionTime.ElapsedMilliseconds}ms");
+		diagnosticTimes.Add($"Chunk Generation took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
 		yield return new WaitForEndOfFrame();
 	}
@@ -132,7 +143,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 
 		executionTime.Stop();
-		Debug.Log($"Chunk path generation took: {executionTime.ElapsedMilliseconds}ms");
+		diagnosticTimes.Add($"Chunk path generation took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
 		yield return new WaitForEndOfFrame();
 	}
@@ -183,7 +195,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 
 		executionTime.Stop();
-		Debug.Log($"Empty rooms generation took: {executionTime.ElapsedMilliseconds}ms");
+		diagnosticTimes.Add($"Empty rooms generation took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
 		yield return new WaitForEndOfFrame();
 	}
@@ -339,15 +352,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 				SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
 				spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-				//if (pp % pathWidth * 2 == 0)
-				//{
-				//	spriteRenderer.color = Color.red;
-				//}
 			}
 		}
 
 		executionTime.Stop();
-		Debug.Log($"Generating pathways between empty rooms took: {executionTime.ElapsedMilliseconds}ms");
+		diagnosticTimes.Add($"Generating pathways between empty rooms took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
 		yield return new WaitForEndOfFrame();
 	}
