@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
 	private float counter = 0f;
 	[SerializeField] private float lifeSpan;
+	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	[SerializeField] private TrailRenderer trail = null;
 	[SerializeField] private bool trailUpgrade = false;
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
