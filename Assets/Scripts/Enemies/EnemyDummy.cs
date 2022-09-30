@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemyDummy : EnemyBase
 {
-	[SerializeField]
-	private GameObject rewardInstance;
+	[SerializeField] private GameObject rewardInstance;
+
 	private void Start()
 	{
 		this.GetComponent<SpriteRenderer>().color = Color.green;

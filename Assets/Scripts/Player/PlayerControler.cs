@@ -124,17 +124,20 @@ public class PlayerControler : MonoBehaviour , IDamageable
 
 	void AbilityOneAttack()
 	{
-
+		ability1.Ability.SetScriptable( ability1 );
+		ability1.Ability.AbilityBehavior();
 	}
 
 	void AbilityTwoAttack()
 	{
-
+		ability2.Ability.SetScriptable( ability2 );
+		ability2.Ability.AbilityBehavior();
 	}
 
 	void AbilityThreeAttack()
 	{
-
+		ability3.Ability.SetScriptable( ability3 );
+		ability3.Ability.AbilityBehavior();
 	}
 
 	void CheckAbilityUpdate()
