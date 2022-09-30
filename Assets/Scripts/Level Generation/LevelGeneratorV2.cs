@@ -99,8 +99,28 @@ public class LevelGeneratorV2 : MonoBehaviour
 				chunk.Coordinates = new Vector2Int(x * chunkSize, y * chunkSize);
 				chunk.Occupied = false;
 
-				chunk.gameObject.transform.position = new Vector2(x * chunkSize, y * chunkSize);
+				chunk.gameObject.transform.position = new Vector2(chunk.Coordinates.x, chunk.Coordinates.y);
 				chunk.gameObject.transform.parent = levelAssetsParent;
+
+				// Create starting chunk node grid (the +1 comes from the fact that the nodes start on the edges of the chunk, not within the chunk)
+				for (int nx = 0; nx < chunkSize + 1; nx++)
+				{
+					for (int ny = 0; ny < chunkSize + 1; ny++)
+					{
+						Vector2Int nodeCoordinates = new Vector2Int(Mathf.RoundToInt(chunk.transform.position.x - chunkSize / 2) + nx, Mathf.RoundToInt(chunk.transform.position.y - chunkSize / 2) + ny);
+
+						GameObject nodeGO = new GameObject($"Node [{nx}][{ny}]");
+						Node node = nodeGO.AddComponent<Node>();
+
+						nodeGO.transform.position = new Vector2(nodeCoordinates.x, nodeCoordinates.y);
+						nodeGO.transform.parent = chunk.transform;
+
+						node.Walkable = true;
+						node.Coordinates = new Vector2Int(Mathf.RoundToInt(nodeGO.transform.position.x), Mathf.RoundToInt(nodeGO.transform.position.y));
+
+						chunk.Nodes.Add(node);
+					}
+				}
 
 				chunks.Add(chunk);
 			}
@@ -271,124 +291,162 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Vector2Int currentPos = startPos;
 			List<Vector2Int> pathPoints = new List<Vector2Int>();
 
+			#region Old Pathfinding
+			////TODO:
+			//// 1: The current way of making the pathways wider, is a bit of a shitty way to do it. This should honestly just be a single line of code, with the ability to instantly decide the width of the pathway.
 
-			//TODO:
-			// 1: The current way of making the pathways wider, is a bit of a shitty way to do it. This should honestly just be a single line of code, with the ability to instantly decide the width of the pathway.
+			//// We need to start of by adjusting the starting position by 1.
+			//// This is done by checking in which way we need to start to make our path.
+			//float angle = GetAngle(room.transform.position, roomToConnectTo.transform.position);
+			//if (Between(angle, 45, 135))
+			//{
+			//	currentPos.y += 1;
+			//	currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+			//}
+			//else if (Between(angle, 225, 315))
+			//{
+			//	currentPos.y -= 1;
+			//	currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+			//}
+			//else if (Between(angle, 315, 360) || Between(angle, 0, 45))
+			//{
+			//	currentPos.x += 1;
+			//	currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+			//}
+			//else if (Between(angle, 135, 225))
+			//{
+			//	currentPos.x -= 1;
+			//	currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+			//}
 
-			// We need to start of by adjusting the starting position by 1.
-			// This is done by checking in which way we need to start to make our path.
-			float angle = GetAngle(room.transform.position, roomToConnectTo.transform.position);
-			if (Between(angle, 45, 135))
-			{
-				currentPos.y += 1;
-				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-			}
-			else if (Between(angle, 225, 315))
-			{
-				currentPos.y -= 1;
-				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-			}
-			else if (Between(angle, 315, 360) || Between(angle, 0, 45))
-			{
-				currentPos.x += 1;
-				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-			}
-			else if (Between(angle, 135, 225))
-			{
-				currentPos.x -= 1;
-				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-			}
+			//// Build the path from start to end
+			//while (currentPos != endPos)
+			//{
+			//	switch (pathwayGenerationType)
+			//	{
+			//		case PathwayGenerationType.Organic:
+			//			if (currentPos.x < endPos.x)
+			//			{
+			//				currentPos.x += 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+			//			}
+			//			if (currentPos.x > endPos.x)
+			//			{
+			//				currentPos.x -= 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+			//			}
+			//			if (currentPos.y < endPos.y)
+			//			{
+			//				currentPos.y += 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+			//			}
+			//			if (currentPos.y > endPos.y)
+			//			{
+			//				currentPos.y -= 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+			//			}
+			//			break;
+			//		case PathwayGenerationType.Straight:
+			//			if (currentPos.x < endPos.x)
+			//			{
+			//				currentPos.x += 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+			//			}
+			//			else if (currentPos.x > endPos.x)
+			//			{
+			//				currentPos.x -= 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
+			//			}
+			//			else if (currentPos.y < endPos.y)
+			//			{
+			//				currentPos.y += 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+			//			}
+			//			else if (currentPos.y > endPos.y)
+			//			{
+			//				currentPos.y -= 1;
+			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
+			//			}
+			//			break;
+			//		default:
+			//			break;
+			//	}
+			//}
+			#endregion
 
-			// Build the path from start to end
-			while (currentPos != endPos)
+			#region New Pathfinding (A*)
+			// Get the two chunks that need to connect their rooms together
+			Chunk startChunk = null;
+			Chunk endChunk = null;
+
+			foreach (Chunk chunk in chunks)
 			{
-				switch (pathwayGenerationType)
+				if (chunk.Room == room)
 				{
-					case PathwayGenerationType.Organic:
-						if (currentPos.x < endPos.x)
-						{
-							currentPos.x += 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-						}
-						if (currentPos.x > endPos.x)
-						{
-							currentPos.x -= 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-						}
-						if (currentPos.y < endPos.y)
-						{
-							currentPos.y += 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-						}
-						if (currentPos.y > endPos.y)
-						{
-							currentPos.y -= 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-						}
-						break;
-					case PathwayGenerationType.Straight:
-						if (currentPos.x < endPos.x)
-						{
-							currentPos.x += 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-						}
-						else if (currentPos.x > endPos.x)
-						{
-							currentPos.x -= 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-						}
-						else if (currentPos.y < endPos.y)
-						{
-							currentPos.y += 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-						}
-						else if (currentPos.y > endPos.y)
-						{
-							currentPos.y -= 1;
-							currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-						}
-						break;
-					default:
-						break;
+					startChunk = chunk;
 				}
-
+				if (chunk.Room == roomToConnectTo)
+				{
+					endChunk = chunk;
+				}
 			}
+
+			List<Node> nodes = new List<Node>();
+			nodes.AddRange(startChunk.Nodes);
+			nodes.AddRange(endChunk.Nodes);
+
+			List<Node> nodesNoDuplicates = nodes.Distinct(new NodeComparer()).ToList();
+
+			foreach (Vector2Int wall in room.CollideableTiles)
+			{
+				Node node = nodesNoDuplicates.Find(n => n.Coordinates == wall);
+				if (node != null) node.Walkable = false;
+			}
+			foreach (Vector2Int wall in roomToConnectTo.CollideableTiles)
+			{
+				Node node = nodesNoDuplicates.Find(n => n.Coordinates == wall);
+				if (node != null) node.Walkable = false;
+			}
+			#endregion
 
 			// Instantiate empty pathway tiles.
-			GameObject pathParent = new GameObject($"Pathway [{r}]");
-			pathParent.transform.parent = levelAssetsParent;
-			int totalX = 0;
-			int totalY = 0;
-			foreach (Vector2Int pathPoint in pathPoints)
+			if (pathPoints.Count > 0)
 			{
-				totalX += pathPoint.x;
-				totalY += pathPoint.y;
-			}
-			int centerX = totalX / pathPoints.Count;
-			int centerY = totalY / pathPoints.Count;
-			pathParent.transform.position = new Vector2(centerX, centerY);
-
-			// Remove all duplicates. Maybe use a HashSet in the future.
-			pathPoints = pathPoints.Distinct().ToList();
-			for (int p = pathPoints.Count - 1; p >= 0; p--)
-			{
-				Vector2Int pathPoint = pathPoints[p];
-				Collider2D[] colliders = Physics2D.OverlapBoxAll(new Vector2Int(pathPoint.x, pathPoint.y), new Vector2(0.75f, 0.75f), 0f);
-				if (colliders.Length > 0)
+				GameObject pathParent = new GameObject($"Pathway [{r}]");
+				pathParent.transform.parent = levelAssetsParent;
+				int totalX = 0;
+				int totalY = 0;
+				foreach (Vector2Int pathPoint in pathPoints)
 				{
-					pathPoints.Remove(pathPoint);
+					totalX += pathPoint.x;
+					totalY += pathPoint.y;
 				}
-			}
+				int centerX = totalX / pathPoints.Count;
+				int centerY = totalY / pathPoints.Count;
+				pathParent.transform.position = new Vector2(centerX, centerY);
 
-			for (int pp = 0; pp < pathPoints.Count; pp++)
-			{
-				Vector2Int point = pathPoints[pp];
-				GameObject pathPoint = new GameObject($"Point [{pp}]");
-				pathPoint.transform.position = new Vector3(point.x, point.y, 0);
-				pathPoint.transform.parent = pathParent.transform;
+				// Remove all duplicates. Maybe use a HashSet in the future.
+				pathPoints = pathPoints.Distinct().ToList();
+				for (int p = pathPoints.Count - 1; p >= 0; p--)
+				{
+					Vector2Int pathPoint = pathPoints[p];
+					Collider2D[] colliders = Physics2D.OverlapBoxAll(new Vector2Int(pathPoint.x, pathPoint.y), new Vector2(0.75f, 0.75f), 0f);
+					if (colliders.Length > 0)
+					{
+						pathPoints.Remove(pathPoint);
+					}
+				}
 
-				SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
-				spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+				for (int pp = 0; pp < pathPoints.Count; pp++)
+				{
+					Vector2Int point = pathPoints[pp];
+					GameObject pathPoint = new GameObject($"Point [{pp}]");
+					pathPoint.transform.position = new Vector3(point.x, point.y, 0);
+					pathPoint.transform.parent = pathParent.transform;
+
+					SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
+					spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+				}
 			}
 		}
 
@@ -500,6 +558,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 				Chunk chunk = chunks[i];
 				Gizmos.color = Color.white;
 				Gizmos.DrawWireCube(chunk.gameObject.transform.position, new Vector3(chunkSize, chunkSize));
+
+				if (chunk.Nodes.Count == 0) return;
+				foreach (Node node in chunk.Nodes)
+				{
+					Gizmos.color = node.Walkable ? new Color(1, 1, 1, 0.1f) : new Color(1, 0, 0, 0.1f);
+					Gizmos.DrawCube(new Vector3(node.Coordinates.x, node.Coordinates.y, 0), Vector3.one * 0.95f);
+				}
 			}
 		}
 
@@ -520,8 +585,62 @@ public class Chunk : MonoBehaviour
 	[SerializeField] private Vector2Int coordinates = new Vector2Int();
 	[SerializeField] private bool occupied = false;
 	[SerializeField] private Room room;
+	[SerializeField] private List<Node> nodes = new List<Node>();
 
 	public Vector2Int Coordinates { get => coordinates; set => coordinates = value; }
 	public bool Occupied { get => occupied; set => occupied = value; }
 	public Room Room { get => room; set => room = value; }
+	public List<Node> Nodes { get => nodes; set => nodes = value; }
+}
+
+public class Node : MonoBehaviour
+{
+	[SerializeField] private bool walkable;
+	[SerializeField] private Vector2Int coordinates;
+
+	public Node(bool walkable, Vector2Int coordinates)
+	{
+		this.walkable = walkable;
+		this.coordinates = coordinates;
+	}
+
+	public bool Walkable { get => walkable; set => walkable = value; }
+	public Vector2Int Coordinates { get => coordinates; set => coordinates = value; }
+
+
+}
+
+public class NodeComparer : IEqualityComparer<Node>
+{
+	// Nodes are equal if their coordinates and walkeable bool are equal.
+	public bool Equals(Node x, Node y)
+	{
+		//Check whether the compared objects reference the same data.
+		if (Object.ReferenceEquals(x, y)) return true;
+
+		//Check whether any of the compared objects is null.
+		if (Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
+			return false;
+
+		//Check whether the nodes properties are equal.
+		return x.Coordinates == y.Coordinates && x.Walkable == y.Walkable;
+	}
+
+	// If Equals() returns true for a pair of objects
+	// then GetHashCode() must return the same value for these objects.
+
+	public int GetHashCode(Node node)
+	{
+		//Check whether the object is null
+		if (Object.ReferenceEquals(node, null)) return 0;
+
+		//Get hash code for the Name field if it is not null.
+		int hashProductName = node.Coordinates == null ? 0 : node.Coordinates.GetHashCode();
+
+		//Get hash code for the Code field.
+		int hashProductCode = node.Walkable.GetHashCode();
+
+		//Calculate the hash code for the product.
+		return hashProductName ^ hashProductCode;
+	}
 }
