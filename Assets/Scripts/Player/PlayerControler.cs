@@ -197,6 +197,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	public void TakeDamage( float damage )
 	{
         healthPoints -= damage;
+		if( healthPoints <= 0 ) Die();
 	}
 
 	public void ApplyStatusEffect( IStatusEffect statusEffect )
@@ -207,5 +208,10 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	public void RemoveStatusEffect( IStatusEffect statusEffect )
 	{
 
+	}
+
+	void Die()
+	{
+		Debug.Log( "I HAVE DIED OH NO" );
 	}
 }

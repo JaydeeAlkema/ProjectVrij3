@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4442677197823009442}
   - component: {fileID: 4442677197823009441}
   - component: {fileID: 4442677197823009436}
-  - component: {fileID: 4442677197823009439}
+  - component: {fileID: 1409221283}
   m_Layer: 6
   m_Name: enemyV1
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4442677197823009442
 SpriteRenderer:
@@ -124,7 +124,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &4442677197823009439
+--- !u!114 &1409221283
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,11 +133,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4442677197823009440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a3df38aa6499bc489f8a315da69b709, type: 3}
+  m_Script: {fileID: 11500000, guid: 632c5f5b9042a6c459f46bcff76bdf27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 100
+  healthPoints: 50
   beingCrowdControlled: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
+  damage: 25
+  speed: 0.2
+  player: {fileID: 0}

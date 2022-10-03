@@ -50,6 +50,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		healthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine( FlashColor() );
+		if( healthPoints <= 0 ) Die();
 	}
 
 	public virtual IEnumerator FlashColor()
