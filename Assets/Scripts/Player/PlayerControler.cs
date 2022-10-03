@@ -15,7 +15,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	private float angle;
 	//[SerializeField]
 	//private Camera cam;
-	private Vector2 lookDir;
+	public Vector2 lookDir; // <-- private this after Dash is implemented correctly!
 	[SerializeField]
 	private Transform castFromPoint;
 	[SerializeField]
@@ -31,7 +31,12 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	[SerializeField] Animator animPlayer;
 	private bool isAttacking = false;
 
-    [SerializeField] private float healthPoints = 500;
+	public float dashSpeed = 100f;
+	public float dashDuration = 0.2f;
+	private bool isDashing = false;
+	public TrailRenderer dashTrail;
+
+	[SerializeField] private float healthPoints = 500;
 
     [Header("Abilities")]
 	#region ability fields
@@ -52,19 +57,27 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	void Start()
 	{
 		rb2d = GetComponent<Rigidbody2D>();
+		dashTrail.emitting = false;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
 		CheckAbilityUpdate();
-		horizontal = (int)Input.GetAxisRaw("Horizontal");
-		vertical = (int)Input.GetAxisRaw("Vertical");
+		
 
-		rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * moveSpeed;
+		if (!isDashing)
+		{
+			horizontal = (int)Input.GetAxisRaw("Horizontal");
+			vertical = (int)Input.GetAxisRaw("Vertical");
+			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * moveSpeed;
+		}
+
 		vel = rb2d.velocity.magnitude;
 
 		MouseLook();
+
+		Dash();
 
 		Sprite.flipX = lookDir.x > 0 ? true : false;
 		AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
@@ -76,6 +89,24 @@ public class PlayerControler : MonoBehaviour , IDamageable
 		if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
 		if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
 		if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
+	}
+
+	void Dash()
+	{
+		if (Input.GetKeyDown(KeyCode.Space) && !isDashing)
+		{
+			StartCoroutine(Dashing(new Vector3(horizontal, vertical).normalized, dashDuration));
+		}
+	}
+
+	public IEnumerator Dashing(Vector2 dashDir, float dashDuration)
+	{
+		isDashing = true;
+		rb2d.velocity = dashDir.normalized * dashSpeed;
+		dashTrail.emitting = true;
+		yield return new WaitForSeconds(dashDuration);
+		isDashing = false;
+		dashTrail.emitting = false;
 	}
 
 	void MouseLook()
