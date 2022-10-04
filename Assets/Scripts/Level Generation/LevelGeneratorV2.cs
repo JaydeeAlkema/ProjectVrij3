@@ -194,8 +194,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 			int roomsizeHalfX = room.RoomSize.x / 2;
 			int roomsizeHalfY = room.RoomSize.y / 2;
 
-			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + 1, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
-			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + 1, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
+			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + 3, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
+			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + 3, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
 
 			newRoomGO.transform.position = new Vector2(randX, randY);
 
@@ -367,6 +367,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 					SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
 					spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+					spriteRenderer.color = Color.blue; // For debugging purposes only!
 
 					// Add extra path to make the pathway wider.
 					for (int x = -(pathWidth / 2); x < (pathWidth / 2) + 1; x++)
@@ -376,14 +377,17 @@ public class LevelGeneratorV2 : MonoBehaviour
 							Vector2Int coordinates = new Vector2Int(point.coordinates.x + x, point.coordinates.y + y);
 							Node node = nodesNoDuplicates.Find(n => n.coordinates == coordinates);
 
-							if (node != null && node.walkable)
+							if (!pathPoints.Contains(node))
 							{
-								GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
-								neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
-								neighbouringPathPoint.transform.parent = pathParent.transform;
+								if (node != null && node.walkable)
+								{
+									GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
+									neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
+									neighbouringPathPoint.transform.parent = pathParent.transform;
 
-								SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
-								neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+									SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
+									neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+								}
 							}
 						}
 					}
