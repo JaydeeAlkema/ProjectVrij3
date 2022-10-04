@@ -152,6 +152,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	{
 		rangedAttack.Ability.SetScriptable(rangedAttack);
 		rangedAttack.Ability.AbilityBehavior();
+		animPlayer.SetTrigger("isAttacking");
 	}
 
 	void AbilityOneAttack()
