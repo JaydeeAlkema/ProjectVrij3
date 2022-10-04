@@ -6,11 +6,12 @@ public class RangedAttack : Ability
 {
 	public override void AbilityBehavior()
 	{
-		GameObject Projectile = Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
-		Projectile.transform.SetParent( null );
-		Projectile.GetComponent<Projectile>().Damage = damage;
-		Projectile.GetComponent<Projectile>().LifeSpan = lifeSpan;
-		Projectile.GetComponent<Projectile>().Force = force;
+		GameObject projectile = Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
+		Projectile proj = projectile.GetComponent<Projectile>();
+		proj.Damage = damage;
+		proj.LifeSpan = lifeSpan;
+		proj.Force = force;
+		projectile.transform.SetParent( null );
 	}
 
 	public override void SetScriptable( AbilityScriptable scriptable )

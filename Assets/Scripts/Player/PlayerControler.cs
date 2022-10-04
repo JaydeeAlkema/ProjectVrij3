@@ -170,7 +170,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 			ability1.MousePos = mousePos;
 			ability1.LookDir = lookDir;
 			ability1.Angle = angle;
-			ability1.Ability.SetScriptable(rangedAttack);
+			//ability1.Ability.SetScriptable();
 		}
 
 		if (ability2 != null)
@@ -180,7 +180,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 			ability2.MousePos = mousePos;
 			ability2.LookDir = lookDir;
 			ability2.Angle = angle;
-			ability2.Ability.SetScriptable(rangedAttack);
+			//ability2.Ability.SetScriptable();
 		}
 
         if( ability3 != null )
@@ -190,7 +190,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
             ability3.MousePos = mousePos;
             ability3.LookDir = lookDir;
             ability3.Angle = angle;
-            ability3.Ability.SetScriptable( rangedAttack );
+            //ability3.Ability.SetScriptable(  );
         }
     }
 

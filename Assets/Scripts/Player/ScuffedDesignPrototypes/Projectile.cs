@@ -5,12 +5,12 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 	private float counter = 0f;
-	private float lifeSpan;
+	[SerializeField] private float lifeSpan;
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	[SerializeField] private TrailRenderer trail = null;
 	[SerializeField] private bool trailUpgrade = false;
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
-	private float force;
+	[SerializeField] private float force;
 	public float Force { get => force; set => force = value; }
 	private float damage;
 	public float Damage { get => damage; set => damage = value; }
@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
 	private void FixedUpdate()
 	{
 		LifeTime( lifeSpan );
-		transform.Translate( Vector3.up * force * Time.fixedDeltaTime, Space.Self );
+		transform.Translate( Vector3.up * force * Time.deltaTime);
 	}
 
 	void LifeTime(float lifeSpan)
