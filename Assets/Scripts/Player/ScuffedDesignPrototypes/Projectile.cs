@@ -34,9 +34,10 @@ public class Projectile : MonoBehaviour
 	void LifeTime(float lifeSpan)
 	{
 		counter += Time.fixedDeltaTime;
-		if (counter >= lifeSpan)
+		if (counter >= lifeSpan && GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerProjectile1"))
 		{
-			Destroy(this.gameObject);
+			GetComponentInChildren<Animator>().Play("PlayerProjectile1_fizzle");
+			Destroy(this.gameObject, GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).length);
 		}
 	}
 
