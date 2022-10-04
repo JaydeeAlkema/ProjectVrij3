@@ -13,19 +13,12 @@ public enum RoomType
 	Spawn
 }
 
-public enum PathwayGenerationType
-{
-	Organic,
-	Straight
-}
-
 public class LevelGeneratorV2 : MonoBehaviour
 {
 	[Header("Level Generation Settings")]
 	[SerializeField] private int seed;
 	[SerializeField] private int chunkSize = 35;
 	[SerializeField] private int maxRooms = 10;
-	[SerializeField] private PathwayGenerationType pathwayGenerationType = PathwayGenerationType.Organic;
 	[SerializeField] private int pathWidth = 3;
 	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
@@ -44,9 +37,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private List<string> diagnosticTimes = new List<string>();
 	[SerializeField] private long totalGenerationTimeInMilliseconds = 0;
 
-
 	List<Node> pathPoints = new List<Node>();
-
 
 	private void Start()
 	{
@@ -113,7 +104,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 					{
 						Vector2Int nodeCoordinates = new Vector2Int(Mathf.RoundToInt(chunk.transform.position.x - chunkSize / 2) + nx, Mathf.RoundToInt(chunk.transform.position.y - chunkSize / 2) + ny);
 
-						GameObject nodeGO = new GameObject($"Node [{nx}][{ny}]");
+						GameObject nodeGO = new GameObject($"Node [{nodeCoordinates.x}][{nodeCoordinates.y}]");
 						Node node = nodeGO.AddComponent<Node>();
 
 						nodeGO.transform.position = new Vector2(nodeCoordinates.x, nodeCoordinates.y);
@@ -293,86 +284,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Vector2Int startPos = new Vector2Int(Mathf.RoundToInt(pathwayStartPoint.transform.position.x), Mathf.RoundToInt(pathwayStartPoint.transform.position.y));
 			Vector2Int targetPos = new Vector2Int(Mathf.RoundToInt(pathwayEndPoint.transform.position.x), Mathf.RoundToInt(pathwayEndPoint.transform.position.y));
 
-			// We need to start of by adjusting the starting position by 1.
-			// This is done by checking in which way we need to start to make our path.
-			float angle = GetAngle(room.transform.position, roomToConnectTo.transform.position);
-			if (Between(angle, 45, 135))
-			{
-				startPos.y += 1;
-			}
-			else if (Between(angle, 225, 315))
-			{
-				startPos.y -= 1;
-			}
-			else if (Between(angle, 315, 360) || Between(angle, 0, 45))
-			{
-				startPos.x += 1;
-			}
-			else if (Between(angle, 135, 225))
-			{
-				startPos.x -= 1;
-			}
-
-			#region Old Pathfinding
-			////TODO:
-			//// 1: The current way of making the pathways wider, is a bit of a shitty way to do it. This should honestly just be a single line of code, with the ability to instantly decide the width of the pathway.
-
-			//// Build the path from start to end
-			//while (currentPos != endPos)
-			//{
-			//	switch (pathwayGenerationType)
-			//	{
-			//		case PathwayGenerationType.Organic:
-			//			if (currentPos.x < endPos.x)
-			//			{
-			//				currentPos.x += 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-			//			}
-			//			if (currentPos.x > endPos.x)
-			//			{
-			//				currentPos.x -= 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-			//			}
-			//			if (currentPos.y < endPos.y)
-			//			{
-			//				currentPos.y += 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-			//			}
-			//			if (currentPos.y > endPos.y)
-			//			{
-			//				currentPos.y -= 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-			//			}
-			//			break;
-			//		case PathwayGenerationType.Straight:
-			//			if (currentPos.x < endPos.x)
-			//			{
-			//				currentPos.x += 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-			//			}
-			//			else if (currentPos.x > endPos.x)
-			//			{
-			//				currentPos.x -= 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(0, 1));
-			//			}
-			//			else if (currentPos.y < endPos.y)
-			//			{
-			//				currentPos.y += 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-			//			}
-			//			else if (currentPos.y > endPos.y)
-			//			{
-			//				currentPos.y -= 1;
-			//				currentPos = AddPathTiles(currentPos, pathPoints, pathWidth, new Vector2Int(1, 0));
-			//			}
-			//			break;
-			//		default:
-			//			break;
-			//	}
-			//}
-			#endregion
-
-			#region New Pathfinding (A*)
 			// Get the two chunks that need to connect their rooms together
 			Chunk startChunk = null;
 			Chunk endChunk = null;
@@ -398,65 +309,27 @@ public class LevelGeneratorV2 : MonoBehaviour
 			List<Node> nodesNoDuplicates = nodes.Distinct(new NodeComparer()).ToList();
 
 			// Set all nodes walkeable variable that have the same coordinates of the collideable tiles as false.
-			foreach (Vector2Int wall in room.CollideableTiles)
+			foreach (Transform currentRoomWall in room.CollideableTiles)
 			{
-				Node node = nodesNoDuplicates.Find(n => n.coordinates == wall);
-				if (node != null) node.walkable = false;
-			}
-			foreach (Vector2Int wall in roomToConnectTo.CollideableTiles)
-			{
-				Node node = nodesNoDuplicates.Find(n => n.coordinates == wall);
-				if (node != null) node.walkable = false;
-			}
-
-			Node startNode = nodesNoDuplicates.Find(n => n.coordinates == startPos);
-			Node targetNode = nodesNoDuplicates.Find(n => n.coordinates == targetPos);
-
-			List<Node> openSet = nodesNoDuplicates;
-			HashSet<Node> closedSet = new HashSet<Node>();
-
-			openSet.Add(startNode);
-
-			while (openSet.Count > 0)
-			{
-				Node currentNode = openSet[0];
-				for (int i = 1; i < openSet.Count; i++)
+				if (currentRoomWall.parent.gameObject.activeInHierarchy)
 				{
-					if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
-					{
-						currentNode = openSet[i];
-					}
-				}
-
-				openSet.Remove(currentNode);
-				closedSet.Add(currentNode);
-
-				if (currentNode == targetNode)
-				{
-					RetracePath(startNode, targetNode);
-					break;
-				}
-
-				foreach (Node neighbourNode in GetNeighbours(currentNode, nodesNoDuplicates))
-				{
-					if (!neighbourNode.walkable || closedSet.Contains(neighbourNode)) continue;
-
-					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbourNode);
-					if (newMovementCostToNeighbour < neighbourNode.gCost || !openSet.Contains(neighbourNode))
-					{
-						neighbourNode.gCost = newMovementCostToNeighbour;
-						neighbourNode.hCost = GetDistance(neighbourNode, targetNode);
-						neighbourNode.parent = currentNode;
-
-						if (!openSet.Contains(neighbourNode))
-						{
-							openSet.Add(neighbourNode);
-						}
-					}
+					Vector2Int wallCoordinates = new Vector2Int(Mathf.RoundToInt(currentRoomWall.position.x), Mathf.RoundToInt(currentRoomWall.position.y));
+					Node node = nodesNoDuplicates.Find(n => n.coordinates == wallCoordinates);
+					if (node != null) node.walkable = false;
 				}
 			}
-			#endregion
-			Debug.Log("!");
+			foreach (Transform neighbourRoomWall in roomToConnectTo.CollideableTiles)
+			{
+				if (neighbourRoomWall.parent.gameObject.activeInHierarchy)
+				{
+					Vector2Int wallCoordinates = new Vector2Int(Mathf.RoundToInt(neighbourRoomWall.position.x), Mathf.RoundToInt(neighbourRoomWall.position.y));
+					Node node = nodesNoDuplicates.Find(n => n.coordinates == wallCoordinates);
+					if (node != null) node.walkable = false;
+				}
+			}
+
+			FindShortestPathBetweenRoomsWithAStar(startPos, targetPos, nodesNoDuplicates);
+
 			// Instantiate empty pathway tiles.
 			if (pathPoints.Count > 0)
 			{
@@ -494,6 +367,26 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 					SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
 					spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+
+					// Add extra path to make the pathway wider.
+					for (int x = -(pathWidth / 2); x < (pathWidth / 2) + 1; x++)
+					{
+						for (int y = -(pathWidth / 2); y < (pathWidth / 2) + 1; y++)
+						{
+							Vector2Int coordinates = new Vector2Int(point.coordinates.x + x, point.coordinates.y + y);
+							Node node = nodesNoDuplicates.Find(n => n.coordinates == coordinates);
+
+							if (node != null && node.walkable)
+							{
+								GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
+								neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
+								neighbouringPathPoint.transform.parent = pathParent.transform;
+
+								SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
+								neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+							}
+						}
+					}
 				}
 			}
 		}
@@ -503,6 +396,66 @@ public class LevelGeneratorV2 : MonoBehaviour
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
 		yield return new WaitForEndOfFrame();
+	}
+
+	/// <summary>
+	/// This finds the shortest path between startPos and targetPos using A*
+	/// </summary>
+	/// <param name="startPos"> starting position. </param>
+	/// <param name="targetPos"> target position. </param>
+	/// <param name="nodesNoDuplicates"> List of nodes to pathfind through. </param>
+	private void FindShortestPathBetweenRoomsWithAStar(Vector2Int startPos, Vector2Int targetPos, List<Node> nodesNoDuplicates)
+	{
+		Node startNode = nodesNoDuplicates.Find(n => n.coordinates == startPos);
+		Node targetNode = nodesNoDuplicates.Find(n => n.coordinates == targetPos);
+
+		List<Node> openSet = new List<Node>();
+		HashSet<Node> closedSet = new HashSet<Node>();
+
+		openSet.Add(startNode);
+		pathPoints.Add(startNode);
+		pathPoints.Add(targetNode);
+
+		while (openSet.Count > 0)
+		{
+			Node currentNode = openSet[0];
+			for (int i = 1; i < openSet.Count; i++)
+			{
+				if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
+				{
+					currentNode = openSet[i];
+				}
+			}
+
+			openSet.Remove(currentNode);
+			closedSet.Add(currentNode);
+
+			if (currentNode == targetNode)
+			{
+				RetracePath(startNode, targetNode);
+				return;
+			}
+
+			List<Node> neighbourNodes = GetNeighbouringNodes(currentNode, nodesNoDuplicates);
+			foreach (Node neighbourNode in neighbourNodes)
+			{
+				if (!neighbourNode.walkable || closedSet.Contains(neighbourNode)) continue;
+
+				int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbourNode);
+				if (newMovementCostToNeighbour < neighbourNode.gCost || !openSet.Contains(neighbourNode))
+				{
+					neighbourNode.gCost = newMovementCostToNeighbour;
+					neighbourNode.hCost = GetDistance(neighbourNode, targetNode);
+					neighbourNode.parent = currentNode;
+
+					if (!openSet.Contains(neighbourNode))
+					{
+						openSet.Add(neighbourNode);
+					}
+				}
+			}
+		}
+
 	}
 
 	#region Helpers
@@ -550,26 +503,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Adds extra pathPoints to the path tiles list to widen the path.
+	/// Get neighbouring nodes
 	/// </summary>
-	/// <param name="currentPos"> Current pathPoint position.</param>
-	/// <param name="pathPoints"> List to add the new positions to.</param>
-	/// <param name="pathWidth"> Width of the path</param>
+	/// <param name="node"> Origin node. </param>
+	/// <param name="nodes"> List of nodes that hold the neighbouring nodes. </param>
 	/// <returns></returns>
-	//private static Vector2Int AddPathTiles(Vector2Int currentPos, List<Vector2Int> pathPoints, int pathWidth, Vector2Int dir)
-	//{
-	//	for (int x = -pathWidth; x <= pathWidth; x++)
-	//	{
-	//		for (int y = -pathWidth; y <= pathWidth; y++)
-	//		{
-	//			pathPoints.Add(new Vector2Int(currentPos.x + x, currentPos.y + y));
-	//		}
-	//	}
-
-	//	return currentPos;
-	//}
-
-	private List<Node> GetNeighbours(Node node, List<Node> nodes)
+	private List<Node> GetNeighbouringNodes(Node node, List<Node> nodes)
 	{
 		List<Node> neighbours = new List<Node>();
 
@@ -582,17 +521,21 @@ public class LevelGeneratorV2 : MonoBehaviour
 				int checkX = node.coordinates.x + x;
 				int checkY = node.coordinates.y + y;
 
-				if (checkX >= 0 && checkX < chunkGridSize.x && checkY >= 0 && checkY < chunkGridSize.y)
-				{
-					neighbours.Add(nodes.Find(n => n.coordinates == new Vector2Int(checkX, checkY)));
-				}
-
+				Node neighbourNode = nodes.Find(n => n.coordinates == new Vector2Int(checkX, checkY));
+				if (neighbourNode != null)
+					neighbours.Add(neighbourNode);
 			}
 		}
 
 		return neighbours;
 	}
 
+	/// <summary>
+	/// Get the distance between node A and node B.
+	/// </summary>
+	/// <param name="nodeA"> Starting node. </param>
+	/// <param name="nodeB"> Target node. </param>
+	/// <returns></returns>
 	private int GetDistance(Node nodeA, Node nodeB)
 	{
 		int distX = Mathf.Abs(nodeA.coordinates.x - nodeB.coordinates.x);
@@ -605,6 +548,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 		return 14 * distX + 10 * (distY - distX);
 	}
 
+	/// <summary>
+	/// Retrace the path from start to end. (and reverse the loop)
+	/// </summary>
+	/// <param name="startNode"> start point of the path. </param>
+	/// <param name="endNode"> end point of the path. </param>
 	private void RetracePath(Node startNode, Node endNode)
 	{
 		List<Node> path = new List<Node>();

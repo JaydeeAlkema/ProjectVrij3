@@ -10,12 +10,12 @@ public class Room : MonoBehaviour
 	[SerializeField] private List<GameObject> pathwayEntries = new List<GameObject>();
 	[Space]
 	[SerializeField, ReadOnly] private List<Room> connectedRooms = new List<Room>();
-	[SerializeField, ReadOnly] private List<Vector2Int> collideableTiles = new List<Vector2Int>();
+	[SerializeField, ReadOnly] private List<Transform> collideableTiles = new List<Transform>();
 
 	public List<GameObject> PathwayEntries { get => pathwayEntries; set => pathwayEntries = value; }
 	public List<Room> ConnectedRooms { get => connectedRooms; set => connectedRooms = value; }
 	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
-	public List<Vector2Int> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
+	public List<Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
 
 	private void Start()
 	{
@@ -25,8 +25,7 @@ public class Room : MonoBehaviour
 		{
 			if (child.GetComponent<BoxCollider2D>())
 			{
-				Vector2Int coordinates = new Vector2Int(Mathf.RoundToInt(child.transform.position.x), Mathf.RoundToInt(child.transform.position.y));
-				CollideableTiles.Add(coordinates);
+				CollideableTiles.Add(child);
 			}
 		}
 	}
