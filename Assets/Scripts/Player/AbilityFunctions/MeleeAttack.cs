@@ -5,6 +5,8 @@ using UnityEngine;
 public class MeleeAttack : Ability
 {
 	private bool onCoolDown = false;
+	public bool burnAreaUpgrade = false;
+	public GameObject burningGround;
 	public override void AbilityBehavior()
 	{
 		if( !onCoolDown )
@@ -16,6 +18,14 @@ public class MeleeAttack : Ability
 			foreach( Collider2D enemy in enemiesInBox )
 			{
 				enemy.GetComponent<IDamageable>()?.TakeDamage( damage );
+			}
+
+			if (burnAreaUpgrade)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					Instantiate(burningGround, rb2d.transform.position + castFromPoint.transform.right * (i-1) + castFromPoint.transform.up * distance, Quaternion.identity);
+				}
 			}
 		}
 	}

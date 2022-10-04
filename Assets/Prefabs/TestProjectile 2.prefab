@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3210017399674347035}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1614635975710687635}
@@ -99,8 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd75376814215f49b13faa09807ce2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectileAnimation: {fileID: 5538143781778905922}
+  lifeSpan: 0
   trail: {fileID: 1788556927361173705, guid: 946506ebe76157943b7b48aefdd63098, type: 3}
-  trailUpgrade: 0
+  trailUpgrade: 1
+  force: 0
   typeOfLayer: 6
 --- !u!58 &3071299147307218352
 CircleCollider2D:
@@ -144,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5538143781778905922}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.183, y: 0.005, z: 0}
+  m_LocalPosition: {x: 0, y: 0.005, z: 0}
   m_LocalScale: {x: 0.1589624, y: 0.1589624, z: 0.1589624}
   m_ConstrainProportionsScale: 0
   m_Children: []
