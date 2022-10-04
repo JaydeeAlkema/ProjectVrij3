@@ -49,7 +49,7 @@ public class AbilityScriptable : ScriptableObject
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 
 	[SerializeField] private float force = 30f;
-	public float Force { get => lifeSpan; set => lifeSpan = value; }
+	public float Force { get => force; set => force = value; }
 
 	[SerializeField]
 	private Ability ability;
