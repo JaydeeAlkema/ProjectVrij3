@@ -14,9 +14,9 @@ public class FodderEnemy : EnemyBase
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
         Vector3 targetDir = player.transform.position - this.transform.position;
         float angle = Mathf.Atan2( targetDir.y, targetDir.x ) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis( angle, Vector3.forward );
