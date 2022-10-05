@@ -24,16 +24,6 @@ public class FodderEnemy : EnemyBase
         rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
     }
 
-	// Update is called once per frame
-	void Update()
-	{
-		base.Update();
-		Vector3 targetDir = player.transform.position - this.transform.position;
-		float angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-		transform.Translate(Vector3.right * speed * Time.fixedDeltaTime);
-	}
-
 	void AttackPlayer(GameObject playerObject)
 	{
 		playerObject.GetComponent<PlayerControler>().TakeDamage(damage);
