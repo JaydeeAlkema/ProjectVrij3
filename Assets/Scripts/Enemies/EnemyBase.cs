@@ -15,10 +15,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void Update()
 	{
-		foreach (IStatusEffect statusEffect in statusEffects)
+		foreach (IStatusEffect statusEffect in statusEffects.ToArray())
 		{
 			IDamageable damageable = GetComponent<IDamageable>();
-			statusEffect.Process(damageable);
+			if(statusEffect != null)
+			{
+				statusEffect.Process(damageable);
+			}
 		}
 
 		if( healthPoints <= 0 ) { Die(); }
@@ -51,6 +54,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine( FlashColor() );
 		if( healthPoints <= 0 ) Die();
+	}
+	
+	public virtual void GetSlowed(float slowAmount)
+	{
+
 	}
 
 	public virtual IEnumerator FlashColor()

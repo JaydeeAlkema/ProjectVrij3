@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+	[SerializeField] private GameObject projectileAnimation;
 	private float counter = 0f;
 	[SerializeField] private float lifeSpan;
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
@@ -19,39 +20,45 @@ public class Projectile : MonoBehaviour
 
 	private void Awake()
 	{
-		if(trailUpgrade)
+		if (trailUpgrade)
 		{
-			addedTrail = Instantiate( trail.gameObject, this.transform.position, this.transform.rotation, this.transform );
+			addedTrail = Instantiate(trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform);
 		}
 	}
 
 	private void FixedUpdate()
 	{
-		LifeTime( lifeSpan );
-		transform.Translate( Vector3.up * force * Time.deltaTime);
+		projectileAnimation.GetComponent<SpriteRenderer>().flipY = transform.rotation.eulerAngles.z > 180 ? true : false;
+		LifeTime(lifeSpan);
+		transform.Translate(Vector3.up * force * Time.deltaTime);
 	}
 
 	void LifeTime(float lifeSpan)
 	{
 		counter += Time.fixedDeltaTime;
-		if (counter >= lifeSpan)
+		if (counter >= lifeSpan && GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerProjectile1"))
 		{
-			Destroy(this.gameObject);
+			GetComponentInChildren<Animator>().Play("PlayerProjectile1_fizzle");
+			Destroy(this.gameObject, GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).length);
 		}
 	}
 
-	private void OnTriggerEnter2D( Collider2D collision )
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if( collision.gameObject.layer == 7 || collision.gameObject.layer == typeOfLayer )
+		if (collision.gameObject.layer == 7 || collision.gameObject.layer == typeOfLayer)
 		{
-			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage( damage );
-			Destroy( this.gameObject );
+			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+			if (collision.gameObject.GetComponent<IDamageable>() != null)
+			{
+				GetComponent<OnHitStatusEffectApply>().OnHitApplyStatusEffects(collision.gameObject.GetComponent<IDamageable>());
+			}
+			Destroy(this.gameObject);
 		}
 	}
 
 	private void OnDestroy()
 	{
-		if( trailUpgrade )
+		if (trailUpgrade)
 		{
 			addedTrail.transform.parent = null;
 			addedTrail.GetComponent<TrailRenderer>().autodestruct = true;

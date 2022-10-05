@@ -8,13 +8,14 @@ public class FodderEnemy : EnemyBase
     [SerializeField] private float speed;
     [SerializeField] private GameObject player;
     [SerializeField] private Rigidbody2D rb2d;
-    // Start is called before the first frame update
+	private float baseSpeed;
     void Start()
     {
         player = FindObjectOfType<PlayerControler>().gameObject;
         rb2d = GetComponent<Rigidbody2D>();
-    }
 
+		baseSpeed = speed;
+	}
     // Update is called once per frame
     void Update()
     {
@@ -23,16 +24,28 @@ public class FodderEnemy : EnemyBase
         rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
     }
 
-    void AttackPlayer(GameObject playerObject)
-    {
-        playerObject.GetComponent<PlayerControler>().TakeDamage(damage);
+	void AttackPlayer(GameObject playerObject)
+	{
+		playerObject.GetComponent<PlayerControler>().TakeDamage(damage);
 	}
 
-	private void OnTriggerEnter2D( Collider2D collision )
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
-        if( collision.gameObject.layer == 8 )
-        {
-            AttackPlayer( collision.gameObject );
-        }
-    }
+		if (collision.gameObject.layer == 8)
+		{
+			AttackPlayer(collision.gameObject);
+		}
+	}
+
+	public override void GetSlowed(float slowAmount)
+	{
+		if (baseSpeed == speed)
+		{
+			speed *= slowAmount;
+		}
+		if (slowAmount >= 1)
+		{
+			speed = baseSpeed;
+		}
+	}
 }

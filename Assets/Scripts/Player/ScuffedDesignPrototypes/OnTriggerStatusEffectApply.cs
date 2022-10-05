@@ -18,6 +18,9 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
+	public float slowAmount;
+	public float slowDuration;
+
 	private void Start()
 	{
 		switch (statusEffectType)
@@ -30,6 +33,7 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 			case StatusEffectType.Stun:
 				break;
 			case StatusEffectType.Slow:
+				statusEffects.Add(new StatusEffect_Slow(slowAmount, slowDuration));
 				break;
 			case StatusEffectType.Marked:
 				break;
