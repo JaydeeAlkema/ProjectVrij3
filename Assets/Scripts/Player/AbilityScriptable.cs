@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 
 [CreateAssetMenu( fileName = "Ability", menuName = "ScriptableObjects/Ability" )]
@@ -61,23 +62,60 @@ public class AbilityScriptable : ScriptableObject
 	public Ability Ability { get => ability; set => ability =  value ; }
 
 
-	private void OnEnable()
-	{
-		cam = Camera.main;
-	}
+	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 
-	public void BlackHole( Rigidbody2D player, Transform castFromPoint, float angle, Vector2 lookDir )
-	{
-		Vector2 circlePos = player.transform.position + castFromPoint.transform.up * 5;
-		Collider2D[] enemiesInCircle = Physics2D.OverlapCircleAll( circlePos, circleSize, layerMask );
-		Debug.Log( "Enemies: " + enemiesInCircle.Length );
+	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-		foreach( Collider2D enemy in enemiesInCircle )
+	public float slowAmount;
+	public float slowDuration;
+
+	private void Start()
+	{
+		switch( statusEffectType )
 		{
-			Vector3 newPoint = circlePos;
-			enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
+			case StatusEffectType.none:
+				break;
+			case StatusEffectType.Burn:
+				statusEffects.Add( new StatusEffect_Burning() );
+				break;
+			case StatusEffectType.Stun:
+				break;
+			case StatusEffectType.Slow:
+				statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
+				break;
+			case StatusEffectType.Marked:
+				break;
+			default:
+				break;
 		}
-
 	}
+
+	public void OnHitApplyStatusEffects( IDamageable damageable )
+	{
+		foreach( IStatusEffect statusEffect in statusEffects )
+		{
+			if( statusEffect == null ) return;
+			damageable.ApplyStatusEffect( statusEffect );
+		}
+	}
+
+	//private void OnEnable()
+	//{
+	//	cam = Camera.main;
+	//}
+
+	//public void BlackHole( Rigidbody2D player, Transform castFromPoint, float angle, Vector2 lookDir )
+	//{
+	//	Vector2 circlePos = player.transform.position + castFromPoint.transform.up * 5;
+	//	Collider2D[] enemiesInCircle = Physics2D.OverlapCircleAll( circlePos, circleSize, layerMask );
+	//	Debug.Log( "Enemies: " + enemiesInCircle.Length );
+
+	//	foreach( Collider2D enemy in enemiesInCircle )
+	//	{
+	//		Vector3 newPoint = circlePos;
+	//		enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
+	//	}
+
+	//}
 
 }

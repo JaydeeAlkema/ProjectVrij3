@@ -17,6 +17,7 @@ public class MeleeAttack : Ability
 			foreach( Collider2D enemy in enemiesInBox )
 			{
 				enemy.GetComponent<IDamageable>()?.TakeDamage( damage );
+				abilityScriptable.OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>());
 			}
 
 			if (burnAreaUpgrade)
