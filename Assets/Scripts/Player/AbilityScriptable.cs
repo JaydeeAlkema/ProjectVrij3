@@ -69,7 +69,7 @@ public class AbilityScriptable : ScriptableObject
 	public float slowAmount;
 	public float slowDuration;
 
-	private void Start()
+	public void Start()
 	{
 		switch( statusEffectType )
 		{

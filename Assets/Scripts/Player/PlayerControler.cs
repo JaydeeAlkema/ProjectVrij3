@@ -180,6 +180,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 			meleeAttack.MousePos = mousePos;
 			meleeAttack.LookDir = lookDir;
 			meleeAttack.Angle = angle;
+			meleeAttack.Start();
 			meleeAttack.Ability.SetScriptable(meleeAttack);
 		}
 
