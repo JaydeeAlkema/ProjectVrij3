@@ -20,7 +20,7 @@ public class FodderEnemy : EnemyBase
     {
         base.Update();
         Vector3 targetDir = player.transform.position - this.transform.position;
-        rb2d.velocity = targetDir * speed * Time.deltaTime;
+        rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
     }
 
     void AttackPlayer(GameObject playerObject)
