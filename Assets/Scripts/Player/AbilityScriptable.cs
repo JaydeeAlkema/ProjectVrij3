@@ -54,13 +54,6 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float force = 30f;
 	public float Force { get => force; set => force = value; }
 
-	[SerializeField] private bool fireArea;
-	public bool FireArea { get => fireArea; set => fireArea = value; }
-	[SerializeField] private bool slowHit;
-	public bool SlowHit { get => slowHit; set => slowHit = value; }
-	[SerializeField] private bool markHit;
-	public bool MarkHit { get => markHit; set => markHit = value; }
-
 	[SerializeField] private EffectType[] effects = new EffectType[3];
 	public EffectType[] Effects { get => effects; set => effects = value; }
 
