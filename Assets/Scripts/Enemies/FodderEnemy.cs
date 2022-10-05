@@ -7,20 +7,20 @@ public class FodderEnemy : EnemyBase
     [SerializeField] private float damage;
     [SerializeField] private float speed;
     [SerializeField] private GameObject player;
+    [SerializeField] private Rigidbody2D rb2d;
     // Start is called before the first frame update
     void Start()
     {
         player = FindObjectOfType<PlayerControler>().gameObject;
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        base.FixedUpdate();
+        base.Update();
         Vector3 targetDir = player.transform.position - this.transform.position;
-        float angle = Mathf.Atan2( targetDir.y, targetDir.x ) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis( angle, Vector3.forward );
-        transform.Translate( Vector3.right * speed * Time.fixedDeltaTime ); 
+        rb2d.velocity = targetDir * speed * Time.deltaTime;
     }
 
     void AttackPlayer(GameObject playerObject)

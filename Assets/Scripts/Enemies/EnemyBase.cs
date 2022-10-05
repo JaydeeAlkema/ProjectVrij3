@@ -13,7 +13,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-	public void FixedUpdate()
+	public void Update()
 	{
 		foreach (IStatusEffect statusEffect in statusEffects)
 		{
