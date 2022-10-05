@@ -35,16 +35,14 @@ public class PlayerControler : MonoBehaviour , IDamageable
 
     [Header("Abilities")]
 	#region ability fields
-	[SerializeField]
-	private AbilityScriptable meleeAttack;
-	[SerializeField]
-	private AbilityScriptable rangedAttack;
-	[SerializeField]
-	private AbilityScriptable ability1;
-	[SerializeField]
-	private AbilityScriptable ability2;
-	[SerializeField]
-	private AbilityScriptable ability3;
+	[SerializeField] private AbilityScriptable meleeAttack;
+	[SerializeField] private AbilityScriptable rangedAttack;
+	[SerializeField] private AbilityScriptable ability1;
+	public AbilityScriptable Ability1 { get => ability1; set => ability1 = value; }
+	[SerializeField] private AbilityScriptable ability2;
+	public AbilityScriptable Ability2 { get => ability2; set => ability2 = value; }
+	[SerializeField] private AbilityScriptable ability3;
+	public AbilityScriptable Ability3 { get => ability3; set => ability3 = value; }
 	#endregion
 
 
@@ -77,6 +75,15 @@ public class PlayerControler : MonoBehaviour , IDamageable
 		if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
 		if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
 	}
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.blue;
+		Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * meleeAttack.Distance, castFromPoint.transform.rotation, meleeAttack.BoxSize);
+		Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+		//Gizmos.color = Color.red;
+		//Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 5, castFromPoint.transform.rotation, new Vector3(circleSize, circleSize, 0));
+		//Gizmos.DrawWireSphere(Vector3.zero, 1);
+	}
 
 	void MouseLook()
 	{
@@ -99,15 +106,6 @@ public class PlayerControler : MonoBehaviour , IDamageable
 		}
 	}
 
-	void OnDrawGizmos()
-	{
-		Gizmos.color = Color.blue;
-		Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * meleeAttack.Distance, castFromPoint.transform.rotation, meleeAttack.BoxSize);
-		Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-		//Gizmos.color = Color.red;
-		//Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 5, castFromPoint.transform.rotation, new Vector3(circleSize, circleSize, 0));
-		//Gizmos.DrawWireSphere(Vector3.zero, 1);
-	}
 
 	void MeleeAttack()
 	{
