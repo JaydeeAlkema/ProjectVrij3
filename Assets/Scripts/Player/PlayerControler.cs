@@ -232,6 +232,11 @@ public class PlayerControler : MonoBehaviour , IDamageable
 		if( healthPoints <= 0 ) Die();
 	}
 
+	public void GetSlowed( float slowAmount)
+	{
+
+	}
+
 	public void ApplyStatusEffect( IStatusEffect statusEffect )
 	{
 

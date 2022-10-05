@@ -4,7 +4,9 @@ using UnityEngine;
 
 public interface IDamageable
 {
-	void TakeDamage( float damage );
+	void TakeDamage(float damage);
+
+	void GetSlowed(float slowAmount);
 
 	void ApplyStatusEffect(IStatusEffect statusEffect);
 

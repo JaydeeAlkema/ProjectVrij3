@@ -48,6 +48,10 @@ public class Projectile : MonoBehaviour
 		if (collision.gameObject.layer == 7 || collision.gameObject.layer == typeOfLayer)
 		{
 			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+			if (collision.gameObject.GetComponent<IDamageable>() != null)
+			{
+				GetComponent<OnHitStatusEffectApply>().OnHitApplyStatusEffects(collision.gameObject.GetComponent<IDamageable>());
+			}
 			Destroy(this.gameObject);
 		}
 	}
