@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 8803674279633105924}
   - component: {fileID: 8803674279633105922}
   - component: {fileID: 8803674279633105921}
+  - component: {fileID: 6919738255088462517}
   m_Layer: 0
   m_Name: RewardTest
   m_TagString: Untagged
@@ -264,6 +265,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.5, y: 2.5}
   m_EdgeRadius: 0
+--- !u!114 &6919738255088462517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8803674279633105925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a81d9c30750cbd46b9b9b8553665cb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilityToGive: {fileID: 11400000, guid: eb01a3aa93a60b94d981ae4869eb58ac, type: 2}
+  upgradeToGive: {fileID: 11400000, guid: 8b0d1e2205e7455448ed5bd6078c033d, type: 2}
+  meleeAttack: {fileID: 11400000, guid: dc3562ba9d4445e47a5c799a36545391, type: 2}
+  rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
 --- !u!1 &8803674279807195312
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +771,50 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 8803674279633105923}
     m_Modifications:
+    - target: {fileID: 1952384146642317329, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6919738255088462517}
+    - target: {fileID: 1952384146642317329, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChooseRangedUpgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079830203134023281, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079830203134023281, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6919738255088462517}
+    - target: {fileID: 2079830203134023281, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChooseAbility
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079830203134023281, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3127393275543069008, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6919738255088462517}
+    - target: {fileID: 3127393275543069008, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChooseMeleeUpgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 4911724681014293045, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6571288266361586225, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7339037712705727397, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8092424814971712547, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
       propertyPath: m_Name
       value: PopupCanvasB

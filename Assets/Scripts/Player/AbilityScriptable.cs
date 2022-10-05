@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "Ability", menuName = "ScriptableObjects/Ability")]
+[CreateAssetMenu( fileName = "Ability", menuName = "ScriptableObjects/Ability" )]
 public class AbilityScriptable : ScriptableObject
 {
 	[SerializeField] private float coolDown = 0f;
@@ -11,6 +11,9 @@ public class AbilityScriptable : ScriptableObject
 
 	[SerializeField] private float damage = 0f;
 	public float Damage { get => damage; set => damage = value; }
+
+	[SerializeField] private float critChance = 0f;
+	public float CritChance { get => critChance; set => critChance = value; }
 
 	[SerializeField] private float distance = 0f;
 	public float Distance { get => distance; set => distance = value; }
@@ -51,8 +54,10 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float force = 30f;
 	public float Force { get => force; set => force = value; }
 
-	[SerializeField]
-	private Ability ability;
+	[SerializeField] private EffectType[] effects = new EffectType[3];
+	public EffectType[] Effects { get => effects; set => effects = value; }
+
+	[SerializeField] private Ability ability;
 	public Ability Ability { get => ability; set => ability =  value ; }
 
 

@@ -11,7 +11,6 @@ public class MeleeAttack : Ability
 	{
 		if( !onCoolDown )
 		{
-			StartCoroutine( CoolDown() );
 			Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( rb2d.transform.position + castFromPoint.transform.up * distance, boxSize, angle, layerMask );
 			Debug.Log( "Enemies: " + enemiesInBox.Length );
 
@@ -47,12 +46,5 @@ public class MeleeAttack : Ability
 	{
 		abilityScriptable = scriptable;
 		SetAbilityStats( scriptable.Rb2d, scriptable.CastFromPoint, scriptable.BoxSize, scriptable.LookDir, scriptable.Angle, scriptable.Layer, scriptable.Damage, scriptable.Distance, scriptable.CoolDown );
-	}
-
-	IEnumerator CoolDown()
-	{
-		onCoolDown = true;
-		yield return new WaitForSeconds(coolDown);
-		onCoolDown = false;
 	}
 }

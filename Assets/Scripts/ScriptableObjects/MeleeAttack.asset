@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coolDown: 0
   damage: 20
+  critChance: 0
   distance: 1.41
   boxSize: {x: 4.2, y: 1.8}
   circleSize: 0
@@ -26,4 +27,5 @@ MonoBehaviour:
   castObject: {fileID: 0}
   lifeSpan: 10
   force: 30
+  effects: 000000000000000000000000
   ability: {fileID: 5931165756625859170, guid: dbb136ce9400c714d974afc9f6468e87, type: 3}
