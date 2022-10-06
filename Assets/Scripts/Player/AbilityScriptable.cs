@@ -68,6 +68,7 @@ public class AbilityScriptable : ScriptableObject
 
 	public float slowAmount;
 	public float slowDuration;
+	public int markType;
 
 	public void Start()
 	{
@@ -84,6 +85,7 @@ public class AbilityScriptable : ScriptableObject
 				statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
 				break;
 			case StatusEffectType.Marked:
+				statusEffects.Add(new StatusEffect_Marked(markType));
 				break;
 			default:
 				break;
