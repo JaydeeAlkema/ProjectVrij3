@@ -523,6 +523,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1972835925610663318, guid: cba955331c4327d4ab4ab3de6aaa9a75, type: 3}
+      propertyPath: healthPoints
+      value: 1e+21
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972835925610663318, guid: cba955331c4327d4ab4ab3de6aaa9a75, type: 3}
       propertyPath: rewardInstance
       value: 
       objectReference: {fileID: 8803674279633105925, guid: 193e084068446ab40923687326b32505, type: 3}
@@ -755,6 +759,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1972835925610663318, guid: cba955331c4327d4ab4ab3de6aaa9a75, type: 3}
+      propertyPath: healthPoints
+      value: 1e+25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: cba955331c4327d4ab4ab3de6aaa9a75, type: 3}
@@ -833,6 +841,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1409221283, guid: 38449df9de5975846b9636b652d29cb0, type: 3}
+      propertyPath: speed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4442677197823009440, guid: 38449df9de5975846b9636b652d29cb0, type: 3}
       propertyPath: m_Name
       value: enemyV1

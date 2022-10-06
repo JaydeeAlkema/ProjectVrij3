@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coolDown: 0
   damage: 25
+  critChance: 0
   distance: 0
   boxSize: {x: 4, y: 6}
   circleSize: 0
@@ -26,4 +27,9 @@ MonoBehaviour:
   castObject: {fileID: 3210017399674347035, guid: f65b5458f6dbcfa4da1048f4471f7ade, type: 3}
   lifeSpan: 0.8
   force: 10
+  effects: 000000000000000000000000
   ability: {fileID: 9127446373528800137, guid: 0005b24bb596cfc40a77e481a51b2941, type: 3}
+  statusEffectType: 0
+  slowAmount: 0.5
+  slowDuration: 4
+  markType: 0

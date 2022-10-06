@@ -9,7 +9,7 @@ public class FodderEnemy : EnemyBase
     [SerializeField] private GameObject player;
     [SerializeField] private Rigidbody2D rb2d;
 	private float baseSpeed;
-    void Start()
+    void Awake()
     {
         player = FindObjectOfType<PlayerControler>().gameObject;
         rb2d = GetComponent<Rigidbody2D>();
