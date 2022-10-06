@@ -531,7 +531,7 @@ Transform:
   - {fileID: 3654675852546308300}
   - {fileID: 5991089748869372926}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &4729987391402745381
 CapsuleCollider2D:
@@ -614,7 +614,7 @@ MonoBehaviour:
   dashDuration: 0.2
   dashTrail: {fileID: 6235134389311391101}
   healthPoints: 500
-  meleeAttack: {fileID: 11400000, guid: dc3562ba9d4445e47a5c799a36545391, type: 2}
+  meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
   ability1: {fileID: 0}
   ability2: {fileID: 0}
