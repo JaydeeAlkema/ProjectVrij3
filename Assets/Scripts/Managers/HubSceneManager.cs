@@ -22,10 +22,10 @@ public class HubSceneManager : MonoBehaviour
 
 	public void ChangeScene(string sceneToLoad, string currentScene)
 	{
+		SceneManager.UnloadSceneAsync( currentScene );
 		SceneManager.LoadSceneAsync( sceneToLoad , LoadSceneMode.Additive);
 		//SceneManager.LoadSceneAsync( "Scene Manager" );
 		//SceneManager.LoadSceneAsync("UITest");
-		SceneManager.UnloadSceneAsync( currentScene );
 	}
 
 	public void StartFirstScenes()
