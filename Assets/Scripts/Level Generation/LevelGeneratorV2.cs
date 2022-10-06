@@ -241,7 +241,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			// Get nearest pathwayConnectionPoint from own room to the room to connect to.
 			float nearestDistance = Mathf.Infinity;
-			foreach (GameObject pathwayConnectionPoint in room.PathwayEntries)
+			foreach (GameObject pathwayConnectionPoint in room.PathwayOpenings)
 			{
 				float distance = Vector2.Distance(roomToConnectTo.transform.position, pathwayConnectionPoint.transform.position);
 				if (distance < nearestDistance)
@@ -253,7 +253,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			// Now we do the same, but from the connecting room to our own.
 			nearestDistance = Mathf.Infinity;
-			foreach (GameObject pathwayConnectionPoint in roomToConnectTo.PathwayEntries)
+			foreach (GameObject pathwayConnectionPoint in roomToConnectTo.PathwayOpenings)
 			{
 				float distance = Vector2.Distance(room.transform.position, pathwayConnectionPoint.transform.position);
 				if (distance < nearestDistance)
@@ -264,19 +264,29 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 
 			// Disable starting pathway opening
-			foreach (GameObject pathwayOpening in room.PathwayEntries)
+			foreach (GameObject pathwayOpening in room.PathwayOpenings)
 			{
 				if (pathwayOpening == pathwayStartPoint)
 				{
 					pathwayStartPoint.SetActive(false);
+					foreach (Transform child in pathwayStartPoint.GetComponentInChildren<Transform>())
+					{
+						if (child != null)
+							child.gameObject.SetActive(false);
+					}
 				}
 			}
 			// Disable ending pathway opening
-			foreach (GameObject pathwayOpening in roomToConnectTo.PathwayEntries)
+			foreach (GameObject pathwayOpening in roomToConnectTo.PathwayOpenings)
 			{
 				if (pathwayOpening == pathwayEndPoint)
 				{
 					pathwayEndPoint.SetActive(false);
+					foreach (Transform child in pathwayEndPoint.GetComponentInChildren<Transform>())
+					{
+						if (child != null)
+							child.gameObject.SetActive(false);
+					}
 				}
 			}
 
@@ -307,22 +317,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			// Remove any duplicate nodes.
 			List<Node> nodesNoDuplicates = nodes.Distinct(new NodeComparer()).ToList();
+			List<Transform> collideableTiles = new List<Transform>();
+			collideableTiles.AddRange(room.CollideableTiles);
+			collideableTiles.AddRange(roomToConnectTo.CollideableTiles);
 
 			// Set all nodes walkeable variable that have the same coordinates of the collideable tiles as false.
-			foreach (Transform currentRoomWall in room.CollideableTiles)
+			foreach (Transform collideableTile in collideableTiles)
 			{
-				if (currentRoomWall.parent.gameObject.activeInHierarchy)
+				if (collideableTile.gameObject.activeInHierarchy || collideableTile.parent.gameObject.activeInHierarchy)
 				{
-					Vector2Int wallCoordinates = new Vector2Int(Mathf.RoundToInt(currentRoomWall.position.x), Mathf.RoundToInt(currentRoomWall.position.y));
-					Node node = nodesNoDuplicates.Find(n => n.coordinates == wallCoordinates);
-					if (node != null) node.walkable = false;
-				}
-			}
-			foreach (Transform neighbourRoomWall in roomToConnectTo.CollideableTiles)
-			{
-				if (neighbourRoomWall.parent.gameObject.activeInHierarchy)
-				{
-					Vector2Int wallCoordinates = new Vector2Int(Mathf.RoundToInt(neighbourRoomWall.position.x), Mathf.RoundToInt(neighbourRoomWall.position.y));
+					Vector2Int wallCoordinates = new Vector2Int(Mathf.RoundToInt(collideableTile.position.x), Mathf.RoundToInt(collideableTile.position.y));
 					Node node = nodesNoDuplicates.Find(n => n.coordinates == wallCoordinates);
 					if (node != null) node.walkable = false;
 				}
@@ -347,20 +351,20 @@ public class LevelGeneratorV2 : MonoBehaviour
 				pathParent.transform.position = new Vector2(centerX, centerY);
 
 				// Remove all duplicates. Maybe use a HashSet in the future.
-				pathPoints = pathPoints.Distinct().ToList();
-				for (int p = pathPoints.Count - 1; p >= 0; p--)
+				List<Node> pathPointsNoDuplicates = pathPoints.Distinct().ToList();
+				for (int p = pathPointsNoDuplicates.Count - 1; p >= 0; p--)
 				{
-					Node pathPoint = pathPoints[p];
+					Node pathPoint = pathPointsNoDuplicates[p];
 					Collider2D[] colliders = Physics2D.OverlapBoxAll(new Vector2Int(pathPoint.coordinates.x, pathPoint.coordinates.y), new Vector2(0.75f, 0.75f), 0f);
 					if (colliders.Length > 0)
 					{
-						pathPoints.Remove(pathPoint);
+						pathPointsNoDuplicates.Remove(pathPoint);
 					}
 				}
 
-				for (int pp = 0; pp < pathPoints.Count; pp++)
+				for (int pp = 0; pp < pathPointsNoDuplicates.Count; pp++)
 				{
-					Node point = pathPoints[pp];
+					Node point = pathPointsNoDuplicates[pp];
 					GameObject pathPoint = new GameObject($"Point [{pp}]");
 					pathPoint.transform.position = new Vector3(point.coordinates.x, point.coordinates.y, 0);
 					pathPoint.transform.parent = pathParent.transform;
@@ -377,7 +381,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 							Vector2Int coordinates = new Vector2Int(point.coordinates.x + x, point.coordinates.y + y);
 							Node node = nodesNoDuplicates.Find(n => n.coordinates == coordinates);
 
-							if (!pathPoints.Contains(node))
+							if (!pathPointsNoDuplicates.Contains(node))
 							{
 								if (node != null && node.walkable)
 								{
@@ -402,6 +406,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 	}
 
+	#region A* Functions
 	/// <summary>
 	/// This finds the shortest path between startPos and targetPos using A*
 	/// </summary>
@@ -460,50 +465,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 		}
 
-	}
-
-	#region Helpers
-	/// <summary>
-	/// Get a random chunk.
-	/// </summary>
-	/// <param name="currentChunk"> Reference to the current chunk. </param>
-	/// <param name="nextChunk"> Reference to the next chunk. </param>
-	/// <returns></returns>
-	private List<Chunk> GetNeighbouringChunks(Vector2Int currentChunkCoordinates)
-	{
-		List<Chunk> neighbourChunkIndeces = new List<Chunk>();
-
-		int chunkX = currentChunkCoordinates.x;
-		int chunkY = currentChunkCoordinates.y;
-
-		Chunk topNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY + chunkSize));
-		Chunk rightNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX + chunkSize, chunkY));
-		Chunk bottomNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY - chunkSize));
-		Chunk leftNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX - chunkSize, chunkY));
-
-		if (topNeighbour != null && path.Contains(topNeighbour) == false) neighbourChunkIndeces.Add(topNeighbour);
-		if (rightNeighbour != null && path.Contains(rightNeighbour) == false) neighbourChunkIndeces.Add(rightNeighbour);
-		if (bottomNeighbour != null && path.Contains(bottomNeighbour) == false) neighbourChunkIndeces.Add(bottomNeighbour);
-		if (leftNeighbour != null && path.Contains(leftNeighbour) == false) neighbourChunkIndeces.Add(leftNeighbour);
-
-		return neighbourChunkIndeces;
-	}
-
-	/// <summary>
-	/// Get a chunk from coordinates.
-	/// </summary>
-	/// <param name="coordinates"> Coordinates to fetch the chunk by. </param>
-	/// <returns></returns>
-	private Chunk GetChunkByCoordinates(Vector2Int coordinates)
-	{
-		for (int i = 0; i < chunks.Count; i++)
-		{
-			if (chunks[i].Coordinates == coordinates)
-			{
-				return chunks[i];
-			}
-		}
-		return null;
 	}
 
 	/// <summary>
@@ -569,7 +530,53 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 		path.Reverse();
 
-		pathPoints = path;
+		pathPoints.AddRange(path);
+		pathPoints = pathPoints.Distinct().ToList();
+	}
+	#endregion
+
+	#region Helpers
+	/// <summary>
+	/// Get a random chunk.
+	/// </summary>
+	/// <param name="currentChunk"> Reference to the current chunk. </param>
+	/// <param name="nextChunk"> Reference to the next chunk. </param>
+	/// <returns></returns>
+	private List<Chunk> GetNeighbouringChunks(Vector2Int currentChunkCoordinates)
+	{
+		List<Chunk> neighbourChunkIndeces = new List<Chunk>();
+
+		int chunkX = currentChunkCoordinates.x;
+		int chunkY = currentChunkCoordinates.y;
+
+		Chunk topNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY + chunkSize));
+		Chunk rightNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX + chunkSize, chunkY));
+		Chunk bottomNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY - chunkSize));
+		Chunk leftNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX - chunkSize, chunkY));
+
+		if (topNeighbour != null && path.Contains(topNeighbour) == false) neighbourChunkIndeces.Add(topNeighbour);
+		if (rightNeighbour != null && path.Contains(rightNeighbour) == false) neighbourChunkIndeces.Add(rightNeighbour);
+		if (bottomNeighbour != null && path.Contains(bottomNeighbour) == false) neighbourChunkIndeces.Add(bottomNeighbour);
+		if (leftNeighbour != null && path.Contains(leftNeighbour) == false) neighbourChunkIndeces.Add(leftNeighbour);
+
+		return neighbourChunkIndeces;
+	}
+
+	/// <summary>
+	/// Get a chunk from coordinates.
+	/// </summary>
+	/// <param name="coordinates"> Coordinates to fetch the chunk by. </param>
+	/// <returns></returns>
+	private Chunk GetChunkByCoordinates(Vector2Int coordinates)
+	{
+		for (int i = 0; i < chunks.Count; i++)
+		{
+			if (chunks[i].Coordinates == coordinates)
+			{
+				return chunks[i];
+			}
+		}
+		return null;
 	}
 
 	// https://answers.unity.com/questions/444414/get-angle-between-2-vector2s.html
