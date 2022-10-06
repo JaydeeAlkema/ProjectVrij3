@@ -10,6 +10,7 @@ public enum StatusEffectType
 	Stun = 1 << 1,
 	Slow = 1 << 2,
 	Marked = 1 << 3,
+	Burntrail = 1 << 4,
 }
 
 public class OnTriggerStatusEffectApply : MonoBehaviour

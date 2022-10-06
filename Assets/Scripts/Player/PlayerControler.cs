@@ -191,6 +191,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 			rangedAttack.MousePos = mousePos;
 			rangedAttack.LookDir = lookDir;
 			rangedAttack.Angle = angle;
+			rangedAttack.Start();
 			rangedAttack.Ability.SetScriptable(rangedAttack);
 		}
 

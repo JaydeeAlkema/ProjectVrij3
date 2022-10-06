@@ -31,6 +31,7 @@ public class RewardChoice : MonoBehaviour
             if( meleeAttack.Effects[i] == upgradeToGive.Effect ) break;
             if( meleeAttack.Effects[i] == EffectType.Null ) meleeAttack.Effects[i] = upgradeToGive.Effect;
 		}
+        meleeAttack.statusEffectType = upgradeToGive.StatusEffect;
         Destroy( this.gameObject );
 	}
 

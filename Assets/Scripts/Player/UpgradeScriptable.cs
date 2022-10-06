@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 [CreateAssetMenu( fileName = "Upgrade", menuName = "ScriptableObjects/Upgrade" )]
 public class UpgradeScriptable : ScriptableObject
@@ -16,6 +17,9 @@ public class UpgradeScriptable : ScriptableObject
 
 	[SerializeField] private EffectType effect;
 	public EffectType Effect { get => effect; set => effect = value; }
+
+	[SerializeField, EnumFlags] private StatusEffectType statusEffect;
+	public StatusEffectType StatusEffect { get => statusEffect; set => statusEffect = value; }
 }
 
 public enum EffectType

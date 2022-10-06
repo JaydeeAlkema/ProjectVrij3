@@ -30,7 +30,7 @@ public class MeleeAttack : Ability
 		}
 	}
 
-	public void SetAbilityStats( Rigidbody2D AbilityRB2D, Transform CastFromPoint, Vector2 BoxSize, Vector2 LookDir, float Angle, LayerMask layer, float Damage, float Distance, float Cooldown )
+	public void SetAbilityStats( Rigidbody2D AbilityRB2D, Transform CastFromPoint, Vector2 BoxSize, Vector2 LookDir, float Angle, LayerMask layer, float Damage, float Distance, float Cooldown, StatusEffectType burntrail )
 	{
 		rb2d = AbilityRB2D;
 		castFromPoint = CastFromPoint;
@@ -41,11 +41,15 @@ public class MeleeAttack : Ability
 		damage = Damage;
 		distance = Distance;
 		coolDown = Cooldown;
+		if( burntrail == StatusEffectType.Burntrail )
+		{
+			burnAreaUpgrade = true;
+		}
 	}
 
 	public override void SetScriptable( AbilityScriptable scriptable )
 	{
 		abilityScriptable = scriptable;
-		SetAbilityStats( scriptable.Rb2d, scriptable.CastFromPoint, scriptable.BoxSize, scriptable.LookDir, scriptable.Angle, scriptable.Layer, scriptable.Damage, scriptable.Distance, scriptable.CoolDown );
+		SetAbilityStats( scriptable.Rb2d, scriptable.CastFromPoint, scriptable.BoxSize, scriptable.LookDir, scriptable.Angle, scriptable.Layer, scriptable.Damage, scriptable.Distance, scriptable.CoolDown, scriptable.statusEffectType );
 	}
 }
