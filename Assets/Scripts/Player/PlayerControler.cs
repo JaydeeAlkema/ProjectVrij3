@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControler : MonoBehaviour , IDamageable
+public class PlayerControler : MonoBehaviour, IDamageable
 {
 	private int horizontal = 0;
 	private int vertical = 0;
@@ -38,7 +38,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 
 	[SerializeField] private float healthPoints = 500;
 
-    [Header("Abilities")]
+	[Header("Abilities")]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -62,7 +62,7 @@ public class PlayerControler : MonoBehaviour , IDamageable
 	void Update()
 	{
 		CheckAbilityUpdate();
-		
+
 
 		if (!isDashing)
 		{
@@ -155,19 +155,19 @@ public class PlayerControler : MonoBehaviour , IDamageable
 
 	void AbilityOneAttack()
 	{
-		ability1.Ability.SetScriptable( ability1 );
+		ability1.Ability.SetScriptable(ability1);
 		ability1.Ability.AbilityBehavior();
 	}
 
 	void AbilityTwoAttack()
 	{
-		ability2.Ability.SetScriptable( ability2 );
+		ability2.Ability.SetScriptable(ability2);
 		ability2.Ability.AbilityBehavior();
 	}
 
 	void AbilityThreeAttack()
 	{
-		ability3.Ability.SetScriptable( ability3 );
+		ability3.Ability.SetScriptable(ability3);
 		ability3.Ability.AbilityBehavior();
 	}
 
@@ -214,40 +214,50 @@ public class PlayerControler : MonoBehaviour , IDamageable
 			//ability2.Ability.SetScriptable();
 		}
 
-        if( ability3 != null )
-        {
-            ability3.Rb2d = rb2d;
-            ability3.CastFromPoint = castFromPoint;
-            ability3.MousePos = mousePos;
-            ability3.LookDir = lookDir;
-            ability3.Angle = angle;
-            //ability3.Ability.SetScriptable(  );
-        }
-    }
-
-	public void TakeDamage( float damage )
-	{
-        healthPoints -= damage;
-		if( healthPoints <= 0 ) Die();
+		if (ability3 != null)
+		{
+			ability3.Rb2d = rb2d;
+			ability3.CastFromPoint = castFromPoint;
+			ability3.MousePos = mousePos;
+			ability3.LookDir = lookDir;
+			ability3.Angle = angle;
+			//ability3.Ability.SetScriptable(  );
+		}
 	}
 
-	public void GetSlowed( float slowAmount)
+	public void TakeDamage(float damage)
 	{
-
+		healthPoints -= damage;
+		if (healthPoints <= 0) Die();
 	}
 
-	public void ApplyStatusEffect( IStatusEffect statusEffect )
+	public void TakeDamage(float damage, int damageType)
 	{
 
 	}
 
-	public void RemoveStatusEffect( IStatusEffect statusEffect )
+	public void GetSlowed(float slowAmount)
+	{
+
+	}
+
+	public void GetMarked(int markType)
+	{
+
+	}
+
+	public void ApplyStatusEffect(IStatusEffect statusEffect)
+	{
+
+	}
+
+	public void RemoveStatusEffect(IStatusEffect statusEffect)
 	{
 
 	}
 
 	void Die()
 	{
-		Debug.Log( "I HAVE DIED OH NO" );
+		Debug.Log("I HAVE DIED OH NO");
 	}
 }

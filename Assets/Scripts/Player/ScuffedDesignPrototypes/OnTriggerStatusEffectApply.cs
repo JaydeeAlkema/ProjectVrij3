@@ -20,6 +20,7 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 
 	public float slowAmount;
 	public float slowDuration;
+	public int markType;	//0 = Melee, 1 = Cast
 
 	private void Start()
 	{
@@ -36,6 +37,7 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 				statusEffects.Add(new StatusEffect_Slow(slowAmount, slowDuration));
 				break;
 			case StatusEffectType.Marked:
+				statusEffects.Add(new StatusEffect_Marked(markType));
 				break;
 			default:
 				break;
