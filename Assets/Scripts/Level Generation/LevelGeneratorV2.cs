@@ -34,6 +34,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private Transform levelAssetsParent = default;
 
 	[Header("Debugging")]
+	[SerializeField] private bool showGizmos = false;
 	[SerializeField] private List<string> diagnosticTimes = new List<string>();
 	[SerializeField] private long totalGenerationTimeInMilliseconds = 0;
 
@@ -645,6 +646,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
+		if (!showGizmos) return;
+
 		if (chunks.Count > 0)
 		{
 			for (int i = 0; i < chunks.Count; i++)
