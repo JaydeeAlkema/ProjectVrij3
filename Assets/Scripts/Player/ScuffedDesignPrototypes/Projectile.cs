@@ -20,14 +20,16 @@ public class Projectile : MonoBehaviour
 
 	private void Awake()
 	{
-		if (trailUpgrade)
-		{
-			addedTrail = Instantiate(trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform);
-		}
+		
 	}
 
 	private void FixedUpdate()
 	{
+		if( trailUpgrade )
+		{
+			addedTrail = Instantiate( trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform );
+			trailUpgrade = false;
+		}
 		projectileAnimation.GetComponent<SpriteRenderer>().flipY = transform.rotation.eulerAngles.z > 180 ? true : false;
 		LifeTime(lifeSpan);
 		transform.Translate(Vector3.up * force * Time.deltaTime);
@@ -58,7 +60,7 @@ public class Projectile : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		if (trailUpgrade)
+		if (addedTrail != null)
 		{
 			addedTrail.transform.parent = null;
 			addedTrail.GetComponent<TrailRenderer>().autodestruct = true;

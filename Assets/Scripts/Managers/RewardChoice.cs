@@ -26,11 +26,6 @@ public class RewardChoice : MonoBehaviour
         meleeAttack.Damage += upgradeToGive.DamageUpgrade;
         meleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
         meleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-		for( int i = 0; i < meleeAttack.Effects.Length; i++ )
-		{
-            if( meleeAttack.Effects[i] == upgradeToGive.Effect ) break;
-            if( meleeAttack.Effects[i] == EffectType.Null ) meleeAttack.Effects[i] = upgradeToGive.Effect;
-		}
         meleeAttack.statusEffectType = upgradeToGive.StatusEffect;
         Destroy( this.gameObject );
 	}
@@ -42,11 +37,7 @@ public class RewardChoice : MonoBehaviour
         rangedAttack.Damage += upgradeToGive.DamageUpgrade;
         rangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
         rangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        for( int i = 0; i < rangedAttack.Effects.Length; i++ )
-        {
-            if( rangedAttack.Effects[i] == upgradeToGive.Effect ) break;
-            if( rangedAttack.Effects[i] == EffectType.Null ) rangedAttack.Effects[i] = upgradeToGive.Effect;
-        }
+        rangedAttack.statusEffectType = upgradeToGive.StatusEffect;
         Destroy( this.gameObject );
     }
 }

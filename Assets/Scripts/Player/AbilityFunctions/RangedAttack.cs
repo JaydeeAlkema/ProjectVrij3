@@ -9,10 +9,10 @@ public class RangedAttack : Ability
 	{
 		GameObject projectile = Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
 		Projectile proj = projectile.GetComponent<Projectile>();
+		if(trailUpgrade) { proj.TrailUpgrade = true; Debug.Log( "trailupgrade on" ); }
 		proj.Damage = damage;
 		proj.LifeSpan = lifeSpan;
 		proj.Force = force;
-		if(trailUpgrade) { proj.TrailUpgrade = true; }
 		projectile.transform.SetParent( null );
 	}
 
@@ -30,9 +30,10 @@ public class RangedAttack : Ability
 		lifeSpan = LifeSpan;
 		force = Force;
 		damage = Damage;
-		if( burntrail == StatusEffectType.Burntrail )
+		if( burntrail != StatusEffectType.Burntrail )
 		{
-			trailUpgrade = true;
+			trailUpgrade = false;
 		}
+		else { trailUpgrade = true; }
 	}
 }
