@@ -40,6 +40,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	List<Node> pathPoints = new List<Node>();
 
+	public List<Room> Rooms { get => rooms; set => rooms = value; }
+
 	private void Start()
 	{
 		if (seed == 0)
@@ -49,10 +51,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		Random.InitState(seed);
 
-		StartCoroutine(GenerateLevel());
 	}
 
-	private IEnumerator GenerateLevel()
+	public IEnumerator GenerateLevel()
 	{
 		yield return StartCoroutine(CreateChunks());
 		yield return StartCoroutine(CreatePathThroughChunks());
