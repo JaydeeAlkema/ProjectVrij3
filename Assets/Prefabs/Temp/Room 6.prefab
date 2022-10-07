@@ -31566,11 +31566,11 @@ MonoBehaviour:
   roomSize: {x: 25, y: 25}
   pathwayEntries:
   - {fileID: 2707188935771841513}
-  - {fileID: 3827161317052057891}
   - {fileID: 5508349081146259874}
-  wallTilesParent: {fileID: 1987758118315085836}
+  - {fileID: 3827161317052057891}
   connectedRooms: []
-  wallTileCoordinates: []
+  collideableTiles: []
+  noncollideableTiles: []
 --- !u!1 &4991551711337367774
 GameObject:
   m_ObjectHideFlags: 0
@@ -44890,9 +44890,6 @@ Transform:
   m_Children:
   - {fileID: 3699450078785158030}
   - {fileID: 7822786611386147344}
-  - {fileID: 3405311926083774463}
-  - {fileID: 1831455136926728410}
-  - {fileID: 6350459503174969560}
   - {fileID: 2468488764681967975}
   m_Father: {fileID: 4957799508745239821}
   m_RootOrder: -1

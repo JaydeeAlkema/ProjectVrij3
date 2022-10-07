@@ -7,32 +7,35 @@ public class Room : MonoBehaviour
 	[SerializeField] private RoomType roomType = RoomType.Generic;
 	[SerializeField] private Vector2Int roomSize = Vector2Int.one;
 	[Space]
-	[SerializeField] private List<GameObject> pathwayEntries = new List<GameObject>();
-	[SerializeField] private Transform wallTilesParent = default;
+	[SerializeField] private List<GameObject> pathwayOpenings = new List<GameObject>();
 	[Space]
 	[SerializeField, ReadOnly] private List<Room> connectedRooms = new List<Room>();
-	[SerializeField, ReadOnly] private List<Vector2Int> wallTileCoordinates = new List<Vector2Int>();
+	[SerializeField, ReadOnly] private List<Transform> collideableTiles = new List<Transform>();
+	[SerializeField, ReadOnly] private List<Transform> noncollideableTiles = new List<Transform>();
 
-	public List<GameObject> PathwayEntries { get => pathwayEntries; set => pathwayEntries = value; }
+	public List<GameObject> PathwayOpenings { get => pathwayOpenings; set => pathwayOpenings = value; }
 	public List<Room> ConnectedRooms { get => connectedRooms; set => connectedRooms = value; }
 	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
-	public List<Vector2Int> WallTileCoordinates { get => wallTileCoordinates; set => wallTileCoordinates = value; }
+	public List<Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
+	public List<Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }
 
 	private void Start()
 	{
-		foreach (Transform child in wallTilesParent.GetComponentsInChildren<Transform>())
+		Transform[] allChildren = GetComponentsInChildren<Transform>();
+
+		foreach (Transform child in allChildren)
 		{
-			if (child != wallTilesParent)
+			BoxCollider2D boxCollider2D = child.GetComponent<BoxCollider2D>();
+			SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+			if (boxCollider2D && spriteRenderer)
 			{
-				Vector2Int coordinates = new Vector2Int(Mathf.RoundToInt(child.transform.position.x), Mathf.RoundToInt(child.transform.position.y));
-				WallTileCoordinates.Add(coordinates);
+				CollideableTiles.Add(child);
+			}
+			else if (!boxCollider2D && spriteRenderer)
+			{
+				NoncollideableTiles.Add(child);
 			}
 		}
-	}
-
-	public void TogglePathwayEntry(int index, bool toggle)
-	{
-		pathwayEntries[index].gameObject.SetActive(toggle);
 	}
 
 	public void AddConnectedRoom(Room connectedRoom)

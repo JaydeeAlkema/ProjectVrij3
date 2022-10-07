@@ -20960,14 +20960,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomType: 0
   roomSize: {x: 21, y: 21}
-  pathwayEntries:
+  pathwayOpenings:
   - {fileID: 7923814114308834789}
   - {fileID: 1913770586881349639}
   - {fileID: 1524765393638658438}
   - {fileID: 7435788500672069778}
-  wallTilesParent: {fileID: 1889614536403658706}
   connectedRooms: []
-  wallTileCoordinates: []
+  collideableTiles: []
+  noncollideableTiles: []
 --- !u!1 &4996472883731358065
 GameObject:
   m_ObjectHideFlags: 0
