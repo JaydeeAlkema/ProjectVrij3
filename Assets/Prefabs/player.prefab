@@ -531,7 +531,7 @@ Transform:
   - {fileID: 3654675852546308300}
   - {fileID: 5991089748869372926}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &4729987391402745381
 CapsuleCollider2D:
@@ -610,8 +610,8 @@ MonoBehaviour:
   AttackAnimation: {fileID: 2562181291164557956}
   animAttack: {fileID: 3861236493606765911}
   animPlayer: {fileID: 1544735143011069060}
-  dashSpeed: 100
-  dashDuration: 0.2
+  dashSpeed: 25
+  dashDuration: 0.1
   dashTrail: {fileID: 6235134389311391101}
   healthPoints: 500
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
