@@ -362,11 +362,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 					}
 				}
 
+				// This will a fairly expensive operation. We will have to check for each pathPoint, it's neighbouring points (Not to be confused with nodes)
+				// Then depending on the amount of neighbours and orientation, the tile sprite will be chosen and rotated accordingly.
 				for (int pp = 0; pp < pathPointsNoDuplicates.Count; pp++)
 				{
-					Node point = pathPointsNoDuplicates[pp];
+					// The "Origin" node is always surrounded by other nodes. So the origin node will always be a ground tile.
+					Node originNode = pathPointsNoDuplicates[pp];
 					GameObject pathPoint = new GameObject($"Point [{pp}]");
-					pathPoint.transform.position = new Vector3(point.coordinates.x, point.coordinates.y, 0);
+					pathPoint.transform.position = new Vector3(originNode.coordinates.x, originNode.coordinates.y, 0);
 					pathPoint.transform.parent = pathParent.transform;
 
 					SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
@@ -378,20 +381,53 @@ public class LevelGeneratorV2 : MonoBehaviour
 					{
 						for (int y = -(pathWidth / 2); y < (pathWidth / 2) + 1; y++)
 						{
-							Vector2Int coordinates = new Vector2Int(point.coordinates.x + x, point.coordinates.y + y);
+							Vector2Int coordinates = new Vector2Int(originNode.coordinates.x + x, originNode.coordinates.y + y);
 							Node node = nodesNoDuplicates.Find(n => n.coordinates == coordinates);
 
-							if (!pathPointsNoDuplicates.Contains(node))
+							if (node != null && !pathPointsNoDuplicates.Contains(node) && node.walkable)
 							{
-								if (node != null && node.walkable)
-								{
-									GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
-									neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
-									neighbouringPathPoint.transform.parent = pathParent.transform;
+								GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
+								SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
+								neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
+								neighbouringPathPoint.transform.parent = pathParent.transform;
 
-									SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
-									neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-								}
+								//Vector2Int topNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y + 1);
+								//Vector2Int topRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y + 1);
+								//Vector2Int rightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y);
+								//Vector2Int bottomRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y - 1);
+								//Vector2Int bottomNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y - 1);
+								//Vector2Int bottomLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y - 1);
+								//Vector2Int leftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y);
+								//Vector2Int topLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y + 1);
+
+								//List<Node> neighbours = new List<Node>();
+								//Node topNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topNeighbourCoordinates);
+								//Node topRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topRightNeighbourCoordinates);
+								//Node rightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == rightNeighbourCoordinates);
+								//Node bottomRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomRightNeighbourCoordinates);
+								//Node bottomNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomNeighbourCoordinates);
+								//Node bottomLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomLeftNeighbourCoordinates);
+								//Node leftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == leftNeighbourCoordinates);
+								//Node topLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topLeftNeighbourCoordinates);
+
+								//if (topNeighbourNode) neighbours.Add(topNeighbourNode);
+								//if (topRightNeighbourNode) neighbours.Add(topRightNeighbourNode);
+								//if (rightNeighbourNode) neighbours.Add(rightNeighbourNode);
+								//if (bottomRightNeighbourNode) neighbours.Add(bottomRightNeighbourNode);
+								//if (bottomNeighbourNode) neighbours.Add(bottomNeighbourNode);
+								//if (bottomLeftNeighbourNode) neighbours.Add(bottomLeftNeighbourNode);
+								//if (leftNeighbourNode) neighbours.Add(leftNeighbourNode);
+								//if (topLeftNeighbourNode) neighbours.Add(topLeftNeighbourNode);
+
+								// Node has 4 adjecent neighbours. This should be a ground node.
+								//if (topNeighbourNode && rightNeighbourNode && bottomNeighbourNode && leftNeighbourNode)
+								//{
+								neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+								//}
+								//else
+								//{
+								//	neighbouringPathPointSpriteRenderer.sprite = pathWallTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+								//}
 							}
 						}
 					}
