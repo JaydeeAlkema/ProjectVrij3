@@ -141,7 +141,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void MeleeAttack()
 	{
 		meleeAttack.Ability.SetScriptable(meleeAttack);
-		meleeAttack.Ability.AbilityBehavior();
+		meleeAttack.Ability.CallAbility();
 		animAttack.SetTrigger("MeleeAttack1");
 		animPlayer.SetTrigger("isAttacking");
 	}

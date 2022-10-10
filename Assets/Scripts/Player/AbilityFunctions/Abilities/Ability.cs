@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability : MonoBehaviour
+public abstract class Ability : MonoBehaviour, IAbility
 {
 	protected float coolDown;
 	protected float damage;
@@ -22,7 +22,8 @@ public abstract class Ability : MonoBehaviour
 	protected float lifeSpan = 10f;
 	protected float force = 30f;
 
-	public abstract void AbilityBehavior();
-	public abstract void SetScriptable(AbilityScriptable scriptable);
+	public virtual void CallAbility() { }
+	public virtual void AbilityBehavior(){ }
+	public virtual void SetScriptable( AbilityScriptable scriptable ) { }
 
 }

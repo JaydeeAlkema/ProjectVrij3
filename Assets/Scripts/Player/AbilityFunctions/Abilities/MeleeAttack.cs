@@ -7,10 +7,21 @@ public class MeleeAttack : Ability
 	private bool onCoolDown = false;
 	public bool burnAreaUpgrade = false;
 	public GameObject burningGround;
+
+	public override void CallAbility()
+	{
+		if( burnAreaUpgrade )
+		{
+			new BurningMeleeDecorator( this, burningGround, rb2d, castFromPoint, distance );
+			return;
+		}
+		else { AbilityBehavior(); }
+	}
 	public override void AbilityBehavior()
 	{
 		if( !onCoolDown )
 		{
+			
 			Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( rb2d.transform.position + castFromPoint.transform.up * distance, boxSize, angle, layerMask );
 			Debug.Log( "Enemies: " + enemiesInBox.Length );
 
@@ -20,13 +31,6 @@ public class MeleeAttack : Ability
 				abilityScriptable.OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>());
 			}
 
-			if (burnAreaUpgrade)
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					Instantiate(burningGround, rb2d.transform.position + castFromPoint.transform.right * (i-1) + castFromPoint.transform.up * distance, Quaternion.identity);
-				}
-			}
 		}
 	}
 
