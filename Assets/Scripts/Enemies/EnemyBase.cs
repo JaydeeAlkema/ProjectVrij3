@@ -34,7 +34,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		}
 		else
 		{
-			GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
 		}
 	}
 
