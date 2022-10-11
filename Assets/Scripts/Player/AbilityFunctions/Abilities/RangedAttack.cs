@@ -5,6 +5,12 @@ using UnityEngine;
 public class RangedAttack : Ability
 {
 	private bool trailUpgrade = false;
+
+	public override void CallAbility()
+	{
+		SetAbilityStats();
+		AbilityBehavior();
+	}
 	public override void AbilityBehavior()
 	{
 		GameObject projectile = Object.Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
@@ -16,24 +22,11 @@ public class RangedAttack : Ability
 		projectile.transform.SetParent( null );
 	}
 
-	//public override void SetPlayerValues( AbilityScriptable scriptable )
-	//{
-	//	abilityScriptable = scriptable;
-	//	SetAbilityStats(scriptable.Rb2d, scriptable.CastFromPoint, scriptable.CastObject, scriptable.LifeSpan, scriptable.Force, scriptable.Damage, scriptable.statusEffectType);
-	//}
-
-	void SetAbilityStats( Rigidbody2D AbilityRB2D, Transform CastFromPoint, GameObject CastObject, float LifeSpan, float Force, float Damage, StatusEffectType burntrail )
+	void SetAbilityStats()
 	{
-		rb2d = AbilityRB2D;
-		castObject = CastObject;
-		castFromPoint = CastFromPoint;
-		lifeSpan = LifeSpan;
-		force = Force;
-		damage = Damage;
-		if( burntrail != StatusEffectType.Burntrail )
-		{
-			trailUpgrade = false;
-		}
-		else { trailUpgrade = true; }
+		castObject = baseStats.CastObject;
+		lifeSpan = baseStats.LifeSpan;
+		force = baseStats.Force;
+		damage = baseStats.Damage;
 	}
 }

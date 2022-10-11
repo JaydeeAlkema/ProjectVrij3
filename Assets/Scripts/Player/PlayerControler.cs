@@ -19,7 +19,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField]
 	private Transform castFromPoint;
 	[SerializeField]
-	private Vector2 boxSize = new Vector2(4, 6);
+	private Vector2 boxSize = new Vector2( 4, 6 );
 	[SerializeField]
 	private float circleSize = 3f;
 	[SerializeField]
@@ -38,7 +38,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	[SerializeField] private float healthPoints = 500;
 
-	[Header("Abilities")]
+	[Header( "Abilities" )]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -50,6 +50,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public AbilityScriptable Ability3 { get => ability3; set => ability3 = value; }
 
 	private IAbility currentMeleeAttack = new MeleeAttack();
+	private IAbility currentRangedAttack = new RangedAttack();
+	private IAbility currentAbility1;
+	private IAbility currentAbility2;
+	private IAbility currentAbility3;
+	public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
+	public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
+	public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
 	#endregion
 
 
@@ -58,6 +65,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		rb2d = GetComponent<Rigidbody2D>();
 		dashTrail.emitting = false;
+		currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, meleeAttack.CoolDown );
 	}
 
 	// Update is called once per frame
@@ -142,8 +150,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MeleeAttack()
 	{
-		//meleeAttack.Ability.SetScriptable(meleeAttack);
-		//meleeAttack.Ability.CallAbility();
 		currentMeleeAttack.BaseStats = meleeAttack;
 		currentMeleeAttack.CallAbility();
 		animAttack.SetTrigger("MeleeAttack1");
@@ -152,8 +158,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void RangedAttack()
 	{
-		//rangedAttack.Ability.SetPlayerValues(rangedAttack);
-		rangedAttack.Ability.AbilityBehavior();
+		currentRangedAttack.BaseStats = rangedAttack;
+		currentRangedAttack.CallAbility();
 		animPlayer.SetTrigger("isAttacking");
 	}
 
@@ -185,13 +191,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (rangedAttack != null)
 		{
-			rangedAttack.Rb2d = rb2d;
-			rangedAttack.CastFromPoint = castFromPoint;
-			rangedAttack.MousePos = mousePos;
-			rangedAttack.LookDir = lookDir;
-			rangedAttack.Angle = angle;
 			rangedAttack.Start();
-			//rangedAttack.Ability.SetScriptable(rangedAttack);
+			currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 		}
 
 		if (ability1 != null)

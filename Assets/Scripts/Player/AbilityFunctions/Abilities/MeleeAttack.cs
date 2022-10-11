@@ -16,7 +16,7 @@ public class MeleeAttack : Ability
 			new BurningMeleeDecorator( this, burningGround, rb2d, castFromPoint, distance );
 			return;
 		}
-		else { AbilityBehavior(); }
+		//else { AbilityBehavior(); }
 	}
 	public override void AbilityBehavior()
 	{
@@ -32,31 +32,10 @@ public class MeleeAttack : Ability
 
 	public void SetAbilityStats()
 	{
-		rb2d = baseStats.Rb2d;
-		castFromPoint = baseStats.CastFromPoint;
 		boxSize = baseStats.BoxSize;
-		angle = baseStats.Angle;
 		layerMask = baseStats.Layer;
-		lookDir = baseStats.LookDir;
 		damage = baseStats.Damage;
 		distance = baseStats.Distance;
 		coolDown = baseStats.CoolDown;
-	}
-
-	public void SetAbilityStats( Rigidbody2D AbilityRB2D, Transform CastFromPoint, Vector2 BoxSize, Vector2 LookDir, float Angle, LayerMask layer, float Damage, float Distance, float Cooldown, StatusEffectType burntrail )
-	{
-		rb2d = AbilityRB2D;
-		castFromPoint = CastFromPoint;
-		boxSize = BoxSize;
-		angle = Angle;
-		layerMask = layer;
-		lookDir = LookDir;
-		damage = Damage;
-		distance = Distance;
-		coolDown = Cooldown;
-		if( burntrail == StatusEffectType.Burntrail )
-		{
-			burnAreaUpgrade = true;
-		}
 	}
 }
