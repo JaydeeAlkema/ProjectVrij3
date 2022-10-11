@@ -48,6 +48,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public AbilityScriptable Ability2 { get => ability2; set => ability2 = value; }
 	[SerializeField] private AbilityScriptable ability3;
 	public AbilityScriptable Ability3 { get => ability3; set => ability3 = value; }
+
+	private IAbility currentMeleeAttack = new MeleeAttack();
 	#endregion
 
 
@@ -140,34 +142,36 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MeleeAttack()
 	{
-		meleeAttack.Ability.SetScriptable(meleeAttack);
-		meleeAttack.Ability.CallAbility();
+		//meleeAttack.Ability.SetScriptable(meleeAttack);
+		//meleeAttack.Ability.CallAbility();
+		currentMeleeAttack.BaseStats = meleeAttack;
+		currentMeleeAttack.CallAbility();
 		animAttack.SetTrigger("MeleeAttack1");
 		animPlayer.SetTrigger("isAttacking");
 	}
 
 	void RangedAttack()
 	{
-		rangedAttack.Ability.SetScriptable(rangedAttack);
+		//rangedAttack.Ability.SetPlayerValues(rangedAttack);
 		rangedAttack.Ability.AbilityBehavior();
 		animPlayer.SetTrigger("isAttacking");
 	}
 
 	void AbilityOneAttack()
 	{
-		ability1.Ability.SetScriptable(ability1);
+		//ability1.Ability.SetPlayerValues(ability1);
 		ability1.Ability.AbilityBehavior();
 	}
 
 	void AbilityTwoAttack()
 	{
-		ability2.Ability.SetScriptable(ability2);
+		//ability2.Ability.SetPlayerValues(ability2);
 		ability2.Ability.AbilityBehavior();
 	}
 
 	void AbilityThreeAttack()
 	{
-		ability3.Ability.SetScriptable(ability3);
+		//ability3.Ability.SetPlayerValues(ability3);
 		ability3.Ability.AbilityBehavior();
 	}
 
@@ -175,13 +179,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (meleeAttack != null)
 		{
-			meleeAttack.Rb2d = rb2d;
-			meleeAttack.CastFromPoint = castFromPoint;
-			meleeAttack.MousePos = mousePos;
-			meleeAttack.LookDir = lookDir;
-			meleeAttack.Angle = angle;
 			meleeAttack.Start();
-			meleeAttack.Ability.SetScriptable(meleeAttack);
+			currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 		}
 
 		if (rangedAttack != null)
@@ -192,7 +191,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			rangedAttack.LookDir = lookDir;
 			rangedAttack.Angle = angle;
 			rangedAttack.Start();
-			rangedAttack.Ability.SetScriptable(rangedAttack);
+			//rangedAttack.Ability.SetScriptable(rangedAttack);
 		}
 
 		if (ability1 != null)

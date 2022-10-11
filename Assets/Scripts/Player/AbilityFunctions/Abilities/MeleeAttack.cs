@@ -10,6 +10,7 @@ public class MeleeAttack : Ability
 
 	public override void CallAbility()
 	{
+		SetAbilityStats();
 		if( burnAreaUpgrade )
 		{
 			new BurningMeleeDecorator( this, burningGround, rb2d, castFromPoint, distance );
@@ -19,19 +20,27 @@ public class MeleeAttack : Ability
 	}
 	public override void AbilityBehavior()
 	{
-		if( !onCoolDown )
+		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( rb2d.transform.position + castFromPoint.transform.up * distance, boxSize, angle, layerMask );
+		Debug.Log( "Enemies: " + enemiesInBox.Length );
+
+		foreach( Collider2D enemy in enemiesInBox )
 		{
-			
-			Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( rb2d.transform.position + castFromPoint.transform.up * distance, boxSize, angle, layerMask );
-			Debug.Log( "Enemies: " + enemiesInBox.Length );
-
-			foreach( Collider2D enemy in enemiesInBox )
-			{
-				enemy.GetComponent<IDamageable>()?.TakeDamage(damage, 0);
-				abilityScriptable.OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>());
-			}
-
+			enemy.GetComponent<IDamageable>()?.TakeDamage(damage, 0);
+			baseStats.OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>());
 		}
+	}
+
+	public void SetAbilityStats()
+	{
+		rb2d = baseStats.Rb2d;
+		castFromPoint = baseStats.CastFromPoint;
+		boxSize = baseStats.BoxSize;
+		angle = baseStats.Angle;
+		layerMask = baseStats.Layer;
+		lookDir = baseStats.LookDir;
+		damage = baseStats.Damage;
+		distance = baseStats.Distance;
+		coolDown = baseStats.CoolDown;
 	}
 
 	public void SetAbilityStats( Rigidbody2D AbilityRB2D, Transform CastFromPoint, Vector2 BoxSize, Vector2 LookDir, float Angle, LayerMask layer, float Damage, float Distance, float Cooldown, StatusEffectType burntrail )
@@ -49,11 +58,5 @@ public class MeleeAttack : Ability
 		{
 			burnAreaUpgrade = true;
 		}
-	}
-
-	public override void SetScriptable( AbilityScriptable scriptable )
-	{
-		abilityScriptable = scriptable;
-		SetAbilityStats( scriptable.Rb2d, scriptable.CastFromPoint, scriptable.BoxSize, scriptable.LookDir, scriptable.Angle, scriptable.Layer, scriptable.Damage, scriptable.Distance, scriptable.CoolDown, scriptable.statusEffectType );
 	}
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public class AbilityDecorator : IAbility
 {
 	private IAbility ability;
-
+	protected AbilityScriptable baseStats;
+	public AbilityScriptable BaseStats { get => baseStats; set => baseStats = value; }
 	public AbilityDecorator(IAbility _ability)
 	{
 		ability = _ability;

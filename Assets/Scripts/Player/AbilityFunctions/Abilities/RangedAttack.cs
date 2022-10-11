@@ -7,7 +7,7 @@ public class RangedAttack : Ability
 	private bool trailUpgrade = false;
 	public override void AbilityBehavior()
 	{
-		GameObject projectile = Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
+		GameObject projectile = Object.Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
 		Projectile proj = projectile.GetComponent<Projectile>();
 		if(trailUpgrade) { proj.TrailUpgrade = true; Debug.Log( "trailupgrade on" ); }
 		proj.Damage = damage;
@@ -16,11 +16,11 @@ public class RangedAttack : Ability
 		projectile.transform.SetParent( null );
 	}
 
-	public override void SetScriptable( AbilityScriptable scriptable )
-	{
-		abilityScriptable = scriptable;
-		SetAbilityStats(scriptable.Rb2d, scriptable.CastFromPoint, scriptable.CastObject, scriptable.LifeSpan, scriptable.Force, scriptable.Damage, scriptable.statusEffectType);
-	}
+	//public override void SetPlayerValues( AbilityScriptable scriptable )
+	//{
+	//	abilityScriptable = scriptable;
+	//	SetAbilityStats(scriptable.Rb2d, scriptable.CastFromPoint, scriptable.CastObject, scriptable.LifeSpan, scriptable.Force, scriptable.Damage, scriptable.statusEffectType);
+	//}
 
 	void SetAbilityStats( Rigidbody2D AbilityRB2D, Transform CastFromPoint, GameObject CastObject, float LifeSpan, float Force, float Damage, StatusEffectType burntrail )
 	{

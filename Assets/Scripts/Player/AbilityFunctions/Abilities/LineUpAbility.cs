@@ -30,10 +30,4 @@ public class LineUpAbility : Ability
 		layerMask = layer;
 		lookDir = LookDir;
 	}
-
-	public override void SetScriptable( AbilityScriptable scriptable )
-	{
-		abilityScriptable = scriptable;
-		SetAbilityStats(scriptable.Rb2d, scriptable.CastFromPoint, scriptable.BoxSize, scriptable.LookDir, scriptable.Angle, scriptable.Layer);
-	}
 }
