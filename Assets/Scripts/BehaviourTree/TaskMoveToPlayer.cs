@@ -5,13 +5,14 @@ using UnityEngine;
 using BehaviourTree;
 public class TaskMoveToPlayer : BTNode
 {
-	private Rigidbody2D rb2d;
+	//private Rigidbody2D rb2d;
 	private EnemyBase enemyScript;
 	private float speed;
 
+
 	public TaskMoveToPlayer(Rigidbody2D getRb2d, EnemyBase getEnemyScript)
 	{
-		rb2d = getRb2d;
+		//rb2d = getRb2d;
 		enemyScript = getEnemyScript;
 		speed = enemyScript.Speed;
 	}
@@ -19,13 +20,21 @@ public class TaskMoveToPlayer : BTNode
 	public override BTNodeState Evaluate()
 	{
 		Transform target = (Transform)GetData("target");
+		if (!enemyScript.Attacking)
+		{
+			enemyScript.Target = target;
+			enemyScript.FollowPath();
+
+		}
 
 		//VERVANGEN MET PATHING
-		Vector3 targetDir = target.transform.position - this.rb2d.transform.position;
-		rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
+		//Vector3 targetDir = target.transform.position - this.rb2d.transform.position;
+		//rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
 		//VERVANGEN MET PATHING
 
 		state = BTNodeState.RUNNING;
 		return state;
 	}
+
+
 }

@@ -142,6 +142,7 @@ MonoBehaviour:
   aggroRange: 10
   attackRange: 3
   attacking: 0
+  rb2d: {fileID: 4442677197823009441}
   beingCrowdControlled: 0
   meleeTarget: 0
   castTarget: 0
@@ -150,11 +151,10 @@ MonoBehaviour:
     m_Bits: 0
   damage: 25
   player: {fileID: 0}
-  rb2d: {fileID: 0}
-  windUpTime: 0.5
+  windUpTime: 0.2
   dashSpeed: 10
   dashDuration: 0.4
-  endLag: 2
+  endLag: 0.8
   hasHitbox: 0
 --- !u!114 &7187582512883066473
 MonoBehaviour:

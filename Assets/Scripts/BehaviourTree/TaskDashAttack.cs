@@ -19,8 +19,9 @@ public class TaskDashAttack : BTNode
 	{
 		Transform target = (Transform)GetData("target");
 
-		if (enemyScript.Attacking == false)
+		if (!enemyScript.Attacking)
 		{
+			enemyScript.StopMovingToPlayer();
 			enemyScript.StartAttack(target);
 		}
 

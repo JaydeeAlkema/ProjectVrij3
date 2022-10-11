@@ -8,18 +8,16 @@ public class FodderEnemy : EnemyBase
 
 	[SerializeField] private float damage;
 	[SerializeField] private GameObject player;
-	[SerializeField] private Rigidbody2D rb2d;
 	private float baseSpeed;
 
-	[SerializeField] private float windUpTime = 0.5f;
+	[SerializeField] private float windUpTime = 0.2f;
 	[SerializeField] private float dashSpeed = 15;
 	[SerializeField] private float dashDuration = 0.4f;
-	[SerializeField] private float endLag = 2f;
+	[SerializeField] private float endLag = 0.8f;
 	public bool hasHitbox = false;
 	void Awake()
 	{
 		player = FindObjectOfType<PlayerControler>().gameObject;
-		rb2d = GetComponent<Rigidbody2D>();
 
 		baseSpeed = Speed;
 	}
@@ -69,6 +67,7 @@ public class FodderEnemy : EnemyBase
 
 	public override void StartAttack(Transform target)
 	{
+		//StopCoroutine(FollowPath());
 		StartCoroutine(DashAttack(target));
 	}
 
@@ -76,12 +75,12 @@ public class FodderEnemy : EnemyBase
 	{
 		Attacking = true;
 		hasHitbox = true;
-		rb2d.velocity = new Vector2(0, 0);
+		Rb2d.velocity = new Vector2(0, 0);
 		yield return new WaitForSeconds(windUpTime);
-		Vector2 dashDir = target.transform.position - rb2d.transform.position;
-		rb2d.velocity = dashDir.normalized * dashSpeed;
+		Vector2 dashDir = target.transform.position - Rb2d.transform.position;
+		Rb2d.velocity = dashDir.normalized * dashSpeed;
 		yield return new WaitForSeconds(dashDuration);
-		rb2d.velocity = new Vector2(0, 0);
+		Rb2d.velocity = new Vector2(0, 0);
 		hasHitbox = false;
 		yield return new WaitForSeconds(endLag);
 		Attacking = false;

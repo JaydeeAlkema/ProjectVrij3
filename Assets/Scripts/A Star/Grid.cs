@@ -34,7 +34,7 @@ public class Grid : MonoBehaviour
 			for (int y = 0; y < gridSizeY; y++)
 			{
 				Vector2 worldPoint = worldBottomLeft + Vector2.right * (x * nodeDiameter + nodeRadius) + Vector2.up * (y * nodeDiameter + nodeRadius);
-				bool walkable = (Physics2D.OverlapCircle(worldPoint, nodeRadius, unwalkableMask) == null); // if no collider2D is returned by overlap circle, then this node is walkable
+				bool walkable = (Physics2D.OverlapCircle(worldPoint, nodeRadius * 0.7f, unwalkableMask) == null); // if no collider2D is returned by overlap circle, then this node is walkable
 
 				grid[x, y] = new Node(walkable, worldPoint, x, y);
 			}
@@ -85,9 +85,9 @@ public class Grid : MonoBehaviour
 		{
 			foreach (Node n in grid)
 			{
-				Gizmos.color = Color.red;
+				Gizmos.color = new Color(1, 0, 0, 0.5f);
 				if (n.Walkable)
-					Gizmos.color = Color.white;
+					Gizmos.color = new Color(1, 1, 1, 0.5f);
 
 				Gizmos.DrawCube(n.WorldPosition, Vector3.one * (nodeDiameter - .1f));
 			}

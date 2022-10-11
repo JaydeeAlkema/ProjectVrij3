@@ -36,7 +36,7 @@ public class CheckPlayerAggro : BTNode
 			Debug.Log("TARGET NOT FOUND (RANGE: " + aggroRange + ")");
 			return state;
 		}
-
+		
 		state = BTNodeState.SUCCESS;
 		Debug.Log("TARGET ACQUIRED");
 		return state;

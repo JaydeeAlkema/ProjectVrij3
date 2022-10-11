@@ -9,6 +9,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private float aggroRange = 0;
 	[SerializeField] private float attackRange = 0;
 	[SerializeField] private bool attacking = false;
+	[SerializeField] private Rigidbody2D rb2d;
+
+	private Transform target = null;
+
+	private Vector2[] path;
+	private int targetIndex = 0;
 
 	private Vector2 pullPoint = new Vector2();
 	private Vector2 vel = new Vector2();
@@ -23,6 +29,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public float AggroRange { get => aggroRange; set => aggroRange = value; }
 	public float AttackRange { get => attackRange; set => attackRange = value; }
 	public bool Attacking { get => attacking; set => attacking = value; }
+	public Rigidbody2D Rb2d { get => rb2d; set => rb2d = value; }
+	public Transform Target { get => target; set => target = value; }
+
+	public void Awake()
+	{
+		rb2d = GetComponent<Rigidbody2D>();
+	}
 
 	public void Update()
 	{
@@ -108,6 +121,47 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	}
 
+	public virtual void StartMovingToPlayer(Transform setTarget)
+	{
+		target = setTarget;
+		//StopCoroutine(FollowPath());
+		//StartCoroutine(FollowPath());
+	}
+
+	public virtual void StopMovingToPlayer()
+	{
+		//StopCoroutine(FollowPath());
+	}
+
+	public void FollowPath()
+	{
+
+		path = Pathfinding.RequestPath(transform.position, target.position);
+
+		if (path.Length == 0)
+		{
+			targetIndex = 0;
+			path = new Vector2[0];
+			return;
+		}
+
+		Vector2 currentWaypoint = path[0];
+
+		if ((Vector2)transform.position == currentWaypoint)
+		{
+			targetIndex++;
+			if (targetIndex >= path.Length)
+			{
+				return;
+			}
+			currentWaypoint = path[targetIndex];
+		}
+
+		//Vector2 targetDir = currentWaypoint - (Vector2)transform.position;
+		//rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
+		transform.position = Vector2.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+	}
+
 	public virtual IEnumerator FlashColor()
 	{
 		yield return new WaitForSeconds(0.08f);
@@ -138,5 +192,28 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		beingCrowdControlled = true;
 		Physics.IgnoreLayerCollision(layerMask.value, layerMask.value, false);
 		this.pullPoint = pullPoint;
+	}
+
+	public void OnDrawGizmos()
+	{
+
+
+		if (path != null)
+		{
+			for (int i = targetIndex; i < path.Length; i++)
+			{
+				Gizmos.color = Color.black;
+				//Gizmos.DrawCube((Vector3)path[i], Vector3.one *.5f);
+
+				if (i == targetIndex)
+				{
+					Gizmos.DrawLine(transform.position, path[i]);
+				}
+				else
+				{
+					Gizmos.DrawLine(path[i - 1], path[i]);
+				}
+			}
+		}
 	}
 }

@@ -36,7 +36,7 @@ public class Pathfinding : MonoBehaviour
 		startNode.Parent = startNode;
 
 
-		if (startNode.Walkable && targetNode.Walkable)
+		if (targetNode.Walkable && startNode.Walkable)
 		{
 			Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
 			HashSet<Node> closedSet = new HashSet<Node>();
@@ -97,13 +97,13 @@ public class Pathfinding : MonoBehaviour
 			path.Add(currentNode);
 			currentNode = currentNode.Parent;
 		}
-		Vector2[] waypoints = SimplifyPath(path);
+		Vector2[] waypoints = SimplifyPath(path, startNode);
 		Array.Reverse(waypoints);
 		return waypoints;
 
 	}
 
-	Vector2[] SimplifyPath(List<Node> path)
+	Vector2[] SimplifyPath(List<Node> path, Node startNode)
 	{
 		List<Vector2> waypoints = new List<Vector2>();
 		Vector2 directionOld = Vector2.zero;
@@ -113,9 +113,13 @@ public class Pathfinding : MonoBehaviour
 			Vector2 directionNew = new Vector2(path[i - 1].GridX - path[i].GridX, path[i - 1].GridY - path[i].GridY);
 			if (directionNew != directionOld)
 			{
-				waypoints.Add(path[i].WorldPosition);
+				waypoints.Add(path[i - 1].WorldPosition);
 			}
 			directionOld = directionNew;
+			if (i == path.Count - 1 && directionOld != new Vector2(path[i].GridX, path[i].GridY) - new Vector2(startNode.GridX, startNode.GridY))
+			{
+				waypoints.Add(path[path.Count - 1].WorldPosition);
+			}
 		}
 		return waypoints.ToArray();
 	}
