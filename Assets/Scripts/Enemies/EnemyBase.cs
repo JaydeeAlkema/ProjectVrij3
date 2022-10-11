@@ -5,6 +5,10 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 {
 	[SerializeField] private float healthPoints = 0;
+	[SerializeField] private float speed = 0;
+	[SerializeField] private float aggroRange = 0;
+	[SerializeField] private float attackRange = 0;
+	[SerializeField] private bool attacking = false;
 
 	private Vector2 pullPoint = new Vector2();
 	private Vector2 vel = new Vector2();
@@ -14,6 +18,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public LayerMask layerMask = default;
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
+
+	public float Speed { get => speed; set => speed = value; }
+	public float AggroRange { get => aggroRange; set => aggroRange = value; }
+	public float AttackRange { get => attackRange; set => attackRange = value; }
+	public bool Attacking { get => attacking; set => attacking = value; }
 
 	public void Update()
 	{
@@ -71,7 +80,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			castTarget = false;
 		}
 		healthPoints -= damage;
-		this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
 	}
@@ -94,9 +103,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	}
 
+	public virtual void StartAttack(Transform target)
+	{
+
+	}
+
 	public virtual IEnumerator FlashColor()
 	{
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSeconds(0.08f);
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
 	}
 

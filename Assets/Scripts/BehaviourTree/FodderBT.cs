@@ -7,10 +7,25 @@ using BehaviourTree;
 public class FodderBT : BTTree
 {
 	public Rigidbody2D rb2d;
-	public static float speed = 150f;
+	public EnemyBase enemyScript;
+
 	protected override BTNode SetupTree()
 	{
-		BTNode root = new TaskIdle(rb2d);
+		BTNode root = new Selector(new List<BTNode>
+		{
+			new Sequence(new List<BTNode>
+			{
+				new CheckAttackRange(rb2d, enemyScript),
+				new TaskDashAttack(rb2d, enemyScript),
+			}),
+			new Sequence(new List<BTNode>
+			{
+				new CheckPlayerAggro(rb2d, enemyScript),
+				new TaskMoveToPlayer(rb2d, enemyScript),
+			}),
+			new TaskIdle(rb2d, enemyScript),
+		});
+
 		return root;
 	}
 

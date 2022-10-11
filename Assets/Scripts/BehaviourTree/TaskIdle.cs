@@ -5,53 +5,58 @@ using UnityEngine;
 using BehaviourTree;
 public class TaskIdle : BTNode
 {
-	private Rigidbody2D _rb2d;
+	//public float walkSpeed = 100f;
 
-	private float _waitTime = 1f;
-	private float _moveTime = 1f;
-	private float _waitCounter = 0f;
-	private float _moveCounter = 0f;
-	private bool _waiting = false;
-	private bool _moving = false;
+	private Rigidbody2D rb2d;
+	private EnemyBase enemyScript;
+
+	private float speed;
+	private float waitTime = 2f;
+	private float moveTime = 1f;
+	private float waitCounter = 0f;
+	private float moveCounter = 0f;
+	private bool waiting = false;
+	private bool moving = false;
 	public Vector2 moveDir;
 
-	public TaskIdle(Rigidbody2D rb2d)
+	public TaskIdle(Rigidbody2D getRb2d, EnemyBase getEnemyScript)
 	{
-		_rb2d = rb2d;
+		rb2d = getRb2d;
+		enemyScript = getEnemyScript;
+		speed = enemyScript.Speed;
 	}
 
 	public override BTNodeState Evaluate()
 	{
-		Debug.Log("Waiting: " + _waiting + ", Moving: " + _moving);
-		if (_waiting)
+		if (waiting)
 		{
-			_rb2d.velocity = new Vector2(0, 0);
-			_waitCounter += Time.deltaTime;
-			if (_waitCounter >= _waitTime)
+			rb2d.velocity = new Vector2(0, 0);
+			waitCounter += Time.deltaTime;
+			if (waitCounter >= waitTime)
 			{
-				_waiting = false;
-				_moveCounter = 0f;
-				_moving = true;
+				waiting = false;
+				moveCounter = 0f;
+				moving = true;
 				moveDir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
 			}
 		}
 		else
 		{
-			if (_moving)
+			if (moving)
 			{
-				_rb2d.velocity = moveDir.normalized * FodderBT.speed * Time.deltaTime;
+				rb2d.velocity = moveDir.normalized * speed * Time.deltaTime;
 
-				_moveCounter += Time.deltaTime;
-				if (_moveCounter >= _moveTime)
+				moveCounter += Time.deltaTime;
+				if (moveCounter >= moveTime)
 				{
-					_moving = false;
-					_waitCounter = 0f;
-					_waiting = true;
+					moving = false;
+					waitCounter = 0f;
+					waiting = true;
 				}
 			}
 			else
 			{
-				_waiting = true;
+				waiting = true;
 			}
 
 		}

@@ -13,13 +13,13 @@ public class EnemyDummy : EnemyBase
 
 	public override IEnumerator FlashColor()
 	{
-		yield return new WaitForSeconds( 0.2f );
+		yield return new WaitForSeconds(0.08f);
 		this.GetComponent<SpriteRenderer>().color = Color.green;
 	}
 
 	public override void Die()
 	{
-		Instantiate( rewardInstance, this.transform.position, Quaternion.identity );
-		Destroy( this.gameObject );
+		Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
+		Destroy(this.gameObject);
 	}
 }
