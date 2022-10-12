@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,16 +32,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	[Header("References")]
 	[SerializeField] private Transform levelAssetsParent = default;
-	[Space(10)]
 
 	[Header("Debugging")]
 	[SerializeField] private bool showGizmos = false;
 	[SerializeField] private List<string> diagnosticTimes = new List<string>();
 	[SerializeField] private long totalGenerationTimeInMilliseconds = 0;
 
-	[Header("Pathway Generation")]
-	[SerializeField] private Grid grid;
-	[SerializeField, ReadOnly] private List<Node> pathPoints = new List<Node>();
+	List<Node> pathPoints = new List<Node>();
 
 	public List<Room> Rooms { get => rooms; set => rooms = value; }
 
@@ -111,9 +107,15 @@ public class LevelGeneratorV2 : MonoBehaviour
 						Vector2Int nodeCoordinates = new Vector2Int(Mathf.RoundToInt(chunk.transform.position.x - chunkSize / 2) + nx, Mathf.RoundToInt(chunk.transform.position.y - chunkSize / 2) + ny);
 
 						GameObject nodeGO = new GameObject($"Node [{nodeCoordinates.x}][{nodeCoordinates.y}]");
+						Node node = nodeGO.AddComponent<Node>();
 
 						nodeGO.transform.position = new Vector2(nodeCoordinates.x, nodeCoordinates.y);
 						nodeGO.transform.parent = chunk.transform;
+
+						node.walkable = true;
+						node.coordinates = new Vector2Int(Mathf.RoundToInt(nodeGO.transform.position.x), Mathf.RoundToInt(nodeGO.transform.position.y));
+
+						chunk.Nodes.Add(node);
 					}
 				}
 
@@ -310,7 +312,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 				}
 			}
 
+			// Get all the nodes between the two chunks
+			List<Node> nodes = new List<Node>();
+			nodes.AddRange(startChunk.Nodes);
+			nodes.AddRange(endChunk.Nodes);
+
 			// Remove any duplicate nodes.
+			List<Node> nodesNoDuplicates = nodes.Distinct(new NodeComparer()).ToList();
 			List<Transform> collideableTiles = new List<Transform>();
 			collideableTiles.AddRange(room.CollideableTiles);
 			collideableTiles.AddRange(roomToConnectTo.CollideableTiles);
@@ -321,12 +329,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 				if (collideableTile.gameObject.activeInHierarchy || collideableTile.parent.gameObject.activeInHierarchy)
 				{
 					Vector2Int wallCoordinates = new Vector2Int(Mathf.RoundToInt(collideableTile.position.x), Mathf.RoundToInt(collideableTile.position.y));
-					//Node node = nodesNoDuplicates.Find(n => n.coordinates == wallCoordinates);
-					//if (node != null) node.walkable = false;
+					Node node = nodesNoDuplicates.Find(n => n.coordinates == wallCoordinates);
+					if (node != null) node.walkable = false;
 				}
 			}
 
-			// A* here
+			FindShortestPathBetweenRoomsWithAStar(startPos, targetPos, nodesNoDuplicates);
 
 			// Instantiate empty pathway tiles.
 			if (pathPoints.Count > 0)
@@ -337,8 +345,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 				int totalY = 0;
 				foreach (Node pathPoint in pathPoints)
 				{
-					totalX += pathPoint.GridX;
-					totalY += pathPoint.GridY;
+					totalX += pathPoint.coordinates.x;
+					totalY += pathPoint.coordinates.y;
 				}
 				int centerX = totalX / pathPoints.Count;
 				int centerY = totalY / pathPoints.Count;
@@ -349,7 +357,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				for (int p = pathPointsNoDuplicates.Count - 1; p >= 0; p--)
 				{
 					Node pathPoint = pathPointsNoDuplicates[p];
-					Collider2D[] colliders = Physics2D.OverlapBoxAll(new Vector2Int(pathPoint.GridX, pathPoint.GridY), new Vector2(0.75f, 0.75f), 0f);
+					Collider2D[] colliders = Physics2D.OverlapBoxAll(new Vector2Int(pathPoint.coordinates.x, pathPoint.coordinates.y), new Vector2(0.75f, 0.75f), 0f);
 					if (colliders.Length > 0)
 					{
 						pathPointsNoDuplicates.Remove(pathPoint);
@@ -363,7 +371,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 					// The "Origin" node is always surrounded by other nodes. So the origin node will always be a ground tile.
 					Node originNode = pathPointsNoDuplicates[pp];
 					GameObject pathPoint = new GameObject($"Point [{pp}]");
-					pathPoint.transform.position = new Vector3(originNode.GridX, originNode.GridY, 0);
+					pathPoint.transform.position = new Vector3(originNode.coordinates.x, originNode.coordinates.y, 0);
 					pathPoint.transform.parent = pathParent.transform;
 
 					SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
@@ -375,54 +383,54 @@ public class LevelGeneratorV2 : MonoBehaviour
 					{
 						for (int y = -(pathWidth / 2); y < (pathWidth / 2) + 1; y++)
 						{
-							Vector2Int coordinates = new Vector2Int(originNode.GridX + x, originNode.GridY + y);
-							//Node node = nodesNoDuplicates.Find(n => n.coordinates == coordinates);
+							Vector2Int coordinates = new Vector2Int(originNode.coordinates.x + x, originNode.coordinates.y + y);
+							Node node = nodesNoDuplicates.Find(n => n.coordinates == coordinates);
 
-							//if (node != null && !pathPointsNoDuplicates.Contains(node) && node.walkable)
-							//{
-							//	GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
-							//	SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
-							//	neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
-							//	neighbouringPathPoint.transform.parent = pathParent.transform;
+							if (node != null && !pathPointsNoDuplicates.Contains(node) && node.walkable)
+							{
+								GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
+								SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
+								neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
+								neighbouringPathPoint.transform.parent = pathParent.transform;
 
-							//	//Vector2Int topNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y + 1);
-							//	//Vector2Int topRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y + 1);
-							//	//Vector2Int rightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y);
-							//	//Vector2Int bottomRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y - 1);
-							//	//Vector2Int bottomNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y - 1);
-							//	//Vector2Int bottomLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y - 1);
-							//	//Vector2Int leftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y);
-							//	//Vector2Int topLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y + 1);
+								//Vector2Int topNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y + 1);
+								//Vector2Int topRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y + 1);
+								//Vector2Int rightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y);
+								//Vector2Int bottomRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y - 1);
+								//Vector2Int bottomNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y - 1);
+								//Vector2Int bottomLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y - 1);
+								//Vector2Int leftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y);
+								//Vector2Int topLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y + 1);
 
-							//	//List<Node> neighbours = new List<Node>();
-							//	//Node topNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topNeighbourCoordinates);
-							//	//Node topRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topRightNeighbourCoordinates);
-							//	//Node rightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == rightNeighbourCoordinates);
-							//	//Node bottomRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomRightNeighbourCoordinates);
-							//	//Node bottomNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomNeighbourCoordinates);
-							//	//Node bottomLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomLeftNeighbourCoordinates);
-							//	//Node leftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == leftNeighbourCoordinates);
-							//	//Node topLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topLeftNeighbourCoordinates);
+								//List<Node> neighbours = new List<Node>();
+								//Node topNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topNeighbourCoordinates);
+								//Node topRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topRightNeighbourCoordinates);
+								//Node rightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == rightNeighbourCoordinates);
+								//Node bottomRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomRightNeighbourCoordinates);
+								//Node bottomNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomNeighbourCoordinates);
+								//Node bottomLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomLeftNeighbourCoordinates);
+								//Node leftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == leftNeighbourCoordinates);
+								//Node topLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topLeftNeighbourCoordinates);
 
-							//	//if (topNeighbourNode) neighbours.Add(topNeighbourNode);
-							//	//if (topRightNeighbourNode) neighbours.Add(topRightNeighbourNode);
-							//	//if (rightNeighbourNode) neighbours.Add(rightNeighbourNode);
-							//	//if (bottomRightNeighbourNode) neighbours.Add(bottomRightNeighbourNode);
-							//	//if (bottomNeighbourNode) neighbours.Add(bottomNeighbourNode);
-							//	//if (bottomLeftNeighbourNode) neighbours.Add(bottomLeftNeighbourNode);
-							//	//if (leftNeighbourNode) neighbours.Add(leftNeighbourNode);
-							//	//if (topLeftNeighbourNode) neighbours.Add(topLeftNeighbourNode);
+								//if (topNeighbourNode) neighbours.Add(topNeighbourNode);
+								//if (topRightNeighbourNode) neighbours.Add(topRightNeighbourNode);
+								//if (rightNeighbourNode) neighbours.Add(rightNeighbourNode);
+								//if (bottomRightNeighbourNode) neighbours.Add(bottomRightNeighbourNode);
+								//if (bottomNeighbourNode) neighbours.Add(bottomNeighbourNode);
+								//if (bottomLeftNeighbourNode) neighbours.Add(bottomLeftNeighbourNode);
+								//if (leftNeighbourNode) neighbours.Add(leftNeighbourNode);
+								//if (topLeftNeighbourNode) neighbours.Add(topLeftNeighbourNode);
 
-							//	// Node has 4 adjecent neighbours. This should be a ground node.
-							//	//if (topNeighbourNode && rightNeighbourNode && bottomNeighbourNode && leftNeighbourNode)
-							//	//{
-							//	neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-							//	//}
-							//	//else
-							//	//{
-							//	//	neighbouringPathPointSpriteRenderer.sprite = pathWallTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-							//	//}
-							//}
+								// Node has 4 adjecent neighbours. This should be a ground node.
+								//if (topNeighbourNode && rightNeighbourNode && bottomNeighbourNode && leftNeighbourNode)
+								//{
+								neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+								//}
+								//else
+								//{
+								//	neighbouringPathPointSpriteRenderer.sprite = pathWallTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+								//}
+							}
 						}
 					}
 				}
@@ -435,6 +443,135 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		yield return new WaitForEndOfFrame();
 	}
+
+	#region A* Functions
+	/// <summary>
+	/// This finds the shortest path between startPos and targetPos using A*
+	/// </summary>
+	/// <param name="startPos"> starting position. </param>
+	/// <param name="targetPos"> target position. </param>
+	/// <param name="nodesNoDuplicates"> List of nodes to pathfind through. </param>
+	private void FindShortestPathBetweenRoomsWithAStar(Vector2Int startPos, Vector2Int targetPos, List<Node> nodesNoDuplicates)
+	{
+		Node startNode = nodesNoDuplicates.Find(n => n.coordinates == startPos);
+		Node targetNode = nodesNoDuplicates.Find(n => n.coordinates == targetPos);
+
+		List<Node> openSet = new List<Node>();
+		HashSet<Node> closedSet = new HashSet<Node>();
+
+		openSet.Add(startNode);
+		pathPoints.Add(startNode);
+		pathPoints.Add(targetNode);
+
+		while (openSet.Count > 0)
+		{
+			Node currentNode = openSet[0];
+			for (int i = 1; i < openSet.Count; i++)
+			{
+				if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
+				{
+					currentNode = openSet[i];
+				}
+			}
+
+			openSet.Remove(currentNode);
+			closedSet.Add(currentNode);
+
+			if (currentNode == targetNode)
+			{
+				RetracePath(startNode, targetNode);
+				return;
+			}
+
+			List<Node> neighbourNodes = GetNeighbouringNodes(currentNode, nodesNoDuplicates);
+			foreach (Node neighbourNode in neighbourNodes)
+			{
+				if (!neighbourNode.walkable || closedSet.Contains(neighbourNode)) continue;
+
+				int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbourNode);
+				if (newMovementCostToNeighbour < neighbourNode.gCost || !openSet.Contains(neighbourNode))
+				{
+					neighbourNode.gCost = newMovementCostToNeighbour;
+					neighbourNode.hCost = GetDistance(neighbourNode, targetNode);
+					neighbourNode.parent = currentNode;
+
+					if (!openSet.Contains(neighbourNode))
+					{
+						openSet.Add(neighbourNode);
+					}
+				}
+			}
+		}
+
+	}
+
+	/// <summary>
+	/// Get neighbouring nodes
+	/// </summary>
+	/// <param name="node"> Origin node. </param>
+	/// <param name="nodes"> List of nodes that hold the neighbouring nodes. </param>
+	/// <returns></returns>
+	private List<Node> GetNeighbouringNodes(Node node, List<Node> nodes)
+	{
+		List<Node> neighbours = new List<Node>();
+
+		for (int x = -1; x <= 1; x++)
+		{
+			for (int y = -1; y <= 1; y++)
+			{
+				if (x == 0 && y == 0) continue;
+
+				int checkX = node.coordinates.x + x;
+				int checkY = node.coordinates.y + y;
+
+				Node neighbourNode = nodes.Find(n => n.coordinates == new Vector2Int(checkX, checkY));
+				if (neighbourNode != null)
+					neighbours.Add(neighbourNode);
+			}
+		}
+
+		return neighbours;
+	}
+
+	/// <summary>
+	/// Get the distance between node A and node B.
+	/// </summary>
+	/// <param name="nodeA"> Starting node. </param>
+	/// <param name="nodeB"> Target node. </param>
+	/// <returns></returns>
+	private int GetDistance(Node nodeA, Node nodeB)
+	{
+		int distX = Mathf.Abs(nodeA.coordinates.x - nodeB.coordinates.x);
+		int distY = Mathf.Abs(nodeA.coordinates.y - nodeB.coordinates.y);
+
+		if (distX > distY)
+		{
+			return 14 * distY + 10 * (distX - distY);
+		}
+		return 14 * distX + 10 * (distY - distX);
+	}
+
+	/// <summary>
+	/// Retrace the path from start to end. (and reverse the loop)
+	/// </summary>
+	/// <param name="startNode"> start point of the path. </param>
+	/// <param name="endNode"> end point of the path. </param>
+	private void RetracePath(Node startNode, Node endNode)
+	{
+		List<Node> path = new List<Node>();
+		Node currentNode = endNode;
+
+		while (currentNode != startNode)
+		{
+			path.Add(currentNode);
+			currentNode = currentNode.parent;
+		}
+		path.Reverse();
+
+		pathPoints.AddRange(path);
+		pathPoints = pathPoints.Distinct().ToList();
+	}
+	#endregion
 
 	#region Helpers
 	/// <summary>
@@ -519,6 +656,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 				Chunk chunk = chunks[i];
 				Gizmos.color = Color.white;
 				Gizmos.DrawWireCube(chunk.gameObject.transform.position, new Vector3(chunkSize, chunkSize));
+
+				if (chunk.Nodes.Count == 0) return;
+				foreach (Node node in chunk.Nodes)
+				{
+					Gizmos.color = node.walkable ? new Color(1, 1, 1, 0.1f) : new Color(1, 0, 0, 0.1f);
+					Gizmos.DrawCube(new Vector3(node.coordinates.x, node.coordinates.y, 0), Vector3.one * 0.95f);
+				}
 			}
 		}
 
@@ -539,8 +683,62 @@ public class Chunk : MonoBehaviour
 	[SerializeField] private Vector2Int coordinates = new Vector2Int();
 	[SerializeField] private bool occupied = false;
 	[SerializeField] private Room room;
+	[SerializeField] private List<Node> nodes = new List<Node>();
 
 	public Vector2Int Coordinates { get => coordinates; set => coordinates = value; }
 	public bool Occupied { get => occupied; set => occupied = value; }
 	public Room Room { get => room; set => room = value; }
+	public List<Node> Nodes { get => nodes; set => nodes = value; }
+}
+
+public class Node : MonoBehaviour
+{
+	public bool walkable;
+	public Vector2Int coordinates;
+
+	public int gCost;
+	public int hCost;
+	public int fCost
+	{
+		get
+		{
+			return gCost + hCost;
+		}
+	}
+	public Node parent;
+}
+
+public class NodeComparer : IEqualityComparer<Node>
+{
+	// Nodes are equal if their coordinates and walkeable bool are equal.
+	public bool Equals(Node x, Node y)
+	{
+		//Check whether the compared objects reference the same data.
+		if (Object.ReferenceEquals(x, y)) return true;
+
+		//Check whether any of the compared objects is null.
+		if (Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
+			return false;
+
+		//Check whether the nodes properties are equal.
+		return x.coordinates == y.coordinates && x.walkable == y.walkable;
+	}
+
+	// If Equals() returns true for a pair of objects
+	// then GetHashCode() must return the same value for these objects.
+
+	public int GetHashCode(Node node)
+	{
+		//Check whether the object is null
+		if (Object.ReferenceEquals(node, null)) return 0;
+
+		//Get hash code for the Name field if it is not null.
+		int hashProductName = node.coordinates == null ? 0 : node.coordinates.GetHashCode();
+
+		//Get hash code for the Code field.
+		int hashProductCode = node.walkable.GetHashCode();
+
+		//Calculate the hash code for the product.
+		return hashProductName ^ hashProductCode;
+	}
 }
