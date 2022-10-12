@@ -8,67 +8,36 @@ using NaughtyAttributes;
 public class AbilityScriptable : ScriptableObject
 {
 	[SerializeField] private float coolDown = 0f;
-	public float CoolDown { get => coolDown; set => coolDown = value; }
-
 	[SerializeField] private float damage = 0f;
-	public float Damage { get => damage; set => damage = value; }
-
 	[SerializeField] private float critChance = 0f;
-	public float CritChance { get => critChance; set => critChance = value; }
-
 	[SerializeField] private float distance = 0f;
-	public float Distance { get => distance; set => distance = value; }
-
 	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
-	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
-
-	[SerializeField] private float circleSize = 0f;
-	public float CircleSize { get => circleSize; set => circleSize = value; }
-
+	//[SerializeField] private float circleSize = 0f;
 	[SerializeField] private LayerMask layerMask;
-	public LayerMask Layer { get => layerMask; set => layerMask = value; }
-
-	private float angle = default;
-	public float Angle { get => angle; set => angle = value; }
-
-	[SerializeField] private Camera cam = default;
-	public Camera Cam { get => cam; set => cam = value; }
-
-	private Vector2 lookDir = default;
-	public Vector2 LookDir { get => lookDir; set => lookDir = value; }
-
-	[SerializeField] private Rigidbody2D rb2d = default;
-	public Rigidbody2D Rb2d { get => rb2d; set => rb2d = value; }
-
-	[SerializeField] private Transform castFromPoint = default;
-	public Transform CastFromPoint { get => castFromPoint; set => castFromPoint = value; }
-
-	private Vector3 mousePos = default;
-	public Vector3 MousePos { get => mousePos; set => mousePos = value; }
-
 	[SerializeField] private GameObject castObject;
-	public GameObject CastObject { get => castObject; set => castObject = value; }
-
 	[SerializeField] private float lifeSpan = 10f;
-	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
-
 	[SerializeField] private float force = 30f;
-	public float Force { get => force; set => force = value; }
 	[SerializeField] private GameObject burnObject;
-	public GameObject BurnObject { get => burnObject; set => burnObject = value; }
-
 	[SerializeField] private EffectType[] effects = new EffectType[3];
-	public EffectType[] Effects { get => effects; set => effects = value; }
-
 	[SerializeField] private Ability ability;
+	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
+
+	public float CoolDown { get => coolDown; set => coolDown = value; }
+	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
+	public float CritChance { get => critChance; set => critChance = value; }
+	public float Damage { get => damage; set => damage = value; }
+	public float Force { get => force; set => force = value; }
+	public float Distance { get => distance; set => distance = value; }
+	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
+	//public float CircleSize { get => circleSize; set => circleSize = value; }
+	public LayerMask Layer { get => layerMask; set => layerMask = value; }
+	public GameObject CastObject { get => castObject; set => castObject = value; }
+	public GameObject BurnObject { get => burnObject; set => burnObject = value; }
 	public Ability Ability { get => ability; set => ability =  value ; }
-
-	public Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
-
+	public EffectType[] Effects { get => effects; set => effects = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
-
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
-
+	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public float slowAmount;
 	public float slowDuration;
 	public int markType;

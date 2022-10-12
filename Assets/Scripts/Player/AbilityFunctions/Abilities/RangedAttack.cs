@@ -5,15 +5,19 @@ using UnityEngine;
 public class RangedAttack : Ability
 {
 	private bool trailUpgrade = false;
+	private bool init = true;
 
 	public override void CallAbility(PlayerControler _player)
 	{
-		SetAbilityStats();
-		AbilityBehavior();
+		if( init )
+		{
+			SetAbilityStats();
+			init = false;
+		}
 	}
 	public override void AbilityBehavior()
 	{
-		GameObject projectile = Object.Instantiate( castObject, castFromPoint.transform.position, castFromPoint.rotation, castFromPoint.transform );
+		GameObject projectile = Object.Instantiate( castObject, CastFromPoint.transform.position, CastFromPoint.rotation, CastFromPoint.transform );
 		Projectile proj = projectile.GetComponent<Projectile>();
 		if(trailUpgrade) { proj.TrailUpgrade = true; Debug.Log( "trailupgrade on" ); }
 		proj.Damage = damage;
@@ -24,9 +28,9 @@ public class RangedAttack : Ability
 
 	void SetAbilityStats()
 	{
-		castObject = baseStats.CastObject;
-		lifeSpan = baseStats.LifeSpan;
-		force = baseStats.Force;
-		damage = baseStats.Damage;
+		castObject = BaseStats.CastObject;
+		lifeSpan = BaseStats.LifeSpan;
+		force = BaseStats.Force;
+		damage = BaseStats.Damage;
 	}
 }

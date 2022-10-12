@@ -165,17 +165,15 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
 		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		//currentMeleeAttack.CallAbility(this);
 		abilityController.MeleeAttacked( currentMeleeAttack ).CallAbility(this);
-		//animAttack.SetTrigger("MeleeAttack1");
-		//animPlayer.SetTrigger("isAttacking");
 	}
 
 	void RangedAttack()
 	{
-		currentRangedAttack.BaseStats = rangedAttack;
-		currentRangedAttack.CallAbility(this);
-		animPlayer.SetTrigger("isAttacking");
+		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
+		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.RangeAttacked( currentRangedAttack ).CallAbility( this );
+		//animPlayer.SetTrigger("isAttacking");
 	}
 
 	void AbilityOneAttack()
@@ -201,7 +199,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if (meleeAttack != null)
 		{
 			meleeAttack.Start();
-			//abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
 			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 		}
 
@@ -213,31 +210,31 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (ability1 != null)
 		{
-			ability1.Rb2d = rb2d;
-			ability1.CastFromPoint = castFromPoint;
-			ability1.MousePos = mousePos;
-			ability1.LookDir = lookDir;
-			ability1.Angle = angle;
+			//ability1.Rb2d = rb2d;
+			//ability1.CastFromPoint = castFromPoint;
+			//ability1.MousePos = mousePos;
+			//ability1.LookDir = lookDir;
+			//ability1.Angle = angle;
 			//ability1.Ability.SetScriptable();
 		}
 
 		if (ability2 != null)
 		{
-			ability2.Rb2d = rb2d;
-			ability2.CastFromPoint = castFromPoint;
-			ability2.MousePos = mousePos;
-			ability2.LookDir = lookDir;
-			ability2.Angle = angle;
+			//ability2.Rb2d = rb2d;
+			//ability2.CastFromPoint = castFromPoint;
+			//ability2.MousePos = mousePos;
+			//ability2.LookDir = lookDir;
+			//ability2.Angle = angle;
 			//ability2.Ability.SetScriptable();
 		}
 
 		if (ability3 != null)
 		{
-			ability3.Rb2d = rb2d;
-			ability3.CastFromPoint = castFromPoint;
-			ability3.MousePos = mousePos;
-			ability3.LookDir = lookDir;
-			ability3.Angle = angle;
+			//ability3.Rb2d = rb2d;
+			//ability3.CastFromPoint = castFromPoint;
+			//ability3.MousePos = mousePos;
+			//ability3.LookDir = lookDir;
+			//ability3.Angle = angle;
 			//ability3.Ability.SetScriptable(  );
 		}
 		abilityController.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3);

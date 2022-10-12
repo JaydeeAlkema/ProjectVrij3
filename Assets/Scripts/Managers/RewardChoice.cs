@@ -5,14 +5,19 @@ using UnityEngine;
 public class RewardChoice : MonoBehaviour
 {
     [SerializeField] private AbilityScriptable abilityToGive;
-    public AbilityScriptable AbilityToGive { get => abilityToGive; set => abilityToGive = value; }
-
     [SerializeField] private UpgradeScriptable upgradeToGive;
-    public UpgradeScriptable UpgradeToGive { get => upgradeToGive; set => upgradeToGive = value; }
-
     [SerializeField] private AbilityScriptable meleeAttack;
     [SerializeField] private AbilityScriptable rangedAttack;
-    public void ChooseAbility()
+    private PlayerControler player;
+    public AbilityScriptable AbilityToGive { get => abilityToGive; set => abilityToGive = value; }
+    public UpgradeScriptable UpgradeToGive { get => upgradeToGive; set => upgradeToGive = value; }
+
+	private void Start()
+	{
+        player = FindObjectOfType<PlayerControler>();
+	}
+
+	public void ChooseAbility()
     {
         // give AbilityScriptable
         FindObjectOfType<PlayerControler>().Ability1 = abilityToGive;
@@ -22,12 +27,11 @@ public class RewardChoice : MonoBehaviour
     public void ChooseMeleeUpgrade()
     {
         // give one of possible upgrades
-        meleeAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
-        meleeAttack.Damage += upgradeToGive.DamageUpgrade;
-        meleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
-        meleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        //meleeAttack.statusEffectType = upgradeToGive.StatusEffect;
-        meleeAttack.abilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+        player.CurrentMeleeAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
+        player.CurrentMeleeAttack.Damage += upgradeToGive.DamageUpgrade;
+        player.CurrentMeleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
+        player.CurrentMeleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
+        player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
         Destroy( this.gameObject );
 	}
 

@@ -5,22 +5,21 @@ using UnityEngine;
 public class MeleeAttack : Ability
 {
 	private bool onCoolDown = false;
+	private bool init = true;
 	public bool burnAreaUpgrade = false;
 	public GameObject burningGround;
 
 	public override void CallAbility(PlayerControler _player)
 	{
-		SetAbilityStats();
-		//if( burnAreaUpgrade )
-		//{
-		//	new BurningMeleeDecorator( this, baseStats );
-		//	return;
-		//}
-		//else { AbilityBehavior(); }
+		if( init )
+		{
+			SetAbilityStats();
+			init = false;
+		}
 	}
 	public override void AbilityBehavior()
 	{
-		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( rb2d.transform.position + castFromPoint.transform.up * distance, boxSize, angle, layerMask );
+		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask );
 		Debug.Log( "Enemies: " + enemiesInBox.Length );
 
 		foreach( Collider2D enemy in enemiesInBox )
@@ -32,10 +31,10 @@ public class MeleeAttack : Ability
 
 	public void SetAbilityStats()
 	{
-		boxSize = baseStats.BoxSize;
-		layerMask = baseStats.Layer;
-		damage = baseStats.Damage;
-		distance = baseStats.Distance;
-		coolDown = baseStats.CoolDown;
+		boxSize = BaseStats.BoxSize;
+		layerMask = BaseStats.Layer;
+		damage = BaseStats.Damage;
+		distance = BaseStats.Distance;
+		coolDown = BaseStats.CoolDown;
 	}
 }

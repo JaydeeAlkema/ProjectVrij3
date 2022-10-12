@@ -17,7 +17,7 @@ public class CoolDownDecorator : AbilityDecorator
 	public override void CallAbility(PlayerControler _player)
 	{
 		//base.CallAbility();
-		player = _player;
+		Player = _player;
 		AbilityBehavior();
 	}
 
@@ -28,11 +28,11 @@ public class CoolDownDecorator : AbilityDecorator
 			cooledDown = false;
 			Debug.Log( "I got cooled" );
 			ability.BaseStats = baseStats;
-			ability.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-			ability.CallAbility(player);
+			ability.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
+			ability.CallAbility(Player);
 			base.AbilityBehavior();
-			player.AnimAttack.SetTrigger( "MeleeAttack1" );
-			player.AnimPlayer.SetTrigger( "isAttacking" );
+			//Player.AnimAttack.SetTrigger( "MeleeAttack1" );
+			//Player.AnimPlayer.SetTrigger( "isAttacking" );
 			Timer();
 		}
 	}

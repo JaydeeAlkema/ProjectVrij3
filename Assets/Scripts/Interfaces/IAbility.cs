@@ -5,23 +5,26 @@ using UnityEngine;
 public interface IAbility
 {
 	AbilityScriptable BaseStats { get; set; }
-	PlayerControler player { get; set; }
-	public Rigidbody2D rb2d { get; set; }
-	public Vector3 mousePos { get; set; }
-	public Vector2 lookDir { get; set; }
-
+	PlayerControler Player { get; set; }
+	public Rigidbody2D Rb2d { get; set; }
+	public Vector3 MousePos { get; set; }
+	public Vector2 LookDir { get; set; }
+	public Transform CastFromPoint { get; set; }
+	public float Angle { get; set; }
 	public float CoolDown { get; set; }
-	public Transform castFromPoint { get; set; }
-	public float angle { get; set; }
+	public float Damage { get; set; }
+	public float CritChance { get; set; }
+	public Vector2 BoxSize { get; set; }
+	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get; set; }
 
 	virtual void CallAbility(PlayerControler _player) { }
 	virtual void AbilityBehavior() { }
 	virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle ) 
 	{
-		rb2d = _rb2d;
-		mousePos = _mousePos;
-		lookDir = _lookDir;
-		castFromPoint = _castFromPoint;
-		angle = _angle;
+		Rb2d = _rb2d;
+		MousePos = _mousePos;
+		LookDir = _lookDir;
+		CastFromPoint = _castFromPoint;
+		Angle = _angle;
 	}
 }
