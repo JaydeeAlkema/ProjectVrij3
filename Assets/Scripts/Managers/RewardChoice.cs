@@ -26,7 +26,8 @@ public class RewardChoice : MonoBehaviour
         meleeAttack.Damage += upgradeToGive.DamageUpgrade;
         meleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
         meleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        meleeAttack.statusEffectType = upgradeToGive.StatusEffect;
+        //meleeAttack.statusEffectType = upgradeToGive.StatusEffect;
+        meleeAttack.abilityUpgrades.Add( upgradeToGive.StatusEffect, true );
         Destroy( this.gameObject );
 	}
 

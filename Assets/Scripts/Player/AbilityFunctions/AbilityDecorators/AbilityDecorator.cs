@@ -5,21 +5,26 @@ using UnityEngine;
 public class AbilityDecorator : IAbility
 {
 	private IAbility ability;
-	protected Rigidbody2D rb2d;
-	protected Vector3 mousePos;
-	protected Vector2 lookDir;
-	protected Transform castFromPoint;
-	protected float angle;
+
 	protected AbilityScriptable baseStats;
 	public AbilityScriptable BaseStats { get => baseStats; set => baseStats = value; }
+	public PlayerControler player { get; set; }
+	public Rigidbody2D rb2d { get; set; }
+	public Vector3 mousePos { get; set; }
+	public Vector2 lookDir { get; set; }
+	public Transform castFromPoint { get; set; }
+	public float angle { get; set; }
+	public float CoolDown { get; set; }
+
 	public AbilityDecorator(IAbility _ability)
 	{
 		ability = _ability;
 	}
 
-	public virtual void CallAbility()
+	public virtual void CallAbility(PlayerControler _player)
 	{
-		ability.CallAbility();
+		player = _player;
+		ability.CallAbility(player);
 	}
 
 	public virtual void AbilityBehavior()

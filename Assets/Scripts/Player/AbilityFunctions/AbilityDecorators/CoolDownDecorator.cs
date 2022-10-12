@@ -5,19 +5,19 @@ using UnityEngine;
 public class CoolDownDecorator : AbilityDecorator
 {
 	private IAbility ability;
-	private float coolDown;
 	private bool cooledDown = true;
 	public IAbility Ability => ability;
 	System.Timers.Timer coolDownTimer = new System.Timers.Timer();
 	public CoolDownDecorator( IAbility _ability, float _coolDown ) : base( _ability )
 	{
 		ability = _ability;
-		coolDown = _coolDown;
+		CoolDown = _coolDown;
 	}
 
-	public override void CallAbility()
+	public override void CallAbility(PlayerControler _player)
 	{
 		//base.CallAbility();
+		player = _player;
 		AbilityBehavior();
 	}
 
@@ -29,15 +29,17 @@ public class CoolDownDecorator : AbilityDecorator
 			Debug.Log( "I got cooled" );
 			ability.BaseStats = baseStats;
 			ability.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-			ability.CallAbility();
+			ability.CallAbility(player);
 			base.AbilityBehavior();
+			player.AnimAttack.SetTrigger( "MeleeAttack1" );
+			player.AnimPlayer.SetTrigger( "isAttacking" );
 			Timer();
 		}
 	}
 
 	private void Timer()
 	{
-		coolDownTimer.Interval = coolDown;
+		coolDownTimer.Interval = CoolDown;
 		coolDownTimer.Elapsed += OnTimedEvent;
 		coolDownTimer.AutoReset = false;
 		coolDownTimer.Enabled = true;

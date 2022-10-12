@@ -54,6 +54,8 @@ public class AbilityScriptable : ScriptableObject
 
 	[SerializeField] private float force = 30f;
 	public float Force { get => force; set => force = value; }
+	[SerializeField] private GameObject burnObject;
+	public GameObject BurnObject { get => burnObject; set => burnObject = value; }
 
 	[SerializeField] private EffectType[] effects = new EffectType[3];
 	public EffectType[] Effects { get => effects; set => effects = value; }
@@ -61,6 +63,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private Ability ability;
 	public Ability Ability { get => ability; set => ability =  value ; }
 
+	public Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 

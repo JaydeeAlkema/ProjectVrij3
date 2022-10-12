@@ -8,14 +8,14 @@ public class MeleeAttack : Ability
 	public bool burnAreaUpgrade = false;
 	public GameObject burningGround;
 
-	public override void CallAbility()
+	public override void CallAbility(PlayerControler _player)
 	{
 		SetAbilityStats();
-		if( burnAreaUpgrade )
-		{
-			new BurningMeleeDecorator( this, burningGround, rb2d, castFromPoint, distance );
-			return;
-		}
+		//if( burnAreaUpgrade )
+		//{
+		//	new BurningMeleeDecorator( this, baseStats );
+		//	return;
+		//}
 		//else { AbilityBehavior(); }
 	}
 	public override void AbilityBehavior()

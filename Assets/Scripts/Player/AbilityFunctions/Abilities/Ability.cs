@@ -11,24 +11,25 @@ public abstract class Ability : IAbility
 	protected Vector2 boxSize;
 	protected float circleSize;
 	protected LayerMask layerMask;
-	protected Vector3 mousePos;
-	protected float angle;
 	protected Camera cam;
-	protected Vector2 lookDir;
-	protected Rigidbody2D rb2d;
-	protected Transform castFromPoint;
 	protected AbilityScriptable abilityScriptable;
 	protected GameObject castObject;
 	protected float lifeSpan = 10f;
 	protected float force = 30f;
 	protected AbilityScriptable baseStats;
 	public AbilityScriptable BaseStats { get => baseStats; set => baseStats = value; }
-	public Vector3 MousePos { get => mousePos; set => mousePos = value; }
 	public float Angle { get => angle; set => angle = value; }
 	public Vector2 LookDir { get => lookDir; set => lookDir = value; }
 	public Transform CastFromPoint { get => castFromPoint; set => castFromPoint = value; }
+	public PlayerControler player { get; set; }
+	public Rigidbody2D rb2d { get; set; }
+	public Vector3 mousePos { get; set; }
+	public Vector2 lookDir { get; set; }
+	public Transform castFromPoint { get; set; }
+	public float angle { get; set; }
+	public float CoolDown { get; set; }
 
-	public virtual void CallAbility() { }
+	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void AbilityBehavior(){ }
 	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle ) 
 	{

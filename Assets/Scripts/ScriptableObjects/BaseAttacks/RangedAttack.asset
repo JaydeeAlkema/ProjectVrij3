@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
   m_Name: RangedAttack
   m_EditorClassIdentifier: 
-  coolDown: 0
+  coolDown: 250
   damage: 25
   critChance: 0
   distance: 0
@@ -27,8 +27,8 @@ MonoBehaviour:
   castObject: {fileID: 3210017399674347035, guid: f65b5458f6dbcfa4da1048f4471f7ade, type: 3}
   lifeSpan: 0.8
   force: 11
+  burnObject: {fileID: 0}
   effects: 000000000000000000000000
-  ability: {fileID: 9127446373528800137, guid: 0005b24bb596cfc40a77e481a51b2941, type: 3}
   statusEffectType: 0
   slowAmount: 0.5
   slowDuration: 4

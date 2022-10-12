@@ -6,7 +6,7 @@ public class RangedAttack : Ability
 {
 	private bool trailUpgrade = false;
 
-	public override void CallAbility()
+	public override void CallAbility(PlayerControler _player)
 	{
 		SetAbilityStats();
 		AbilityBehavior();

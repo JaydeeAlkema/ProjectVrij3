@@ -7,24 +7,25 @@ public class BurningMeleeDecorator : AbilityDecorator
 	private IAbility ability;
 	public IAbility Ability => ability;
 
-	[SerializeField] private GameObject burnObject;
-	private Rigidbody2D rb2d;
-	private Transform castFromPoint;
+	private GameObject burnObject;
 	private float distance;
-	public BurningMeleeDecorator( IAbility _ability, GameObject _burnObject, Rigidbody2D _rb2d, Transform _castFromPoint, float _distance ) : base( _ability ) 
+	public BurningMeleeDecorator( IAbility _ability, AbilityScriptable _baseStats ) : base( _ability ) 
 	{
 		Debug.Log( "i got decorated with fire" );
 		ability = _ability;
-		burnObject = _burnObject;
-		rb2d = _rb2d;
-		castFromPoint = _castFromPoint;
-		distance = _distance;
-		AbilityBehavior();
+		baseStats = _baseStats;
+		burnObject = baseStats.BurnObject;
+		//rb2d = baseStats.Rb2d;
+		//castFromPoint = baseStats.CastFromPoint;
+		distance = baseStats.Distance;
+		//AbilityBehavior();
 	}
+
 
 	public override void AbilityBehavior()
 	{
-		base.AbilityBehavior();
+		Debug.Log( "i want to burn" );
+		//base.AbilityBehavior();
 		//ability.AbilityBehavior();
 		for( int i = 0; i < 3; i++ )
 		{
