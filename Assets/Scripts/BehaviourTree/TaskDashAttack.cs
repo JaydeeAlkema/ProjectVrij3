@@ -21,7 +21,7 @@ public class TaskDashAttack : BTNode
 
 		if (!enemyScript.Attacking)
 		{
-			enemyScript.StopMovingToPlayer();
+			enemyScript.StopMovingToTarget();
 			enemyScript.StartAttack(target);
 		}
 

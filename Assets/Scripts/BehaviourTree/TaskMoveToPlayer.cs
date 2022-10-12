@@ -20,11 +20,10 @@ public class TaskMoveToPlayer : BTNode
 	public override BTNodeState Evaluate()
 	{
 		Transform target = (Transform)GetData("target");
-		if (!enemyScript.Attacking)
+		if (!enemyScript.Attacking && target != null)
 		{
-			enemyScript.Target = target;
-			enemyScript.FollowPath();
-
+			enemyScript.MoveToTarget(target);
+			Debug.Log("Moving to target");
 		}
 
 		//VERVANGEN MET PATHING

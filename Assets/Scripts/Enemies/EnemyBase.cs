@@ -13,6 +13,9 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	private Transform target = null;
 
+	[SerializeField] private Pathfinding.AIDestinationSetter destinationSetter;
+	[SerializeField] private Pathfinding.AIPath aiPath;
+
 	private Vector2[] path;
 	private int targetIndex = 0;
 
@@ -35,6 +38,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public void Awake()
 	{
 		rb2d = GetComponent<Rigidbody2D>();
+		destinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
+		aiPath = GetComponent<Pathfinding.AIPath>();
 	}
 
 	public void Update()
@@ -121,45 +126,16 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	}
 
-	public virtual void StartMovingToPlayer(Transform setTarget)
+	public virtual void MoveToTarget(Transform target)
 	{
-		target = setTarget;
-		//StopCoroutine(FollowPath());
-		//StartCoroutine(FollowPath());
+		aiPath.enabled = true;
+		destinationSetter.target = target;
 	}
 
-	public virtual void StopMovingToPlayer()
+	public virtual void StopMovingToTarget()
 	{
-		//StopCoroutine(FollowPath());
-	}
-
-	public void FollowPath()
-	{
-
-		path = Pathfinding.RequestPath(transform.position, target.position);
-
-		if (path.Length == 0)
-		{
-			targetIndex = 0;
-			path = new Vector2[0];
-			return;
-		}
-
-		Vector2 currentWaypoint = path[0];
-
-		if ((Vector2)transform.position == currentWaypoint)
-		{
-			targetIndex++;
-			if (targetIndex >= path.Length)
-			{
-				return;
-			}
-			currentWaypoint = path[targetIndex];
-		}
-
-		//Vector2 targetDir = currentWaypoint - (Vector2)transform.position;
-		//rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
-		transform.position = Vector2.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+		aiPath.enabled = false;
+		destinationSetter.target = null;
 	}
 
 	public virtual IEnumerator FlashColor()
