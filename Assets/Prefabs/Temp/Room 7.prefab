@@ -20701,7 +20701,6 @@ GameObject:
   - component: {fileID: 1987758118315085836}
   - component: {fileID: 367571599092614752}
   - component: {fileID: 3867139675083272194}
-  - component: {fileID: 358630869637854316}
   m_Layer: 10
   m_Name: Wall Tiles
   m_TagString: Untagged
@@ -20862,22 +20861,6 @@ CompositeCollider2D:
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
---- !u!114 &358630869637854316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4740930799773461284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &4777361329180458054
 GameObject:
   m_ObjectHideFlags: 0
@@ -31493,7 +31476,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6017090850565325393}
-  - component: {fileID: 956614581375496585}
   m_Layer: 10
   m_Name: Pathway Openings
   m_TagString: Untagged
@@ -31520,22 +31502,6 @@ Transform:
   m_Father: {fileID: 4957799508745239821}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &956614581375496585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6939357002133049935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &6988391200537261465
 GameObject:
   m_ObjectHideFlags: 0
@@ -31881,7 +31847,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4027332529940799188}
-  - component: {fileID: 4837556663887592734}
   m_Layer: 11
   m_Name: Floor Tiles
   m_TagString: Untagged
@@ -32268,22 +32233,6 @@ Transform:
   m_Father: {fileID: 4957799508745239821}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4837556663887592734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7057714402920533248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 0
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &7061813085770562013
 GameObject:
   m_ObjectHideFlags: 0
