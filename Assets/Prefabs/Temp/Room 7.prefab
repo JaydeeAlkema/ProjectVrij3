@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 1260440561652880189}
   - component: {fileID: 3637831003495835501}
   - component: {fileID: 8225506969955087296}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (91)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -290,7 +290,7 @@ GameObject:
   - component: {fileID: 1031086299685144322}
   - component: {fileID: 2431219871523563797}
   - component: {fileID: 8794435118148021553}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (89)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,90 +390,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!1 &115344050370681627
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4720790411902182809}
-  - component: {fileID: 7489380607846401118}
-  m_Layer: 0
-  m_Name: LightGrey_Box128x128 (90)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4720790411902182809
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 115344050370681627}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8, y: -3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4027332529940799188}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7489380607846401118
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 115344050370681627}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &123200635142076740
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,7 +401,7 @@ GameObject:
   - component: {fileID: 3546066838695260587}
   - component: {fileID: 5922852627524916430}
   - component: {fileID: 640306043525602858}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +512,7 @@ GameObject:
   - component: {fileID: 3427731794682809938}
   - component: {fileID: 4884102396482424863}
   - component: {fileID: 447146739010148381}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -707,7 +623,7 @@ GameObject:
   - component: {fileID: 446145261074372193}
   - component: {fileID: 8484689145786302975}
   - component: {fileID: 773916271903470423}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1238,7 +1154,7 @@ GameObject:
   - component: {fileID: 6551862706156013350}
   - component: {fileID: 4464726954897168425}
   - component: {fileID: 1743947791882530129}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (52)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1349,7 +1265,7 @@ GameObject:
   - component: {fileID: 1891115127975266379}
   - component: {fileID: 2764828837743726636}
   - component: {fileID: 905536080044100237}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1880,7 +1796,7 @@ GameObject:
   - component: {fileID: 1506290995580357763}
   - component: {fileID: 1798530342229910571}
   - component: {fileID: 1870545610063994683}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (83)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2243,7 +2159,7 @@ GameObject:
   - component: {fileID: 1491965821989805254}
   - component: {fileID: 2518856097834356089}
   - component: {fileID: 3963807707528946641}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (81)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2690,7 +2606,7 @@ GameObject:
   - component: {fileID: 7544383015813665530}
   - component: {fileID: 4882425529627183693}
   - component: {fileID: 6321627652913684820}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (101)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3053,7 +2969,7 @@ GameObject:
   - component: {fileID: 879716647977420553}
   - component: {fileID: 462441163085714034}
   - component: {fileID: 45413532115767567}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (58)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3164,7 +3080,7 @@ GameObject:
   - component: {fileID: 4181966055985205907}
   - component: {fileID: 2561545387286806801}
   - component: {fileID: 3865017371432167743}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3275,7 +3191,7 @@ GameObject:
   - component: {fileID: 5098435442440020445}
   - component: {fileID: 6800086548284893179}
   - component: {fileID: 4369363084155432467}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (88)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4719,90 +4635,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1169199127075266346
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9034548163129447972}
-  - component: {fileID: 3402767479061166588}
-  m_Layer: 0
-  m_Name: LightGrey_Box128x128 (10)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9034548163129447972
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1169199127075266346}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9, y: 3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4027332529940799188}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3402767479061166588
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1169199127075266346}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &1191386094305888161
 GameObject:
   m_ObjectHideFlags: 0
@@ -5234,7 +5066,7 @@ GameObject:
   - component: {fileID: 2052565230209152256}
   - component: {fileID: 2845633650220946635}
   - component: {fileID: 2286130996262181317}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5681,7 +5513,7 @@ GameObject:
   - component: {fileID: 8325089597033630929}
   - component: {fileID: 4928097466851641034}
   - component: {fileID: 344718669523415105}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (65)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5876,7 +5708,7 @@ GameObject:
   - component: {fileID: 5950952076934510686}
   - component: {fileID: 796863046787066899}
   - component: {fileID: 8372003325568257401}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6071,7 +5903,7 @@ GameObject:
   - component: {fileID: 7244700159065275373}
   - component: {fileID: 5187220958688793943}
   - component: {fileID: 2370053308569279311}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (103)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6182,7 +6014,7 @@ GameObject:
   - component: {fileID: 7133592235485823560}
   - component: {fileID: 2487140286025923097}
   - component: {fileID: 4116386329122344608}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (39)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6954,90 +6786,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1541224624066356115
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1635872690672648322}
-  - component: {fileID: 583640038438205678}
-  m_Layer: 0
-  m_Name: LightGrey_Box128x128 (105)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1635872690672648322
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1541224624066356115}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: -9, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4027332529940799188}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &583640038438205678
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1541224624066356115}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &1548889483321776660
 GameObject:
   m_ObjectHideFlags: 0
@@ -7049,7 +6797,7 @@ GameObject:
   - component: {fileID: 6331212016723618755}
   - component: {fileID: 1546255507501294769}
   - component: {fileID: 2317559205957490916}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (38)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7916,7 +7664,7 @@ GameObject:
   - component: {fileID: 9061899654830222329}
   - component: {fileID: 8593678829359983412}
   - component: {fileID: 6830587521289947946}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8111,7 +7859,7 @@ GameObject:
   - component: {fileID: 2679535411728855540}
   - component: {fileID: 3515873070820655959}
   - component: {fileID: 5525031834481095006}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8894,7 +8642,7 @@ GameObject:
   - component: {fileID: 5034016878926363078}
   - component: {fileID: 2949002423447955003}
   - component: {fileID: 4991730984743048773}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (77)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9005,7 +8753,7 @@ GameObject:
   - component: {fileID: 7220851416302181145}
   - component: {fileID: 6758978889795634880}
   - component: {fileID: 1346442976633572895}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (69)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9536,7 +9284,7 @@ GameObject:
   - component: {fileID: 694668319813806593}
   - component: {fileID: 1648655143328656338}
   - component: {fileID: 4153745646702775487}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (61)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10319,7 +10067,7 @@ GameObject:
   - component: {fileID: 2145039967435613415}
   - component: {fileID: 7575637293511434513}
   - component: {fileID: 1890461147615702809}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (57)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10682,7 +10430,7 @@ GameObject:
   - component: {fileID: 8614960834671190160}
   - component: {fileID: 1372349753433588622}
   - component: {fileID: 7882130645411538707}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (62)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10877,7 +10625,7 @@ GameObject:
   - component: {fileID: 3638293952898293571}
   - component: {fileID: 9066665892093130911}
   - component: {fileID: 3419853518180425293}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (43)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11072,7 +10820,7 @@ GameObject:
   - component: {fileID: 4364560230366806057}
   - component: {fileID: 2114255604033615157}
   - component: {fileID: 1022475701731825436}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11267,7 +11015,7 @@ GameObject:
   - component: {fileID: 5141409067310511850}
   - component: {fileID: 7505952362903125359}
   - component: {fileID: 7722370296231907831}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (42)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12050,7 +11798,7 @@ GameObject:
   - component: {fileID: 3699450078785158030}
   - component: {fileID: 2995711881765340645}
   - component: {fileID: 2983451637584170012}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pathway Opening
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -12119,90 +11867,6 @@ CompositeCollider2D:
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
---- !u!1 &2736311464461561266
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4465319204707632050}
-  - component: {fileID: 7089828766540604080}
-  m_Layer: 0
-  m_Name: LightGrey_Box128x128 (132)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4465319204707632050
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2736311464461561266}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8, y: -5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4027332529940799188}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7089828766540604080
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2736311464461561266}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &2746348032593077728
 GameObject:
   m_ObjectHideFlags: 0
@@ -12214,7 +11878,7 @@ GameObject:
   - component: {fileID: 3460430555458369168}
   - component: {fileID: 5600790119538089474}
   - component: {fileID: 2257836899515937726}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (76)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12493,7 +12157,7 @@ GameObject:
   - component: {fileID: 516210253054108754}
   - component: {fileID: 4842765427551038499}
   - component: {fileID: 5173050148028495852}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (55)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12688,7 +12352,7 @@ GameObject:
   - component: {fileID: 5423907935634374943}
   - component: {fileID: 1258481388115154724}
   - component: {fileID: 8652843072397690057}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12967,7 +12631,7 @@ GameObject:
   - component: {fileID: 4610886029458484592}
   - component: {fileID: 7508858069257913094}
   - component: {fileID: 619613057461073412}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (87)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13078,7 +12742,7 @@ GameObject:
   - component: {fileID: 3578764919611887790}
   - component: {fileID: 5514360332584746056}
   - component: {fileID: 8134435640965210444}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (73)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13273,7 +12937,7 @@ GameObject:
   - component: {fileID: 2949609971008862988}
   - component: {fileID: 5106186044418241852}
   - component: {fileID: 455175230458144296}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (85)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13384,7 +13048,7 @@ GameObject:
   - component: {fileID: 5709851020845867612}
   - component: {fileID: 2930490778435564135}
   - component: {fileID: 1051105723060927770}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (67)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13831,7 +13495,7 @@ GameObject:
   - component: {fileID: 2854412139301965930}
   - component: {fileID: 506361453904601140}
   - component: {fileID: 8932518973790542586}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13850,7 +13514,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4027332529940799188}
+  m_Father: {fileID: 1987758118315085836}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &506361453904601140
@@ -14614,7 +14278,7 @@ GameObject:
   - component: {fileID: 3140692614077351113}
   - component: {fileID: 2756001934471052997}
   - component: {fileID: 6063059138562160168}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14725,7 +14389,7 @@ GameObject:
   - component: {fileID: 8324004862370279221}
   - component: {fileID: 6239316985730101835}
   - component: {fileID: 7648050792300003866}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (94)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15424,7 +15088,7 @@ GameObject:
   - component: {fileID: 8511558050230160556}
   - component: {fileID: 3503685135181595564}
   - component: {fileID: 2361968737131474453}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15535,7 +15199,7 @@ GameObject:
   - component: {fileID: 5962958057327567070}
   - component: {fileID: 2779798671429540834}
   - component: {fileID: 3659191375172095868}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (76)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15730,7 +15394,7 @@ GameObject:
   - component: {fileID: 7097861911626310165}
   - component: {fileID: 2561462313256089362}
   - component: {fileID: 8112364985291833012}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (48)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15841,7 +15505,7 @@ GameObject:
   - component: {fileID: 2518242092974917378}
   - component: {fileID: 5802244189060888404}
   - component: {fileID: 2014816632425077158}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (41)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16036,7 +15700,7 @@ GameObject:
   - component: {fileID: 146454881544838901}
   - component: {fileID: 140617380379018714}
   - component: {fileID: 7929563726810726064}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (49)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16399,7 +16063,7 @@ GameObject:
   - component: {fileID: 6810340014932287424}
   - component: {fileID: 3293678295700511574}
   - component: {fileID: 6116437447142171376}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (86)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16678,7 +16342,7 @@ GameObject:
   - component: {fileID: 1168794190009130106}
   - component: {fileID: 809007312348504497}
   - component: {fileID: 1365273575548819517}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17125,7 +16789,7 @@ GameObject:
   - component: {fileID: 269851284480754743}
   - component: {fileID: 4143232251322661402}
   - component: {fileID: 1507947478725556648}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (77)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17320,7 +16984,7 @@ GameObject:
   - component: {fileID: 5347334841233758950}
   - component: {fileID: 1101883557201428376}
   - component: {fileID: 4351559548728126682}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (78)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18019,7 +17683,7 @@ GameObject:
   - component: {fileID: 9139062572223509193}
   - component: {fileID: 7389697858695406712}
   - component: {fileID: 346702634442695455}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18466,7 +18130,7 @@ GameObject:
   - component: {fileID: 7336252400868734703}
   - component: {fileID: 1766866038631694479}
   - component: {fileID: 2259400662508280228}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (59)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19081,7 +18745,7 @@ GameObject:
   - component: {fileID: 7027145648950447117}
   - component: {fileID: 906022470837484122}
   - component: {fileID: 5077893176824782806}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19444,7 +19108,7 @@ GameObject:
   - component: {fileID: 5862937838612174442}
   - component: {fileID: 4608279965770582538}
   - component: {fileID: 3035308105543714828}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (96)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19639,7 +19303,7 @@ GameObject:
   - component: {fileID: 5455261253996303926}
   - component: {fileID: 6522951085619454623}
   - component: {fileID: 2673314956499824697}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20338,7 +20002,7 @@ GameObject:
   - component: {fileID: 8180609965830073553}
   - component: {fileID: 7748785628729097630}
   - component: {fileID: 3615224818508434849}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (99)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21037,7 +20701,7 @@ GameObject:
   - component: {fileID: 1987758118315085836}
   - component: {fileID: 367571599092614752}
   - component: {fileID: 3867139675083272194}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Wall Tiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21148,6 +20812,8 @@ Transform:
   - {fileID: 4940902731206376859}
   - {fileID: 7544383015813665530}
   - {fileID: 7244700159065275373}
+  - {fileID: 5794233011063013854}
+  - {fileID: 2854412139301965930}
   m_Father: {fileID: 4957799508745239821}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21290,7 +20956,7 @@ GameObject:
   - component: {fileID: 8022228272857682652}
   - component: {fileID: 8586854430349272240}
   - component: {fileID: 3466454207265830033}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (54)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21653,7 +21319,7 @@ GameObject:
   - component: {fileID: 5629889577409179957}
   - component: {fileID: 1402705352064825096}
   - component: {fileID: 4588409834313661686}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (71)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22409,7 +22075,7 @@ GameObject:
   - component: {fileID: 8159940840047183030}
   - component: {fileID: 5021119744283507972}
   - component: {fileID: 8242691370523706479}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (97)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22520,7 +22186,7 @@ GameObject:
   - component: {fileID: 6477096755456531950}
   - component: {fileID: 912679056336887619}
   - component: {fileID: 7021081051658516714}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (36)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22715,7 +22381,7 @@ GameObject:
   - component: {fileID: 5318224368560315701}
   - component: {fileID: 2016031101541792568}
   - component: {fileID: 5149968548679369844}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (74)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22994,7 +22660,7 @@ GameObject:
   - component: {fileID: 6665089649489990170}
   - component: {fileID: 468513477841238985}
   - component: {fileID: 4526687146651577147}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (63)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23105,7 +22771,7 @@ GameObject:
   - component: {fileID: 1814387520368463347}
   - component: {fileID: 3118080653074801348}
   - component: {fileID: 2102955817756294191}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (93)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23720,7 +23386,7 @@ GameObject:
   - component: {fileID: 7073596752494109721}
   - component: {fileID: 105034827212166162}
   - component: {fileID: 6677522272325914816}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (51)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23915,7 +23581,7 @@ GameObject:
   - component: {fileID: 72675271889128686}
   - component: {fileID: 3200793409449221724}
   - component: {fileID: 3007635645589271050}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (95)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24698,7 +24364,7 @@ GameObject:
   - component: {fileID: 7822786611386147344}
   - component: {fileID: 2727311187554171235}
   - component: {fileID: 5951172174544534831}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pathway Opening 3
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -25366,7 +25032,7 @@ GameObject:
   - component: {fileID: 174941289499684147}
   - component: {fileID: 5120563553845772320}
   - component: {fileID: 8280047650994003171}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (46)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25897,7 +25563,7 @@ GameObject:
   - component: {fileID: 3268302518372129601}
   - component: {fileID: 8065942677953498315}
   - component: {fileID: 1551185050465596599}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (66)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26092,7 +25758,7 @@ GameObject:
   - component: {fileID: 5364734634731614991}
   - component: {fileID: 2160173762759772595}
   - component: {fileID: 5054244160229440073}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (75)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26203,7 +25869,7 @@ GameObject:
   - component: {fileID: 2353912155047388435}
   - component: {fileID: 288497092876916220}
   - component: {fileID: 2720181861183079723}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (100)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26314,7 +25980,7 @@ GameObject:
   - component: {fileID: 6820161883582491267}
   - component: {fileID: 9148605156773029700}
   - component: {fileID: 4729819166179231805}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (47)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26677,7 +26343,7 @@ GameObject:
   - component: {fileID: 5133125922704147062}
   - component: {fileID: 1529540383327228378}
   - component: {fileID: 5979833704326789577}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27124,7 +26790,7 @@ GameObject:
   - component: {fileID: 5641804396263532734}
   - component: {fileID: 4720745045655742543}
   - component: {fileID: 1305794594085815334}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (80)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27571,7 +27237,7 @@ GameObject:
   - component: {fileID: 6279581605292244459}
   - component: {fileID: 1611490427855876209}
   - component: {fileID: 8387360285529060095}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (84)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27766,7 +27432,7 @@ GameObject:
   - component: {fileID: 8765766202211587892}
   - component: {fileID: 6263357709463937555}
   - component: {fileID: 2787665846389735239}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (92)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28717,7 +28383,7 @@ GameObject:
   - component: {fileID: 356786385592134430}
   - component: {fileID: 8212223933797375829}
   - component: {fileID: 5577017300815178694}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (60)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29584,7 +29250,7 @@ GameObject:
   - component: {fileID: 7014769512039323563}
   - component: {fileID: 2955700178776035167}
   - component: {fileID: 4057530424656171905}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29779,7 +29445,7 @@ GameObject:
   - component: {fileID: 1851532406515839530}
   - component: {fileID: 457957474320827284}
   - component: {fileID: 1562867439464880729}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (40)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30058,7 +29724,7 @@ GameObject:
   - component: {fileID: 2636914152662003818}
   - component: {fileID: 1509177316893304611}
   - component: {fileID: 8207262128141516317}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (90)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30169,7 +29835,7 @@ GameObject:
   - component: {fileID: 751512917862115328}
   - component: {fileID: 1891716676467727950}
   - component: {fileID: 129054155912093635}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pathway Opening 2
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -30333,7 +29999,7 @@ GameObject:
   - component: {fileID: 5417931517473258220}
   - component: {fileID: 6132400337311623518}
   - component: {fileID: 7271167899085456197}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (98)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30444,7 +30110,7 @@ GameObject:
   - component: {fileID: 7367446574918894264}
   - component: {fileID: 1400787581918370887}
   - component: {fileID: 5135203958512419544}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30555,7 +30221,7 @@ GameObject:
   - component: {fileID: 1440347578490684744}
   - component: {fileID: 1039089771829723904}
   - component: {fileID: 1838345805114141176}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (75)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30666,7 +30332,7 @@ GameObject:
   - component: {fileID: 569287675512852698}
   - component: {fileID: 8260079633103309974}
   - component: {fileID: 2916755330001683729}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31701,7 +31367,7 @@ GameObject:
   - component: {fileID: 8899634372844845071}
   - component: {fileID: 3161438360246991679}
   - component: {fileID: 4356744356519760361}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (37)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31810,7 +31476,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6017090850565325393}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pathway Openings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32205,16 +31871,10 @@ Transform:
   - {fileID: 7552110050555543350}
   - {fileID: 2101776190990333687}
   - {fileID: 752982305596944484}
-  - {fileID: 9034548163129447972}
   - {fileID: 1635326422540178447}
   - {fileID: 7929656642593622359}
   - {fileID: 6066549648630234621}
   - {fileID: 930217864541223597}
-  - {fileID: 7541371708471745802}
-  - {fileID: 4720790411902182809}
-  - {fileID: 1635872690672648322}
-  - {fileID: 4465319204707632050}
-  - {fileID: 525675478752650596}
   - {fileID: 8546127546305425311}
   - {fileID: 954015682633392133}
   - {fileID: 5086968195398466222}
@@ -32224,8 +31884,6 @@ Transform:
   - {fileID: 375245720967424066}
   - {fileID: 6376078537870435224}
   - {fileID: 8890431884065163601}
-  - {fileID: 5794233011063013854}
-  - {fileID: 2854412139301965930}
   - {fileID: 8543552595746343737}
   - {fileID: 1215447765386895986}
   - {fileID: 8222698433745827714}
@@ -33090,7 +32748,7 @@ GameObject:
   - component: {fileID: 5167478676002184854}
   - component: {fileID: 5841048034959786093}
   - component: {fileID: 7211377553732282135}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (64)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33694,90 +33352,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &7254988381146971064
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 525675478752650596}
-  - component: {fileID: 88373565808302318}
-  m_Layer: 0
-  m_Name: LightGrey_Box128x128 (210)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &525675478752650596
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7254988381146971064}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: -8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4027332529940799188}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &88373565808302318
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7254988381146971064}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &7265637203298616319
 GameObject:
   m_ObjectHideFlags: 0
@@ -34125,7 +33699,7 @@ GameObject:
   - component: {fileID: 4531328514177661824}
   - component: {fileID: 447137755912941804}
   - component: {fileID: 2884954969586201016}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (44)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34236,7 +33810,7 @@ GameObject:
   - component: {fileID: 5124603855326263271}
   - component: {fileID: 1579849295683818856}
   - component: {fileID: 6253730951830035611}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (72)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34599,7 +34173,7 @@ GameObject:
   - component: {fileID: 7442929856870229958}
   - component: {fileID: 3307110385889116297}
   - component: {fileID: 8421213985026205898}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (55)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34878,7 +34452,7 @@ GameObject:
   - component: {fileID: 7964579561082180251}
   - component: {fileID: 3158394744344522476}
   - component: {fileID: 7871534794792206086}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (56)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35073,7 +34647,7 @@ GameObject:
   - component: {fileID: 1359455906475131074}
   - component: {fileID: 5881002929996847488}
   - component: {fileID: 8777747221037734591}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35268,7 +34842,7 @@ GameObject:
   - component: {fileID: 2668754786412012632}
   - component: {fileID: 7739974991334161943}
   - component: {fileID: 8616869053100468977}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (45)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36219,7 +35793,7 @@ GameObject:
   - component: {fileID: 1029977350294925146}
   - component: {fileID: 4657933367144152919}
   - component: {fileID: 3403492177892598936}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36739,90 +36313,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &7962450562151794286
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7541371708471745802}
-  - component: {fileID: 449218951567035742}
-  m_Layer: 0
-  m_Name: LightGrey_Box128x128 (27)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7541371708471745802
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7962450562151794286}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8, y: -4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4027332529940799188}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &449218951567035742
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7962450562151794286}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &7963994734534370273
 GameObject:
   m_ObjectHideFlags: 0
@@ -37254,7 +36744,7 @@ GameObject:
   - component: {fileID: 5794233011063013854}
   - component: {fileID: 5488179134090569316}
   - component: {fileID: 6764140767505377892}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37273,7 +36763,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4027332529940799188}
+  m_Father: {fileID: 1987758118315085836}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5488179134090569316
@@ -37449,7 +36939,7 @@ GameObject:
   - component: {fileID: 3907485001100273229}
   - component: {fileID: 5700085837271949715}
   - component: {fileID: 4102255455353530116}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38148,7 +37638,7 @@ GameObject:
   - component: {fileID: 8923495821302818892}
   - component: {fileID: 551790485646050301}
   - component: {fileID: 2433828110070906937}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38427,7 +37917,7 @@ GameObject:
   - component: {fileID: 4940902731206376859}
   - component: {fileID: 6661989230089204525}
   - component: {fileID: 4345637379341582555}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (102)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38622,7 +38112,7 @@ GameObject:
   - component: {fileID: 6760147256235980370}
   - component: {fileID: 1644490296289678345}
   - component: {fileID: 8185098218603402096}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (53)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39153,7 +38643,7 @@ GameObject:
   - component: {fileID: 593737289956412130}
   - component: {fileID: 5948636475662574606}
   - component: {fileID: 2167825046736238110}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (50)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40020,7 +39510,7 @@ GameObject:
   - component: {fileID: 8578618682378947165}
   - component: {fileID: 8222066318435268649}
   - component: {fileID: 727681386640258465}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (56)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40803,7 +40293,7 @@ GameObject:
   - component: {fileID: 885972500146999472}
   - component: {fileID: 6587585226016515654}
   - component: {fileID: 2022746548447739174}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41250,7 +40740,7 @@ GameObject:
   - component: {fileID: 3441115688948741538}
   - component: {fileID: 2430390151198198930}
   - component: {fileID: 2180240548076691061}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (79)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41361,7 +40851,7 @@ GameObject:
   - component: {fileID: 6989363436100380337}
   - component: {fileID: 3980080121420926113}
   - component: {fileID: 8011121243688575849}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41556,7 +41046,7 @@ GameObject:
   - component: {fileID: 14680900022484118}
   - component: {fileID: 8151925830621579120}
   - component: {fileID: 635860510701927491}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42087,7 +41577,7 @@ GameObject:
   - component: {fileID: 1024002109350257628}
   - component: {fileID: 316807022183184080}
   - component: {fileID: 4820031175102068499}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (35)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42198,7 +41688,7 @@ GameObject:
   - component: {fileID: 1814388827411720151}
   - component: {fileID: 5169480128892875543}
   - component: {fileID: 3267005990825842753}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (82)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42393,7 +41883,7 @@ GameObject:
   - component: {fileID: 1573154943911877853}
   - component: {fileID: 4019746395665118158}
   - component: {fileID: 1360363651559079869}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pathway Opening 1
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -42641,7 +42131,7 @@ GameObject:
   - component: {fileID: 5083153480423214350}
   - component: {fileID: 1307308584473711518}
   - component: {fileID: 4372160297798525126}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (68)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42836,7 +42326,7 @@ GameObject:
   - component: {fileID: 8582641255956173467}
   - component: {fileID: 6166433953526635693}
   - component: {fileID: 6357057489620969997}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (70)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43367,7 +42857,7 @@ GameObject:
   - component: {fileID: 8899634341136596451}
   - component: {fileID: 2118965901496119188}
   - component: {fileID: 5544433668055042579}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43730,7 +43220,7 @@ GameObject:
   - component: {fileID: 6161901463518352761}
   - component: {fileID: 1008610407970326948}
   - component: {fileID: 3845406427232057418}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DarkGrey_Box128x128 (54)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
