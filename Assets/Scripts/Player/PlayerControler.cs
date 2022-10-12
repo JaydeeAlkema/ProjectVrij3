@@ -29,6 +29,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] GameObject AttackAnimation;
 	[SerializeField] Animator animAttack;
 	[SerializeField] Animator animPlayer;
+
+	[SerializeField] PlayerHealthBar healthBar;
+
 	private bool isAttacking = false;
 
 	public float dashSpeed = 100f;
@@ -36,7 +39,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private bool isDashing = false;
 	public TrailRenderer dashTrail;
 
-	[SerializeField] private float healthPoints = 500;
+	[SerializeField] private float maxHealthPoints = 500;
+	[SerializeField] private float currentHealthPoints;
 
 	[Header("Abilities")]
 	#region ability fields
@@ -56,6 +60,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		rb2d = GetComponent<Rigidbody2D>();
 		dashTrail.emitting = false;
+
+		currentHealthPoints = maxHealthPoints;
+		healthBar.SetMaxHP(maxHealthPoints);
 	}
 
 	// Update is called once per frame
@@ -228,8 +235,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(float damage)
 	{
-		healthPoints -= damage;
-		if (healthPoints <= 0) Die();
+		currentHealthPoints -= damage;
+		healthBar.SetHP(currentHealthPoints);
+		if (currentHealthPoints <= 0) Die();
 	}
 
 	public void TakeDamage(float damage, int damageType)
