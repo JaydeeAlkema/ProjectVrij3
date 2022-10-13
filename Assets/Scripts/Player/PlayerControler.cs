@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
@@ -32,6 +33,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	[SerializeField] PlayerHealthBar healthBar;
 
+	//Temporary, remove when implementing real death screen
+	[SerializeField] Transform deathScreenTest;
+	private bool isDying = false;
+
 	private bool isAttacking = false;
 
 	public float dashSpeed = 100f;
@@ -62,7 +67,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		dashTrail.emitting = false;
 
 		currentHealthPoints = maxHealthPoints;
-		healthBar.SetMaxHP(maxHealthPoints);
+		if (healthBar != null)
+		{
+			healthBar.SetMaxHP(maxHealthPoints);
+		}
+
+		//Death screen test, remove later
+		if (deathScreenTest != null)
+		{
+			deathScreenTest.gameObject.SetActive(false);
+		}
+
 	}
 
 	// Update is called once per frame
@@ -237,7 +252,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		currentHealthPoints -= damage;
 		healthBar.SetHP(currentHealthPoints);
-		if (currentHealthPoints <= 0) Die();
+		if (currentHealthPoints <= 0 && !isDying) Die();
 	}
 
 	public void TakeDamage(float damage, int damageType)
@@ -267,6 +282,30 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void Die()
 	{
+		isDying = true;
+		StartCoroutine(DeathSequence());
 		Debug.Log("I HAVE DIED OH NO");
+	}
+
+	void Respawn()
+	{
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+	}
+
+	IEnumerator DeathSequence()
+	{
+		Time.timeScale = 0f;    //Hitstop
+		yield return new WaitForSecondsRealtime(1f);
+		Sprite.gameObject.SetActive(false);
+		Time.timeScale = 1f;
+		yield return new WaitForSecondsRealtime(1.5f);
+
+		//Deathscreen test
+		deathScreenTest.gameObject.SetActive(true);
+		yield return new WaitForSecondsRealtime(3f);
+
+		Respawn();
+		isDying = false;
+		yield return null;
 	}
 }
