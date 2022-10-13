@@ -10,6 +10,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private float attackRange = 0;
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
+	[SerializeField] public Transform damageNumberText;
 
 	private Transform target = null;
 
@@ -79,6 +80,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void TakeDamage(float damage)
 	{
+		DamagePopup(damage);
 		healthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine(FlashColor());
@@ -97,6 +99,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			healthPoints -= damage;
 			castTarget = false;
 		}
+		DamagePopup(damage);
 		healthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
@@ -136,6 +139,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	{
 		aiPath.enabled = false;
 		destinationSetter.target = null;
+	}
+
+	public virtual void DamagePopup(float damage)
+	{
+		Transform damageNumber = Instantiate(damageNumberText, transform.position, Quaternion.identity);
+		damageNumber.GetComponent<DamageNumberPopup>()?.SetDamageText(damage);
+		Debug.Log("TEXT CREATED WITH DAMAGE: " + damage);
 	}
 
 	public virtual IEnumerator FlashColor()
