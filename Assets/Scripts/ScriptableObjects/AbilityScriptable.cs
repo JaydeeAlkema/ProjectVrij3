@@ -20,6 +20,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private GameObject burnObject;
 	[SerializeField] private EffectType[] effects = new EffectType[3];
 	[SerializeField] private Ability ability;
+	[SerializeField] private bool trailUpgrade;
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	public float CoolDown { get => coolDown; set => coolDown = value; }
@@ -33,6 +34,7 @@ public class AbilityScriptable : ScriptableObject
 	public LayerMask Layer { get => layerMask; set => layerMask = value; }
 	public GameObject CastObject { get => castObject; set => castObject = value; }
 	public GameObject BurnObject { get => burnObject; set => burnObject = value; }
+	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	public Ability Ability { get => ability; set => ability =  value ; }
 	public EffectType[] Effects { get => effects; set => effects = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
@@ -64,14 +66,14 @@ public class AbilityScriptable : ScriptableObject
 		}
 	}
 
-	public void OnHitApplyStatusEffects( IDamageable damageable )
-	{
-		foreach( IStatusEffect statusEffect in statusEffects )
-		{
-			if( statusEffect == null ) return;
-			damageable.ApplyStatusEffect( statusEffect );
-		}
-	}
+	//public void OnHitApplyStatusEffects( IDamageable damageable )
+	//{
+	//	foreach( IStatusEffect statusEffect in statusEffects )
+	//	{
+	//		if( statusEffect == null ) return;
+	//		damageable.ApplyStatusEffect( statusEffect );
+	//	}
+	//}
 
 	//private void OnEnable()
 	//{

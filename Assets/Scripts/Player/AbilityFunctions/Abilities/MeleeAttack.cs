@@ -25,7 +25,7 @@ public class MeleeAttack : Ability
 		foreach( Collider2D enemy in enemiesInBox )
 		{
 			enemy.GetComponent<IDamageable>()?.TakeDamage(damage, 0);
-			baseStats.OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>());
+			OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>());
 		}
 	}
 

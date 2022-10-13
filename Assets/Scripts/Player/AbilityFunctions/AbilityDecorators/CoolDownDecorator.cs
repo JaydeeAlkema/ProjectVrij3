@@ -28,11 +28,9 @@ public class CoolDownDecorator : AbilityDecorator
 			cooledDown = false;
 			Debug.Log( "I got cooled" );
 			ability.BaseStats = baseStats;
-			ability.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
+			ability.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle, TrailUpgrade);
 			ability.CallAbility(Player);
 			base.AbilityBehavior();
-			//Player.AnimAttack.SetTrigger( "MeleeAttack1" );
-			//Player.AnimPlayer.SetTrigger( "isAttacking" );
 			Timer();
 		}
 	}

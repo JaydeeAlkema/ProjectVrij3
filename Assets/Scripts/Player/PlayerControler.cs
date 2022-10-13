@@ -164,14 +164,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void MeleeAttack()
 	{
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
-		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
 		abilityController.MeleeAttacked( currentMeleeAttack ).CallAbility(this);
 	}
 
 	void RangedAttack()
 	{
 		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
-		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
 		abilityController.RangeAttacked( currentRangedAttack ).CallAbility( this );
 		//animPlayer.SetTrigger("isAttacking");
 	}
@@ -205,7 +205,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if (rangedAttack != null)
 		{
 			rangedAttack.Start();
-			currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 		}
 
 		if (ability1 != null)

@@ -38,11 +38,11 @@ public class RewardChoice : MonoBehaviour
     public void ChooseRangedUpgrade()
     {
         // give one of possible upgrades
-        rangedAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
-        rangedAttack.Damage += upgradeToGive.DamageUpgrade;
-        rangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
-        rangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        rangedAttack.statusEffectType = upgradeToGive.StatusEffect;
+        player.CurrentRangedAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
+        player.CurrentRangedAttack.Damage += upgradeToGive.DamageUpgrade;
+        player.CurrentRangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
+        player.CurrentRangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
+        player.CurrentRangedAttack.AbilityUpgrades.Add(upgradeToGive.StatusEffect, true);
         Destroy( this.gameObject );
     }
 }

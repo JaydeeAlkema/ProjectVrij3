@@ -58,9 +58,8 @@ public class AbilityController : MonoBehaviour
                     case StatusEffectType.none:
                         break;
                     case StatusEffectType.Burn:
-                        //currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
                         IAbility burn = new BurningMeleeDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats );
-                        burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+                        burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
                         burn.AbilityBehavior();
                         break;
                     case StatusEffectType.Stun:
@@ -73,13 +72,11 @@ public class AbilityController : MonoBehaviour
                         break;
                 }
             }
-            currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-            return currentMeleeAttack;
         }
         IAbility anim = new AnimationDecorator( currentMeleeAttack, "MeleeAttack1", "isAttacking" );
-        anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-        anim.CallAbility( currentMeleeAttack.Player );
-        currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        anim.CallAbility( this.GetComponent<PlayerControler>() );
+        currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         return currentMeleeAttack;
 	}
 
@@ -94,6 +91,9 @@ public class AbilityController : MonoBehaviour
                     case StatusEffectType.none:
                         break;
                     case StatusEffectType.Burn:
+                        Debug.Log( "burning" );
+                        IAbility burn = new BurningRangedDecorator( currentRangedAttack, true );
+                        burn.AbilityBehavior();
                         break;
                     case StatusEffectType.Stun:
                         break;
@@ -105,12 +105,12 @@ public class AbilityController : MonoBehaviour
                         break;
                 }
             }
-            currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-            return currentRangedAttack;
+            //currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            //return currentRangedAttack;
         }
         IAbility anim = new AnimationDecorator( currentMeleeAttack, "", "isAttacking" );
-        anim.CallAbility( currentRangedAttack.Player );
-        currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        anim.CallAbility( this.GetComponent<PlayerControler>() );
+        currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         return currentRangedAttack;
 	}
 
@@ -136,10 +136,10 @@ public class AbilityController : MonoBehaviour
                         break;
                 }
             }
-            currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-            return currentAbility1;
+            //currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            //return currentAbility1;
         }
-        currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         return currentAbility1;
 	}
 
@@ -165,10 +165,10 @@ public class AbilityController : MonoBehaviour
                         break;
                 }
             }
-            currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             return currentAbility2;
         }
-        currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         return currentAbility2;
 	}
 
@@ -194,10 +194,10 @@ public class AbilityController : MonoBehaviour
                         break;
                 }
             }
-            currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             return currentAbility3;
         }
-        currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         return currentAbility3;
 	}
 

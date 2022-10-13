@@ -33,6 +33,9 @@ public class AbilityDecorator : IAbility
 	public float CritChance { get => critChance; set => critChance = value; }
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
+	public GameObject CastObject { get; set; }
+	public GameObject CastedObject { get; set; }
+	public bool TrailUpgrade { get; set; }
 
 	public AbilityDecorator(IAbility _ability)
 	{
@@ -50,12 +53,22 @@ public class AbilityDecorator : IAbility
 		ability.AbilityBehavior();
 	}
 
-	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle )
+	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle, bool _trailUpgrade )
 	{
 		Rb2d = _rb2d;
 		MousePos = _mousePos;
 		LookDir = _lookDir;
 		CastFromPoint = _castFromPoint;
 		Angle = _angle;
+		TrailUpgrade = _trailUpgrade;
+	}
+
+	public void OnHitApplyStatusEffects( IDamageable damageable )
+	{
+		foreach( IStatusEffect statusEffect in BaseStats.statusEffects )
+		{
+			if( statusEffect == null ) return;
+			damageable.ApplyStatusEffect( statusEffect );
+		}
 	}
 }

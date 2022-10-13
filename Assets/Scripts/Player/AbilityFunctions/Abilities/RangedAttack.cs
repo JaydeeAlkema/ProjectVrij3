@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RangedAttack : Ability
 {
-	private bool trailUpgrade = false;
 	private bool init = true;
 
 	public override void CallAbility(PlayerControler _player)
@@ -17,13 +16,14 @@ public class RangedAttack : Ability
 	}
 	public override void AbilityBehavior()
 	{
-		GameObject projectile = Object.Instantiate( castObject, CastFromPoint.transform.position, CastFromPoint.rotation, CastFromPoint.transform );
-		Projectile proj = projectile.GetComponent<Projectile>();
-		if(trailUpgrade) { proj.TrailUpgrade = true; Debug.Log( "trailupgrade on" ); }
+		CastedObject = Object.Instantiate( castObject, CastFromPoint.transform.position, CastFromPoint.rotation, CastFromPoint.transform );
+		Projectile proj = CastedObject.GetComponent<Projectile>();
+		//TrailUpgrade = BaseStats.TrailUpgrade;
+		proj.TrailUpgrade = TrailUpgrade;
 		proj.Damage = damage;
 		proj.LifeSpan = lifeSpan;
 		proj.Force = force;
-		projectile.transform.SetParent( null );
+		CastedObject.transform.SetParent( null );
 	}
 
 	void SetAbilityStats()

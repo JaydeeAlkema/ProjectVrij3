@@ -23,7 +23,7 @@ public class AnimationDecorator : AbilityDecorator
 
 	public override void AbilityBehavior()
 	{
-		if( attackTrigger != "" ) { Player.AnimAttack.SetTrigger( ""+ attackTrigger ); }
-		if(playerTrigger != "") { Player.AnimPlayer.SetTrigger( "" + playerTrigger ); }
+		if( attackTrigger != "" ) {Player.AnimAttack.SetTrigger( attackTrigger ); }
+		if(playerTrigger != "") { Player.AnimPlayer.SetTrigger( playerTrigger ); }
 	}
 }

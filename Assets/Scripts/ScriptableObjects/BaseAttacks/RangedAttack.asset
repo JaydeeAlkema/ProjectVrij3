@@ -17,18 +17,15 @@ MonoBehaviour:
   critChance: 0
   distance: 0
   boxSize: {x: 4, y: 6}
-  circleSize: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
-  cam: {fileID: 0}
-  rb2d: {fileID: 0}
-  castFromPoint: {fileID: 0}
   castObject: {fileID: 3210017399674347035, guid: f65b5458f6dbcfa4da1048f4471f7ade, type: 3}
   lifeSpan: 0.8
   force: 11
   burnObject: {fileID: 0}
   effects: 000000000000000000000000
+  trailUpgrade: 0
   statusEffectType: 0
   slowAmount: 0.5
   slowDuration: 4
