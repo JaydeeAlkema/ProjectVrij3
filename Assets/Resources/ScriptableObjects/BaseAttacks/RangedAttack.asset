@@ -10,26 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
-  m_Name: MeleeAttack
+  m_Name: RangedAttack
   m_EditorClassIdentifier: 
-  coolDown: 0
-  damage: 20
+  coolDown: 250
+  damage: 25
   critChance: 0
-  distance: 1.41
-  boxSize: {x: 4.2, y: 1.8}
-  circleSize: 0
+  distance: 0
+  boxSize: {x: 4, y: 6}
   layerMask:
     serializedVersion: 2
-    m_Bits: 64
-  cam: {fileID: 0}
-  rb2d: {fileID: 0}
-  castFromPoint: {fileID: 0}
-  castObject: {fileID: 0}
-  lifeSpan: 10
-  force: 30
+    m_Bits: 0
+  castObject: {fileID: 3210017399674347035, guid: f65b5458f6dbcfa4da1048f4471f7ade, type: 3}
+  lifeSpan: 0.8
+  force: 11
+  burnObject: {fileID: 0}
   effects: 000000000000000000000000
-  ability: {fileID: 5931165756625859170, guid: dbb136ce9400c714d974afc9f6468e87, type: 3}
+  trailUpgrade: 0
   statusEffectType: 0
   slowAmount: 0.5
   slowDuration: 4
-  markType: 1
+  markType: 0

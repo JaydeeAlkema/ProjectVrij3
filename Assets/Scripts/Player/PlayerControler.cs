@@ -20,7 +20,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField]
 	private Transform castFromPoint;
 	[SerializeField]
-	private Vector2 boxSize = new Vector2(4, 6);
+	private Vector2 boxSize = new Vector2( 4, 6 );
 	[SerializeField]
 	private float circleSize = 3f;
 	[SerializeField]
@@ -29,6 +29,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] GameObject Pivot_AttackAnimation;
 	[SerializeField] GameObject AttackAnimation;
 	[SerializeField] Animator animAttack;
+	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
 	[SerializeField] Animator animPlayer;
 
 	[SerializeField] PlayerHealthBar healthBar;
@@ -37,6 +38,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] Transform deathScreenTest;
 	private bool isDying = false;
 
+	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
 	private bool isAttacking = false;
 
 	public float dashSpeed = 100f;
@@ -46,8 +48,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	[SerializeField] private float maxHealthPoints = 500;
 	[SerializeField] private float currentHealthPoints;
+	[SerializeField] private AbilityController abilityController;
 
-	[Header("Abilities")]
+	[Header( "Abilities" )]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -57,6 +60,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public AbilityScriptable Ability2 { get => ability2; set => ability2 = value; }
 	[SerializeField] private AbilityScriptable ability3;
 	public AbilityScriptable Ability3 { get => ability3; set => ability3 = value; }
+
+	private IAbility currentMeleeAttack = new MeleeAttack();
+	private IAbility currentRangedAttack = new RangedAttack();
+	private IAbility currentAbility1;
+	private IAbility currentAbility2;
+	private IAbility currentAbility3;
+	public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
+	public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
+	public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
+	public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
+	public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
 	#endregion
 
 
@@ -65,6 +79,15 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		rb2d = GetComponent<Rigidbody2D>();
 		dashTrail.emitting = false;
+		//currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, meleeAttack.CoolDown );
+		currentMeleeAttack.BaseStats = meleeAttack;
+		abilityController.CurrentMeleeAttack = currentMeleeAttack;
+		currentRangedAttack.BaseStats = rangedAttack;
+		abilityController.CurrentRangedAttack = currentRangedAttack;
+		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
+		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
+		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
+		abilityController.SetAttacks();
 
 		currentHealthPoints = maxHealthPoints;
 		if (healthBar != null)
@@ -162,34 +185,34 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MeleeAttack()
 	{
-		meleeAttack.Ability.SetScriptable(meleeAttack);
-		meleeAttack.Ability.AbilityBehavior();
-		animAttack.SetTrigger("MeleeAttack1");
-		animPlayer.SetTrigger("isAttacking");
+		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
+		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+		abilityController.MeleeAttacked( currentMeleeAttack ).CallAbility(this);
 	}
 
 	void RangedAttack()
 	{
-		rangedAttack.Ability.SetScriptable(rangedAttack);
-		rangedAttack.Ability.AbilityBehavior();
-		animPlayer.SetTrigger("isAttacking");
+		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
+		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+		abilityController.RangeAttacked( currentRangedAttack ).CallAbility( this );
+		//animPlayer.SetTrigger("isAttacking");
 	}
 
 	void AbilityOneAttack()
 	{
-		ability1.Ability.SetScriptable(ability1);
+		//ability1.Ability.SetPlayerValues(ability1);
 		ability1.Ability.AbilityBehavior();
 	}
 
 	void AbilityTwoAttack()
 	{
-		ability2.Ability.SetScriptable(ability2);
+		//ability2.Ability.SetPlayerValues(ability2);
 		ability2.Ability.AbilityBehavior();
 	}
 
 	void AbilityThreeAttack()
 	{
-		ability3.Ability.SetScriptable(ability3);
+		//ability3.Ability.SetPlayerValues(ability3);
 		ability3.Ability.AbilityBehavior();
 	}
 
@@ -197,55 +220,46 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (meleeAttack != null)
 		{
-			meleeAttack.Rb2d = rb2d;
-			meleeAttack.CastFromPoint = castFromPoint;
-			meleeAttack.MousePos = mousePos;
-			meleeAttack.LookDir = lookDir;
-			meleeAttack.Angle = angle;
 			meleeAttack.Start();
-			meleeAttack.Ability.SetScriptable(meleeAttack);
+			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 		}
 
 		if (rangedAttack != null)
 		{
-			rangedAttack.Rb2d = rb2d;
-			rangedAttack.CastFromPoint = castFromPoint;
-			rangedAttack.MousePos = mousePos;
-			rangedAttack.LookDir = lookDir;
-			rangedAttack.Angle = angle;
 			rangedAttack.Start();
-			rangedAttack.Ability.SetScriptable(rangedAttack);
+			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 		}
 
 		if (ability1 != null)
 		{
-			ability1.Rb2d = rb2d;
-			ability1.CastFromPoint = castFromPoint;
-			ability1.MousePos = mousePos;
-			ability1.LookDir = lookDir;
-			ability1.Angle = angle;
+			//ability1.Rb2d = rb2d;
+			//ability1.CastFromPoint = castFromPoint;
+			//ability1.MousePos = mousePos;
+			//ability1.LookDir = lookDir;
+			//ability1.Angle = angle;
 			//ability1.Ability.SetScriptable();
 		}
 
 		if (ability2 != null)
 		{
-			ability2.Rb2d = rb2d;
-			ability2.CastFromPoint = castFromPoint;
-			ability2.MousePos = mousePos;
-			ability2.LookDir = lookDir;
-			ability2.Angle = angle;
+			//ability2.Rb2d = rb2d;
+			//ability2.CastFromPoint = castFromPoint;
+			//ability2.MousePos = mousePos;
+			//ability2.LookDir = lookDir;
+			//ability2.Angle = angle;
 			//ability2.Ability.SetScriptable();
 		}
 
 		if (ability3 != null)
 		{
-			ability3.Rb2d = rb2d;
-			ability3.CastFromPoint = castFromPoint;
-			ability3.MousePos = mousePos;
-			ability3.LookDir = lookDir;
-			ability3.Angle = angle;
+			//ability3.Rb2d = rb2d;
+			//ability3.CastFromPoint = castFromPoint;
+			//ability3.MousePos = mousePos;
+			//ability3.LookDir = lookDir;
+			//ability3.Angle = angle;
 			//ability3.Ability.SetScriptable(  );
 		}
+		abilityController.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3);
 	}
 
 	public void TakeDamage(float damage)
