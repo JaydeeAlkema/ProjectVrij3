@@ -8,6 +8,7 @@ public class RewardChoice : MonoBehaviour
     [SerializeField] private UpgradeScriptable upgradeToGive;
     [SerializeField] private AbilityScriptable meleeAttack;
     [SerializeField] private AbilityScriptable rangedAttack;
+    private UpgradeScriptable[] upgrades;
     private PlayerControler player;
     public AbilityScriptable AbilityToGive { get => abilityToGive; set => abilityToGive = value; }
     public UpgradeScriptable UpgradeToGive { get => upgradeToGive; set => upgradeToGive = value; }
@@ -15,7 +16,13 @@ public class RewardChoice : MonoBehaviour
 	private void Start()
 	{
         player = FindObjectOfType<PlayerControler>();
-	}
+        int maxRange = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrade" ).Length;
+        upgrades = new UpgradeScriptable[maxRange];
+        upgrades = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades");
+        Debug.Log( "upgrades loaded: " + upgrades.Length );
+        upgradeToGive = upgrades[Random.Range( 0, upgrades.Length -1 )];
+        Debug.Log(upgradeToGive.name);
+    }
 
 	public void ChooseAbility()
     {
