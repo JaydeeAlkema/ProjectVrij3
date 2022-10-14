@@ -600,23 +600,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: cba955331c4327d4ab4ab3de6aaa9a75, type: 3}
---- !u!1 &1786022382 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4729987391402745377, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
-  m_PrefabInstance: {fileID: 1952911365}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1786022388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786022382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d1e7e19fdf527b43979dd376badd273, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1866152629
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,10 +767,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4729987391402745380, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
-      propertyPath: abilityController
-      value: 
-      objectReference: {fileID: 1786022388}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
@@ -868,7 +847,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7033657127096513245, guid: 35d4ecfc122a8b6428c3102f1d2565eb, type: 3}
       propertyPath: sceneToLoadName
-      value: RoomClearTest
+      value: EnemyBehaviourTest
       objectReference: {fileID: 0}
     - target: {fileID: 7033657127096513245, guid: 35d4ecfc122a8b6428c3102f1d2565eb, type: 3}
       propertyPath: currentSceneName

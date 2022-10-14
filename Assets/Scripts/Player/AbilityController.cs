@@ -20,6 +20,7 @@ public class AbilityController : MonoBehaviour
     public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
     public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
 
+    //gives all attacks/abilities cooldowns
 	public void SetAttacks()
 	{
         currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats.CoolDown );
@@ -38,6 +39,7 @@ public class AbilityController : MonoBehaviour
         }
     }
 
+    //makes it so the cooldowns actually update when getting upgrades
     public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3)
     {
         if( currentMeleeAttack != null ) { currentMeleeAttack.CoolDown = melee.CoolDown; }
@@ -47,6 +49,8 @@ public class AbilityController : MonoBehaviour
         if( currentAbility3 != null ) { currentAbility3.CoolDown = ab3.CoolDown; }
 	}
 
+
+    //Shit show of switches for all the effects with decorators
 	public IAbility MeleeAttacked(IAbility melee)
     {
         foreach( KeyValuePair<StatusEffectType, bool> effect in melee.AbilityUpgrades )
@@ -201,6 +205,8 @@ public class AbilityController : MonoBehaviour
         return currentAbility3;
 	}
 
+
+    //always get set player values when the player controller updates their rotation etc, must always be called on mouse movement
     public void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle )
     {
         rb2d = _rb2d;

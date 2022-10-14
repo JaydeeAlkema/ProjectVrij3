@@ -16,6 +16,7 @@ public class RewardChoice : MonoBehaviour
 	private void Start()
 	{
         player = FindObjectOfType<PlayerControler>();
+        //load all upgrade assets
         int maxRange = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrade" ).Length;
         upgrades = new UpgradeScriptable[maxRange];
         upgrades = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades");

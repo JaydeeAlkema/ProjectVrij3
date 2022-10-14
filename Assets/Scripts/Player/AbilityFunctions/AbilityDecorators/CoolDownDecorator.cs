@@ -35,6 +35,7 @@ public class CoolDownDecorator : AbilityDecorator
 		}
 	}
 
+	//cooldown timer
 	private void Timer()
 	{
 		coolDownTimer.Interval = CoolDown;
@@ -43,6 +44,7 @@ public class CoolDownDecorator : AbilityDecorator
 		coolDownTimer.Enabled = true;
 	}
 
+	//timer even when timer has elapsed
 	private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
 	{
 		cooledDown = true;
