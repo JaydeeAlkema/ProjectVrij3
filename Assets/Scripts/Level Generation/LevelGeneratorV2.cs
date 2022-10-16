@@ -1,3 +1,4 @@
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,6 +33,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	[Header("References")]
 	[SerializeField] private Transform levelAssetsParent = default;
+	[SerializeField] private AstarPath astarPath = default;
 
 	[Header("Debugging")]
 	[SerializeField] private bool showGizmos = false;
@@ -292,6 +294,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 				}
 			}
 
+			// Setup Astar Graph
+			Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
+			AstarData astarData = AstarPath.active.data;
+			GridGraph gg = astarData.gridGraph;
+			gg.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
+			gg.SetDimensions(chunkSize * chunkGridSize.x + 1, chunkSize * chunkGridSize.y + 1, gg.nodeSize);
+			AstarPath.active.Scan();
+
 			// Actually build the pathways here...
 			Vector2Int startPos = new Vector2Int(Mathf.RoundToInt(pathwayStartPoint.transform.position.x), Mathf.RoundToInt(pathwayStartPoint.transform.position.y));
 			Vector2Int targetPos = new Vector2Int(Mathf.RoundToInt(pathwayEndPoint.transform.position.x), Mathf.RoundToInt(pathwayEndPoint.transform.position.y));
@@ -319,6 +329,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			// Remove any duplicate nodes.
 			List<Node> nodesNoDuplicates = nodes.Distinct(new NodeComparer()).ToList();
+
+			// Set all nodes walkable by checking if they overlap with the wall transforms.
 			List<Transform> collideableTiles = new List<Transform>();
 			collideableTiles.AddRange(room.CollideableTiles);
 			collideableTiles.AddRange(roomToConnectTo.CollideableTiles);
@@ -333,6 +345,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 					if (node != null) node.walkable = false;
 				}
 			}
+
+			// Add all occupied tiles into a single list. This will be used later for checking overlaps.
+			List<Transform> occupiedTiles = new List<Transform>();
+			occupiedTiles.AddRange(room.CollideableTiles);
+			occupiedTiles.AddRange(room.NoncollideableTiles);
+			occupiedTiles.AddRange(roomToConnectTo.CollideableTiles);
+			occupiedTiles.AddRange(roomToConnectTo.NoncollideableTiles);
 
 			FindShortestPathBetweenRoomsWithAStar(startPos, targetPos, nodesNoDuplicates);
 
@@ -374,6 +393,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathPoint.transform.position = new Vector3(originNode.coordinates.x, originNode.coordinates.y, 0);
 					pathPoint.transform.parent = pathParent.transform;
 
+					List<GameObject> pathwayTiles = new List<GameObject>();
+					pathwayTiles.Add(pathPoint);
+
 					SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
 					spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
 					spriteRenderer.color = Color.blue; // For debugging purposes only!
@@ -388,51 +410,87 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 							if (node != null && !pathPointsNoDuplicates.Contains(node) && node.walkable)
 							{
-								GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
-								SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
-								neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
-								neighbouringPathPoint.transform.parent = pathParent.transform;
+								// Again, this is very inefficient, but of it works, it works...
+								Transform overlappingRoomTile = null;
+								foreach (Transform occupiedTile in occupiedTiles)
+								{
+									Vector2Int occupiedTileCoordinates = new Vector2Int(Mathf.RoundToInt(occupiedTile.position.x), Mathf.RoundToInt(occupiedTile.position.y));
+									if (occupiedTileCoordinates == node.coordinates)
+									{
+										overlappingRoomTile = occupiedTile;
+									}
+								}
+								GameObject overlappingPathwayTile = null;
+								foreach (GameObject pathwayTile in pathwayTiles)
+								{
+									Vector2Int pathwayTileCoordinates = new Vector2Int(Mathf.RoundToInt(pathwayTile.transform.position.x), Mathf.RoundToInt(pathwayTile.transform.position.y));
+									if (pathwayTileCoordinates == node.coordinates)
+									{
+										overlappingPathwayTile = pathwayTile;
+									}
+								}
 
-								//Vector2Int topNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y + 1);
-								//Vector2Int topRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y + 1);
-								//Vector2Int rightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y);
-								//Vector2Int bottomRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y - 1);
-								//Vector2Int bottomNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y - 1);
-								//Vector2Int bottomLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y - 1);
-								//Vector2Int leftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y);
-								//Vector2Int topLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y + 1);
+								if (overlappingRoomTile == null && overlappingPathwayTile == null)
+								{
+									GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
+									SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
+									neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
+									neighbouringPathPoint.transform.parent = pathParent.transform;
 
-								//List<Node> neighbours = new List<Node>();
-								//Node topNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topNeighbourCoordinates);
-								//Node topRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topRightNeighbourCoordinates);
-								//Node rightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == rightNeighbourCoordinates);
-								//Node bottomRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomRightNeighbourCoordinates);
-								//Node bottomNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomNeighbourCoordinates);
-								//Node bottomLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomLeftNeighbourCoordinates);
-								//Node leftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == leftNeighbourCoordinates);
-								//Node topLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topLeftNeighbourCoordinates);
-
-								//if (topNeighbourNode) neighbours.Add(topNeighbourNode);
-								//if (topRightNeighbourNode) neighbours.Add(topRightNeighbourNode);
-								//if (rightNeighbourNode) neighbours.Add(rightNeighbourNode);
-								//if (bottomRightNeighbourNode) neighbours.Add(bottomRightNeighbourNode);
-								//if (bottomNeighbourNode) neighbours.Add(bottomNeighbourNode);
-								//if (bottomLeftNeighbourNode) neighbours.Add(bottomLeftNeighbourNode);
-								//if (leftNeighbourNode) neighbours.Add(leftNeighbourNode);
-								//if (topLeftNeighbourNode) neighbours.Add(topLeftNeighbourNode);
-
-								// Node has 4 adjecent neighbours. This should be a ground node.
-								//if (topNeighbourNode && rightNeighbourNode && bottomNeighbourNode && leftNeighbourNode)
-								//{
-								neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-								//}
-								//else
-								//{
-								//	neighbouringPathPointSpriteRenderer.sprite = pathWallTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-								//}
+									pathwayTiles.Add(neighbouringPathPoint);
+								}
 							}
 						}
 					}
+					//for (int i = 0; i < pathwayTiles.Count; i++)
+					//{
+					//	GameObject pathwayTile = pathwayTiles[i];
+
+					//	int coordX = Mathf.RoundToInt(pathwayTile.transform.position.x);
+					//	int coordY = Mathf.RoundToInt(pathwayTile.transform.position.y);
+
+					//	Vector2Int topNeighbourCoordinates = new Vector2Int(coordX, coordY + 1);
+					//	Vector2Int topRightNeighbourCoordinates = new Vector2Int(coordX + 1, coordY + 1);
+					//	Vector2Int rightNeighbourCoordinates = new Vector2Int(coordX + 1, coordY);
+					//	Vector2Int bottomRightNeighbourCoordinates = new Vector2Int(coordX + 1, coordY - 1);
+					//	Vector2Int bottomNeighbourCoordinates = new Vector2Int(coordX, coordY - 1);
+					//	Vector2Int bottomLeftNeighbourCoordinates = new Vector2Int(coordX - 1, coordY - 1);
+					//	Vector2Int leftNeighbourCoordinates = new Vector2Int(coordX - 1, coordY);
+					//	Vector2Int topLeftNeighbourCoordinates = new Vector2Int(coordX - 1, coordY + 1);
+
+					//	List<Node> neighbours = new List<Node>();
+					//	Node topNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topNeighbourCoordinates);
+					//	Node topRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topRightNeighbourCoordinates);
+					//	Node rightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == rightNeighbourCoordinates);
+					//	Node bottomRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomRightNeighbourCoordinates);
+					//	Node bottomNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomNeighbourCoordinates);
+					//	Node bottomLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomLeftNeighbourCoordinates);
+					//	Node leftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == leftNeighbourCoordinates);
+					//	Node topLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topLeftNeighbourCoordinates);
+
+					//	if (topNeighbourNode) neighbours.Add(topNeighbourNode);
+					//	if (topRightNeighbourNode) neighbours.Add(topRightNeighbourNode);
+					//	if (rightNeighbourNode) neighbours.Add(rightNeighbourNode);
+					//	if (bottomRightNeighbourNode) neighbours.Add(bottomRightNeighbourNode);
+					//	if (bottomNeighbourNode) neighbours.Add(bottomNeighbourNode);
+					//	if (bottomLeftNeighbourNode) neighbours.Add(bottomLeftNeighbourNode);
+					//	if (leftNeighbourNode) neighbours.Add(leftNeighbourNode);
+					//	if (topLeftNeighbourNode) neighbours.Add(topLeftNeighbourNode);
+
+					//	//Node has 4 adjecent neighbours. This should be a ground node.
+					//	if (neighbours.Count == 8)
+					//	{
+					//		neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+					//		neighbouringPathPoint.layer = LayerMask.NameToLayer("Walkable");
+					//	}
+					//	else if (neighbours.Count < 8)
+					//	{
+					//		neighbouringPathPointSpriteRenderer.sprite = pathWallTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
+					//		neighbouringPathPoint.layer = LayerMask.NameToLayer("Unwalkable");
+					//		neighbouringPathPoint.AddComponent<BoxCollider2D>();
+					//		node.walkable = false;
+					//	}
+					//}
 				}
 			}
 		}
@@ -460,6 +518,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		HashSet<Node> closedSet = new HashSet<Node>();
 
 		openSet.Add(startNode);
+		pathPoints.Clear();
 		pathPoints.Add(startNode);
 		pathPoints.Add(targetNode);
 
