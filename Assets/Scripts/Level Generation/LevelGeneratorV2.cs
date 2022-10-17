@@ -31,8 +31,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[Space(10)]
 
 	[Header("References")]
-	[SerializeField] private Transform levelAssetsParent = default;
-	[SerializeField] private AstarPath astarPath = default;
+	[SerializeField] private Transform chunksParent = default;
+	[SerializeField] private Transform roomsParent = default;
+	[SerializeField] private Transform pathwaysParent = default;
 
 	[Header("Debugging")]
 	[SerializeField] private bool showGizmos = false;
@@ -98,7 +99,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				chunk.Occupied = false;
 
 				chunk.gameObject.transform.position = new Vector2(chunk.Coordinates.x, chunk.Coordinates.y);
-				chunk.gameObject.transform.parent = levelAssetsParent;
+				chunk.gameObject.transform.parent = chunksParent;
 
 				// Create starting chunk node grid (the +1 comes from the fact that the nodes start on the edges of the chunk, not within the chunk)
 				for (int nx = 0; nx < chunkSize + 1; nx++)
@@ -199,7 +200,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			int randRot = Random.Range(0, 4);
 			newRoomGO.transform.Rotate(new Vector3(0, 0, randRot * 90));
 
-			newRoomGO.transform.parent = levelAssetsParent;
+			newRoomGO.transform.parent = roomsParent;
 			rooms.Add(room);
 		}
 
@@ -348,6 +349,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 			path = seeker.StartPath(new Vector3(startPos.x, startPos.y, 0), new Vector3(targetPos.x, targetPos.y, 0), OnPathComplete);
 		}
 
+		while (AstarPath.active.IsAnyGraphUpdateInProgress || seeker.IsDone() == false)
+		{
+			yield return new WaitForEndOfFrame();
+		}
+
 		Destroy(SeekerGO);
 		executionTime.Stop();
 		diagnosticTimes.Add($"Generating pathways between empty rooms took: {executionTime.ElapsedMilliseconds}ms");
@@ -358,23 +364,54 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	private void OnPathComplete(Path p)
 	{
-		Debug.Log("Yay, we got a path back. Did it have an error? " + p.error);
-		GameObject pathPointParentGO = new GameObject("Pathway");
+		//Debug.Log("Yay, we got a path back. Did it have an error? " + p.error);
 		Vector3 startVector = p.vectorPath[0];
 		Vector3 endVector = p.vectorPath[p.vectorPath.Count - 1];
 		Vector3 pathPointParentCenter = new Vector3(startVector.x, startVector.y, 0) - new Vector3(endVector.x, endVector.y, 0);
+
+		GameObject pathPointParentGO = new GameObject("Pathway");
 		pathPointParentGO.transform.position = pathPointParentCenter;
-		pathPointParentGO.transform.parent = levelAssetsParent;
+		pathPointParentGO.transform.parent = pathwaysParent;
+
+		List<Vector2Int> pathPoints = new List<Vector2Int>();
+
 		foreach (Vector3 pathCoord in p.vectorPath)
 		{
-			GameObject pathPointGO = new GameObject("pathPoint");
-			pathPointGO.transform.position = pathCoord;
+			Vector2Int pathCoordInt = new Vector2Int(Mathf.RoundToInt(pathCoord.x), Mathf.RoundToInt(pathCoord.y));
+			pathPoints.Add(pathCoordInt);
+
+			GameObject pathPointGO = new GameObject($"PathPoint[{pathCoordInt.x}][{pathCoordInt.y}]");
+			pathPointGO.transform.position = new Vector3(pathCoordInt.x, pathCoordInt.y, 0);
 			pathPointGO.transform.parent = pathPointParentGO.transform;
 
-			SpriteRenderer spriteRenderer = pathPointGO.AddComponent<SpriteRenderer>();
-			spriteRenderer.sprite = pathGroundTileSprites[0];
-			spriteRenderer.color = Color.green;
+			SpriteRenderer originPathPointSpriteRenderer = pathPointGO.AddComponent<SpriteRenderer>();
+			originPathPointSpriteRenderer.sprite = pathGroundTileSprites[0];
+
+			for (int x = -pathDepth; x < pathDepth + 1; x++)
+			{
+				for (int y = -pathDepth; y < pathDepth + 1; y++)
+				{
+					// Do not check for center tile. we know this one exists already.
+					if (x != 0 && y != 0)
+					{
+						Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
+						if (pathPoints.Contains(newCoord) == false)
+						{
+							GameObject newPathPointGO = new GameObject($"PathPoint[{newCoord.x}][{newCoord.y}]");
+							newPathPointGO.transform.position = new Vector3(newCoord.x, newCoord.y, 0);
+							newPathPointGO.transform.parent = pathPointParentGO.transform;
+							pathPoints.Add(newCoord);
+
+							SpriteRenderer newPathPointSpriteRenderer = newPathPointGO.AddComponent<SpriteRenderer>();
+							newPathPointSpriteRenderer.sprite = pathGroundTileSprites[0];
+						}
+					}
+				}
+			}
 		}
+
+		diagnosticTimes.Add($"Pathfinder took: {p.duration}ms");
+		totalGenerationTimeInMilliseconds += (long)p.duration;
 	}
 
 	#region Helpers
@@ -419,33 +456,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 		}
 		return null;
-	}
-
-	// https://answers.unity.com/questions/444414/get-angle-between-2-vector2s.html
-	public float GetAngle(Vector2 A, Vector2 B)
-	{
-		//difference
-		var Delta = B - A;
-		//use atan2 to get the angle; Atan2 returns radians
-		var angleRadians = Mathf.Atan2(Delta.y, Delta.x);
-
-		//convert to degrees
-		var angleDegrees = angleRadians * Mathf.Rad2Deg;
-
-		//angleDegrees will be in the range (-180,180].
-		//I like normalizing to [0,360) myself, but this is optional..
-		if (angleDegrees < 0)
-			angleDegrees += 360;
-
-		return angleDegrees;
-	}
-	bool Between(float angle, float A, float B)
-	{
-		if (angle < B && angle > A)
-		{
-			return true;
-		}
-		return false;
 	}
 	#endregion
 
