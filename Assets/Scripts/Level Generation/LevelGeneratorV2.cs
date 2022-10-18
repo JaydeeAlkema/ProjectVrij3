@@ -2,6 +2,7 @@ using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
@@ -67,6 +68,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
 		yield return StartCoroutine(GeneratePathwaysBetweenEmptyRooms());
+		yield return StartCoroutine(ConfigurePathways());
+
+		// This should always be called last!
 		yield return StartCoroutine(DecorateLevel());
 
 		foreach (string diagnosticTime in diagnosticTimes)
@@ -386,6 +390,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		List<Vector2Int> pathPoints = new List<Vector2Int>();
 
+		// Instantiate all the initial tiles. These tiles will have not been configurated yet, this will need to be done is a separate pass.
 		foreach (Vector3 pathCoord in p.vectorPath)
 		{
 			Vector2Int pathCoordInt = new Vector2Int(Mathf.RoundToInt(pathCoord.x), Mathf.RoundToInt(pathCoord.y));
@@ -394,9 +399,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			GameObject pathPointGO = new GameObject($"PathPoint[{pathCoordInt.x}][{pathCoordInt.y}]");
 			pathPointGO.transform.position = new Vector3(pathCoordInt.x, pathCoordInt.y, 0);
 			pathPointGO.transform.parent = pathPointParentGO.transform;
-
-			SpriteRenderer originPathPointSpriteRenderer = pathPointGO.AddComponent<SpriteRenderer>();
-			originPathPointSpriteRenderer.sprite = pathGroundTileSprites[0];
 
 			for (int x = -pathDepth; x < pathDepth + 1; x++)
 			{
@@ -412,9 +414,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 							newPathPointGO.transform.position = new Vector3(newCoord.x, newCoord.y, 0);
 							newPathPointGO.transform.parent = pathPointParentGO.transform;
 							pathPoints.Add(newCoord);
-
-							SpriteRenderer newPathPointSpriteRenderer = newPathPointGO.AddComponent<SpriteRenderer>();
-							newPathPointSpriteRenderer.sprite = pathGroundTileSprites[0];
 						}
 					}
 				}
@@ -423,6 +422,89 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		diagnosticTimes.Add($"Pathfinder took: {p.duration}ms");
 		totalGenerationTimeInMilliseconds += (long)p.duration;
+	}
+
+	/// <summary>
+	/// Configures all the pathways. This includes, but is not limited to: Setting the correct sprites depeninding on their neighbouring tiles.
+	/// </summary>
+	/// <returns></returns>
+	private IEnumerator ConfigurePathways()
+	{
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
+
+		foreach (Transform pathParents in pathwaysParent)
+		{
+			List<Transform> childPathTiles = new List<Transform>();
+			childPathTiles.AddRange(pathParents.GetComponentsInChildren<Transform>());
+			foreach (Transform pathTile in childPathTiles)
+			{
+				SpriteRenderer spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				List<GameObject> neighbouringTiles = new List<GameObject>();
+				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
+
+				Vector2Int topTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y + 1);
+				Vector2Int topRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y + 1);
+				Vector2Int rightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y);
+				Vector2Int bottomRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y - 1);
+				Vector2Int bottomTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y - 1);
+				Vector2Int bottomLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y - 1);
+				Vector2Int leftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y);
+				Vector2Int topLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y + 1);
+
+				GameObject topTile = null;
+				GameObject topRightTile = null;
+				GameObject rightTile = null;
+				GameObject bottomRightTile = null;
+				GameObject bottomTile = null;
+				GameObject bottomLeftTile = null;
+				GameObject leftTile = null;
+				GameObject topLeftTile = null;
+
+				for (int t = 0; t < childPathTiles.Count; t++)
+				{
+					GameObject childPathTile = childPathTiles[t].gameObject;
+					Vector2Int childPathTileCoord = new Vector2Int(Mathf.RoundToInt(childPathTile.transform.position.x), Mathf.RoundToInt(childPathTile.transform.position.y));
+					if (childPathTileCoord == topTileCoord) topTile = childPathTile;
+					else if (childPathTileCoord == topRightTileCoord) topRightTile = childPathTile;
+					else if (childPathTileCoord == rightTileCoord) rightTile = childPathTile;
+					else if (childPathTileCoord == bottomRightTileCoord) bottomRightTile = childPathTile;
+					else if (childPathTileCoord == bottomTileCoord) bottomTile = childPathTile;
+					else if (childPathTileCoord == bottomLeftTileCoord) bottomLeftTile = childPathTile;
+					else if (childPathTileCoord == leftTileCoord) leftTile = childPathTile;
+					else if (childPathTileCoord == topLeftTileCoord) topLeftTile = childPathTile;
+				}
+
+				if (topTile) neighbouringTiles.Add(topTile);
+				if (topRightTile) neighbouringTiles.Add(topRightTile);
+				if (rightTile) neighbouringTiles.Add(rightTile);
+				if (bottomRightTile) neighbouringTiles.Add(bottomRightTile);
+				if (bottomTile) neighbouringTiles.Add(bottomTile);
+				if (bottomLeftTile) neighbouringTiles.Add(bottomLeftTile);
+				if (leftTile) neighbouringTiles.Add(leftTile);
+				if (topLeftTile) neighbouringTiles.Add(topLeftTile);
+
+				if (neighbouringTiles.Count == 8)
+				{
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.white;
+					spriteRenderer.sortingOrder = 0;
+				}
+				else if (neighbouringTiles.Count == 4)
+				{
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.grey;
+					spriteRenderer.sortingOrder = 10;
+				}
+
+			}
+		}
+
+		executionTime.Stop();
+		diagnosticTimes.Add($"Configuring pathways took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
+
+		yield return new WaitForEndOfFrame();
 	}
 
 	/// <summary>
