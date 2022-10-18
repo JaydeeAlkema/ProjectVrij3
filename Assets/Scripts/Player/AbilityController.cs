@@ -55,6 +55,7 @@ public class AbilityController : MonoBehaviour
     {
         foreach( KeyValuePair<StatusEffectType, bool> effect in melee.AbilityUpgrades )
         {
+            Debug.Log( "effect in effects is: " + effect );
             if( effect.Value )
             {
                 switch( effect.Key )
@@ -65,12 +66,15 @@ public class AbilityController : MonoBehaviour
                         IAbility burn = new BurningMeleeDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats );
                         burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
                         burn.AbilityBehavior();
+                        Debug.Log( "should be burning" );
                         break;
                     case StatusEffectType.Stun:
                         break;
                     case StatusEffectType.Slow:
+                        IAbility slow = new SlowDecorator( currentMeleeAttack );
                         break;
                     case StatusEffectType.Marked:
+                        IAbility mark = new MarkDecorator( currentMeleeAttack );
                         break;
                     default:
                         break;
@@ -102,8 +106,10 @@ public class AbilityController : MonoBehaviour
                     case StatusEffectType.Stun:
                         break;
                     case StatusEffectType.Slow:
+                        IAbility slow = new SlowDecorator( currentRangedAttack );
                         break;
                     case StatusEffectType.Marked:
+                        IAbility mark = new MarkDecorator( currentRangedAttack );
                         break;
                     default:
                         break;

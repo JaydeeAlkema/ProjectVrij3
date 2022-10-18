@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class HubSceneManager : MonoBehaviour
 {
     public static HubSceneManager sceneManagerInstance { get; private set; }
+	private string loadScene;
 
 	private void Awake()
 	{
@@ -22,10 +23,16 @@ public class HubSceneManager : MonoBehaviour
 
 	public void ChangeScene(string sceneToLoad, string currentScene)
 	{
+		loadScene = sceneToLoad;
 		SceneManager.UnloadSceneAsync( currentScene );
-		SceneManager.LoadSceneAsync( sceneToLoad , LoadSceneMode.Additive);
+		SceneManager.LoadSceneAsync( sceneToLoad, LoadSceneMode.Additive ).completed += HubSceneManager_completed;
 		//SceneManager.LoadSceneAsync( "Scene Manager" );
 		//SceneManager.LoadSceneAsync("UITest");
+	}
+
+	private void HubSceneManager_completed( AsyncOperation obj )
+	{
+		SceneManager.SetActiveScene( SceneManager.GetSceneByName( loadScene ) );
 	}
 
 	public void StartFirstScenes()
