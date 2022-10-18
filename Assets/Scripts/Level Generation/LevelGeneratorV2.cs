@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 public enum RoomType
@@ -34,11 +35,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private Transform chunksParent = default;
 	[SerializeField] private Transform roomsParent = default;
 	[SerializeField] private Transform pathwaysParent = default;
+	[SerializeField] private Transform decorationsParent = default;
+	[Space(10)]
 
 	[Header("Debugging")]
 	[SerializeField] private bool showGizmos = false;
 	[SerializeField] private List<string> diagnosticTimes = new List<string>();
 	[SerializeField] private long totalGenerationTimeInMilliseconds = 0;
+
+	[Header("Spawnable Prefabs")]
+	[SerializeField] private GameObject bossFightPortal = default;
 
 	List<GameObject> pathwayParents = new List<GameObject>();
 
@@ -61,6 +67,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
 		yield return StartCoroutine(GeneratePathwaysBetweenEmptyRooms());
+		yield return StartCoroutine(DecorateLevel());
 
 		foreach (string diagnosticTime in diagnosticTimes)
 		{
@@ -362,6 +369,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 	}
 
+	/// <summary>
+	/// Handles the placement of all pathway tiles as soon as a path has been found between two rooms.
+	/// </summary>
+	/// <param name="p"> Reference to the path. </param>
 	private void OnPathComplete(Path p)
 	{
 		//Debug.Log("Yay, we got a path back. Did it have an error? " + p.error);
@@ -412,6 +423,30 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		diagnosticTimes.Add($"Pathfinder took: {p.duration}ms");
 		totalGenerationTimeInMilliseconds += (long)p.duration;
+	}
+
+	/// <summary>
+	/// A final pass for the level generator. This handles decorating everything the needs decorating.
+	/// </summary>
+	/// <returns></returns>
+	private IEnumerator DecorateLevel()
+	{
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
+
+		// Spawn a portal in the boss room.
+		Vector3 finalRoom = rooms[rooms.Count - 1].transform.position;
+		Vector2Int portalSpawnPoint = new Vector2Int(Mathf.RoundToInt(finalRoom.x), Mathf.RoundToInt(finalRoom.y));
+		GameObject portalGO = Instantiate(bossFightPortal, new Vector2(portalSpawnPoint.x, portalSpawnPoint.y), Quaternion.identity, decorationsParent);
+		Portal portal = portalGO.GetComponent<Portal>();
+		portal.SceneToLoadName = "Boss Testing";
+		portal.CurrentSceneName = SceneManager.GetActiveScene().name;
+
+		executionTime.Stop();
+		diagnosticTimes.Add($"Decorating the level took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
+
+		yield return new WaitForEndOfFrame();
 	}
 
 	#region Helpers
