@@ -35,6 +35,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public bool Attacking { get => attacking; set => attacking = value; }
 	public Rigidbody2D Rb2d { get => rb2d; set => rb2d = value; }
 	public Transform Target { get => target; set => target = value; }
+	public float HealthPoints { get => healthPoints; set => healthPoints = value; }
 
 	public void Awake()
 	{
@@ -87,7 +88,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (healthPoints <= 0) Die();
 	}
 
-	public void TakeDamage(float damage, int damageType)
+	public virtual void TakeDamage(float damage, int damageType)
 	{
 		if (damageType == 0 && meleeTarget)
 		{
