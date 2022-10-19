@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4442677197823009443}
   - component: {fileID: 4442677197823009441}
+  - component: {fileID: 8395027121329697671}
   - component: {fileID: 4468130794609170519}
   - component: {fileID: 1409221283}
   - component: {fileID: 7187582512883066473}
@@ -60,8 +61,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &4468130794609170519
-CapsuleCollider2D:
+--- !u!58 &8395027121329697671
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -74,7 +75,23 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 2.5, y: 0.97240627}
+  serializedVersion: 2
+  m_Radius: 0.3
+--- !u!70 &4468130794609170519
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4442677197823009440}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.5, y: 0.6}
   m_Direction: 1
 --- !u!114 &1409221283
 MonoBehaviour:
@@ -237,7 +254,7 @@ Transform:
   m_GameObject: {fileID: 8879844763961028847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.13768534, y: 0.13768534, z: 0.13768534}
+  m_LocalScale: {x: 0.089006685, y: 0.089006685, z: 0.089006685}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4442677197823009443}
