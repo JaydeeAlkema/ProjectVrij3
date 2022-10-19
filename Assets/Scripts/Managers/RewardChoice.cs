@@ -45,7 +45,7 @@ public class RewardChoice : MonoBehaviour
         {
             if( tier3Upgrades.Length > 0 )
             {
-                upgradeToGive = tier3Upgrades[Random.Range( 0, tier3Upgrades.Length - 1 )];
+                upgradeToGive = tier3Upgrades[Random.Range( 0, tier3Upgrades.Length )];
                 Debug.Log( upgradeToGive.name );
             }
         }
@@ -53,7 +53,7 @@ public class RewardChoice : MonoBehaviour
         {
             if( tier2Upgrades.Length > 0 )
             {
-                upgradeToGive = tier2Upgrades[Random.Range( 0, tier2Upgrades.Length - 1 )];
+                upgradeToGive = tier2Upgrades[Random.Range( 0, tier2Upgrades.Length )];
                 Debug.Log( upgradeToGive.name );
             }
         }
@@ -61,7 +61,7 @@ public class RewardChoice : MonoBehaviour
         {
             if( tier1Upgrades.Length > 0 )
             {
-                upgradeToGive = tier1Upgrades[Random.Range( 0, tier1Upgrades.Length - 1 )];
+                upgradeToGive = tier1Upgrades[Random.Range( 0, tier1Upgrades.Length )];
                 Debug.Log( upgradeToGive.name );
             }
         }
@@ -70,7 +70,10 @@ public class RewardChoice : MonoBehaviour
 	public void ChooseAbility()
     {
         // give AbilityScriptable
-        FindObjectOfType<PlayerControler>().Ability1 = abilityToGive;
+        player.Ability1 = abilityToGive;
+        IAbility giveAbility = abilityToGive.Ability;
+        player.CurrentAbility1 = giveAbility;
+        player.initAbilities();
         Destroy( this.gameObject );
     }
 
@@ -82,6 +85,7 @@ public class RewardChoice : MonoBehaviour
         player.CurrentMeleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
         player.CurrentMeleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
         player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+        Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
         Destroy( this.gameObject );
 	}
 
@@ -93,6 +97,7 @@ public class RewardChoice : MonoBehaviour
         player.CurrentRangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
         player.CurrentRangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
         player.CurrentRangedAttack.AbilityUpgrades.Add(upgradeToGive.StatusEffect, true);
+        Debug.Log( "added " + upgradeToGive.name + " to player as ranged" );
         Destroy( this.gameObject );
     }
 }

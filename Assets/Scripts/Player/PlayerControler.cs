@@ -81,13 +81,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		dashTrail.emitting = false;
 		//currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, meleeAttack.CoolDown );
 		currentMeleeAttack.BaseStats = meleeAttack;
-		abilityController.CurrentMeleeAttack = currentMeleeAttack;
 		currentRangedAttack.BaseStats = rangedAttack;
-		abilityController.CurrentRangedAttack = currentRangedAttack;
-		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
-		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
-		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
-		abilityController.SetAttacks();
+		initAbilities();
 
 		currentHealthPoints = maxHealthPoints;
 		if (healthBar != null)
@@ -101,6 +96,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			deathScreenTest.gameObject.SetActive(false);
 		}
 
+	}
+
+	public void initAbilities()
+	{
+		abilityController.CurrentMeleeAttack = currentMeleeAttack;
+		abilityController.CurrentRangedAttack = currentRangedAttack;
+		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
+		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
+		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
+		abilityController.SetAttacks();
 	}
 
 	// Update is called once per frame
@@ -201,7 +206,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void AbilityOneAttack()
 	{
 		//ability1.Ability.SetPlayerValues(ability1);
-		ability1.Ability.AbilityBehavior();
+		//ability1.Ability.AbilityBehavior();
+		Debug.Log( abilityController.CurrentAbility1 );
+		abilityController.CurrentAbility1.BaseStats = ability1;
+		abilityController.CurrentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+		abilityController.AbilityOneAttacked( currentAbility1 ).CallAbility( this );
 	}
 
 	void AbilityTwoAttack()
@@ -232,6 +241,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (ability1 != null)
 		{
+			ability1.Start();
+			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 			//ability1.Rb2d = rb2d;
 			//ability1.CastFromPoint = castFromPoint;
 			//ability1.MousePos = mousePos;

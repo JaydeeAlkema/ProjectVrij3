@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class LineUpAbility : Ability
 {
+	private bool init = true;
+	public void CallAbility(PlayerControler _playerControler)
+	{
+		if( init )
+		{
+			SetAbilityStats();
+			init = false;
+		}
+	}
+	
 	public override void AbilityBehavior()
 	{
 		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( Rb2d.transform.position + CastFromPoint.transform.up * 3, boxSize, Angle, layerMask );
@@ -21,13 +31,12 @@ public class LineUpAbility : Ability
 		}
 	}
 
-	public void SetAbilityStats(Rigidbody2D AbilityRB2D, Transform CastFromPoint, Vector2 BoxSize, Vector2 LookDir, float Angle, LayerMask layer)
+	public void SetAbilityStats()
 	{
-		Rb2d = AbilityRB2D;
-		CastFromPoint = CastFromPoint;
-		boxSize = BoxSize;
-		Angle = Angle;
-		layerMask = layer;
-		LookDir = LookDir;
+		boxSize = BaseStats.BoxSize;
+		layerMask = BaseStats.Layer;
+		damage = BaseStats.Damage;
+		distance = BaseStats.Distance;
+		coolDown = BaseStats.CoolDown;
 	}
 }

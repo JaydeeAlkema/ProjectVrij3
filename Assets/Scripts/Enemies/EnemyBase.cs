@@ -55,6 +55,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			}
 		}
 
+		if( aiPath != null )
+		{
+			aiPath.maxSpeed = speed;
+		}
+
 		if (healthPoints <= 0) { Die(); }
 
 		if (beingCrowdControlled)
