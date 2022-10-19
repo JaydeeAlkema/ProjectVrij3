@@ -206,15 +206,55 @@ MonoBehaviour:
   spawnableRooms:
   - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
   - {fileID: 11400000, guid: 14383afd7cabf874b95581c1b59291b5, type: 2}
-  - {fileID: 11400000, guid: 8261924b6bb16ab4eb9d3fc5fa694a9e, type: 2}
-  - {fileID: 11400000, guid: 3df7e0f1a45ff4b4e9dd403b35c775de, type: 2}
-  - {fileID: 11400000, guid: 002c1019b13591f4fb64140219944294, type: 2}
-  - {fileID: 11400000, guid: 46c550f53f66761479c7bb4a9f444d66, type: 2}
-  - {fileID: 11400000, guid: 4f1990784a94f41458352e027d22265d, type: 2}
-  pathGroundTileSprites:
-  - {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  pathWallTileSprites:
-  - {fileID: 21300000, guid: d6ccebcb9a2a9594f980bda944759e09, type: 3}
+  floorSprites:
+  - {fileID: -1994589904, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -146117464, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1984020428, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1010394929, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -434650341, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -467640460, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 2084124841, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -727964843, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1320179203, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 157804456, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1692008770, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -379608226, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topWallSprites:
+  - {fileID: 1515833362, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1029127999, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 684171043, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1691871387, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomWallSprites:
+  - {fileID: -1869997835, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 340844279, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1974086491, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -2022398927, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  leftWallSprites:
+  - {fileID: 1172881229, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 985038510, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 57958679, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -202535545, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  rightWallSprites:
+  - {fileID: -1355762240, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1617129924, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1397102630, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 341539676, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topLeftOuterCornerSprites:
+  - {fileID: 1295239396, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topRightOuterCornerSprites:
+  - {fileID: 1295239396, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomLeftOuterCornerSprites:
+  - {fileID: -1067463408, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomRightOuterCornerSprites:
+  - {fileID: -1067463408, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topLeftInnerCornerSprites:
+  - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topRightInnerCornerSprites:
+  - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomLeftInnerCornerSprites:
+  - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomRightInnerCornerSprites:
+  - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   chunks: []
   path: []
   rooms: []
@@ -437,6 +477,30 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1726747652}
     m_Modifications:
+    - target: {fileID: 4729987390537786978, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.027450982
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729987390537786978, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.007843138
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729987390537786978, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.050980397
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729987390537786980, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
+      propertyPath: m_StopNaN
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729987390537786980, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
+      propertyPath: m_Antialiasing
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729987390537786980, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4729987391402745377, guid: 228a140a35ea76d4bae99279d2522892, type: 3}
       propertyPath: m_Name
       value: player
