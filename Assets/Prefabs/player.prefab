@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 3654675852546308300}
   - component: {fileID: 5849170758635047400}
   - component: {fileID: 1544735143011069060}
-  - component: {fileID: 6235134389311391101}
+  - component: {fileID: 1217624759}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -274,7 +274,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!96 &6235134389311391101
+--- !u!96 &1217624759
 TrailRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -437,7 +437,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.4
+  orthographic size: 5.6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -507,6 +507,7 @@ GameObject:
   - component: {fileID: 4729987391402745383}
   - component: {fileID: 4729987391402745382}
   - component: {fileID: 4729987391402745380}
+  - component: {fileID: 3422167265633473836}
   m_Layer: 8
   m_Name: player
   m_TagString: Untagged
@@ -598,7 +599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c003286158a798540a99b27669b79865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 9
+  moveSpeed: 8
   vel: 0
   lookDir: {x: 0, y: 0}
   castFromPoint: {fileID: 316848616}
@@ -610,12 +611,28 @@ MonoBehaviour:
   AttackAnimation: {fileID: 2562181291164557956}
   animAttack: {fileID: 3861236493606765911}
   animPlayer: {fileID: 1544735143011069060}
+  healthBar: {fileID: 0}
+  deathScreenTest: {fileID: 0}
   dashSpeed: 25
   dashDuration: 0.1
-  dashTrail: {fileID: 6235134389311391101}
-  healthPoints: 500
+  dashTrail: {fileID: 1217624759}
+  maxHealthPoints: 500
+  currentHealthPoints: 0
+  abilityController: {fileID: 3422167265633473836}
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
   ability1: {fileID: 0}
   ability2: {fileID: 0}
   ability3: {fileID: 0}
+--- !u!114 &3422167265633473836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4729987391402745377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d1e7e19fdf527b43979dd376badd273, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
