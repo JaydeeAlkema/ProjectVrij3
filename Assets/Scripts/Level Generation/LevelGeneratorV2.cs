@@ -24,8 +24,20 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private int pathDepth = 2; // How far from the center the path will generate extra path tiles. So a depth of 2 results in a path that is 5 wide in total. Example: (## # ##)
 	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
-	[SerializeField] private List<Sprite> pathGroundTileSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> pathWallTileSprites = new List<Sprite>();
+	[Space]
+	[SerializeField] private List<Sprite> floorSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> topWallSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> bottomWallSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> leftWallSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> rightWallSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> topLeftOuterCornerSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> topRightOuterCornerSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> bottomLeftOuterCornerSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> bottomRightOuterCornerSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> topLeftInnerCornerSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> topRightInnerCornerSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> bottomLeftInnerCornerSprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> bottomRightInnerCornerSprites = new List<Sprite>();
 	[Space]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
@@ -506,37 +518,35 @@ public class LevelGeneratorV2 : MonoBehaviour
 				if (leftTile) neighbouringTiles.Add(leftTile);
 				if (topLeftTile) neighbouringTiles.Add(topLeftTile);
 
-				// Set sprites according to neighbours
-				spriteRenderer.sprite = pathGroundTileSprites[0];
+				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
+				{
+					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
+				}
 
 				#region Cardinal Walls
 				// Top Wall
-				if (!topTile && rightTile && bottomTile && leftTile)
+				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.blue;
+					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
 				}
 				// Bottom Wall
-				else if (topTile && rightTile && !bottomTile && leftTile)
+				else if (!bottomTile && leftTile && topTile && rightTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.blue;
+					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
 				}
 				// Left Wall
-				else if (topTile && rightTile && bottomTile && !leftTile)
+				else if (!leftTile && !topLeftTile && !topTile && !topRightTile && rightTile && bottomRightTile && bottomTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.red;
+					spriteRenderer.sprite = leftWallSprites[Random.Range(0, leftWallSprites.Count)];
 				}
 				// Right Wall
-				else if (topTile && !rightTile && bottomTile && leftTile)
+				else if (!topLeftTile && !topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.red;
+					spriteRenderer.sprite = rightWallSprites[Random.Range(0, rightWallSprites.Count)];
 				}
 				#endregion
 				#region Outer Corners
@@ -544,29 +554,26 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (!leftTile && !topLeftTile && !topTile && rightTile && bottomRightTile && bottomTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.magenta;
+					spriteRenderer.sprite = topLeftOuterCornerSprites[Random.Range(0, topLeftOuterCornerSprites.Count)];
+					spriteRenderer.flipY = true;
 				}
 				// Top Right Outer Corner
 				else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.magenta;
+					spriteRenderer.sprite = topRightOuterCornerSprites[Random.Range(0, topRightOuterCornerSprites.Count)];
 				}
 				// Bottom Right Outer Corner
 				else if (!rightTile && !bottomRightTile && !bottomTile && leftTile && topLeftTile && topTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.magenta;
+					spriteRenderer.sprite = bottomRightOuterCornerSprites[Random.Range(0, bottomRightOuterCornerSprites.Count)];
 				}
 				// Bottom Left Outer Corner
 				else if (!bottomTile && !bottomLeftTile && !leftTile && topTile && topRightTile && rightTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.magenta;
+					spriteRenderer.sprite = bottomLeftOuterCornerSprites[Random.Range(0, bottomLeftOuterCornerSprites.Count)];
 				}
 				#endregion
 				#region Inner Corners
@@ -574,29 +581,25 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (!topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.green;
+					spriteRenderer.sprite = topLeftInnerCornerSprites[Random.Range(0, topLeftInnerCornerSprites.Count)];
 				}
 				// Top Right Inner Corner
 				else if (!topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topLeftTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.green;
+					spriteRenderer.sprite = topRightInnerCornerSprites[Random.Range(0, topRightInnerCornerSprites.Count)];
 				}
 				// Bottom Right Inner Corner
 				else if (!bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.green;
+					spriteRenderer.sprite = bottomRightInnerCornerSprites[Random.Range(0, bottomRightInnerCornerSprites.Count)];
 				}
 				// Bottom Left Inner Corner
 				else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
-					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.green;
+					spriteRenderer.sprite = bottomLeftInnerCornerSprites[Random.Range(0, bottomLeftInnerCornerSprites.Count)];
 				}
 				#endregion
 
