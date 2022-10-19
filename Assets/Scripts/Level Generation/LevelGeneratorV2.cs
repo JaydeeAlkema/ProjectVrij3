@@ -388,6 +388,17 @@ public class LevelGeneratorV2 : MonoBehaviour
 		pathPointParentGO.transform.position = pathPointParentCenter;
 		pathPointParentGO.transform.parent = pathwaysParent;
 
+		pathwayParents.Add(pathPointParentGO);
+
+		Room roomA = rooms[pathwayParents.Count - 1];
+		Room roomB = rooms[pathwayParents.Count];
+
+		List<Vector2Int> occupiedTiles = new List<Vector2Int>();
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomA.CollideableTiles));
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomA.NoncollideableTiles));
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomB.CollideableTiles));
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomB.NoncollideableTiles));
+
 		List<Vector2Int> pathPoints = new List<Vector2Int>();
 
 		// Instantiate all the initial tiles. These tiles will have not been configurated yet, this will need to be done is a separate pass.
@@ -396,25 +407,21 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Vector2Int pathCoordInt = new Vector2Int(Mathf.RoundToInt(pathCoord.x), Mathf.RoundToInt(pathCoord.y));
 			pathPoints.Add(pathCoordInt);
 
-			GameObject pathPointGO = new GameObject($"PathPoint[{pathCoordInt.x}][{pathCoordInt.y}]");
-			pathPointGO.transform.position = new Vector3(pathCoordInt.x, pathCoordInt.y, 0);
-			pathPointGO.transform.parent = pathPointParentGO.transform;
+			//GameObject pathPointGO = new GameObject($"PathPoint[{pathCoordInt.x}][{pathCoordInt.y}]");
+			//pathPointGO.transform.position = new Vector3(pathCoordInt.x, pathCoordInt.y, 0);
+			//pathPointGO.transform.parent = pathPointParentGO.transform;
 
 			for (int x = -pathDepth; x < pathDepth + 1; x++)
 			{
 				for (int y = -pathDepth; y < pathDepth + 1; y++)
 				{
-					// Do not check for center tile. we know this one exists already.
-					if (x != 0 && y != 0)
+					Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
+					if (pathPoints.Contains(newCoord) == false && occupiedTiles.Contains(newCoord) == false)
 					{
-						Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
-						if (pathPoints.Contains(newCoord) == false)
-						{
-							GameObject newPathPointGO = new GameObject($"PathPoint[{newCoord.x}][{newCoord.y}]");
-							newPathPointGO.transform.position = new Vector3(newCoord.x, newCoord.y, 0);
-							newPathPointGO.transform.parent = pathPointParentGO.transform;
-							pathPoints.Add(newCoord);
-						}
+						GameObject newPathPointGO = new GameObject($"PathPoint[{newCoord.x}][{newCoord.y}]");
+						newPathPointGO.transform.position = new Vector3(newCoord.x, newCoord.y, 0);
+						newPathPointGO.transform.parent = pathPointParentGO.transform;
+						pathPoints.Add(newCoord);
 					}
 				}
 			}
@@ -433,10 +440,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
-		foreach (Transform pathParents in pathwaysParent)
+		//foreach (Transform pathParents in pathwaysParent)
+		for (int i = 0; i < pathwayParents.Count; i++)
 		{
+			Transform pathParents = pathwayParents[i].transform;
 			List<Transform> childPathTiles = new List<Transform>();
 			childPathTiles.AddRange(pathParents.GetComponentsInChildren<Transform>());
+
+			Room roomA = rooms[i];
+			Room roomB = rooms[i + 1];
+
 			foreach (Transform pathTile in childPathTiles)
 			{
 				SpriteRenderer spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
@@ -461,9 +474,18 @@ public class LevelGeneratorV2 : MonoBehaviour
 				GameObject leftTile = null;
 				GameObject topLeftTile = null;
 
-				for (int t = 0; t < childPathTiles.Count; t++)
+				List<Transform> occupiedTiles = new List<Transform>();
+				occupiedTiles.AddRange(childPathTiles);
+				occupiedTiles.AddRange(roomA.CollideableTiles);
+				//occupiedTiles.AddRange(roomA.NoncollideableTiles);
+				occupiedTiles.AddRange(roomB.CollideableTiles);
+				//occupiedTiles.AddRange(roomB.NoncollideableTiles);
+				occupiedTiles.AddRange(pathParents.GetComponentsInChildren<Transform>());
+				if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
+
+				for (int t = 0; t < occupiedTiles.Count; t++)
 				{
-					GameObject childPathTile = childPathTiles[t].gameObject;
+					GameObject childPathTile = occupiedTiles[t].gameObject;
 					Vector2Int childPathTileCoord = new Vector2Int(Mathf.RoundToInt(childPathTile.transform.position.x), Mathf.RoundToInt(childPathTile.transform.position.y));
 					if (childPathTileCoord == topTileCoord) topTile = childPathTile;
 					else if (childPathTileCoord == topRightTileCoord) topRightTile = childPathTile;
@@ -484,18 +506,69 @@ public class LevelGeneratorV2 : MonoBehaviour
 				if (leftTile) neighbouringTiles.Add(leftTile);
 				if (topLeftTile) neighbouringTiles.Add(topLeftTile);
 
-				if (neighbouringTiles.Count == 8)
+				// Set sprites according to neighbours
+				spriteRenderer.sprite = pathGroundTileSprites[0];
+
+				#region Cardinal Walls
+				// Top Wall
+				if (!topTile && rightTile && bottomTile && leftTile)
 				{
+					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.white;
-					spriteRenderer.sortingOrder = 0;
+					spriteRenderer.color = Color.blue;
 				}
-				else if (neighbouringTiles.Count == 4)
+				// Bottom Wall
+				else if (topTile && rightTile && !bottomTile && leftTile)
 				{
+					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = pathGroundTileSprites[0];
-					spriteRenderer.color = Color.grey;
-					spriteRenderer.sortingOrder = 10;
+					spriteRenderer.color = Color.blue;
 				}
+				// Left Wall
+				else if (topTile && rightTile && bottomTile && !leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.red;
+				}
+				// Right Wall
+				else if (topTile && !rightTile && bottomTile && leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.red;
+				}
+				#endregion
+				#region Outer Corners
+				// Top Left Outer Corner
+				else if (!topTile && rightTile && bottomTile && !leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.magenta;
+				}
+				// Top Right Outer Corner
+				else if (!topTile && !rightTile && bottomTile && leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.magenta;
+				}
+				// Bottom Right Outer Corner
+				else if (topTile && !rightTile && !bottomTile && leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.magenta;
+				}
+				// Bottom Left Outer Corner
+				else if (topTile && rightTile && !bottomTile && !leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.magenta;
+				}
+				#endregion
 
 			}
 		}
@@ -573,6 +646,22 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 		}
 		return null;
+	}
+
+	/// <summary>
+	/// Returns a list of Vecttor2Int from Transforms.
+	/// </summary>
+	/// <param name="transforms"> List of Transforms to get positions from and turn into Vector2Ints. </param>
+	/// <returns> List<Vector2Int> </returns>
+	private List<Vector2Int> TransformListToVector2IntList(List<Transform> transforms)
+	{
+		List<Vector2Int> coords = new List<Vector2Int>();
+		foreach (Transform transform in transforms)
+		{
+			Vector2Int coord = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+			coords.Add(coord);
+		}
+		return coords;
 	}
 	#endregion
 
