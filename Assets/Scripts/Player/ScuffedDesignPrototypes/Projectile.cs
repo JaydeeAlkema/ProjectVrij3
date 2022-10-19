@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+	[SerializeField] private IAbility castedFrom;
+	public IAbility CastedFrom { get => castedFrom; set => castedFrom = value; }
 	[SerializeField] private GameObject projectileAnimation;
 	private float counter = 0f;
 	[SerializeField] private float lifeSpan;
@@ -52,7 +54,8 @@ public class Projectile : MonoBehaviour
 			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, 1);
 			if (collision.gameObject.GetComponent<IDamageable>() != null)
 			{
-				GetComponent<OnHitStatusEffectApply>().OnHitApplyStatusEffects(collision.gameObject.GetComponent<IDamageable>());
+				//GetComponent<OnHitStatusEffectApply>().OnHitApplyStatusEffects(collision.gameObject.GetComponent<IDamageable>());
+				castedFrom.OnHitApplyStatusEffects( collision.gameObject.GetComponent<IDamageable>());
 			}
 			Destroy(this.gameObject);
 		}

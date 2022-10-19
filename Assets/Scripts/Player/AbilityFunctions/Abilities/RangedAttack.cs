@@ -23,6 +23,7 @@ public class RangedAttack : Ability
 		proj.Damage = damage;
 		proj.LifeSpan = lifeSpan;
 		proj.Force = force;
+		proj.CastedFrom = this;
 		CastedObject.transform.SetParent( null );
 	}
 

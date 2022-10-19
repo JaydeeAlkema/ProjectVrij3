@@ -94,17 +94,20 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void TakeDamage(float damage, int damageType)
 	{
+		float damageToTake = damage;
 		if (damageType == 0 && meleeTarget)
 		{
 			healthPoints -= damage;
 			meleeTarget = false;
+			damageToTake *= 2;
 		}
 		if (damageType == 1 && castTarget)
 		{
 			healthPoints -= damage;
 			castTarget = false;
+			damageToTake *= 2;
 		}
-		DamagePopup(damage);
+		DamagePopup(damageToTake);
 		healthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
