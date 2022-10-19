@@ -6,6 +6,8 @@ public class FodderEnemy : EnemyBase
 {
 	private int playerLayer = 1 << 8;
 
+	[SerializeField] public Animator fodderAnimator;
+
 	[SerializeField] private float damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
@@ -57,6 +59,30 @@ public class FodderEnemy : EnemyBase
 	//	}
 	//}
 
+	public override void TakeDamage(float damage, int damageType)
+	{
+		if (damageType == 0 && meleeTarget)
+		{
+			HealthPoints -= damage;
+			meleeTarget = false;
+		}
+		if (damageType == 1 && castTarget)
+		{
+			HealthPoints -= damage;
+			castTarget = false;
+		}
+		DamagePopup(damage);
+		HealthPoints -= damage;
+		StartCoroutine(FlashColor());
+		if (HealthPoints <= 0) Die();
+	}
+
+	public override void MoveToTarget(Transform target)
+	{
+		base.MoveToTarget(target);
+		fodderAnimator.Play("Fodder1Walk");
+	}
+
 	public override void GetSlowed(float slowAmount)
 	{
 		if (baseSpeed == Speed)
@@ -77,9 +103,9 @@ public class FodderEnemy : EnemyBase
 
 	public override IEnumerator FlashColor()
 	{
-		//Material change here
-		yield return new WaitForSeconds(0.08f);
-
+		enemySprite.material = MaterialHit;
+		yield return new WaitForSeconds(0.09f);
+		enemySprite.material = MaterialDefault;
 	}
 
 	public IEnumerator DashAttack(Transform target)

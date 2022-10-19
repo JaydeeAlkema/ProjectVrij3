@@ -113,6 +113,8 @@ MonoBehaviour:
   rb2d: {fileID: 4442677197823009441}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
+  materialDefault: {fileID: 0}
+  materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   destinationSetter: {fileID: 5571211868668841190}
   aiPath: {fileID: 1453729541019105252}
   beingCrowdControlled: 0
@@ -121,6 +123,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 0
+  fodderAnimator: {fileID: 6017575560788466592}
   damage: 25
   player: {fileID: 0}
   windUpTime: 0.2
