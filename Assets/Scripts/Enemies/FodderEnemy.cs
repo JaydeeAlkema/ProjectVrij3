@@ -15,9 +15,12 @@ public class FodderEnemy : EnemyBase
 	[SerializeField] private float dashDuration = 0.4f;
 	[SerializeField] private float endLag = 0.8f;
 	public bool hasHitbox = false;
+	public CapsuleCollider2D hurtbox;
+
 	void Awake()
 	{
 		player = FindObjectOfType<PlayerControler>().gameObject;
+		hurtbox = this.GetComponent<CapsuleCollider2D>();
 
 		baseSpeed = Speed;
 	}
@@ -28,11 +31,12 @@ public class FodderEnemy : EnemyBase
 		//Vector3 targetDir = player.transform.position - this.rb2d.transform.position;
 		//rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
 		HitBox();
+		LookAtTarget();
 	}
 
 	void HitBox()
 	{
-		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, this.GetComponent<CircleCollider2D>().radius, playerLayer);
+		Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayer);
 		if(playerBody != null & hasHitbox)
 		{
 			AttackPlayer(playerBody.gameObject);
@@ -69,6 +73,13 @@ public class FodderEnemy : EnemyBase
 	{
 		//StopCoroutine(FollowPath());
 		StartCoroutine(DashAttack(target));
+	}
+
+	public override IEnumerator FlashColor()
+	{
+		//Material change here
+		yield return new WaitForSeconds(0.08f);
+
 	}
 
 	public IEnumerator DashAttack(Transform target)

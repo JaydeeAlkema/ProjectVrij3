@@ -11,6 +11,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
 	[SerializeField] public Transform damageNumberText;
+	[SerializeField] public SpriteRenderer enemySprite = null;
 
 	private Transform target = null;
 
@@ -128,6 +129,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public virtual void GetSlowed(float slowAmount)
 	{
 
+	}
+
+	public virtual void LookAtTarget()
+	{
+		if(destinationSetter.target != null && enemySprite != null)
+		{
+			enemySprite.flipX = (destinationSetter.target.position - transform.position).normalized.x > 0 ? true : false;
+		}
 	}
 
 	public virtual void StartAttack(Transform target)
