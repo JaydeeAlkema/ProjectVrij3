@@ -12,11 +12,11 @@ public class CameraToMouseFollow : MonoBehaviour
 	void Update()
 	{
 		Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-		Vector3 followPos = (player.position + mousePos) / 2f;
+		Vector3 followDir = mousePos - player.transform.localPosition;
 
-		followPos.x = Mathf.Clamp(followPos.x, -threshold + player.position.x, threshold + player.position.x);
-		followPos.y = Mathf.Clamp(followPos.y, -threshold + player.position.y, threshold + player.position.y);
+		//followPos.x = Mathf.Clamp(followPos.x, -threshold + player.position.x, threshold + player.position.x);
+		//followPos.y = Mathf.Clamp(followPos.y, -threshold + player.position.y, threshold + player.position.y);
 
-		this.transform.position = followPos;
+		this.transform.position = player.localPosition + Vector3.ClampMagnitude(followDir, threshold);
 	}
 }
