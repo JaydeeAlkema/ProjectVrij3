@@ -541,32 +541,62 @@ public class LevelGeneratorV2 : MonoBehaviour
 				#endregion
 				#region Outer Corners
 				// Top Left Outer Corner
-				else if (!topTile && rightTile && bottomTile && !leftTile)
+				else if (!leftTile && !topLeftTile && !topTile && rightTile && bottomRightTile && bottomTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = pathGroundTileSprites[0];
 					spriteRenderer.color = Color.magenta;
 				}
 				// Top Right Outer Corner
-				else if (!topTile && !rightTile && bottomTile && leftTile)
+				else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = pathGroundTileSprites[0];
 					spriteRenderer.color = Color.magenta;
 				}
 				// Bottom Right Outer Corner
-				else if (topTile && !rightTile && !bottomTile && leftTile)
+				else if (!rightTile && !bottomRightTile && !bottomTile && leftTile && topLeftTile && topTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = pathGroundTileSprites[0];
 					spriteRenderer.color = Color.magenta;
 				}
 				// Bottom Left Outer Corner
-				else if (topTile && rightTile && !bottomTile && !leftTile)
+				else if (!bottomTile && !bottomLeftTile && !leftTile && topTile && topRightTile && rightTile)
 				{
 					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = pathGroundTileSprites[0];
 					spriteRenderer.color = Color.magenta;
+				}
+				#endregion
+				#region Inner Corners
+				// Top Left Inner Corner
+				else if (!topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.green;
+				}
+				// Top Right Inner Corner
+				else if (!topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topLeftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.green;
+				}
+				// Bottom Right Inner Corner
+				else if (!bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.green;
+				}
+				// Bottom Left Inner Corner
+				else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = pathGroundTileSprites[0];
+					spriteRenderer.color = Color.green;
 				}
 				#endregion
 
