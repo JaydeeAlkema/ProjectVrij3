@@ -480,7 +480,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				//occupiedTiles.AddRange(roomA.NoncollideableTiles);
 				occupiedTiles.AddRange(roomB.CollideableTiles);
 				//occupiedTiles.AddRange(roomB.NoncollideableTiles);
-				occupiedTiles.AddRange(pathParents.GetComponentsInChildren<Transform>());
+				if (i < pathwayParents.Count - 1) occupiedTiles.AddRange(pathwayParents[i + 1].GetComponentsInChildren<Transform>());
 				if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
 
 				for (int t = 0; t < occupiedTiles.Count; t++)
