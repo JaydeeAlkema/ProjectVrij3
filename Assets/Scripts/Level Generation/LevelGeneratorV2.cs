@@ -66,7 +66,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
 		yield return StartCoroutine(GeneratePathwaysBetweenEmptyRooms());
-		yield return StartCoroutine(ConfigurePathways());
+		yield return StartCoroutine(ConfigurePathways()); // << This needs to be optimized. By far the worst offender when it comes to generation times.
+		yield return StartCoroutine(SpawnEnemies());
 
 		// This should always be called last!
 		yield return StartCoroutine(DecorateLevel());
@@ -213,6 +214,19 @@ public class LevelGeneratorV2 : MonoBehaviour
 		int roomIndex = 0;
 		foreach (Room room in rooms)
 		{
+			if (roomIndex == 0)
+			{
+				room.RoomType = RoomType.Spawn;
+			}
+			else if (roomIndex == rooms.Count)
+			{
+				room.RoomType = RoomType.Boss;
+			}
+			else
+			{
+				room.RoomType = RoomType.Generic;
+			}
+
 			if (roomIndex - 1 >= 0 && path[roomIndex - 1].Room != null) room.AddConnectedRoom(path[roomIndex - 1].Room);
 			if (roomIndex + 1 < path.Count && path[roomIndex + 1].Room != null) room.AddConnectedRoom(path[roomIndex + 1].Room);
 
@@ -618,7 +632,38 @@ public class LevelGeneratorV2 : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator SpawnEnemies()
 	{
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
 
+		foreach (Room room in rooms)
+		{
+			if (room.RoomType != RoomType.Spawn && room.RoomType != RoomType.Boss)
+			{
+				int currentEnemyCount = 0;
+				foreach (EnemyGroup enemyGroup in LGS.EnemyGroups)
+				{
+					// The enemyCountPerRoom variable is a Min Man vector. so the X axis refers to the minimum amount of enemies and the Y to the max amount of enemies
+					while (currentEnemyCount < enemyGroup.enemyCountPerRoom.y)
+					{
+						// Always spawn atleast the minimum amount of enemies.
+						if (currentEnemyCount <= enemyGroup.enemyCountPerRoom.x)
+						{
+							Transform tileToSpawnEnemyUpon = room.NoncollideableTiles[Random.Range(0, room.NoncollideableTiles.Count)];
+							Vector2Int enemySpawnPoint = new Vector2Int(Mathf.RoundToInt(tileToSpawnEnemyUpon.position.x), Mathf.RoundToInt(tileToSpawnEnemyUpon.position.y));
+
+							GameObject enemyPrefab = enemyGroup.enemyPrefab;
+							GameObject enemyGO = Instantiate(enemyPrefab, new Vector3(enemySpawnPoint.x, enemySpawnPoint.y, 0), Quaternion.identity, room.transform);
+
+						}
+						currentEnemyCount++;
+					}
+				}
+			}
+		}
+
+		executionTime.Stop();
+		diagnosticTimes.Add($"Spawning enemies in rooms took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
 		yield return new WaitForEndOfFrame();
 	}

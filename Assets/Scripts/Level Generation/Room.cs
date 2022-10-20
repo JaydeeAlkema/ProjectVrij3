@@ -18,7 +18,7 @@ public class Room : MonoBehaviour
 	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
 	public List<Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
 	public List<Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }
-
+	public RoomType RoomType { get => roomType; set => roomType = value; }
 
 	[Button]
 	private void FetchAllTiles()

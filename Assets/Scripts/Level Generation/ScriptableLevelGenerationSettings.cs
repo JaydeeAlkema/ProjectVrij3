@@ -26,6 +26,13 @@ public class ScriptableLevelGenerationSettings : ScriptableObject
 	[Foldout("Sprites")] public List<Sprite> bottomLeftInnerCornerSprites = new List<Sprite>();
 	[Foldout("Sprites")] public List<Sprite> bottomRightInnerCornerSprites = new List<Sprite>();
 
-	[Foldout("Enemy References")] public List<GameObject> fodderEnemies = new List<GameObject>();
-	[Foldout("Enemy References")] public List<GameObject> rewardEnemies = new List<GameObject>();
+	[Foldout("Enemy Generation")] public List<EnemyGroup> EnemyGroups = new List<EnemyGroup>();
+}
+
+[System.Serializable]
+public struct EnemyGroup
+{
+	public GameObject enemyPrefab;
+	public Vector2Int enemyCountPerRoom;
+	public int spawnChance;
 }

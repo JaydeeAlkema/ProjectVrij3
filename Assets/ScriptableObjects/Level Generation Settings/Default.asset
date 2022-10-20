@@ -69,6 +69,7 @@ MonoBehaviour:
   - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   bottomRightInnerCornerSprites:
   - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  fodderEnemies:
-  - {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
-  rewardEnemies: []
+  EnemyGroups:
+  - enemyPrefab: {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
+    enemyCountPerRoom: {x: 5, y: 10}
+    spawnChance: 75
