@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="140">
+	<RootPaths>
+		<ProjectRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\</ProjectRoot>
+		<SourceFilesRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\</SourceFilesRoot>
+		<SoundBanksRoot>C:\Users\maxjo\Documents\Unity Projects\ProjectVrij3\Assets\StreamingAssets\Audio\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles/>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="534561221" Language="SFX" Hash="1189375373">
+			<ObjectPath>\SoundBanks\Default Work Unit\MainSoundbank</ObjectPath>
+			<ShortName>MainSoundbank</ShortName>
+			<Path>MainSoundbank.bnk</Path>
+			<IncludedEvents>
+				<Event Id="2843458411" Name="Plyr_Attack_Cast" ObjectPath="\Events\Player\Player Attack\Plyr_Attack_Cast" DurationType="OneShot" DurationMin="1.31639" DurationMax="1.394667"/>
+			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="1068396648" Language="SFX">
+					<ShortName>Cast.wav</ShortName>
+					<Path>SFX\Cast_10C4C929.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+		</SoundBank>
+		<SoundBank Id="1355168291" Language="SFX" Hash="3218791417">
+			<ObjectPath>Init</ObjectPath>
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+			<IncludedAuxBusses>
+				<AuxBus Id="247451540" Name="CaveBig" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\CaveBig"/>
+				<AuxBus Id="992774748" Name="Graveyard" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\Graveyard"/>
+				<AuxBus Id="3545700988" Name="Reverbs" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs"/>
+			</IncludedAuxBusses>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>
