@@ -210,14 +210,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 
 		// Assign connected rooms for each room.
-		int roomIndex = 1;
+		int roomIndex = 0;
 		foreach (Room room in rooms)
 		{
-			if (roomIndex == 1)
+			if (roomIndex == 0)
 			{
 				room.RoomType = RoomType.Spawn;
 			}
-			else if (roomIndex == rooms.Count)
+			else if (roomIndex == rooms.Count - 1)
 			{
 				room.RoomType = RoomType.Boss;
 			}

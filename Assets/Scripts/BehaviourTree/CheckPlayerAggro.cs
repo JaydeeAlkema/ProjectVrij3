@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 using BehaviourTree;
+using UnityEngine;
 
 public class CheckPlayerAggro : BTNode
 {
@@ -33,12 +30,12 @@ public class CheckPlayerAggro : BTNode
 			}
 
 			state = BTNodeState.FAILURE;
-			Debug.Log("TARGET NOT FOUND (RANGE: " + aggroRange + ")");
+			//Debug.Log("TARGET NOT FOUND (RANGE: " + aggroRange + ")");
 			return state;
 		}
-		
+
 		state = BTNodeState.SUCCESS;
-		Debug.Log("TARGET ACQUIRED");
+		//Debug.Log("TARGET ACQUIRED");
 		return state;
 	}
 
