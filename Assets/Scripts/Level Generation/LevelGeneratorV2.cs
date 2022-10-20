@@ -23,21 +23,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private int maxRooms = 10;
 	[SerializeField] private int pathDepth = 2; // How far from the center the path will generate extra path tiles. So a depth of 2 results in a path that is 5 wide in total. Example: (## # ##)
 	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
-	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
-	[Space]
-	[SerializeField] private List<Sprite> floorSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> topWallSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> bottomWallSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> leftWallSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> rightWallSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> topLeftOuterCornerSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> topRightOuterCornerSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> bottomLeftOuterCornerSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> bottomRightOuterCornerSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> topLeftInnerCornerSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> topRightInnerCornerSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> bottomLeftInnerCornerSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> bottomRightInnerCornerSprites = new List<Sprite>();
+	[SerializeField] ScriptableLevelGenerationSettings levelGenerationSettings = null;
 	[Space]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
@@ -204,7 +190,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		// Spawn the rooms within the chunk borders.
 		foreach (Chunk chunk in path)
 		{
-			ScriptableRoom randRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
+			ScriptableRoom randRoom = levelGenerationSettings.spawnableRooms[Random.Range(0, levelGenerationSettings.spawnableRooms.Count)];
 
 			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity);
 			newRoomGO.name = $"Room [{rooms.Count + 1}]";
@@ -448,6 +434,21 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
+		List<Sprite> floorSprites = levelGenerationSettings.floorSprites;
+		List<Sprite> topWallSprites = levelGenerationSettings.topWallSprites;
+		List<Sprite> bottomWallSprites = levelGenerationSettings.bottomWallSprites;
+		List<Sprite> leftWallSprites = levelGenerationSettings.leftWallSprites;
+		List<Sprite> rightWallSprites = levelGenerationSettings.rightWallSprites;
+		List<Sprite> topLeftOuterCornerSprites = levelGenerationSettings.topLeftOuterCornerSprites;
+		List<Sprite> topRightOuterCornerSprites = levelGenerationSettings.topRightOuterCornerSprites;
+		List<Sprite> bottomRightOuterCornerSprites = levelGenerationSettings.bottomRightOuterCornerSprites;
+		List<Sprite> bottomLeftOuterCornerSprites = levelGenerationSettings.bottomLeftOuterCornerSprites;
+		List<Sprite> topLeftInnerCornerSprites = levelGenerationSettings.topLeftInnerCornerSprites;
+		List<Sprite> topRightInnerCornerSprites = levelGenerationSettings.topRightInnerCornerSprites;
+		List<Sprite> bottomRightInnerCornerSprites = levelGenerationSettings.bottomRightInnerCornerSprites;
+		List<Sprite> bottomLeftInnerCornerSprites = levelGenerationSettings.bottomLeftInnerCornerSprites;
+
+
 		//foreach (Transform pathParents in pathwaysParent)
 		for (int i = 0; i < pathwayParents.Count; i++)
 		{
@@ -560,7 +561,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					spriteRenderer.sprite = topRightOuterCornerSprites[Random.Range(0, topRightOuterCornerSprites.Count)];
-					spriteRenderer.flipX = true;
 					spriteRenderer.flipY = true;
 				}
 				// Bottom Right Outer Corner
@@ -572,7 +572,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (!bottomTile && !bottomLeftTile && !leftTile && topTile && topRightTile && rightTile)
 				{
 					spriteRenderer.sprite = bottomLeftOuterCornerSprites[Random.Range(0, bottomLeftOuterCornerSprites.Count)];
-					spriteRenderer.flipX = true;
 				}
 				#endregion
 				#region Inner Corners
@@ -593,6 +592,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (!bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile)
 				{
 					spriteRenderer.sprite = bottomRightInnerCornerSprites[Random.Range(0, bottomRightInnerCornerSprites.Count)];
+					spriteRenderer.flipX = true;
 				}
 				// Bottom Left Inner Corner
 				else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
