@@ -1,7 +1,9 @@
+using NaughtyAttributes;
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -16,40 +18,44 @@ public enum RoomType
 public class LevelGeneratorV2 : MonoBehaviour
 {
 	[Header("Level Generation Settings")]
-	[SerializeField] private int seed;
-	[SerializeField] private int chunkSize = 35;
-	[SerializeField] private int maxRooms = 10;
-	[SerializeField] private int pathWidth = 3;
-	[SerializeField, Tooltip("The grid size may NEVER be divisible by 2")] private Vector2Int chunkGridSize = new Vector2Int(10, 10);
-	[SerializeField] private List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
-	[SerializeField] private List<Sprite> pathGroundTileSprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> pathWallTileSprites = new List<Sprite>();
+
+	[SerializeField, Expandable] ScriptableLevelGenerationSettings LGS = null;
 	[Space]
+
+	[Header("Runtime References")]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
 	[SerializeField] private List<Room> rooms = new List<Room>();
 	[Space(10)]
 
 	[Header("References")]
-	[SerializeField] private Transform levelAssetsParent = default;
+	[SerializeField] private Transform chunksParent = default;
+	[SerializeField] private Transform roomsParent = default;
+	[SerializeField] private Transform pathwaysParent = default;
+	[SerializeField] private Transform decorationsParent = default;
+	[Space(10)]
 
 	[Header("Debugging")]
 	[SerializeField] private bool showGizmos = false;
 	[SerializeField] private List<string> diagnosticTimes = new List<string>();
 	[SerializeField] private long totalGenerationTimeInMilliseconds = 0;
+	[Space(10)]
 
-	List<Node> pathPoints = new List<Node>();
+	[Header("Spawnable Prefabs")]
+	[SerializeField] private GameObject bossFightPortal = default;
+
+	List<GameObject> pathwayParents = new List<GameObject>();
 
 	public List<Room> Rooms { get => rooms; set => rooms = value; }
 
 	private void Start()
 	{
-		if (seed == 0)
+		if (LGS.seed == 0)
 		{
-			seed = Random.Range(0, int.MaxValue);
+			LGS.seed = Random.Range(0, int.MaxValue);
 		}
 
-		Random.InitState(seed);
+		Random.InitState(LGS.seed);
 
 	}
 
@@ -59,6 +65,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return StartCoroutine(CreatePathThroughChunks());
 		yield return StartCoroutine(CreateEmptyRooms());
 		yield return StartCoroutine(GeneratePathwaysBetweenEmptyRooms());
+		yield return StartCoroutine(ConfigurePathways()); // << This needs to be optimized. By far the worst offender when it comes to generation times.
+		yield return StartCoroutine(SpawnEnemies());
+
+		// This should always be called last!
+		yield return StartCoroutine(DecorateLevel());
 
 		foreach (string diagnosticTime in diagnosticTimes)
 		{
@@ -76,46 +87,40 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
-		if (chunkGridSize.x < 3) chunkGridSize.x = 3;
-		if (chunkGridSize.y < 3) chunkGridSize.y = 3;
+		if (LGS.chunkGridSize.x < 3) LGS.chunkGridSize.x = 3;
+		if (LGS.chunkGridSize.y < 3) LGS.chunkGridSize.y = 3;
 
-		if (chunkGridSize.x > 19) chunkGridSize.x = 19;
-		if (chunkGridSize.y > 19) chunkGridSize.y = 19;
+		if (LGS.chunkGridSize.x > 19) LGS.chunkGridSize.x = 19;
+		if (LGS.chunkGridSize.y > 19) LGS.chunkGridSize.y = 19;
 
 		// The grid size may NEVER be divisible by 2, this will cause an even grid without a center chunk... We must always have a center chunk!
-		if (chunkGridSize.x % 2 == 0) chunkGridSize.x -= 1;
-		if (chunkGridSize.y % 2 == 0) chunkGridSize.y -= 1;
+		if (LGS.chunkGridSize.x % 2 == 0) LGS.chunkGridSize.x -= 1;
+		if (LGS.chunkGridSize.y % 2 == 0) LGS.chunkGridSize.y -= 1;
 
-		for (int x = 0; x < chunkGridSize.x; x++)
+		for (int x = 0; x < LGS.chunkGridSize.x; x++)
 		{
-			for (int y = 0; y < chunkGridSize.y; y++)
+			for (int y = 0; y < LGS.chunkGridSize.y; y++)
 			{
 				GameObject chunkGO = new GameObject($"Chunk [{x}][{y}]");
 				Chunk chunk = chunkGO.AddComponent<Chunk>();
 
-				chunk.Coordinates = new Vector2Int(x * chunkSize, y * chunkSize);
+				chunk.Coordinates = new Vector2Int(x * LGS.chunkSize, y * LGS.chunkSize);
 				chunk.Occupied = false;
 
 				chunk.gameObject.transform.position = new Vector2(chunk.Coordinates.x, chunk.Coordinates.y);
-				chunk.gameObject.transform.parent = levelAssetsParent;
+				chunk.gameObject.transform.parent = chunksParent;
 
 				// Create starting chunk node grid (the +1 comes from the fact that the nodes start on the edges of the chunk, not within the chunk)
-				for (int nx = 0; nx < chunkSize + 1; nx++)
+				for (int nx = 0; nx < LGS.chunkSize + 1; nx++)
 				{
-					for (int ny = 0; ny < chunkSize + 1; ny++)
+					for (int ny = 0; ny < LGS.chunkSize + 1; ny++)
 					{
-						Vector2Int nodeCoordinates = new Vector2Int(Mathf.RoundToInt(chunk.transform.position.x - chunkSize / 2) + nx, Mathf.RoundToInt(chunk.transform.position.y - chunkSize / 2) + ny);
+						Vector2Int nodeCoordinates = new Vector2Int(Mathf.RoundToInt(chunk.transform.position.x - LGS.chunkSize / 2) + nx, Mathf.RoundToInt(chunk.transform.position.y - LGS.chunkSize / 2) + ny);
 
 						GameObject nodeGO = new GameObject($"Node [{nodeCoordinates.x}][{nodeCoordinates.y}]");
-						Node node = nodeGO.AddComponent<Node>();
 
 						nodeGO.transform.position = new Vector2(nodeCoordinates.x, nodeCoordinates.y);
 						nodeGO.transform.parent = chunk.transform;
-
-						node.walkable = true;
-						node.coordinates = new Vector2Int(Mathf.RoundToInt(nodeGO.transform.position.x), Mathf.RoundToInt(nodeGO.transform.position.y));
-
-						chunk.Nodes.Add(node);
 					}
 				}
 
@@ -163,7 +168,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				break;
 			}
 
-			if (path.Count >= maxRooms) break;
+			if (path.Count >= LGS.maxRooms) break;
 		}
 
 		executionTime.Stop();
@@ -185,14 +190,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 		// Spawn the rooms within the chunk borders.
 		foreach (Chunk chunk in path)
 		{
-			ScriptableRoom randRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
+			ScriptableRoom randRoom = LGS.spawnableRooms[Random.Range(0, LGS.spawnableRooms.Count)];
 
 			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity);
 			newRoomGO.name = $"Room [{rooms.Count + 1}]";
 			Room room = newRoomGO.GetComponent<Room>();
 			chunk.Room = room;
 
-			int chunkSizeHalf = chunkSize / 2;
+			int chunkSizeHalf = LGS.chunkSize / 2;
 			int roomsizeHalfX = room.RoomSize.x / 2;
 			int roomsizeHalfY = room.RoomSize.y / 2;
 
@@ -200,11 +205,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + 3, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
 
 			newRoomGO.transform.position = new Vector2(randX, randY);
-
-			int randRot = Random.Range(0, 4);
-			newRoomGO.transform.Rotate(new Vector3(0, 0, randRot * 90));
-
-			newRoomGO.transform.parent = levelAssetsParent;
+			newRoomGO.transform.parent = roomsParent;
 			rooms.Add(room);
 		}
 
@@ -212,6 +213,19 @@ public class LevelGeneratorV2 : MonoBehaviour
 		int roomIndex = 0;
 		foreach (Room room in rooms)
 		{
+			if (roomIndex == 0)
+			{
+				room.RoomType = RoomType.Spawn;
+			}
+			else if (roomIndex == rooms.Count - 1)
+			{
+				room.RoomType = RoomType.Boss;
+			}
+			else
+			{
+				room.RoomType = RoomType.Generic;
+			}
+
 			if (roomIndex - 1 >= 0 && path[roomIndex - 1].Room != null) room.AddConnectedRoom(path[roomIndex - 1].Room);
 			if (roomIndex + 1 < path.Count && path[roomIndex + 1].Room != null) room.AddConnectedRoom(path[roomIndex + 1].Room);
 
@@ -234,6 +248,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
+		// Open the pathway openings for each room.
 		for (int r = 0; r < rooms.Count - 1; r++)
 		{
 			Room room = rooms[r];
@@ -252,7 +267,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathwayStartPoint = pathwayConnectionPoint;
 				}
 			}
-
 			// Now we do the same, but from the connecting room to our own.
 			nearestDistance = Mathf.Infinity;
 			foreach (GameObject pathwayConnectionPoint in roomToConnectTo.PathwayOpenings)
@@ -291,152 +305,74 @@ public class LevelGeneratorV2 : MonoBehaviour
 					}
 				}
 			}
+		}
+
+		// Setup Astar Graph
+		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
+		AstarData astarData = AstarPath.active.data;
+		GridGraph gg = astarData.gridGraph;
+
+		GameObject SeekerGO = new GameObject("Seeker");
+		Seeker seeker = SeekerGO.AddComponent<Seeker>();
+
+		gg.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
+		gg.SetDimensions(LGS.chunkSize * LGS.chunkGridSize.x + 1, LGS.chunkSize * LGS.chunkGridSize.y + 1, gg.nodeSize);
+		AstarPath.active.Scan();
+
+		while (AstarPath.active.IsAnyGraphUpdateInProgress)
+		{
+			yield return new WaitForEndOfFrame();
+		}
+
+		for (int r = 0; r < rooms.Count - 1; r++)
+		{
+			Room room = rooms[r];
+			Room roomToConnectTo = room.ConnectedRooms[room.ConnectedRooms.Count - 1];
+			GameObject pathwayStartPoint = null;
+			GameObject pathwayEndPoint = null;
+
+			// Get nearest pathwayConnectionPoint from own room to the room to connect to.
+			float nearestDistance = Mathf.Infinity;
+			foreach (GameObject pathwayConnectionPoint in room.PathwayOpenings)
+			{
+				float distance = Vector2.Distance(roomToConnectTo.transform.position, pathwayConnectionPoint.transform.position);
+				if (distance < nearestDistance)
+				{
+					nearestDistance = distance;
+					pathwayStartPoint = pathwayConnectionPoint;
+				}
+			}
+			// Now we do the same, but from the connecting room to our own.
+			nearestDistance = Mathf.Infinity;
+			foreach (GameObject pathwayConnectionPoint in roomToConnectTo.PathwayOpenings)
+			{
+				float distance = Vector2.Distance(room.transform.position, pathwayConnectionPoint.transform.position);
+				if (distance < nearestDistance)
+				{
+					nearestDistance = distance;
+					pathwayEndPoint = pathwayConnectionPoint;
+				}
+			}
 
 			// Actually build the pathways here...
 			Vector2Int startPos = new Vector2Int(Mathf.RoundToInt(pathwayStartPoint.transform.position.x), Mathf.RoundToInt(pathwayStartPoint.transform.position.y));
 			Vector2Int targetPos = new Vector2Int(Mathf.RoundToInt(pathwayEndPoint.transform.position.x), Mathf.RoundToInt(pathwayEndPoint.transform.position.y));
 
-			// Get the two chunks that need to connect their rooms together
-			Chunk startChunk = null;
-			Chunk endChunk = null;
-
-			foreach (Chunk chunk in chunks)
+			while (seeker.IsDone() == false)
 			{
-				if (chunk.Room == room)
-				{
-					startChunk = chunk;
-				}
-				if (chunk.Room == roomToConnectTo)
-				{
-					endChunk = chunk;
-				}
+				yield return new WaitForEndOfFrame();
 			}
 
-			// Get all the nodes between the two chunks
-			List<Node> nodes = new List<Node>();
-			nodes.AddRange(startChunk.Nodes);
-			nodes.AddRange(endChunk.Nodes);
-
-			// Remove any duplicate nodes.
-			List<Node> nodesNoDuplicates = nodes.Distinct(new NodeComparer()).ToList();
-			List<Transform> collideableTiles = new List<Transform>();
-			collideableTiles.AddRange(room.CollideableTiles);
-			collideableTiles.AddRange(roomToConnectTo.CollideableTiles);
-
-			// Set all nodes walkeable variable that have the same coordinates of the collideable tiles as false.
-			foreach (Transform collideableTile in collideableTiles)
-			{
-				if (collideableTile.gameObject.activeInHierarchy || collideableTile.parent.gameObject.activeInHierarchy)
-				{
-					Vector2Int wallCoordinates = new Vector2Int(Mathf.RoundToInt(collideableTile.position.x), Mathf.RoundToInt(collideableTile.position.y));
-					Node node = nodesNoDuplicates.Find(n => n.coordinates == wallCoordinates);
-					if (node != null) node.walkable = false;
-				}
-			}
-
-			FindShortestPathBetweenRoomsWithAStar(startPos, targetPos, nodesNoDuplicates);
-
-			// Instantiate empty pathway tiles.
-			if (pathPoints.Count > 0)
-			{
-				GameObject pathParent = new GameObject($"Pathway [{r}]");
-				pathParent.transform.parent = levelAssetsParent;
-				int totalX = 0;
-				int totalY = 0;
-				foreach (Node pathPoint in pathPoints)
-				{
-					totalX += pathPoint.coordinates.x;
-					totalY += pathPoint.coordinates.y;
-				}
-				int centerX = totalX / pathPoints.Count;
-				int centerY = totalY / pathPoints.Count;
-				pathParent.transform.position = new Vector2(centerX, centerY);
-
-				// Remove all duplicates. Maybe use a HashSet in the future.
-				List<Node> pathPointsNoDuplicates = pathPoints.Distinct().ToList();
-				for (int p = pathPointsNoDuplicates.Count - 1; p >= 0; p--)
-				{
-					Node pathPoint = pathPointsNoDuplicates[p];
-					Collider2D[] colliders = Physics2D.OverlapBoxAll(new Vector2Int(pathPoint.coordinates.x, pathPoint.coordinates.y), new Vector2(0.75f, 0.75f), 0f);
-					if (colliders.Length > 0)
-					{
-						pathPointsNoDuplicates.Remove(pathPoint);
-					}
-				}
-
-				// This will a fairly expensive operation. We will have to check for each pathPoint, it's neighbouring points (Not to be confused with nodes)
-				// Then depending on the amount of neighbours and orientation, the tile sprite will be chosen and rotated accordingly.
-				for (int pp = 0; pp < pathPointsNoDuplicates.Count; pp++)
-				{
-					// The "Origin" node is always surrounded by other nodes. So the origin node will always be a ground tile.
-					Node originNode = pathPointsNoDuplicates[pp];
-					GameObject pathPoint = new GameObject($"Point [{pp}]");
-					pathPoint.transform.position = new Vector3(originNode.coordinates.x, originNode.coordinates.y, 0);
-					pathPoint.transform.parent = pathParent.transform;
-
-					SpriteRenderer spriteRenderer = pathPoint.AddComponent<SpriteRenderer>();
-					spriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-					spriteRenderer.color = Color.blue; // For debugging purposes only!
-
-					// Add extra path to make the pathway wider.
-					for (int x = -(pathWidth / 2); x < (pathWidth / 2) + 1; x++)
-					{
-						for (int y = -(pathWidth / 2); y < (pathWidth / 2) + 1; y++)
-						{
-							Vector2Int coordinates = new Vector2Int(originNode.coordinates.x + x, originNode.coordinates.y + y);
-							Node node = nodesNoDuplicates.Find(n => n.coordinates == coordinates);
-
-							if (node != null && !pathPointsNoDuplicates.Contains(node) && node.walkable)
-							{
-								GameObject neighbouringPathPoint = new GameObject($"Point [{pp}]");
-								SpriteRenderer neighbouringPathPointSpriteRenderer = neighbouringPathPoint.AddComponent<SpriteRenderer>();
-								neighbouringPathPoint.transform.position = new Vector3(node.coordinates.x, node.coordinates.y, 0);
-								neighbouringPathPoint.transform.parent = pathParent.transform;
-
-								//Vector2Int topNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y + 1);
-								//Vector2Int topRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y + 1);
-								//Vector2Int rightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y);
-								//Vector2Int bottomRightNeighbourCoordinates = new Vector2Int(node.coordinates.x + 1, node.coordinates.y - 1);
-								//Vector2Int bottomNeighbourCoordinates = new Vector2Int(node.coordinates.x, node.coordinates.y - 1);
-								//Vector2Int bottomLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y - 1);
-								//Vector2Int leftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y);
-								//Vector2Int topLeftNeighbourCoordinates = new Vector2Int(node.coordinates.x - 1, node.coordinates.y + 1);
-
-								//List<Node> neighbours = new List<Node>();
-								//Node topNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topNeighbourCoordinates);
-								//Node topRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topRightNeighbourCoordinates);
-								//Node rightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == rightNeighbourCoordinates);
-								//Node bottomRightNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomRightNeighbourCoordinates);
-								//Node bottomNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomNeighbourCoordinates);
-								//Node bottomLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == bottomLeftNeighbourCoordinates);
-								//Node leftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == leftNeighbourCoordinates);
-								//Node topLeftNeighbourNode = pathPointsNoDuplicates.Find(p => p.coordinates == topLeftNeighbourCoordinates);
-
-								//if (topNeighbourNode) neighbours.Add(topNeighbourNode);
-								//if (topRightNeighbourNode) neighbours.Add(topRightNeighbourNode);
-								//if (rightNeighbourNode) neighbours.Add(rightNeighbourNode);
-								//if (bottomRightNeighbourNode) neighbours.Add(bottomRightNeighbourNode);
-								//if (bottomNeighbourNode) neighbours.Add(bottomNeighbourNode);
-								//if (bottomLeftNeighbourNode) neighbours.Add(bottomLeftNeighbourNode);
-								//if (leftNeighbourNode) neighbours.Add(leftNeighbourNode);
-								//if (topLeftNeighbourNode) neighbours.Add(topLeftNeighbourNode);
-
-								// Node has 4 adjecent neighbours. This should be a ground node.
-								//if (topNeighbourNode && rightNeighbourNode && bottomNeighbourNode && leftNeighbourNode)
-								//{
-								neighbouringPathPointSpriteRenderer.sprite = pathGroundTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-								//}
-								//else
-								//{
-								//	neighbouringPathPointSpriteRenderer.sprite = pathWallTileSprites[Random.Range(0, pathGroundTileSprites.Count)];
-								//}
-							}
-						}
-					}
-				}
-			}
+			Path path = null;
+			path = seeker.StartPath(new Vector3(startPos.x, startPos.y, 0), new Vector3(targetPos.x, targetPos.y, 0), OnPathComplete);
 		}
 
+		while (AstarPath.active.IsAnyGraphUpdateInProgress || seeker.IsDone() == false)
+		{
+			yield return new WaitForEndOfFrame();
+		}
+
+		Destroy(SeekerGO);
 		executionTime.Stop();
 		diagnosticTimes.Add($"Generating pathways between empty rooms took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
@@ -444,134 +380,316 @@ public class LevelGeneratorV2 : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 	}
 
-	#region A* Functions
 	/// <summary>
-	/// This finds the shortest path between startPos and targetPos using A*
+	/// Handles the placement of all pathway tiles as soon as a path has been found between two rooms.
 	/// </summary>
-	/// <param name="startPos"> starting position. </param>
-	/// <param name="targetPos"> target position. </param>
-	/// <param name="nodesNoDuplicates"> List of nodes to pathfind through. </param>
-	private void FindShortestPathBetweenRoomsWithAStar(Vector2Int startPos, Vector2Int targetPos, List<Node> nodesNoDuplicates)
+	/// <param name="p"> Reference to the path. </param>
+	private void OnPathComplete(Path p)
 	{
-		Node startNode = nodesNoDuplicates.Find(n => n.coordinates == startPos);
-		Node targetNode = nodesNoDuplicates.Find(n => n.coordinates == targetPos);
+		//Debug.Log("Yay, we got a path back. Did it have an error? " + p.error);
+		Vector3 startVector = p.vectorPath[0];
+		Vector3 endVector = p.vectorPath[p.vectorPath.Count - 1];
+		Vector3 pathPointParentCenter = new Vector3(startVector.x, startVector.y, 0) - new Vector3(endVector.x, endVector.y, 0);
 
-		List<Node> openSet = new List<Node>();
-		HashSet<Node> closedSet = new HashSet<Node>();
+		GameObject pathPointParentGO = new GameObject("Pathway");
+		pathPointParentGO.transform.position = pathPointParentCenter;
+		pathPointParentGO.transform.parent = pathwaysParent;
 
-		openSet.Add(startNode);
-		pathPoints.Add(startNode);
-		pathPoints.Add(targetNode);
+		pathwayParents.Add(pathPointParentGO);
 
-		while (openSet.Count > 0)
+		Room roomA = rooms[pathwayParents.Count - 1];
+		Room roomB = rooms[pathwayParents.Count];
+
+		List<Vector2Int> occupiedTiles = new List<Vector2Int>();
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomA.CollideableTiles));
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomA.NoncollideableTiles));
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomB.CollideableTiles));
+		occupiedTiles.AddRange(TransformListToVector2IntList(roomB.NoncollideableTiles));
+
+		List<Vector2Int> pathPoints = new List<Vector2Int>();
+
+		// Instantiate all the initial tiles. These tiles will have not been configurated yet, this will need to be done is a separate pass.
+		foreach (Vector3 pathCoord in p.vectorPath)
 		{
-			Node currentNode = openSet[0];
-			for (int i = 1; i < openSet.Count; i++)
+			Vector2Int pathCoordInt = new Vector2Int(Mathf.RoundToInt(pathCoord.x), Mathf.RoundToInt(pathCoord.y));
+			pathPoints.Add(pathCoordInt);
+
+			//GameObject pathPointGO = new GameObject($"PathPoint[{pathCoordInt.x}][{pathCoordInt.y}]");
+			//pathPointGO.transform.position = new Vector3(pathCoordInt.x, pathCoordInt.y, 0);
+			//pathPointGO.transform.parent = pathPointParentGO.transform;
+
+			for (int x = -LGS.pathDepth; x < LGS.pathDepth + 1; x++)
 			{
-				if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
+				for (int y = -LGS.pathDepth; y < LGS.pathDepth + 1; y++)
 				{
-					currentNode = openSet[i];
-				}
-			}
-
-			openSet.Remove(currentNode);
-			closedSet.Add(currentNode);
-
-			if (currentNode == targetNode)
-			{
-				RetracePath(startNode, targetNode);
-				return;
-			}
-
-			List<Node> neighbourNodes = GetNeighbouringNodes(currentNode, nodesNoDuplicates);
-			foreach (Node neighbourNode in neighbourNodes)
-			{
-				if (!neighbourNode.walkable || closedSet.Contains(neighbourNode)) continue;
-
-				int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbourNode);
-				if (newMovementCostToNeighbour < neighbourNode.gCost || !openSet.Contains(neighbourNode))
-				{
-					neighbourNode.gCost = newMovementCostToNeighbour;
-					neighbourNode.hCost = GetDistance(neighbourNode, targetNode);
-					neighbourNode.parent = currentNode;
-
-					if (!openSet.Contains(neighbourNode))
+					Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
+					if (pathPoints.Contains(newCoord) == false && occupiedTiles.Contains(newCoord) == false)
 					{
-						openSet.Add(neighbourNode);
+						GameObject newPathPointGO = new GameObject($"PathPoint[{newCoord.x}][{newCoord.y}]");
+						newPathPointGO.transform.position = new Vector3(newCoord.x, newCoord.y, 0);
+						newPathPointGO.transform.parent = pathPointParentGO.transform;
+						pathPoints.Add(newCoord);
 					}
 				}
 			}
 		}
 
+		diagnosticTimes.Add($"Pathfinder took: {p.duration}ms");
+		totalGenerationTimeInMilliseconds += (long)p.duration;
 	}
 
 	/// <summary>
-	/// Get neighbouring nodes
+	/// Configures all the pathways. This includes, but is not limited to: Setting the correct sprites depeninding on their neighbouring tiles.
 	/// </summary>
-	/// <param name="node"> Origin node. </param>
-	/// <param name="nodes"> List of nodes that hold the neighbouring nodes. </param>
 	/// <returns></returns>
-	private List<Node> GetNeighbouringNodes(Node node, List<Node> nodes)
+	private IEnumerator ConfigurePathways()
 	{
-		List<Node> neighbours = new List<Node>();
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
 
-		for (int x = -1; x <= 1; x++)
+		List<Sprite> floorSprites = LGS.floorSprites;
+		List<Sprite> topWallSprites = LGS.topWallSprites;
+		List<Sprite> bottomWallSprites = LGS.bottomWallSprites;
+		List<Sprite> leftWallSprites = LGS.leftWallSprites;
+		List<Sprite> rightWallSprites = LGS.rightWallSprites;
+		List<Sprite> topLeftOuterCornerSprites = LGS.topLeftOuterCornerSprites;
+		List<Sprite> topRightOuterCornerSprites = LGS.topRightOuterCornerSprites;
+		List<Sprite> bottomRightOuterCornerSprites = LGS.bottomRightOuterCornerSprites;
+		List<Sprite> bottomLeftOuterCornerSprites = LGS.bottomLeftOuterCornerSprites;
+		List<Sprite> topLeftInnerCornerSprites = LGS.topLeftInnerCornerSprites;
+		List<Sprite> topRightInnerCornerSprites = LGS.topRightInnerCornerSprites;
+		List<Sprite> bottomRightInnerCornerSprites = LGS.bottomRightInnerCornerSprites;
+		List<Sprite> bottomLeftInnerCornerSprites = LGS.bottomLeftInnerCornerSprites;
+
+
+		//foreach (Transform pathParents in pathwaysParent)
+		for (int i = 0; i < pathwayParents.Count; i++)
 		{
-			for (int y = -1; y <= 1; y++)
+			Transform pathParents = pathwayParents[i].transform;
+			List<Transform> childPathTiles = new List<Transform>();
+			childPathTiles.AddRange(pathParents.GetComponentsInChildren<Transform>());
+
+			Room roomA = rooms[i];
+			Room roomB = rooms[i + 1];
+
+			foreach (Transform pathTile in childPathTiles)
 			{
-				if (x == 0 && y == 0) continue;
+				SpriteRenderer spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				BoxCollider2D boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
+				boxCollider2D.size = Vector2.one;
 
-				int checkX = node.coordinates.x + x;
-				int checkY = node.coordinates.y + y;
+				List<GameObject> neighbouringTiles = new List<GameObject>();
+				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
 
-				Node neighbourNode = nodes.Find(n => n.coordinates == new Vector2Int(checkX, checkY));
-				if (neighbourNode != null)
-					neighbours.Add(neighbourNode);
+				Vector2Int topTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y + 1);
+				Vector2Int topRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y + 1);
+				Vector2Int rightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y);
+				Vector2Int bottomRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y - 1);
+				Vector2Int bottomTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y - 1);
+				Vector2Int bottomLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y - 1);
+				Vector2Int leftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y);
+				Vector2Int topLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y + 1);
+
+				GameObject topTile = null;
+				GameObject topRightTile = null;
+				GameObject rightTile = null;
+				GameObject bottomRightTile = null;
+				GameObject bottomTile = null;
+				GameObject bottomLeftTile = null;
+				GameObject leftTile = null;
+				GameObject topLeftTile = null;
+
+				List<Transform> occupiedTiles = new List<Transform>();
+				occupiedTiles.AddRange(childPathTiles);
+				occupiedTiles.AddRange(roomA.CollideableTiles);
+				//occupiedTiles.AddRange(roomA.NoncollideableTiles);
+				occupiedTiles.AddRange(roomB.CollideableTiles);
+				//occupiedTiles.AddRange(roomB.NoncollideableTiles);
+				if (i < pathwayParents.Count - 1) occupiedTiles.AddRange(pathwayParents[i + 1].GetComponentsInChildren<Transform>());
+				if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
+
+				for (int t = 0; t < occupiedTiles.Count; t++)
+				{
+					GameObject childPathTile = occupiedTiles[t].gameObject;
+					Vector2Int childPathTileCoord = new Vector2Int(Mathf.RoundToInt(childPathTile.transform.position.x), Mathf.RoundToInt(childPathTile.transform.position.y));
+					if (childPathTileCoord == topTileCoord) topTile = childPathTile;
+					else if (childPathTileCoord == topRightTileCoord) topRightTile = childPathTile;
+					else if (childPathTileCoord == rightTileCoord) rightTile = childPathTile;
+					else if (childPathTileCoord == bottomRightTileCoord) bottomRightTile = childPathTile;
+					else if (childPathTileCoord == bottomTileCoord) bottomTile = childPathTile;
+					else if (childPathTileCoord == bottomLeftTileCoord) bottomLeftTile = childPathTile;
+					else if (childPathTileCoord == leftTileCoord) leftTile = childPathTile;
+					else if (childPathTileCoord == topLeftTileCoord) topLeftTile = childPathTile;
+				}
+
+				if (topTile) neighbouringTiles.Add(topTile);
+				if (topRightTile) neighbouringTiles.Add(topRightTile);
+				if (rightTile) neighbouringTiles.Add(rightTile);
+				if (bottomRightTile) neighbouringTiles.Add(bottomRightTile);
+				if (bottomTile) neighbouringTiles.Add(bottomTile);
+				if (bottomLeftTile) neighbouringTiles.Add(bottomLeftTile);
+				if (leftTile) neighbouringTiles.Add(leftTile);
+				if (topLeftTile) neighbouringTiles.Add(topLeftTile);
+
+				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
+				{
+					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
+					boxCollider2D.enabled = false;
+				}
+
+				#region Cardinal Walls
+				// Top Wall
+				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
+				}
+				// Bottom Wall
+				else if (!bottomTile && leftTile && topTile && rightTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
+				}
+				// Left Wall
+				else if (!leftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = leftWallSprites[Random.Range(0, leftWallSprites.Count)];
+				}
+				// Right Wall
+				else if (!rightTile && bottomTile && bottomLeftTile && leftTile & topLeftTile && topTile)
+				{
+					pathTile.AddComponent<BoxCollider2D>();
+					spriteRenderer.sprite = rightWallSprites[Random.Range(0, rightWallSprites.Count)];
+				}
+				#endregion
+				#region Outer Corners
+				// Top Left Outer Corner
+				else if (!leftTile && !topLeftTile && !topTile && rightTile && bottomRightTile && bottomTile)
+				{
+					spriteRenderer.sprite = topLeftOuterCornerSprites[Random.Range(0, topLeftOuterCornerSprites.Count)];
+					spriteRenderer.flipY = true;
+				}
+				// Top Right Outer Corner
+				else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
+				{
+					spriteRenderer.sprite = topRightOuterCornerSprites[Random.Range(0, topRightOuterCornerSprites.Count)];
+					spriteRenderer.flipY = true;
+				}
+				// Bottom Right Outer Corner
+				else if (!rightTile && !bottomRightTile && !bottomTile && leftTile && topLeftTile && topTile)
+				{
+					spriteRenderer.sprite = bottomRightOuterCornerSprites[Random.Range(0, bottomRightOuterCornerSprites.Count)];
+				}
+				// Bottom Left Outer Corner
+				else if (!bottomTile && !bottomLeftTile && !leftTile && topTile && topRightTile && rightTile)
+				{
+					spriteRenderer.sprite = bottomLeftOuterCornerSprites[Random.Range(0, bottomLeftOuterCornerSprites.Count)];
+				}
+				#endregion
+				#region Inner Corners
+				// Top Left Inner Corner
+				else if (!topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
+				{
+					spriteRenderer.sprite = topLeftInnerCornerSprites[Random.Range(0, topLeftInnerCornerSprites.Count)];
+					spriteRenderer.flipY = true;
+				}
+				// Top Right Inner Corner
+				else if (!topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topLeftTile)
+				{
+					spriteRenderer.sprite = topRightInnerCornerSprites[Random.Range(0, topRightInnerCornerSprites.Count)];
+					spriteRenderer.flipX = true;
+					spriteRenderer.flipY = true;
+				}
+				// Bottom Right Inner Corner
+				else if (!bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile)
+				{
+					spriteRenderer.sprite = bottomRightInnerCornerSprites[Random.Range(0, bottomRightInnerCornerSprites.Count)];
+					spriteRenderer.flipX = true;
+				}
+				// Bottom Left Inner Corner
+				else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
+				{
+					spriteRenderer.sprite = bottomLeftInnerCornerSprites[Random.Range(0, bottomLeftInnerCornerSprites.Count)];
+					spriteRenderer.flipX = true;
+				}
+				#endregion
+
 			}
 		}
 
-		return neighbours;
+		executionTime.Stop();
+		diagnosticTimes.Add($"Configuring pathways took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
+
+		yield return new WaitForEndOfFrame();
 	}
 
 	/// <summary>
-	/// Get the distance between node A and node B.
+	/// Spawn enemies by group and type in the dungeon.
 	/// </summary>
-	/// <param name="nodeA"> Starting node. </param>
-	/// <param name="nodeB"> Target node. </param>
 	/// <returns></returns>
-	private int GetDistance(Node nodeA, Node nodeB)
+	private IEnumerator SpawnEnemies()
 	{
-		int distX = Mathf.Abs(nodeA.coordinates.x - nodeB.coordinates.x);
-		int distY = Mathf.Abs(nodeA.coordinates.y - nodeB.coordinates.y);
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
 
-		if (distX > distY)
+		foreach (Room room in rooms)
 		{
-			return 14 * distY + 10 * (distX - distY);
+			if (room.RoomType != RoomType.Spawn && room.RoomType != RoomType.Boss)
+			{
+				int currentEnemyCount = 0;
+				foreach (EnemyGroup enemyGroup in LGS.EnemyGroups)
+				{
+					// The enemyCountPerRoom variable is a Min Man vector. so the X axis refers to the minimum amount of enemies and the Y to the max amount of enemies
+					while (currentEnemyCount < enemyGroup.enemyCountPerRoom.y)
+					{
+						// Always spawn atleast the minimum amount of enemies.
+						if (currentEnemyCount <= enemyGroup.enemyCountPerRoom.x)
+						{
+							Transform tileToSpawnEnemyUpon = room.NoncollideableTiles[Random.Range(0, room.NoncollideableTiles.Count)];
+							Vector2Int enemySpawnPoint = new Vector2Int(Mathf.RoundToInt(tileToSpawnEnemyUpon.position.x), Mathf.RoundToInt(tileToSpawnEnemyUpon.position.y));
+
+							GameObject enemyPrefab = enemyGroup.enemyPrefab;
+							GameObject enemyGO = Instantiate(enemyPrefab, new Vector3(enemySpawnPoint.x, enemySpawnPoint.y, 0), Quaternion.identity, room.transform);
+
+						}
+						currentEnemyCount++;
+					}
+				}
+			}
 		}
-		return 14 * distX + 10 * (distY - distX);
+
+		executionTime.Stop();
+		diagnosticTimes.Add($"Spawning enemies in rooms took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
+
+		yield return new WaitForEndOfFrame();
 	}
 
 	/// <summary>
-	/// Retrace the path from start to end. (and reverse the loop)
+	/// A final pass for the level generator. This handles decorating everything the needs decorating.
 	/// </summary>
-	/// <param name="startNode"> start point of the path. </param>
-	/// <param name="endNode"> end point of the path. </param>
-	private void RetracePath(Node startNode, Node endNode)
+	/// <returns></returns>
+	private IEnumerator DecorateLevel()
 	{
-		List<Node> path = new List<Node>();
-		Node currentNode = endNode;
+		Stopwatch executionTime = new Stopwatch();
+		executionTime.Start();
 
-		while (currentNode != startNode)
-		{
-			path.Add(currentNode);
-			currentNode = currentNode.parent;
-		}
-		path.Reverse();
+		// Spawn a portal in the boss room.
+		Vector3 finalRoom = rooms[rooms.Count - 1].transform.position;
+		Vector2Int portalSpawnPoint = new Vector2Int(Mathf.RoundToInt(finalRoom.x), Mathf.RoundToInt(finalRoom.y));
+		GameObject portalGO = Instantiate(bossFightPortal, new Vector2(portalSpawnPoint.x, portalSpawnPoint.y), Quaternion.identity, decorationsParent);
+		Portal portal = portalGO.GetComponent<Portal>();
+		portal.SceneToLoadName = "Boss Testing";
+		portal.CurrentSceneName = "Jaydee Testing Scene";
 
-		pathPoints.AddRange(path);
-		pathPoints = pathPoints.Distinct().ToList();
+		executionTime.Stop();
+		diagnosticTimes.Add($"Decorating the level took: {executionTime.ElapsedMilliseconds}ms");
+		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
+
+		yield return new WaitForEndOfFrame();
 	}
-	#endregion
 
 	#region Helpers
 	/// <summary>
@@ -587,10 +705,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 		int chunkX = currentChunkCoordinates.x;
 		int chunkY = currentChunkCoordinates.y;
 
-		Chunk topNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY + chunkSize));
-		Chunk rightNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX + chunkSize, chunkY));
-		Chunk bottomNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY - chunkSize));
-		Chunk leftNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX - chunkSize, chunkY));
+		Chunk topNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY + LGS.chunkSize));
+		Chunk rightNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX + LGS.chunkSize, chunkY));
+		Chunk bottomNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY - LGS.chunkSize));
+		Chunk leftNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX - LGS.chunkSize, chunkY));
 
 		if (topNeighbour != null && path.Contains(topNeighbour) == false) neighbourChunkIndeces.Add(topNeighbour);
 		if (rightNeighbour != null && path.Contains(rightNeighbour) == false) neighbourChunkIndeces.Add(rightNeighbour);
@@ -617,31 +735,20 @@ public class LevelGeneratorV2 : MonoBehaviour
 		return null;
 	}
 
-	// https://answers.unity.com/questions/444414/get-angle-between-2-vector2s.html
-	public float GetAngle(Vector2 A, Vector2 B)
+	/// <summary>
+	/// Returns a list of Vecttor2Int from Transforms.
+	/// </summary>
+	/// <param name="transforms"> List of Transforms to get positions from and turn into Vector2Ints. </param>
+	/// <returns> List<Vector2Int> </returns>
+	private List<Vector2Int> TransformListToVector2IntList(List<Transform> transforms)
 	{
-		//difference
-		var Delta = B - A;
-		//use atan2 to get the angle; Atan2 returns radians
-		var angleRadians = Mathf.Atan2(Delta.y, Delta.x);
-
-		//convert to degrees
-		var angleDegrees = angleRadians * Mathf.Rad2Deg;
-
-		//angleDegrees will be in the range (-180,180].
-		//I like normalizing to [0,360) myself, but this is optional..
-		if (angleDegrees < 0)
-			angleDegrees += 360;
-
-		return angleDegrees;
-	}
-	bool Between(float angle, float A, float B)
-	{
-		if (angle < B && angle > A)
+		List<Vector2Int> coords = new List<Vector2Int>();
+		foreach (Transform transform in transforms)
 		{
-			return true;
+			Vector2Int coord = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+			coords.Add(coord);
 		}
-		return false;
+		return coords;
 	}
 	#endregion
 
@@ -655,14 +762,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			{
 				Chunk chunk = chunks[i];
 				Gizmos.color = Color.white;
-				Gizmos.DrawWireCube(chunk.gameObject.transform.position, new Vector3(chunkSize, chunkSize));
-
-				if (chunk.Nodes.Count == 0) return;
-				foreach (Node node in chunk.Nodes)
-				{
-					Gizmos.color = node.walkable ? new Color(1, 1, 1, 0.1f) : new Color(1, 0, 0, 0.1f);
-					Gizmos.DrawCube(new Vector3(node.coordinates.x, node.coordinates.y, 0), Vector3.one * 0.95f);
-				}
+				Gizmos.DrawWireCube(chunk.gameObject.transform.position, new Vector3(LGS.chunkSize, LGS.chunkSize));
 			}
 		}
 
@@ -683,62 +783,8 @@ public class Chunk : MonoBehaviour
 	[SerializeField] private Vector2Int coordinates = new Vector2Int();
 	[SerializeField] private bool occupied = false;
 	[SerializeField] private Room room;
-	[SerializeField] private List<Node> nodes = new List<Node>();
 
 	public Vector2Int Coordinates { get => coordinates; set => coordinates = value; }
 	public bool Occupied { get => occupied; set => occupied = value; }
 	public Room Room { get => room; set => room = value; }
-	public List<Node> Nodes { get => nodes; set => nodes = value; }
-}
-
-public class Node : MonoBehaviour
-{
-	public bool walkable;
-	public Vector2Int coordinates;
-
-	public int gCost;
-	public int hCost;
-	public int fCost
-	{
-		get
-		{
-			return gCost + hCost;
-		}
-	}
-	public Node parent;
-}
-
-public class NodeComparer : IEqualityComparer<Node>
-{
-	// Nodes are equal if their coordinates and walkeable bool are equal.
-	public bool Equals(Node x, Node y)
-	{
-		//Check whether the compared objects reference the same data.
-		if (Object.ReferenceEquals(x, y)) return true;
-
-		//Check whether any of the compared objects is null.
-		if (Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
-			return false;
-
-		//Check whether the nodes properties are equal.
-		return x.coordinates == y.coordinates && x.walkable == y.walkable;
-	}
-
-	// If Equals() returns true for a pair of objects
-	// then GetHashCode() must return the same value for these objects.
-
-	public int GetHashCode(Node node)
-	{
-		//Check whether the object is null
-		if (Object.ReferenceEquals(node, null)) return 0;
-
-		//Get hash code for the Name field if it is not null.
-		int hashProductName = node.coordinates == null ? 0 : node.coordinates.GetHashCode();
-
-		//Get hash code for the Code field.
-		int hashProductCode = node.walkable.GetHashCode();
-
-		//Calculate the hash code for the product.
-		return hashProductName ^ hashProductCode;
-	}
 }
