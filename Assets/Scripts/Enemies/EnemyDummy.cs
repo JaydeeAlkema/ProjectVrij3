@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnemyDummy : EnemyBase
 {
 	[SerializeField] private GameObject rewardInstance;
+	[SerializeField] private int enemyID;
+	[SerializeField] private Ability ability;
+	[SerializeField] private AbilityScriptable abilityStats;
 
 	private void Start()
 	{
@@ -19,7 +22,10 @@ public class EnemyDummy : EnemyBase
 
 	public override void Die()
 	{
-		Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
+		GameObject reward = Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
+		reward.GetComponent<RewardChoice>().AbilityStats = abilityStats;
+		reward.GetComponent<RewardChoice>().AbilityToGive = ability;
+		Debug.Log( reward.GetComponent<RewardChoice>().AbilityToGive );
 		Destroy(this.gameObject);
 	}
 }

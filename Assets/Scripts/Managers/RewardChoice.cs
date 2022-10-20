@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class RewardChoice : MonoBehaviour
 {
-    [SerializeField] private AbilityScriptable abilityToGive;
+    [SerializeField] private IAbility abilityToGive;
+    [SerializeField] private AbilityScriptable abilityStats;
+    [SerializeField] private int rewardID;
     [SerializeField] private UpgradeScriptable upgradeToGive;
     [SerializeField] private AbilityScriptable meleeAttack;
     [SerializeField] private AbilityScriptable rangedAttack;
@@ -13,16 +15,30 @@ public class RewardChoice : MonoBehaviour
     [SerializeField] private int t1Chance = 1; //1-700000
     [SerializeField] private int t2Chance = 700001; //700001-995000
     [SerializeField] private int t3Chance = 995001; //995001-1000000
+    private Ability[] abilitiesToGive;
     private UpgradeScriptable[] tier1Upgrades;
     private UpgradeScriptable[] tier2Upgrades;
     private UpgradeScriptable[] tier3Upgrades;
     private PlayerControler player;
-    public AbilityScriptable AbilityToGive { get => abilityToGive; set => abilityToGive = value; }
+    public int RewardID { get => rewardID; set => rewardID = value; }
+    public IAbility AbilityToGive { get => abilityToGive; set => abilityToGive = value; }
+    public AbilityScriptable AbilityStats { get => abilityStats; set => abilityStats = value; }
     public UpgradeScriptable UpgradeToGive { get => upgradeToGive; set => upgradeToGive = value; }
 
 	private void Start()
 	{
         player = FindObjectOfType<PlayerControler>();
+        //load abilities
+  //      int maxRangeAbilities = Resources.LoadAll<Ability>( "Abilities/PowerAbilities" ).Length;
+  //      abilitiesToGive = new Ability[maxRangeAbilities];
+  //      abilitiesToGive = Resources.LoadAll<Ability>( "Abilities/PowerAbilities" );
+		//foreach( Ability ability in abilitiesToGive )
+		//{
+  //          if(ability.abilityID == rewardID)
+  //          {
+  //              abilityToGive = ability;
+		//	}
+		//}
         //load tier 1 upgrades
         int maxRangeT1 = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades/Tier1" ).Length;
         tier1Upgrades = new UpgradeScriptable[maxRangeT1];
@@ -70,9 +86,10 @@ public class RewardChoice : MonoBehaviour
 	public void ChooseAbility()
     {
         // give AbilityScriptable
-        player.Ability1 = abilityToGive;
-        IAbility giveAbility = abilityToGive.Ability;
-        player.CurrentAbility1 = giveAbility;
+        //player.Ability1 = abilityToGive;
+       //IAbility giveAbility = abilityToGive;
+        player.Ability1 = abilityStats;
+        player.CurrentAbility1 = abilityToGive;
         player.initAbilities();
         Destroy( this.gameObject );
     }

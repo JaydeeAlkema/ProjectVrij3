@@ -7,19 +7,19 @@ using NaughtyAttributes;
 [CreateAssetMenu( fileName = "Ability", menuName = "ScriptableObjects/Ability" )]
 public class AbilityScriptable : ScriptableObject
 {
+	[SerializeField] private Ability ability;
 	[SerializeField] private float coolDown = 0f;
 	[SerializeField] private float damage = 0f;
 	[SerializeField] private float critChance = 0f;
 	[SerializeField] private float distance = 0f;
 	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
-	//[SerializeField] private float circleSize = 0f;
+	[SerializeField] private float circleSize = 0f;
 	[SerializeField] private LayerMask layerMask;
 	[SerializeField] private GameObject castObject;
 	[SerializeField] private float lifeSpan = 10f;
 	[SerializeField] private float force = 30f;
 	[SerializeField] private GameObject burnObject;
 	[SerializeField] private EffectType[] effects = new EffectType[3];
-	[SerializeField] private Ability ability;
 	[SerializeField] private bool trailUpgrade;
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
@@ -30,7 +30,7 @@ public class AbilityScriptable : ScriptableObject
 	public float Force { get => force; set => force = value; }
 	public float Distance { get => distance; set => distance = value; }
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
-	//public float CircleSize { get => circleSize; set => circleSize = value; }
+	public float CircleSize { get => circleSize; set => circleSize = value; }
 	public LayerMask Layer { get => layerMask; set => layerMask = value; }
 	public GameObject CastObject { get => castObject; set => castObject = value; }
 	public GameObject BurnObject { get => burnObject; set => burnObject = value; }
@@ -65,33 +65,4 @@ public class AbilityScriptable : ScriptableObject
 				break;
 		}
 	}
-
-	//public void OnHitApplyStatusEffects( IDamageable damageable )
-	//{
-	//	foreach( IStatusEffect statusEffect in statusEffects )
-	//	{
-	//		if( statusEffect == null ) return;
-	//		damageable.ApplyStatusEffect( statusEffect );
-	//	}
-	//}
-
-	//private void OnEnable()
-	//{
-	//	cam = Camera.main;
-	//}
-
-	//public void BlackHole( Rigidbody2D player, Transform castFromPoint, float angle, Vector2 lookDir )
-	//{
-	//	Vector2 circlePos = player.transform.position + castFromPoint.transform.up * 5;
-	//	Collider2D[] enemiesInCircle = Physics2D.OverlapCircleAll( circlePos, circleSize, layerMask );
-	//	Debug.Log( "Enemies: " + enemiesInCircle.Length );
-
-	//	foreach( Collider2D enemy in enemiesInCircle )
-	//	{
-	//		Vector3 newPoint = circlePos;
-	//		enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
-	//	}
-
-	//}
-
 }

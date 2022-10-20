@@ -81,10 +81,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (beingCrowdControlled)
 		{
 			beingDisplaced();
+			StopMovingToTarget();
 		}
 		else
 		{
 			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+			
 		}
 	}
 
@@ -111,17 +113,20 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void TakeDamage(float damage, int damageType)
 	{
+		float damageToTake = damage;
 		if (damageType == 0 && meleeTarget)
 		{
 			healthPoints -= damage;
 			meleeTarget = false;
+			damageToTake *= 2;
 		}
 		if (damageType == 1 && castTarget)
 		{
 			healthPoints -= damage;
 			castTarget = false;
+			damageToTake *= 2;
 		}
-		DamagePopup(damage);
+		DamagePopup(damageToTake);
 		healthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
@@ -191,7 +196,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	private void beingDisplaced()
 	{
-		if (Vector2.Distance(transform.position, pullPoint) > 0.1f)
+		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
 			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
 
