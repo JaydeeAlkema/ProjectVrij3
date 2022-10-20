@@ -12,17 +12,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 839aebb8859c3664da18d858255d4c27, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  spawnableRooms: []
-  floorSprites: []
-  topWallSprites: []
-  bottomWallSprites: []
-  leftWallSprites: []
-  rightWallSprites: []
-  topLeftOuterCornerSprites: []
-  topRightOuterCornerSprites: []
-  bottomLeftOuterCornerSprites: []
-  bottomRightOuterCornerSprites: []
-  topLeftInnerCornerSprites: []
-  topRightInnerCornerSprites: []
-  bottomLeftInnerCornerSprites: []
-  bottomRightInnerCornerSprites: []
+  seed: 1841614558
+  chunkSize: 40
+  maxRooms: 25
+  pathDepth: 3
+  chunkGridSize: {x: 9, y: 9}
+  spawnableRooms:
+  - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
+  - {fileID: 11400000, guid: 14383afd7cabf874b95581c1b59291b5, type: 2}
+  floorSprites:
+  - {fileID: -1994589904, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -146117464, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1984020428, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1010394929, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -434650341, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -467640460, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 2084124841, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -727964843, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1320179203, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 157804456, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1692008770, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -379608226, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topWallSprites:
+  - {fileID: 1515833362, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1029127999, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 684171043, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1691871387, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomWallSprites:
+  - {fileID: -1869997835, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 340844279, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1974086491, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -2022398927, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  leftWallSprites:
+  - {fileID: 1172881229, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 985038510, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 57958679, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -202535545, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  rightWallSprites:
+  - {fileID: -1355762240, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1617129924, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1397102630, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 341539676, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topLeftOuterCornerSprites:
+  - {fileID: 1295239396, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topRightOuterCornerSprites:
+  - {fileID: -1067463408, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomLeftOuterCornerSprites:
+  - {fileID: 1295239396, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomRightOuterCornerSprites:
+  - {fileID: -1067463408, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topLeftInnerCornerSprites:
+  - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topRightInnerCornerSprites:
+  - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomLeftInnerCornerSprites:
+  - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  bottomRightInnerCornerSprites:
+  - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  fodderEnemies:
+  - {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
+  rewardEnemies: []
