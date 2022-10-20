@@ -19,9 +19,13 @@ public class Room : MonoBehaviour
 	public List<Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
 	public List<Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }
 
-	private void Start()
+
+	[Button]
+	private void FetchAllTiles()
 	{
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
+		collideableTiles.Clear();
+		noncollideableTiles.Clear();
 
 		foreach (Transform child in allChildren)
 		{
