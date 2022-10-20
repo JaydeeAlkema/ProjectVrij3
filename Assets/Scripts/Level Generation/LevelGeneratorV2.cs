@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 public enum RoomType
@@ -211,10 +210,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 
 		// Assign connected rooms for each room.
-		int roomIndex = 0;
+		int roomIndex = 1;
 		foreach (Room room in rooms)
 		{
-			if (roomIndex == 0)
+			if (roomIndex == 1)
 			{
 				room.RoomType = RoomType.Spawn;
 			}
@@ -683,7 +682,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		GameObject portalGO = Instantiate(bossFightPortal, new Vector2(portalSpawnPoint.x, portalSpawnPoint.y), Quaternion.identity, decorationsParent);
 		Portal portal = portalGO.GetComponent<Portal>();
 		portal.SceneToLoadName = "Boss Testing";
-		portal.CurrentSceneName = SceneManager.GetActiveScene().name;
+		portal.CurrentSceneName = "Jaydee Testing Scene";
 
 		executionTime.Stop();
 		diagnosticTimes.Add($"Decorating the level took: {executionTime.ElapsedMilliseconds}ms");
