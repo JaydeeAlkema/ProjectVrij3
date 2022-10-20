@@ -6,6 +6,8 @@ public class FodderEnemy : EnemyBase
 {
 	private int playerLayer = 1 << 8;
 
+	[SerializeField] public Animator fodderAnimator;
+
 	[SerializeField] private float damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
@@ -15,9 +17,12 @@ public class FodderEnemy : EnemyBase
 	[SerializeField] private float dashDuration = 0.4f;
 	[SerializeField] private float endLag = 0.8f;
 	public bool hasHitbox = false;
+	public CapsuleCollider2D hurtbox;
+
 	void Awake()
 	{
 		player = FindObjectOfType<PlayerControler>().gameObject;
+		hurtbox = this.GetComponent<CapsuleCollider2D>();
 
 		baseSpeed = Speed;
 	}
@@ -28,11 +33,12 @@ public class FodderEnemy : EnemyBase
 		//Vector3 targetDir = player.transform.position - this.rb2d.transform.position;
 		//rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
 		HitBox();
+		LookAtTarget();
 	}
 
 	void HitBox()
 	{
-		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, this.GetComponent<CircleCollider2D>().radius, playerLayer);
+		Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayer);
 		if(playerBody != null & hasHitbox)
 		{
 			AttackPlayer(playerBody.gameObject);
@@ -53,6 +59,30 @@ public class FodderEnemy : EnemyBase
 	//	}
 	//}
 
+	public override void TakeDamage(float damage, int damageType)
+	{
+		if (damageType == 0 && meleeTarget)
+		{
+			HealthPoints -= damage;
+			meleeTarget = false;
+		}
+		if (damageType == 1 && castTarget)
+		{
+			HealthPoints -= damage;
+			castTarget = false;
+		}
+		DamagePopup(damage);
+		HealthPoints -= damage;
+		StartCoroutine(FlashColor());
+		if (HealthPoints <= 0) Die();
+	}
+
+	public override void MoveToTarget(Transform target)
+	{
+		base.MoveToTarget(target);
+		fodderAnimator.Play("Fodder1Walk");
+	}
+
 	public override void GetSlowed(float slowAmount)
 	{
 		if (baseSpeed == Speed)
@@ -69,6 +99,13 @@ public class FodderEnemy : EnemyBase
 	{
 		//StopCoroutine(FollowPath());
 		StartCoroutine(DashAttack(target));
+	}
+
+	public override IEnumerator FlashColor()
+	{
+		enemySprite.material = MaterialHit;
+		yield return new WaitForSeconds(0.09f);
+		enemySprite.material = MaterialDefault;
 	}
 
 	public IEnumerator DashAttack(Transform target)

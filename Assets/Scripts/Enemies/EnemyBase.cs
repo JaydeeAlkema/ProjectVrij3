@@ -11,6 +11,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
 	[SerializeField] public Transform damageNumberText;
+	[SerializeField] public SpriteRenderer enemySprite = null;
+
+	[SerializeField] public Material materialDefault = null;
+	[SerializeField] public Material materialHit = null;
 
 	private Transform target = null;
 
@@ -36,9 +40,21 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public Rigidbody2D Rb2d { get => rb2d; set => rb2d = value; }
 	public Transform Target { get => target; set => target = value; }
 	public float HealthPoints { get => healthPoints; set => healthPoints = value; }
+	public Material MaterialDefault { get => materialDefault; set => materialDefault = value; }
+	public Material MaterialHit { get => materialHit; set => materialHit = value; }
+
+	public void Start()
+	{
+		if (enemySprite != null)
+		{
+			materialDefault = enemySprite.material;
+		}
+	}
 
 	public void Awake()
 	{
+		
+
 		rb2d = GetComponent<Rigidbody2D>();
 		destinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
 		aiPath = GetComponent<Pathfinding.AIPath>();
@@ -128,6 +144,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public virtual void GetSlowed(float slowAmount)
 	{
 
+	}
+
+	public virtual void LookAtTarget()
+	{
+		if(destinationSetter.target != null && enemySprite != null)
+		{
+			enemySprite.flipX = (destinationSetter.target.position - transform.position).normalized.x > 0 ? true : false;
+		}
 	}
 
 	public virtual void StartAttack(Transform target)
