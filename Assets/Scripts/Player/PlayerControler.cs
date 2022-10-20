@@ -79,10 +79,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		rb2d = GetComponent<Rigidbody2D>();
 		dashTrail.emitting = false;
-		//currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, meleeAttack.CoolDown );
+		abilityController.Player = this;
 		currentMeleeAttack.BaseStats = meleeAttack;
 		currentRangedAttack.BaseStats = rangedAttack;
-		initAbilities();
+		abilityController.CurrentMeleeAttack = currentMeleeAttack;
+		abilityController.CurrentRangedAttack = currentRangedAttack;
+		abilityController.SetAttacks();
 
 		currentHealthPoints = maxHealthPoints;
 		if (healthBar != null)
@@ -100,12 +102,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void initAbilities()
 	{
-		abilityController.CurrentMeleeAttack = currentMeleeAttack;
-		abilityController.CurrentRangedAttack = currentRangedAttack;
-		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
-		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
-		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
-		abilityController.SetAttacks();
+		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; abilityController.SetAbility(); }
+		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; abilityController.SetAbility(); }
+		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; abilityController.SetAbility(); }
 	}
 
 	// Update is called once per frame
@@ -192,14 +191,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
 		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-		abilityController.MeleeAttacked( currentMeleeAttack ).CallAbility(this);
+		abilityController.MeleeAttacked( currentMeleeAttack );
 	}
 
 	void RangedAttack()
 	{
 		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
 		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-		abilityController.RangeAttacked( currentRangedAttack ).CallAbility( this );
+		abilityController.RangeAttacked( currentRangedAttack );
 		//animPlayer.SetTrigger("isAttacking");
 	}
 
@@ -207,10 +206,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		//ability1.Ability.SetPlayerValues(ability1);
 		//ability1.Ability.AbilityBehavior();
-		Debug.Log( abilityController.CurrentAbility1 );
+		Debug.Log( CurrentAbility1 );
 		abilityController.CurrentAbility1.BaseStats = ability1;
 		abilityController.CurrentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-		abilityController.AbilityOneAttacked( currentAbility1 ).CallAbility( this );
+		abilityController.AbilityOneAttacked( currentAbility1 );
 	}
 
 	void AbilityTwoAttack()

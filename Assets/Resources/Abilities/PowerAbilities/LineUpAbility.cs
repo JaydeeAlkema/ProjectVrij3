@@ -5,7 +5,7 @@ using UnityEngine;
 public class LineUpAbility : Ability
 {
 	private bool init = true;
-	public void CallAbility(PlayerControler _playerControler)
+	public override void CallAbility(PlayerControler _playerControler)
 	{
 		if( init )
 		{

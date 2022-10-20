@@ -36,6 +36,7 @@ public class AbilityDecorator : IAbility
 	public GameObject CastObject { get; set; }
 	public GameObject CastedObject { get; set; }
 	public bool TrailUpgrade { get; set; }
+	public int abilityID { get; set; }
 
 	public AbilityDecorator(IAbility _ability)
 	{

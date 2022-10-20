@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AbilityController : MonoBehaviour
 {
+    private PlayerControler player;
     private Rigidbody2D rb2d;
     private Vector3 mousePos;
     private Vector2 lookDir;
@@ -19,16 +20,21 @@ public class AbilityController : MonoBehaviour
     public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
     public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
     public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
+    public PlayerControler Player { get => player; set => player = value; }
 
     //gives all attacks/abilities cooldowns
 	public void SetAttacks()
 	{
         currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats.CoolDown );
         currentRangedAttack = new CoolDownDecorator( currentRangedAttack, currentRangedAttack.BaseStats.CoolDown );
-        if(currentAbility1 != null)
+    }
+
+    public void SetAbility()
+    {
+        if( currentAbility1 != null )
         {
             currentAbility1 = new CoolDownDecorator( currentAbility1, currentAbility1.BaseStats.CoolDown );
-		}
+        }
         if( currentAbility2 != null )
         {
             currentAbility2 = new CoolDownDecorator( currentAbility2, currentAbility2.BaseStats.CoolDown );
@@ -85,6 +91,7 @@ public class AbilityController : MonoBehaviour
         anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         anim.CallAbility( this.GetComponent<PlayerControler>() );
         currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentMeleeAttack.CallAbility(player);
         return currentMeleeAttack;
 	}
 
@@ -121,6 +128,7 @@ public class AbilityController : MonoBehaviour
         IAbility anim = new AnimationDecorator( currentMeleeAttack, "", "isAttacking" );
         anim.CallAbility( this.GetComponent<PlayerControler>() );
         currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentRangedAttack.CallAbility( player );
         return currentRangedAttack;
 	}
 
@@ -150,6 +158,7 @@ public class AbilityController : MonoBehaviour
             //return currentAbility1;
         }
         currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentAbility1.CallAbility( player );
         return currentAbility1;
 	}
 
@@ -179,6 +188,7 @@ public class AbilityController : MonoBehaviour
             return currentAbility2;
         }
         currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentAbility2.CallAbility( player );
         return currentAbility2;
 	}
 
@@ -208,6 +218,7 @@ public class AbilityController : MonoBehaviour
             return currentAbility3;
         }
         currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentAbility3.CallAbility( player );
         return currentAbility3;
 	}
 

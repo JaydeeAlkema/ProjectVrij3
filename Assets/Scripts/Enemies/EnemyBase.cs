@@ -64,10 +64,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (beingCrowdControlled)
 		{
 			beingDisplaced();
+			StopMovingToTarget();
 		}
 		else
 		{
 			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+			
 		}
 	}
 
@@ -169,7 +171,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	private void beingDisplaced()
 	{
-		if (Vector2.Distance(transform.position, pullPoint) > 0.1f)
+		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
 			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
 

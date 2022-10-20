@@ -100,11 +100,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 100
+  speed: 0
+  aggroRange: 0
+  attackRange: 0
+  attacking: 0
+  rb2d: {fileID: 0}
+  damageNumberText: {fileID: 0}
+  destinationSetter: {fileID: 0}
+  aiPath: {fileID: 0}
   beingCrowdControlled: 0
+  meleeTarget: 0
+  castTarget: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
   rewardInstance: {fileID: 8803674279633105925, guid: 717b331640d80b4478f032d90dbf02dd, type: 3}
+  enemyID: 0
+  ability: {fileID: -1495277099781758936, guid: 8ee501e1a148c0b4c83363788b6d7b9b, type: 3}
+  abilityStats: {fileID: 11400000, guid: eb01a3aa93a60b94d981ae4869eb58ac, type: 2}
 --- !u!61 &1972835925610663319
 BoxCollider2D:
   m_ObjectHideFlags: 0

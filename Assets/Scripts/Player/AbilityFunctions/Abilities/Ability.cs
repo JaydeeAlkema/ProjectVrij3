@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability : IAbility
+public abstract class Ability : MonoBehaviour ,IAbility
 {
 	protected float coolDown;
 	protected float damage;
@@ -34,6 +34,7 @@ public abstract class Ability : IAbility
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public GameObject CastedObject { get; set; }
 	public bool TrailUpgrade { get; set; }
+	public int abilityID { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void AbilityBehavior(){ }

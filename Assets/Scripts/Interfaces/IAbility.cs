@@ -10,6 +10,7 @@ public interface IAbility
 	public Vector3 MousePos { get; set; }
 	public Vector2 LookDir { get; set; }
 	public Transform CastFromPoint { get; set; }
+	public int abilityID { get; set; }
 	public float Angle { get; set; }
 	public float CoolDown { get; set; }
 	public float Damage { get; set; }
