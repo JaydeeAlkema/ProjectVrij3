@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MeleeAttack : Ability
 {
-	private bool onCoolDown = false;
 	private bool init = true;
 	public bool burnAreaUpgrade = false;
 	public GameObject burningGround;

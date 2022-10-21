@@ -8,7 +8,7 @@ using NaughtyAttributes;
 public class AbilityScriptable : ScriptableObject
 {
 	[SerializeField] private Ability ability;
-	[SerializeField] private float coolDown = 0f;
+	[SerializeField] private float coolDown = 0.001f;
 	[SerializeField] private float damage = 0f;
 	[SerializeField] private float critChance = 0f;
 	[SerializeField] private float distance = 0f;
@@ -21,6 +21,8 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private GameObject burnObject;
 	[SerializeField] private EffectType[] effects = new EffectType[3];
 	[SerializeField] private bool trailUpgrade;
+	[SerializeField] private float dashSpeed = 100f;
+	[SerializeField] private float dashDuration = 0.2f;
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	public float CoolDown { get => coolDown; set => coolDown = value; }
@@ -35,6 +37,8 @@ public class AbilityScriptable : ScriptableObject
 	public GameObject CastObject { get => castObject; set => castObject = value; }
 	public GameObject BurnObject { get => burnObject; set => burnObject = value; }
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
+	public float DashSpeed { get => dashSpeed; set => dashSpeed = value; }
+	public float DashDuration { get => dashDuration; set => dashDuration = value; }
 	public Ability Ability { get => ability; set => ability =  value ; }
 	public EffectType[] Effects { get => effects; set => effects = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;

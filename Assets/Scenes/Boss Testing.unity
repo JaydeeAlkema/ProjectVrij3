@@ -1040,7 +1040,7 @@ MonoBehaviour:
   beingCrowdControlled: 0
   meleeTarget: 0
   castTarget: 0
-  layerMask:
+  avoidEnemyLayerMask:
     serializedVersion: 2
     m_Bits: 0
   healthBar: {fileID: 2823736184998678964}
@@ -2075,6 +2075,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8334970476083683796, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1827681474}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
@@ -2830,6 +2834,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2779702176485318022, guid: 5d1ce1a941d56fd47ac6e665772aa6cd, type: 3}
   m_PrefabInstance: {fileID: 1827681472}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1827681474 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2779702176485318023, guid: 5d1ce1a941d56fd47ac6e665772aa6cd, type: 3}
+  m_PrefabInstance: {fileID: 1827681472}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b10c19a07eb734ea8cfb71360faf24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1852743128
 PrefabInstance:
   m_ObjectHideFlags: 0

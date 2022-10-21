@@ -12,11 +12,13 @@ public class AbilityController : MonoBehaviour
     private float angle;
     private IAbility currentMeleeAttack;
     private IAbility currentRangedAttack;
+    private IAbility currentDash;
     private IAbility currentAbility1;
     private IAbility currentAbility2;
     private IAbility currentAbility3;
     public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
     public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
+    public IAbility CurrentDash { get => currentDash; set => currentDash = value; }
     public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
     public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
     public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
@@ -27,6 +29,7 @@ public class AbilityController : MonoBehaviour
 	{
         currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats.CoolDown );
         currentRangedAttack = new CoolDownDecorator( currentRangedAttack, currentRangedAttack.BaseStats.CoolDown );
+        currentDash = new CoolDownDecorator( currentDash, currentDash.BaseStats.CoolDown );
     }
 
     public void SetAbility()
@@ -46,10 +49,11 @@ public class AbilityController : MonoBehaviour
     }
 
     //makes it so the cooldowns actually update when getting upgrades
-    public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3)
+    public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable cd)
     {
         if( currentMeleeAttack != null ) { currentMeleeAttack.CoolDown = melee.CoolDown; }
         if( currentRangedAttack != null ) { currentRangedAttack.CoolDown = ranged.CoolDown; }
+        if(currentDash != null) { currentDash.CoolDown = cd.CoolDown; }
         if( currentAbility1 != null ) { currentAbility1.CoolDown = ab1.CoolDown; }
         if( currentAbility2 != null ) { currentAbility2.CoolDown = ab2.CoolDown; }
         if( currentAbility3 != null ) { currentAbility3.CoolDown = ab3.CoolDown; }
@@ -130,6 +134,34 @@ public class AbilityController : MonoBehaviour
         currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         currentRangedAttack.CallAbility( player );
         return currentRangedAttack;
+	}
+
+    public IAbility Dashing(IAbility dash)
+    {
+        foreach( KeyValuePair<StatusEffectType, bool> effect in dash.AbilityUpgrades )
+        {
+            if( effect.Value )
+            {
+                switch( effect.Key )
+                {
+                    case StatusEffectType.none:
+                        break;
+                    case StatusEffectType.Burn:
+                        break;
+                    case StatusEffectType.Stun:
+                        break;
+                    case StatusEffectType.Slow:
+                        break;
+                    case StatusEffectType.Marked:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        currentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentDash.CallAbility( player );
+        return currentDash;
 	}
 
     public IAbility AbilityOneAttacked(IAbility ability1)

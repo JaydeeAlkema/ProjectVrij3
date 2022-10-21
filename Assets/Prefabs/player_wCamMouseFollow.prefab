@@ -854,19 +854,18 @@ MonoBehaviour:
   Pivot_AttackAnimation: {fileID: 3778431377053427336}
   AttackAnimation: {fileID: 1261354564871183732}
   animAttack: {fileID: 547846125462354599}
+  trail: {fileID: 3607252478168810823}
   animPlayer: {fileID: 2846144575864148852}
   healthBar: {fileID: 0}
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   deathScreenTest: {fileID: 0}
-  dashSpeed: 25
-  dashDuration: 0.1
-  dashTrail: {fileID: 3607252478168810823}
   maxHealthPoints: 500
   currentHealthPoints: 0
   abilityController: {fileID: 2121885897375394524}
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
+  dash: {fileID: 11400000, guid: d0aa0c52c1c565d47a2076fec02e7279, type: 2}
   ability1: {fileID: 11400000, guid: eb01a3aa93a60b94d981ae4869eb58ac, type: 2}
   ability2: {fileID: 0}
   ability3: {fileID: 0}
