@@ -34,6 +34,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	[SerializeField] PlayerHealthBar healthBar;
 
+	public Material materialDefault = null;
+	public Material materialHit = null;
+
 	//Temporary, remove when implementing real death screen
 	[SerializeField] Transform deathScreenTest;
 	private bool isDying = false;
@@ -85,6 +88,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentMeleeAttack = currentMeleeAttack;
 		abilityController.CurrentRangedAttack = currentRangedAttack;
 		abilityController.SetAttacks();
+
+		materialDefault = Sprite.material;
 
 		currentHealthPoints = maxHealthPoints;
 		if (healthBar != null)
@@ -274,6 +279,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(float damage)
 	{
+		StartCoroutine(playerFlashColor());
 		currentHealthPoints -= damage;
 		healthBar.SetHP(currentHealthPoints);
 		if (currentHealthPoints <= 0 && !isDying) Die();
@@ -331,5 +337,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Respawn();
 		isDying = false;
 		yield return null;
+	}
+
+	IEnumerator playerFlashColor()
+	{
+		Sprite.material = materialHit;
+		yield return new WaitForSeconds(0.09f);
+		Sprite.material = materialDefault;
 	}
 }
