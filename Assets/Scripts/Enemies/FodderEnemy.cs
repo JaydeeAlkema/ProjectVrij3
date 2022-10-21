@@ -12,9 +12,9 @@ public class FodderEnemy : EnemyBase
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
-	[SerializeField] private float windUpTime = 0.2f;
-	[SerializeField] private float dashSpeed = 15;
-	[SerializeField] private float dashDuration = 0.4f;
+	[SerializeField] private float windUpTime = 0.3f;
+	[SerializeField] private float dashSpeed = 9;
+	[SerializeField] private float dashDuration = 0.5f;
 	[SerializeField] private float endLag = 0.8f;
 	public bool hasHitbox = false;
 	public CapsuleCollider2D hurtbox;
@@ -112,14 +112,20 @@ public class FodderEnemy : EnemyBase
 	{
 		Attacking = true;
 		hasHitbox = true;
+		fodderAnimator.Play("Fodder1Windup");
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Rb2d.velocity = new Vector2(0, 0);
 		yield return new WaitForSeconds(windUpTime);
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+		fodderAnimator.Play("Fodder1Attack");
 		Vector2 dashDir = target.transform.position - Rb2d.transform.position;
 		Rb2d.velocity = dashDir.normalized * dashSpeed;
 		yield return new WaitForSeconds(dashDuration);
+		fodderAnimator.Play("Fodder1Landing");
 		Rb2d.velocity = new Vector2(0, 0);
 		hasHitbox = false;
 		yield return new WaitForSeconds(endLag);
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Attacking = false;
 	}
 }
