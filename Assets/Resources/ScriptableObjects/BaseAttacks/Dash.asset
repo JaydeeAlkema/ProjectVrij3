@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dash
   m_EditorClassIdentifier: 
   ability: {fileID: 0}
-  coolDown: 500
+  coolDown: 1000
   damage: 0
   critChance: 0
   distance: 0
@@ -28,8 +28,8 @@ MonoBehaviour:
   burnObject: {fileID: 0}
   effects: 000000000000000000000000
   trailUpgrade: 0
-  dashSpeed: 100
-  dashDuration: 0.2
+  dashSpeed: 25
+  dashDuration: 0.1
   statusEffectType: 0
   slowAmount: 0
   slowDuration: 0
