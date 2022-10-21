@@ -125,13 +125,17 @@ public class FodderEnemy : EnemyBase
 
 		//Dash starts
 		hasHitbox = true;
-		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		fodderAnimator.Play("Fodder1Attack");
 		Vector2 dashDir = target.transform.position - Rb2d.transform.position;
+		float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
+		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+		enemySprite.flipX = false;
 		Rb2d.velocity = dashDir.normalized * dashSpeed;
 		yield return new WaitForSeconds(dashDuration);
 
 		//Landing starts
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		fodderAnimator.Play("Fodder1Landing");
 		Rb2d.velocity = new Vector2(0, 0);
 		hasHitbox = false;
