@@ -59,6 +59,12 @@ public class Projectile : MonoBehaviour
 			}
 			Destroy(this.gameObject);
 		}
+
+		if (collision.gameObject.layer == 10)
+		{
+			Debug.Log("AAAAA");
+			Destroy(this.gameObject);
+		}
 	}
 
 	private void OnDestroy()
