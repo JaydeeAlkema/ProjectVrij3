@@ -120,12 +120,16 @@ MonoBehaviour:
   beingCrowdControlled: 0
   meleeTarget: 0
   castTarget: 0
-  layerMask:
+  avoidEnemyLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
   fodderAnimator: {fileID: 6017575560788466592}
   damage: 25
   player: {fileID: 0}
+  hitDetectionRadius: 0.55
   windUpTime: 0.3
   dashSpeed: 9
   dashDuration: 0.5

@@ -29,7 +29,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public bool beingCrowdControlled = false;
 	public bool meleeTarget = false;
 	public bool castTarget = false;
-	public LayerMask layerMask = default;
+	public LayerMask avoidEnemyLayerMask = default;
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
@@ -53,7 +53,6 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void Awake()
 	{
-		
 
 		rb2d = GetComponent<Rigidbody2D>();
 		destinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
@@ -191,6 +190,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void Die()
 	{
+		StopAllCoroutines();
+		Time.timeScale = 1f;
 		Destroy(this.gameObject);
 	}
 
@@ -204,15 +205,23 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		else
 		{
 			beingCrowdControlled = false;
-			Physics.IgnoreLayerCollision(layerMask.value, layerMask.value, true);
+			Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, true);
 		}
 	}
 
 	public void Pull(Vector2 pullPoint)
 	{
 		beingCrowdControlled = true;
-		Physics.IgnoreLayerCollision(layerMask.value, layerMask.value, false);
+		Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, false);
 		this.pullPoint = pullPoint;
+	}
+
+	public IEnumerator HitStop()
+	{
+		Time.timeScale = 0.2f;
+		yield return new WaitForSeconds(0.015f);
+		Time.timeScale = 1f;
+		yield return null;
 	}
 
 	public void OnDrawGizmos()

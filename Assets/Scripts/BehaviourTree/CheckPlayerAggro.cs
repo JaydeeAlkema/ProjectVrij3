@@ -27,6 +27,7 @@ public class CheckPlayerAggro : BTNode
 			if (playerCollider != null)
 			{
 				parent.parent.SetData("target", playerCollider.transform);
+				enemyScript.Target = playerCollider.transform;
 			}
 
 			state = BTNodeState.FAILURE;
