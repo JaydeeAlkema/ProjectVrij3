@@ -4,51 +4,56 @@ using UnityEngine;
 
 public class FodderEnemy : EnemyBase
 {
-	private int playerLayer = 1 << 8;
+	public LayerMask playerLayerMask;
 
-	[SerializeField] public Animator fodderAnimator;
+	public Animator fodderAnimator;
 
 	[SerializeField] private float damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
-	[SerializeField] private float windUpTime = 0.2f;
-	[SerializeField] private float dashSpeed = 15;
-	[SerializeField] private float dashDuration = 0.4f;
+	[SerializeField] private float hitDetectionRadius = 1f;
+	[SerializeField] private float windUpTime = 0.3f;
+	[SerializeField] private float dashSpeed = 9;
+	[SerializeField] private float dashDuration = 0.5f;
 	[SerializeField] private float endLag = 0.8f;
 	public bool hasHitbox = false;
 	public CapsuleCollider2D hurtbox;
 
 	void Awake()
 	{
-		player = FindObjectOfType<PlayerControler>().gameObject;
+		//player = FindObjectOfType<PlayerControler>().gameObject;
 		hurtbox = this.GetComponent<CapsuleCollider2D>();
 
 		baseSpeed = Speed;
 	}
-	// Update is called once per frame
+
 	void Update()
 	{
 		base.Update();
-		//Vector3 targetDir = player.transform.position - this.rb2d.transform.position;
-		//rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
-		HitBox();
+		if (Target != null)
+		{
+			HitBox();
+		}
 		LookAtTarget();
 	}
 
 	void HitBox()
 	{
-		Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayer);
-		if(playerBody != null & hasHitbox)
+		if (Vector2.Distance(transform.position, Target.position) <= 1)
 		{
-			AttackPlayer(playerBody.gameObject);
-			hasHitbox = false;
+			if (Target.gameObject != null && hasHitbox)
+			{
+				AttackPlayer(Target.gameObject);
+				hasHitbox = false;
+			}
 		}
+		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
 	}
 
 	void AttackPlayer(GameObject playerObject)
 	{
-		playerObject.GetComponent<PlayerControler>().TakeDamage(damage);
+		playerObject.GetComponent<PlayerControler>()?.TakeDamage(damage);
 	}
 
 	//private void OnTriggerEnter2D(Collider2D collision)
@@ -73,6 +78,7 @@ public class FodderEnemy : EnemyBase
 		}
 		DamagePopup(damage);
 		HealthPoints -= damage;
+		StartCoroutine(HitStop());
 		StartCoroutine(FlashColor());
 		if (HealthPoints <= 0) Die();
 	}
@@ -110,16 +116,37 @@ public class FodderEnemy : EnemyBase
 
 	public IEnumerator DashAttack(Transform target)
 	{
+		//Windup starts
 		Attacking = true;
-		hasHitbox = true;
+		fodderAnimator.Play("Fodder1Windup");
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Rb2d.velocity = new Vector2(0, 0);
 		yield return new WaitForSeconds(windUpTime);
+
+		//Dash starts
+		hasHitbox = true;
+		fodderAnimator.Play("Fodder1Attack");
 		Vector2 dashDir = target.transform.position - Rb2d.transform.position;
+		float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
+		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+		enemySprite.flipX = false;
 		Rb2d.velocity = dashDir.normalized * dashSpeed;
 		yield return new WaitForSeconds(dashDuration);
+
+		//Landing starts
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+		fodderAnimator.Play("Fodder1Landing");
 		Rb2d.velocity = new Vector2(0, 0);
 		hasHitbox = false;
 		yield return new WaitForSeconds(endLag);
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Attacking = false;
+	}
+
+	public void OnDrawGizmosSelected()
+	{
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(transform.position, hitDetectionRadius);
 	}
 }

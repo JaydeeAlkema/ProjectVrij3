@@ -12,17 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
   m_Name: RangedAttack
   m_EditorClassIdentifier: 
+  ability: {fileID: 0}
   coolDown: 250
   damage: 25
   critChance: 0
   distance: 0
   boxSize: {x: 4, y: 6}
+  circleSize: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
   castObject: {fileID: 3210017399674347035, guid: f65b5458f6dbcfa4da1048f4471f7ade, type: 3}
-  lifeSpan: 0.8
-  force: 11
+  lifeSpan: 0.7
+  force: 15
   burnObject: {fileID: 0}
   effects: 000000000000000000000000
   trailUpgrade: 0
