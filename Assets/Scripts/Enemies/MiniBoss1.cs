@@ -13,8 +13,8 @@ public class MiniBoss1 : EnemyBase
 	[SerializeField] private SpriteRenderer coreCharged;
 
 	private Color baseColor;
-	private float agitateCounter = 0f;
-	private float respawnCounter = 0f;
+	public float agitateCounter = 0f;
+	public float respawnCounter = 0f;
 	public float spawnTimeMultiplier = 1f;
 
 	public List<GameObject> mobs = new List<GameObject>();
@@ -35,7 +35,7 @@ public class MiniBoss1 : EnemyBase
 		SpawnMobs();
 	}
 
-	private void Update()
+	private void FixedUpdate()
 	{
 		base.Update();
 		healthBar.SetHP(HealthPoints);

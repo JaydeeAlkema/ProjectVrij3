@@ -441,7 +441,7 @@ Transform:
   m_GameObject: {fileID: 571556238}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6559425, y: 0.6559425, z: 0.6559425}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 856065327}
@@ -588,6 +588,8 @@ MonoBehaviour:
   respawnTime: 35
   bodyCharged: {fileID: 616313523}
   coreCharged: {fileID: 1394814182}
+  agitateCounter: 0
+  respawnCounter: 0
   spawnTimeMultiplier: 1
   mobs: []
   innerSpawnPoints:
@@ -619,7 +621,6 @@ GameObject:
   m_Component:
   - component: {fileID: 616313521}
   - component: {fileID: 616313523}
-  - component: {fileID: 616313522}
   m_Layer: 0
   m_Name: ChargedBody
   m_TagString: Untagged
@@ -636,28 +637,12 @@ Transform:
   m_GameObject: {fileID: 616313520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6.2968044, y: 6.2968044, z: 6.2968044}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 571556239}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &616313522
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 616313520}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!212 &616313523
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -814,7 +799,7 @@ GameObject:
   - component: {fileID: 856065327}
   - component: {fileID: 856065328}
   - component: {fileID: 856065329}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -830,7 +815,7 @@ Transform:
   m_GameObject: {fileID: 856065326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6.2968044, y: 6.2968044, z: 6.2968044}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 571556239}
@@ -1168,7 +1153,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1394814180}
   - component: {fileID: 1394814182}
-  - component: {fileID: 1394814181}
   m_Layer: 0
   m_Name: ChargedCore
   m_TagString: Untagged
@@ -1191,22 +1175,6 @@ Transform:
   m_Father: {fileID: 571556239}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1394814181
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1394814179}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!212 &1394814182
 SpriteRenderer:
   m_ObjectHideFlags: 0
