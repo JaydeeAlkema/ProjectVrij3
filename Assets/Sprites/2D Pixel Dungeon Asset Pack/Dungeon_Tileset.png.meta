@@ -1148,7 +1148,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_49
+      name: Stones 1
       rect:
         serializedVersion: 2
         x: 144
@@ -1358,7 +1358,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_59
+      name: Stones 2
       rect:
         serializedVersion: 2
         x: 144
@@ -1547,7 +1547,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_68
+      name: Bones 2
       rect:
         serializedVersion: 2
         x: 128
@@ -1673,7 +1673,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_74
+      name: Banner 1
       rect:
         serializedVersion: 2
         x: 64
@@ -1736,7 +1736,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_77
+      name: Bones 1
       rect:
         serializedVersion: 2
         x: 112
@@ -1799,7 +1799,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_80
+      name: Wooden Chest Small
       rect:
         serializedVersion: 2
         x: 0
@@ -1820,7 +1820,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_81
+      name: Metal Chest Small 1
       rect:
         serializedVersion: 2
         x: 16
@@ -1841,7 +1841,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_82
+      name: Metal Chest Big 1
       rect:
         serializedVersion: 2
         x: 32
@@ -1862,7 +1862,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_83
+      name: Wooden Chest Big
       rect:
         serializedVersion: 2
         x: 48
@@ -1883,7 +1883,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_84
+      name: Metal Chest Big 2
       rect:
         serializedVersion: 2
         x: 64
@@ -1904,7 +1904,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_85
+      name: Metal Chest Small 2
       rect:
         serializedVersion: 2
         x: 80
@@ -1925,7 +1925,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_86
+      name: Coin
       rect:
         serializedVersion: 2
         x: 96
@@ -1946,7 +1946,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_87
+      name: Small Mana Potion
       rect:
         serializedVersion: 2
         x: 112
@@ -1967,7 +1967,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_88
+      name: Silver Key
       rect:
         serializedVersion: 2
         x: 128
@@ -1988,7 +1988,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_89
+      name: Big Health Potion
       rect:
         serializedVersion: 2
         x: 144
@@ -2009,7 +2009,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_90
+      name: Wall Torch Front Lit
       rect:
         serializedVersion: 2
         x: 0
@@ -2030,7 +2030,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_91
+      name: Wall Torch Side Lit
       rect:
         serializedVersion: 2
         x: 16
@@ -2051,7 +2051,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_92
+      name: Wall Torch Front Unlit
       rect:
         serializedVersion: 2
         x: 32
@@ -2156,7 +2156,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_97
+      name: Big Mana Potion
       rect:
         serializedVersion: 2
         x: 112
@@ -2177,7 +2177,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_98
+      name: Small Health Potion
       rect:
         serializedVersion: 2
         x: 128
@@ -2198,7 +2198,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_99
+      name: Golden Key
       rect:
         serializedVersion: 2
         x: 144
@@ -2232,12 +2232,13 @@ TextureImporter:
       Dungeon_Tileset_62: 485971618
       Top Left Corner Sharp: 699263333
       Top Left Corner Rounded: 584467548
+      Small Health Potion: -1506760086
+      Golden Key: 486738751
       Bottom Wall 1: -1869997835
       Dungeon_Tileset_63: 2000784441
       Floor No Edges 7: 2084124841
-      Dungeon_Tileset_83: 2091998223
+      Wall Torch Front Unlit: -586220766
       Top Right Corner Rounded: 1609169674
-      Dungeon_Tileset_92: -586220766
       Floor No Edges 10: 157804456
       Top Right Corner Sharp: 2040022257
       Left Wall 3: 57958679
@@ -2245,89 +2246,88 @@ TextureImporter:
       Floor 7: -1378517816
       Dungeon_Tileset_94: -1238164304
       Top Wall 4: 1691871387
-      Dungeon_Tileset_89: 1133655393
+      Coin: -272463858
       Dungeon_Tileset_61: 457411451
       Dungeon_Tileset_72: 1301495971
-      Dungeon_Tileset_77: 2027542645
-      Dungeon_Tileset_87: -1734758351
       Floor No Edges 1: -1994589904
-      Dungeon_Tileset_84: 1068316721
       Dungeon_Tileset_56: -1354044341
-      Dungeon_Tileset_74: -724776260
       Dungeon_Tileset_75: -875783249
       Dungeon_Tileset_46: 2036157965
+      Stones 1: 1754463617
       Right Wall 2: -1617129924
       Floor No Edges 6: -467640460
       Floor No Edges 4: 1010394929
       Floor 2: 552980576
-      Trapdoor: 660340836
       Bottom Wall 2: 340844279
+      Small Mana Potion: -1734758351
+      Trapdoor: 660340836
+      Stones 2: 1465405479
       Floor No Edges 9: 1320179203
+      Big Mana Potion: -1399534400
       Floor 11: -1753688627
       Bottom Wall Sharp 2: 2068126234
+      Bones 1: 2027542645
       Floor Ladder: 2013395492
       Bottom Right Wall: -1067463408
       Top Wall 3: 684171043
       Dungeon_Tileset_37: 619983559
       Left Wall 2: 985038510
       Background 3: -1709248783
+      Wall Torch Side Lit: -2041788793
       Dungeon_Tileset_47: -1596920768
-      Dungeon_Tileset_82: -1770860184
       Dungeon_Tileset_60: 714682699
       Dungeon_Tileset_67: 302367397
       Floor No Edges 2: -146117464
       Floor 10: 836146564
-      Dungeon_Tileset_86: -272463858
-      Dungeon_Tileset_59: 1465405479
-      Dungeon_Tileset_97: -1399534400
       Bottom Left Wall: 1295239396
+      Left Wall 1: 1172881229
       Dungeon_Tileset_95: 2136335943
-      Dungeon_Tileset_98: -1506760086
+      Metal Chest Small 1: -518834792
       Right Wall 3: 1397102630
       Floor No Edges 12: -379608226
       Dungeon_Tileset_93: 1184625099
-      Left Wall 1: 1172881229
+      Metal Chest Big 1: -1770860184
       Dungeon_Tileset_73: 1005684922
+      Metal Chest Big 2: 1068316721
       Bottom Wall Sharp 1: 716512112
       Dungeon_Tileset_65: 1857273157
       Dungeon_Tileset_66: -58655535
       Dungeon_Tileset_36: -254185104
       Right Wall  1: -1355762240
       Dungeon_Tileset_70: -555754925
-      Dungeon_Tileset_81: -518834792
+      Big Health Potion: 1133655393
       Background 1: 1223181278
       Dungeon_Tileset_76: 74038611
-      Dungeon_Tileset_80: 388672749
       Background 2: -417110720
-      Dungeon_Tileset_68: 235064338
       Floor 3: -1255953481
       Floor 12: -1444534409
       Floor No Edges 5: -434650341
       Floor 6: -1581247531
       Floor 5: -984127320
       Floor No Edges 11: -1692008770
+      Wooden Chest Small: 388672749
       Left Wall 4: -202535545
-      Dungeon_Tileset_49: 1754463617
-      Dungeon_Tileset_90: 1735270170
+      Wall Torch Front Lit: 1735270170
       Floor 8: 42804958
       Bottom Wall 4: -2022398927
-      Dungeon_Tileset_88: -154595312
-      Floor No Edges 3: -1984020428
       Floor 9: 2138412673
+      Floor No Edges 3: -1984020428
       Dungeon_Tileset_48: 423822612
       Top Wall 1: 1515833362
       Top Wall 2: 1029127999
       Dungeon_Tileset_64: -1771408304
       Bottom Wall 3: -1974086491
+      Wooden Chest Big: 2091998223
       Floor 4: -380625653
       Right Wall 4: 341539676
       Floor No Edges 8: -727964843
-      Dungeon_Tileset_99: 486738751
+      Bones 2: 235064338
+      Metal Chest Small 2: 1914447345
+      Banner 1: -724776260
       Dungeon_Tileset_96: -511896390
-      Dungeon_Tileset_91: -2041788793
+      Silver Key: -154595312
       Dungeon_Tileset_57: 137499709
       Dungeon_Tileset_71: 608423218
-      Dungeon_Tileset_85: 1914447345
       Dungeon_Tileset_58: -1666358348
   spritePackingTag: 
   pSDRemoveMatte: 0
