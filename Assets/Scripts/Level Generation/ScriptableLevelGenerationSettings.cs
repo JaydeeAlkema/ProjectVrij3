@@ -11,6 +11,7 @@ public class ScriptableLevelGenerationSettings : ScriptableObject
 	[Foldout("Base Level Generation")] public int pathDepth = 2; // How far from the center the path will generate extra path tiles. So a depth of 2 results in a path that is 5 wide in total. Example: (## # ##)
 	[Foldout("Base Level Generation")] public Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
+	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableBossRooms = new List<ScriptableRoom>();
 
 	[Foldout("Sprites")] public List<Sprite> floorSprites = new List<Sprite>();
 	[Foldout("Sprites")] public List<Sprite> topWallSprites = new List<Sprite>();

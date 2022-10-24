@@ -188,9 +188,19 @@ public class LevelGeneratorV2 : MonoBehaviour
 		executionTime.Start();
 
 		// Spawn the rooms within the chunk borders.
-		foreach (Chunk chunk in path)
+		for (int r = 0; r < path.Count; r++)
 		{
-			ScriptableRoom randRoom = LGS.spawnableRooms[Random.Range(0, LGS.spawnableRooms.Count)];
+			Chunk chunk = path[r];
+			ScriptableRoom randRoom = null;
+			// Spawn roomType depending on how far along the path we are (the end of the path should always be a boss room)
+			if (r == path.Count - 1)
+			{
+				randRoom = LGS.spawnableBossRooms[Random.Range(0, LGS.spawnableBossRooms.Count)];
+			}
+			else
+			{
+				randRoom = LGS.spawnableRooms[Random.Range(0, LGS.spawnableRooms.Count)];
+			}
 
 			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity);
 			newRoomGO.name = $"Room [{rooms.Count + 1}]";
@@ -209,8 +219,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 			rooms.Add(room);
 		}
 
-		// Assign connected rooms for each room.
 		int roomIndex = 0;
+		// Assign connected rooms for each room.
 		foreach (Room room in rooms)
 		{
 			if (roomIndex == 0)
