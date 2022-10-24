@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5793724696057155424
 SpriteRenderer:
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.77718306, g: 0.8679245, b: 0.32260588, a: 1}
   m_FlipX: 0
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 75
-  speed: 3
+  speed: 6
   aggroRange: 0
   attackRange: 0
   attacking: 0
@@ -145,7 +145,7 @@ MonoBehaviour:
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 0}
   materialDefault: {fileID: 0}
-  materialHit: {fileID: 0}
+  materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   destinationSetter: {fileID: 0}
   aiPath: {fileID: 0}
   beingCrowdControlled: 0
@@ -156,9 +156,10 @@ MonoBehaviour:
     m_Bits: 0
   damage: 25
   player: {fileID: 0}
-  aggro: 0
   hasHitbox: 1
   center: {fileID: 0}
-  orbitRadius: 2
+  orbitRadius: 3
   radiusSpeed: 1
   rotationSpeed: 40
+  agitated: 0
+  aggro: 0

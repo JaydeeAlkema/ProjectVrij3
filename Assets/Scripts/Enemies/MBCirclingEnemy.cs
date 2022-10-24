@@ -11,7 +11,7 @@ public class MBCirclingEnemy : EnemyBase
 	[SerializeField] private bool hasHitbox = true;
 	private float checkMaxHP;
 
-	public Transform center;
+	public Vector3 center;
 	public float orbitRadius;
 	public float radiusSpeed = 10f;
 	public float rotationSpeed = 6f;
@@ -22,7 +22,7 @@ public class MBCirclingEnemy : EnemyBase
 	{
 		checkMaxHP = HealthPoints;
 		player = FindObjectOfType<PlayerControler>().gameObject;
-		transform.position = (transform.position - center.position).normalized * orbitRadius + center.position;
+		transform.position = (transform.position - center).normalized * orbitRadius + center;
 	}
 
 	void Update()
@@ -57,8 +57,8 @@ public class MBCirclingEnemy : EnemyBase
 	{
 		if (!aggro)
 		{
-			transform.RotateAround(center.position, Vector3.forward, rotationSpeed * Time.deltaTime);
-			var desiredPosition = (transform.position - center.position).normalized * orbitRadius + center.position;
+			transform.RotateAround(center, Vector3.forward, rotationSpeed * Time.deltaTime);
+			var desiredPosition = (transform.position - center).normalized * orbitRadius + center;
 			transform.position = Vector3.MoveTowards(transform.position, desiredPosition, radiusSpeed * Time.deltaTime);
 		}
 	}

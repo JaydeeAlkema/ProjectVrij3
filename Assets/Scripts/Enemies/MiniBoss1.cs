@@ -4,14 +4,23 @@ using UnityEngine;
 
 public class MiniBoss1 : EnemyBase
 {
+	[SerializeField] private GameObject mobPrefab;
 	[SerializeField] PlayerHealthBar healthBar;
 	[SerializeField] private float maxHealthPoints = 1000;
 	[SerializeField] private float agitateTime = 5f;
+	[SerializeField] private float respawnTime = 15f;
 	[SerializeField] private SpriteRenderer bodyCharged;
-	private Color baseColor;
-	private float counter = 0f;
+	[SerializeField] private SpriteRenderer coreCharged;
 
-	public GameObject[] addMobs;
+	private Color baseColor;
+	private float agitateCounter = 0f;
+	private float respawnCounter = 0f;
+	public float spawnTimeMultiplier = 1f;
+
+	public List<GameObject> mobs = new List<GameObject>();
+	public Transform[] innerSpawnPoints;
+	public Transform[] outerSpawnPoints;
+	public bool respawning = false;
 
 	private void Start()
 	{
@@ -22,6 +31,8 @@ public class MiniBoss1 : EnemyBase
 		}
 
 		baseColor = this.GetComponent<SpriteRenderer>().color;
+
+		SpawnMobs();
 	}
 
 	private void Update()
@@ -29,33 +40,109 @@ public class MiniBoss1 : EnemyBase
 		base.Update();
 		healthBar.SetHP(HealthPoints);
 		AgitateTimer();
+		MobListUpdate();
+		if (mobs.Count < (innerSpawnPoints.Length + outerSpawnPoints.Length) && !respawning)
+		{
+			SpawnTimer();
+		}
+	}
+
+	public void SpawnMobs()
+	{
+		foreach (Transform spawnPoint in innerSpawnPoints)
+		{
+			GameObject spawnedMob = Instantiate(mobPrefab, spawnPoint.position, Quaternion.identity);
+			spawnedMob.GetComponent<MBCirclingEnemy>().center = transform.position;
+			mobs.Add(spawnedMob);
+		}
+
+		foreach (Transform spawnPoint in outerSpawnPoints)
+		{
+			GameObject spawnedMob = Instantiate(mobPrefab, spawnPoint.position, Quaternion.identity);
+			MBCirclingEnemy spawnedScript = spawnedMob.GetComponent<MBCirclingEnemy>();
+			spawnedScript.center = transform.position;
+			spawnedScript.orbitRadius = 5f;
+			spawnedScript.rotationSpeed = spawnedScript.rotationSpeed * -1f;
+			mobs.Add(spawnedMob);
+		}
+	}
+
+	public void MobListUpdate()
+	{
+		foreach(GameObject mob in mobs)
+		{
+			if(mob == null)
+			{
+				spawnTimeMultiplier += 0.2f;
+				mobs.Remove(mob);
+			}
+		}
+	}
+
+	public void SpawnTimer()
+	{
+		respawnCounter += spawnTimeMultiplier * Time.fixedDeltaTime;
+
+		Color coreColor = coreCharged.color;
+		coreColor.a = respawnCounter / respawnTime;
+		coreCharged.color = coreColor;
+
+		if (respawnCounter >= respawnTime)
+		{
+			respawnCounter = 0f;
+			coreColor.a = 0f;
+			coreCharged.color = coreColor;
+			StartCoroutine(SpawnSequence());
+		}
 	}
 
 	public void AgitateTimer()
 	{
-		counter += Time.fixedDeltaTime;
+		agitateCounter += Time.fixedDeltaTime;
 
 		Color chargeColor = bodyCharged.color;
-		chargeColor.a = counter / agitateTime;
+		chargeColor.a = agitateCounter / agitateTime;
 		bodyCharged.color = chargeColor;
 
-		if (counter >= agitateTime)
+		if (agitateCounter >= agitateTime)
 		{
-			foreach (GameObject addMob in addMobs)
+			foreach (GameObject mob in mobs)
 			{
-				if (addMob != null)
+				if (mob != null)
 				{
-					MBCirclingEnemy mobScript = addMob.GetComponent<MBCirclingEnemy>();
+					MBCirclingEnemy mobScript = mob.GetComponent<MBCirclingEnemy>();
 					if (mobScript.agitated)
 					{
 						mobScript.aggro = true;
 						mobScript.agitated = false;
 					}
 				}
+				else
+				{
+					mobs.Remove(mob);
+				}
 			}
-			counter = 0f;
+			agitateCounter = 0f;
 			Debug.Log("ATTACK!!!");
 		}
+	}
+
+	IEnumerator SpawnSequence()
+	{
+		respawning = true;
+		foreach (GameObject mob in mobs)
+		{
+			if (mob != null)
+			{
+				Destroy(mob);
+			}
+		}
+		mobs.Clear();
+		spawnTimeMultiplier = 1f;
+		yield return new WaitForSeconds(1f);
+		SpawnMobs();
+		respawning = false;
+		yield return null;
 	}
 
 	public override IEnumerator FlashColor()
