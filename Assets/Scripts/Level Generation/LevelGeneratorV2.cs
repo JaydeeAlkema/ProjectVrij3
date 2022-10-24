@@ -487,11 +487,20 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room roomA = rooms[i];
 			Room roomB = rooms[i + 1];
 
+			childPathTiles.AddRange(roomA.CollideableTiles);
+			childPathTiles.AddRange(roomB.CollideableTiles);
+
 			foreach (Transform pathTile in childPathTiles)
 			{
-				SpriteRenderer spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
-				BoxCollider2D boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
-				boxCollider2D.size = Vector2.one;
+				SpriteRenderer spriteRenderer = pathTile.GetComponent<SpriteRenderer>();
+				BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
+
+				if (spriteRenderer == null) spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				if (boxCollider2D == null)
+				{
+					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
+					boxCollider2D.size = Vector2.one;
+				}
 
 				List<GameObject> neighbouringTiles = new List<GameObject>();
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
@@ -517,9 +526,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 				List<Transform> occupiedTiles = new List<Transform>();
 				occupiedTiles.AddRange(childPathTiles);
 				occupiedTiles.AddRange(roomA.CollideableTiles);
-				//occupiedTiles.AddRange(roomA.NoncollideableTiles);
+				occupiedTiles.AddRange(roomA.NoncollideableTiles);
 				occupiedTiles.AddRange(roomB.CollideableTiles);
-				//occupiedTiles.AddRange(roomB.NoncollideableTiles);
+				occupiedTiles.AddRange(roomB.NoncollideableTiles);
+
 				if (i < pathwayParents.Count - 1) occupiedTiles.AddRange(pathwayParents[i + 1].GetComponentsInChildren<Transform>());
 				if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
 
@@ -556,25 +566,21 @@ public class LevelGeneratorV2 : MonoBehaviour
 				// Top Wall
 				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
 				}
 				// Left Wall
 				else if (!leftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = leftWallSprites[Random.Range(0, leftWallSprites.Count)];
 				}
 				// Right Wall
 				else if (!rightTile && bottomTile && bottomLeftTile && leftTile & topLeftTile && topTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = rightWallSprites[Random.Range(0, rightWallSprites.Count)];
 				}
 				#endregion
@@ -629,7 +635,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					spriteRenderer.flipX = true;
 				}
 				#endregion
-
 			}
 		}
 
