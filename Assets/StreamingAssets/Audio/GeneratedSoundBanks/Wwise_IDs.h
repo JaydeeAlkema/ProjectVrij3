@@ -13,7 +13,11 @@ namespace AK
 {
     namespace EVENTS
     {
-        static const AkUniqueID PLYR_ATTACK_CAST = 2843458411U;
+        static const AkUniqueID NPC_DMG_CAST = 3509614367U;
+        static const AkUniqueID NPC_DMG_MELEE = 2025828010U;
+        static const AkUniqueID PLR_ATTCK_CAST = 1994383775U;
+        static const AkUniqueID PLR_ATTCK_MELEE = 3420739114U;
+        static const AkUniqueID PLR_DMG_NPC = 2474305640U;
     } // namespace EVENTS
 
     namespace STATES

@@ -1,6 +1,14 @@
 Event	ID	Name			Wwise Object Path	Notes
-	2843458411	Plyr_Attack_Cast			\Player\Player Attack\Plyr_Attack_Cast	
+	1994383775	plr_attck_cast			\Player\Player Actions\plr_attck_cast	
+	2025828010	npc_dmg_melee			\NPC\npc_dmg_melee	
+	2474305640	plr_dmg_npc			\Player\Player Actions\plr_dmg_npc	
+	3420739114	plr_attck_melee			\Player\Player Actions\plr_attck_melee	
+	3509614367	npc_dmg_cast			\NPC\npc_dmg_cast	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	1068396648	Cast	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\Cast_10C4C929.wem		\Actor-Mixer Hierarchy\Player Actions\Plyr_Attack_Cast\Cast		267920
+	201842440	lb_sx_uni_plr_attck_melee_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_attck_melee_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player Actions\plr_attck_melee\lb_sx_uni_plr_attck_melee_01		182512
+	457766068	lb_sx_uni_npc_dmg_melee_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_dmg_melee_01_10C4C929.wem		\Actor-Mixer Hierarchy\NPC Interactives\npc_dmg_melee\lb_sx_uni_npc_dmg_melee_01		152168
+	506543933	lb_sx_uni_plr_dmg_npc_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_dmg_npc_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player Actions\plr_dmg_npc\lb_sx_uni_plr_dmg_npc_01		246844
+	586357725	lb_sx_uni_plr_attck_cast_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_attck_cast_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player Actions\plr_attck_cast\lb_sx_uni_plr_attck_cast_01		267920
+	859909442	lb_sx_uni_npc_dmg_cast_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_dmg_cast_01_10C4C929.wem		\Actor-Mixer Hierarchy\NPC Interactives\npc_dmg_cast\lb_sx_uni_npc_dmg_cast_01		256144
 
