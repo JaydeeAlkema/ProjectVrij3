@@ -1,3 +1,8 @@
+// Writen by: Jaydee Alkema
+// the Level Generator is responsible for, well, generating the map.
+// This generator is a bit of a mix of behaviours however. Rooms for example aren't generate, but placed within the level chunks.
+// A pathway is then generated between the rooms to connect them together. This might be a bit unconventional, but this is done for experimenting purposes, and it works relatively well.
+
 using NaughtyAttributes;
 using Pathfinding;
 using System;
@@ -703,7 +708,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (room.RoomType == RoomType.Boss) break;
 
 			// Spawn Wall Decorations
-			// This will be done at a later date because this requires to tiles to store their orientation.
+			// This will be done at a later date because this requires the tiles to store their orientation.
 
 			// Spawn Floor Decorations
 			foreach (Transform noncollideableTile in room.NoncollideableTiles)
