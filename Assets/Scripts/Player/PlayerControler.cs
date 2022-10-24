@@ -42,7 +42,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	[SerializeField] private float maxHealthPoints = 500;
 	[SerializeField] private float currentHealthPoints;
-	[SerializeField] private AbilityController abilityController;
+	private AbilityController abilityController;
 	public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }
@@ -80,6 +80,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	// Start is called before the first frame update
 	void Start()
 	{
+		abilityController = AbilityController.AbilityControllerInstance;
 		rb2d = GetComponent<Rigidbody2D>();
 		abilityController.Player = this;
 		currentMeleeAttack.BaseStats = meleeAttack;

@@ -23,6 +23,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private bool trailUpgrade;
 	[SerializeField] private float dashSpeed = 100f;
 	[SerializeField] private float dashDuration = 0.2f;
+	[SerializeField] private float attackTime = 200f;
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	public float CoolDown { get => coolDown; set => coolDown = value; }
@@ -39,6 +40,7 @@ public class AbilityScriptable : ScriptableObject
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	public float DashSpeed { get => dashSpeed; set => dashSpeed = value; }
 	public float DashDuration { get => dashDuration; set => dashDuration = value; }
+	public float AttackTime { get => attackTime; set => attackTime = value; }
 	public Ability Ability { get => ability; set => ability =  value ; }
 	public EffectType[] Effects { get => effects; set => effects = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;

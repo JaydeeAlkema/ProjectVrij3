@@ -7,6 +7,7 @@ public class MeleeAttack : Ability
 	private bool init = true;
 	public bool burnAreaUpgrade = false;
 	public GameObject burningGround;
+	System.Timers.Timer attackTimer = new System.Timers.Timer();
 
 	public override void CallAbility(PlayerControler _player)
 	{
@@ -35,5 +36,6 @@ public class MeleeAttack : Ability
 		damage = BaseStats.Damage;
 		distance = BaseStats.Distance;
 		coolDown = BaseStats.CoolDown;
+		AttackTime = BaseStats.AttackTime;
 	}
 }
