@@ -12,6 +12,8 @@ public class ScriptableLevelGenerationSettings : ScriptableObject
 	[Foldout("Base Level Generation")] public Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableBossRooms = new List<ScriptableRoom>();
+	[Foldout("Base Level Generation")] public List<Decoration> floorDecorations = new List<Decoration>();
+	[Foldout("Base Level Generation")] public List<Decoration> wallDecorations = new List<Decoration>();
 
 	[Foldout("Sprites")] public List<Sprite> floorSprites = new List<Sprite>();
 	[Foldout("Sprites")] public List<Sprite> topWallSprites = new List<Sprite>();
@@ -35,5 +37,12 @@ public struct EnemyGroup
 {
 	public GameObject enemyPrefab;
 	public Vector2Int enemyCountPerRoom;
+	public int spawnChance;
+}
+
+[System.Serializable]
+public struct Decoration
+{
+	public Sprite sprite;
 	public int spawnChance;
 }
