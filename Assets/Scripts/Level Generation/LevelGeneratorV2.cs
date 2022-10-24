@@ -719,7 +719,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 					SpriteRenderer spriteRenderer = decorationGO.AddComponent<SpriteRenderer>();
 					spriteRenderer.sprite = decorationSprite;
-					spriteRenderer.sortingOrder = 2;
+					spriteRenderer.sortingOrder = 1;
 
 					decorations.Add(decorationGO);
 				}
