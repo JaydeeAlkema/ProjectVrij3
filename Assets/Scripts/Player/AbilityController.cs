@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class AbilityController : MonoBehaviour
 {
+    private static AbilityController abilityControllerInstance;
     private PlayerControler player;
     private Rigidbody2D rb2d;
     private Vector3 mousePos;
     private Vector2 lookDir;
     private Transform castFromPoint;
+    [SerializeField] private bool isAttacking;
     private float angle;
     private IAbility currentMeleeAttack;
     private IAbility currentRangedAttack;
@@ -16,6 +18,8 @@ public class AbilityController : MonoBehaviour
     private IAbility currentAbility1;
     private IAbility currentAbility2;
     private IAbility currentAbility3;
+    public static AbilityController AbilityControllerInstance{ get => abilityControllerInstance; set => abilityControllerInstance = value; }
+    public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
     public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
     public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
     public IAbility CurrentDash { get => currentDash; set => currentDash = value; }
@@ -24,7 +28,12 @@ public class AbilityController : MonoBehaviour
     public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
     public PlayerControler Player { get => player; set => player = value; }
 
-    //gives all attacks/abilities cooldowns
+
+	private void Awake()
+	{
+        abilityControllerInstance = this;
+	}
+	//gives all attacks/abilities cooldowns
 	public void SetAttacks()
 	{
         currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats.CoolDown );
@@ -63,76 +72,84 @@ public class AbilityController : MonoBehaviour
     //Shit show of switches for all the effects with decorators
 	public IAbility MeleeAttacked(IAbility melee)
     {
-        foreach( KeyValuePair<StatusEffectType, bool> effect in melee.AbilityUpgrades )
+        if( !isAttacking )
         {
-            Debug.Log( "effect in effects is: " + effect );
-            if( effect.Value )
+            isAttacking = true;
+            foreach( KeyValuePair<StatusEffectType, bool> effect in melee.AbilityUpgrades )
             {
-                switch( effect.Key )
+                Debug.Log( "effect in effects is: " + effect );
+                if( effect.Value )
                 {
-                    case StatusEffectType.none:
-                        break;
-                    case StatusEffectType.Burn:
-                        IAbility burn = new BurningMeleeDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats );
-                        burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-                        burn.AbilityBehavior();
-                        Debug.Log( "should be burning" );
-                        break;
-                    case StatusEffectType.Stun:
-                        break;
-                    case StatusEffectType.Slow:
-                        IAbility slow = new SlowDecorator( currentMeleeAttack );
-                        break;
-                    case StatusEffectType.Marked:
-                        IAbility mark = new MarkDecorator( currentMeleeAttack );
-                        break;
-                    default:
-                        break;
+                    switch( effect.Key )
+                    {
+                        case StatusEffectType.none:
+                            break;
+                        case StatusEffectType.Burn:
+                            IAbility burn = new BurningMeleeDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats );
+                            burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+                            burn.AbilityBehavior();
+                            Debug.Log( "should be burning" );
+                            break;
+                        case StatusEffectType.Stun:
+                            break;
+                        case StatusEffectType.Slow:
+                            IAbility slow = new SlowDecorator( currentMeleeAttack );
+                            break;
+                        case StatusEffectType.Marked:
+                            IAbility mark = new MarkDecorator( currentMeleeAttack );
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+            IAbility anim = new AnimationDecorator( currentMeleeAttack, "MeleeAttack1", "isAttacking" );
+            anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            anim.CallAbility( this.GetComponent<PlayerControler>() );
+            currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            currentMeleeAttack.CallAbility( player );
         }
-        IAbility anim = new AnimationDecorator( currentMeleeAttack, "MeleeAttack1", "isAttacking" );
-        anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-        anim.CallAbility( this.GetComponent<PlayerControler>() );
-        currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-        currentMeleeAttack.CallAbility(player);
         return currentMeleeAttack;
 	}
 
     public IAbility RangeAttacked(IAbility ranged)
     {
-        foreach( KeyValuePair<StatusEffectType, bool> effect in ranged.AbilityUpgrades )
+        if( !isAttacking )
         {
-            if( effect.Value )
+            isAttacking = true;
+            foreach( KeyValuePair<StatusEffectType, bool> effect in ranged.AbilityUpgrades )
             {
-                switch( effect.Key )
+                if( effect.Value )
                 {
-                    case StatusEffectType.none:
-                        break;
-                    case StatusEffectType.Burn:
-                        Debug.Log( "burning" );
-                        IAbility burn = new BurningRangedDecorator( currentRangedAttack, true );
-                        burn.AbilityBehavior();
-                        break;
-                    case StatusEffectType.Stun:
-                        break;
-                    case StatusEffectType.Slow:
-                        IAbility slow = new SlowDecorator( currentRangedAttack );
-                        break;
-                    case StatusEffectType.Marked:
-                        IAbility mark = new MarkDecorator( currentRangedAttack );
-                        break;
-                    default:
-                        break;
+                    switch( effect.Key )
+                    {
+                        case StatusEffectType.none:
+                            break;
+                        case StatusEffectType.Burn:
+                            Debug.Log( "burning" );
+                            IAbility burn = new BurningRangedDecorator( currentRangedAttack, true );
+                            burn.AbilityBehavior();
+                            break;
+                        case StatusEffectType.Stun:
+                            break;
+                        case StatusEffectType.Slow:
+                            IAbility slow = new SlowDecorator( currentRangedAttack );
+                            break;
+                        case StatusEffectType.Marked:
+                            IAbility mark = new MarkDecorator( currentRangedAttack );
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                //currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+                //return currentRangedAttack;
             }
-            //currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-            //return currentRangedAttack;
+            IAbility anim = new AnimationDecorator( currentMeleeAttack, "", "isAttacking" );
+            anim.CallAbility( this.GetComponent<PlayerControler>() );
+            currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            currentRangedAttack.CallAbility( player );
         }
-        IAbility anim = new AnimationDecorator( currentMeleeAttack, "", "isAttacking" );
-        anim.CallAbility( this.GetComponent<PlayerControler>() );
-        currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-        currentRangedAttack.CallAbility( player );
         return currentRangedAttack;
 	}
 

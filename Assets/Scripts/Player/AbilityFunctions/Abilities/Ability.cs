@@ -35,6 +35,8 @@ public abstract class Ability : MonoBehaviour ,IAbility
 	public GameObject CastedObject { get; set; }
 	public bool TrailUpgrade { get; set; }
 	public int abilityID { get; set; }
+	public AbilityController Controller { get; set; }
+	public float AttackTime { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void AbilityBehavior(){ }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class RangedAttack : Ability
 {
 	private bool init = true;
+	System.Timers.Timer attackTimer = new System.Timers.Timer();
 
 	public override void CallAbility(PlayerControler _player)
 	{
@@ -33,5 +34,6 @@ public class RangedAttack : Ability
 		lifeSpan = BaseStats.LifeSpan;
 		force = BaseStats.Force;
 		damage = BaseStats.Damage;
+		AttackTime = BaseStats.AttackTime;
 	}
 }

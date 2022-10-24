@@ -48,6 +48,7 @@ public class CoolDownDecorator : AbilityDecorator
 	private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
 	{
 		cooledDown = true;
+		AbilityController.AbilityControllerInstance.IsAttacking = false;
 		coolDownTimer.Enabled = false;
 	}
 }
