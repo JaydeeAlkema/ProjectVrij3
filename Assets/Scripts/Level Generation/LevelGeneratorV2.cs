@@ -30,6 +30,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[Space]
 
 	[Header("Runtime References")]
+	[SerializeField] private int seed = 0;
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
 	[SerializeField] private List<Room> rooms = new List<Room>();
@@ -58,13 +59,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	private void Start()
 	{
-		if (SLGS.seed == 0)
-		{
-			SLGS.seed = Random.Range(0, int.MaxValue);
-		}
+		if (seed == 0) seed = Random.Range(0, int.MaxValue);
 
-		Random.InitState(SLGS.seed);
-
+		Random.InitState(seed);
 	}
 
 	public IEnumerator GenerateLevel()
@@ -686,7 +683,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	}
 
 	/// <summary>
-	/// A final pass for the level generator. This handles decorating everything the needs decorating.
+	/// A final pass for the level generator. This handles decorating everything that needs decorating.
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator DecorateLevel()
@@ -714,7 +711,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			foreach (Transform noncollideableTile in room.NoncollideableTiles)
 			{
 				int randDecorationSpawnChance = Random.Range(0, 100);
-				if (randDecorationSpawnChance < 7)
+				if (randDecorationSpawnChance < SLGS.decorationSpawnChance)
 				{
 					int randDecorationIndex = Random.Range(0, SLGS.floorDecorations.Count);
 					Sprite decorationSprite = SLGS.floorDecorations[randDecorationIndex].sprite;

@@ -5,10 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Level Generation Settings", menuName = "ScriptableObjects/New Level Generation Settings")]
 public class ScriptableLevelGenerationSettings : ScriptableObject
 {
-	[Foldout("Base Level Generation")] public int seed;
 	[Foldout("Base Level Generation")] public int chunkSize = 35;
 	[Foldout("Base Level Generation")] public int maxRooms = 10;
 	[Foldout("Base Level Generation")] public int pathDepth = 2; // How far from the center the path will generate extra path tiles. So a depth of 2 results in a path that is 5 wide in total. Example: (## # ##)
+	[Foldout("Base Level Generation")] public int decorationSpawnChance = 5;
 	[Foldout("Base Level Generation")] public Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableBossRooms = new List<ScriptableRoom>();

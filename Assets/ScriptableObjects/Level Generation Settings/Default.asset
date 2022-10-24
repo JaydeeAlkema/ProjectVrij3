@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 839aebb8859c3664da18d858255d4c27, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  seed: 920021747
   chunkSize: 40
   maxRooms: 5
-  pathDepth: 3
+  pathDepth: 2
+  decorationSpawnChance: 5
   chunkGridSize: {x: 5, y: 5}
   spawnableRooms:
   - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
