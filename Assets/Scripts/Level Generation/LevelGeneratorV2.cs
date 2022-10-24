@@ -1,3 +1,8 @@
+// Writen by: Jaydee Alkema
+// the Level Generator is responsible for, well, generating the map.
+// This generator is a bit of a mix of behaviours however. Rooms for example aren't generate, but placed within the level chunks.
+// A pathway is then generated between the rooms to connect them together. This might be a bit unconventional, but this is done for experimenting purposes, and it works relatively well.
+
 using NaughtyAttributes;
 using Pathfinding;
 using System;
@@ -25,6 +30,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[Space]
 
 	[Header("Runtime References")]
+	[SerializeField] private int seed = 0;
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
 	[SerializeField] private List<Room> rooms = new List<Room>();
@@ -53,13 +59,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	private void Start()
 	{
-		if (SLGS.seed == 0)
-		{
-			SLGS.seed = Random.Range(0, int.MaxValue);
-		}
+		if (seed == 0) seed = Random.Range(0, int.MaxValue);
 
-		Random.InitState(SLGS.seed);
-
+		Random.InitState(seed);
 	}
 
 	public IEnumerator GenerateLevel()
@@ -485,11 +487,20 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room roomA = rooms[i];
 			Room roomB = rooms[i + 1];
 
+			childPathTiles.AddRange(roomA.CollideableTiles);
+			childPathTiles.AddRange(roomB.CollideableTiles);
+
 			foreach (Transform pathTile in childPathTiles)
 			{
-				SpriteRenderer spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
-				BoxCollider2D boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
-				boxCollider2D.size = Vector2.one;
+				SpriteRenderer spriteRenderer = pathTile.GetComponent<SpriteRenderer>();
+				BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
+
+				if (spriteRenderer == null) spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				if (boxCollider2D == null)
+				{
+					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
+					boxCollider2D.size = Vector2.one;
+				}
 
 				List<GameObject> neighbouringTiles = new List<GameObject>();
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
@@ -515,9 +526,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 				List<Transform> occupiedTiles = new List<Transform>();
 				occupiedTiles.AddRange(childPathTiles);
 				occupiedTiles.AddRange(roomA.CollideableTiles);
-				//occupiedTiles.AddRange(roomA.NoncollideableTiles);
+				occupiedTiles.AddRange(roomA.NoncollideableTiles);
 				occupiedTiles.AddRange(roomB.CollideableTiles);
-				//occupiedTiles.AddRange(roomB.NoncollideableTiles);
+				occupiedTiles.AddRange(roomB.NoncollideableTiles);
+
 				if (i < pathwayParents.Count - 1) occupiedTiles.AddRange(pathwayParents[i + 1].GetComponentsInChildren<Transform>());
 				if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
 
@@ -554,25 +566,21 @@ public class LevelGeneratorV2 : MonoBehaviour
 				// Top Wall
 				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
 				}
 				// Left Wall
 				else if (!leftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = leftWallSprites[Random.Range(0, leftWallSprites.Count)];
 				}
 				// Right Wall
 				else if (!rightTile && bottomTile && bottomLeftTile && leftTile & topLeftTile && topTile)
 				{
-					pathTile.AddComponent<BoxCollider2D>();
 					spriteRenderer.sprite = rightWallSprites[Random.Range(0, rightWallSprites.Count)];
 				}
 				#endregion
@@ -627,7 +635,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					spriteRenderer.flipX = true;
 				}
 				#endregion
-
 			}
 		}
 
@@ -681,7 +688,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	}
 
 	/// <summary>
-	/// A final pass for the level generator. This handles decorating everything the needs decorating.
+	/// A final pass for the level generator. This handles decorating everything that needs decorating.
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator DecorateLevel()
@@ -703,13 +710,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (room.RoomType == RoomType.Boss) break;
 
 			// Spawn Wall Decorations
-			// This will be done at a later date because this requires to tiles to store their orientation.
+			// This will be done at a later date because this requires the tiles to store their orientation.
 
 			// Spawn Floor Decorations
 			foreach (Transform noncollideableTile in room.NoncollideableTiles)
 			{
 				int randDecorationSpawnChance = Random.Range(0, 100);
-				if (randDecorationSpawnChance < 7)
+				if (randDecorationSpawnChance < SLGS.decorationSpawnChance)
 				{
 					int randDecorationIndex = Random.Range(0, SLGS.floorDecorations.Count);
 					Sprite decorationSprite = SLGS.floorDecorations[randDecorationIndex].sprite;
@@ -719,7 +726,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 					SpriteRenderer spriteRenderer = decorationGO.AddComponent<SpriteRenderer>();
 					spriteRenderer.sprite = decorationSprite;
-					spriteRenderer.sortingOrder = 2;
+					spriteRenderer.sortingOrder = 1;
 
 					decorations.Add(decorationGO);
 				}
