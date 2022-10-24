@@ -1,11 +1,13 @@
 using NaughtyAttributes;
 using Pathfinding;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
 
 public enum RoomType
 {
@@ -19,13 +21,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 {
 	[Header("Level Generation Settings")]
 
-	[SerializeField, Expandable] ScriptableLevelGenerationSettings LGS = null;
+	[SerializeField, Expandable] ScriptableLevelGenerationSettings SLGS = null;
 	[Space]
 
 	[Header("Runtime References")]
 	[SerializeField] private List<Chunk> chunks = new List<Chunk>();
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
 	[SerializeField] private List<Room> rooms = new List<Room>();
+	[SerializeField] private List<GameObject> decorations = new List<GameObject>();
 	[Space(10)]
 
 	[Header("References")]
@@ -50,12 +53,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	private void Start()
 	{
-		if (LGS.seed == 0)
+		if (SLGS.seed == 0)
 		{
-			LGS.seed = Random.Range(0, int.MaxValue);
+			SLGS.seed = Random.Range(0, int.MaxValue);
 		}
 
-		Random.InitState(LGS.seed);
+		Random.InitState(SLGS.seed);
 
 	}
 
@@ -87,35 +90,35 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
-		if (LGS.chunkGridSize.x < 3) LGS.chunkGridSize.x = 3;
-		if (LGS.chunkGridSize.y < 3) LGS.chunkGridSize.y = 3;
+		if (SLGS.chunkGridSize.x < 3) SLGS.chunkGridSize.x = 3;
+		if (SLGS.chunkGridSize.y < 3) SLGS.chunkGridSize.y = 3;
 
-		if (LGS.chunkGridSize.x > 19) LGS.chunkGridSize.x = 19;
-		if (LGS.chunkGridSize.y > 19) LGS.chunkGridSize.y = 19;
+		if (SLGS.chunkGridSize.x > 19) SLGS.chunkGridSize.x = 19;
+		if (SLGS.chunkGridSize.y > 19) SLGS.chunkGridSize.y = 19;
 
 		// The grid size may NEVER be divisible by 2, this will cause an even grid without a center chunk... We must always have a center chunk!
-		if (LGS.chunkGridSize.x % 2 == 0) LGS.chunkGridSize.x -= 1;
-		if (LGS.chunkGridSize.y % 2 == 0) LGS.chunkGridSize.y -= 1;
+		if (SLGS.chunkGridSize.x % 2 == 0) SLGS.chunkGridSize.x -= 1;
+		if (SLGS.chunkGridSize.y % 2 == 0) SLGS.chunkGridSize.y -= 1;
 
-		for (int x = 0; x < LGS.chunkGridSize.x; x++)
+		for (int x = 0; x < SLGS.chunkGridSize.x; x++)
 		{
-			for (int y = 0; y < LGS.chunkGridSize.y; y++)
+			for (int y = 0; y < SLGS.chunkGridSize.y; y++)
 			{
 				GameObject chunkGO = new GameObject($"Chunk [{x}][{y}]");
 				Chunk chunk = chunkGO.AddComponent<Chunk>();
 
-				chunk.Coordinates = new Vector2Int(x * LGS.chunkSize, y * LGS.chunkSize);
+				chunk.Coordinates = new Vector2Int(x * SLGS.chunkSize, y * SLGS.chunkSize);
 				chunk.Occupied = false;
 
 				chunk.gameObject.transform.position = new Vector2(chunk.Coordinates.x, chunk.Coordinates.y);
 				chunk.gameObject.transform.parent = chunksParent;
 
 				// Create starting chunk node grid (the +1 comes from the fact that the nodes start on the edges of the chunk, not within the chunk)
-				for (int nx = 0; nx < LGS.chunkSize + 1; nx++)
+				for (int nx = 0; nx < SLGS.chunkSize + 1; nx++)
 				{
-					for (int ny = 0; ny < LGS.chunkSize + 1; ny++)
+					for (int ny = 0; ny < SLGS.chunkSize + 1; ny++)
 					{
-						Vector2Int nodeCoordinates = new Vector2Int(Mathf.RoundToInt(chunk.transform.position.x - LGS.chunkSize / 2) + nx, Mathf.RoundToInt(chunk.transform.position.y - LGS.chunkSize / 2) + ny);
+						Vector2Int nodeCoordinates = new Vector2Int(Mathf.RoundToInt(chunk.transform.position.x - SLGS.chunkSize / 2) + nx, Mathf.RoundToInt(chunk.transform.position.y - SLGS.chunkSize / 2) + ny);
 
 						GameObject nodeGO = new GameObject($"Node [{nodeCoordinates.x}][{nodeCoordinates.y}]");
 
@@ -168,7 +171,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				break;
 			}
 
-			if (path.Count >= LGS.maxRooms) break;
+			if (path.Count >= SLGS.maxRooms) break;
 		}
 
 		executionTime.Stop();
@@ -195,11 +198,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 			// Spawn roomType depending on how far along the path we are (the end of the path should always be a boss room)
 			if (r == path.Count - 1)
 			{
-				randRoom = LGS.spawnableBossRooms[Random.Range(0, LGS.spawnableBossRooms.Count)];
+				randRoom = SLGS.spawnableBossRooms[Random.Range(0, SLGS.spawnableBossRooms.Count)];
 			}
 			else
 			{
-				randRoom = LGS.spawnableRooms[Random.Range(0, LGS.spawnableRooms.Count)];
+				randRoom = SLGS.spawnableRooms[Random.Range(0, SLGS.spawnableRooms.Count)];
 			}
 
 			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity);
@@ -207,7 +210,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room room = newRoomGO.GetComponent<Room>();
 			chunk.Room = room;
 
-			int chunkSizeHalf = LGS.chunkSize / 2;
+			int chunkSizeHalf = SLGS.chunkSize / 2;
 			int roomsizeHalfX = room.RoomSize.x / 2;
 			int roomsizeHalfY = room.RoomSize.y / 2;
 
@@ -326,7 +329,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Seeker seeker = SeekerGO.AddComponent<Seeker>();
 
 		gg.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
-		gg.SetDimensions(LGS.chunkSize * LGS.chunkGridSize.x + 1, LGS.chunkSize * LGS.chunkGridSize.y + 1, gg.nodeSize);
+		gg.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x + 1, SLGS.chunkSize * SLGS.chunkGridSize.y + 1, gg.nodeSize);
 		AstarPath.active.Scan();
 
 		while (AstarPath.active.IsAnyGraphUpdateInProgress)
@@ -428,9 +431,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 			//pathPointGO.transform.position = new Vector3(pathCoordInt.x, pathCoordInt.y, 0);
 			//pathPointGO.transform.parent = pathPointParentGO.transform;
 
-			for (int x = -LGS.pathDepth; x < LGS.pathDepth + 1; x++)
+			for (int x = -SLGS.pathDepth; x < SLGS.pathDepth + 1; x++)
 			{
-				for (int y = -LGS.pathDepth; y < LGS.pathDepth + 1; y++)
+				for (int y = -SLGS.pathDepth; y < SLGS.pathDepth + 1; y++)
 				{
 					Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
 					if (pathPoints.Contains(newCoord) == false && occupiedTiles.Contains(newCoord) == false)
@@ -457,19 +460,19 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
-		List<Sprite> floorSprites = LGS.floorSprites;
-		List<Sprite> topWallSprites = LGS.topWallSprites;
-		List<Sprite> bottomWallSprites = LGS.bottomWallSprites;
-		List<Sprite> leftWallSprites = LGS.leftWallSprites;
-		List<Sprite> rightWallSprites = LGS.rightWallSprites;
-		List<Sprite> topLeftOuterCornerSprites = LGS.topLeftOuterCornerSprites;
-		List<Sprite> topRightOuterCornerSprites = LGS.topRightOuterCornerSprites;
-		List<Sprite> bottomRightOuterCornerSprites = LGS.bottomRightOuterCornerSprites;
-		List<Sprite> bottomLeftOuterCornerSprites = LGS.bottomLeftOuterCornerSprites;
-		List<Sprite> topLeftInnerCornerSprites = LGS.topLeftInnerCornerSprites;
-		List<Sprite> topRightInnerCornerSprites = LGS.topRightInnerCornerSprites;
-		List<Sprite> bottomRightInnerCornerSprites = LGS.bottomRightInnerCornerSprites;
-		List<Sprite> bottomLeftInnerCornerSprites = LGS.bottomLeftInnerCornerSprites;
+		List<Sprite> floorSprites = SLGS.floorSprites;
+		List<Sprite> topWallSprites = SLGS.topWallSprites;
+		List<Sprite> bottomWallSprites = SLGS.bottomWallSprites;
+		List<Sprite> leftWallSprites = SLGS.leftWallSprites;
+		List<Sprite> rightWallSprites = SLGS.rightWallSprites;
+		List<Sprite> topLeftOuterCornerSprites = SLGS.topLeftOuterCornerSprites;
+		List<Sprite> topRightOuterCornerSprites = SLGS.topRightOuterCornerSprites;
+		List<Sprite> bottomRightOuterCornerSprites = SLGS.bottomRightOuterCornerSprites;
+		List<Sprite> bottomLeftOuterCornerSprites = SLGS.bottomLeftOuterCornerSprites;
+		List<Sprite> topLeftInnerCornerSprites = SLGS.topLeftInnerCornerSprites;
+		List<Sprite> topRightInnerCornerSprites = SLGS.topRightInnerCornerSprites;
+		List<Sprite> bottomRightInnerCornerSprites = SLGS.bottomRightInnerCornerSprites;
+		List<Sprite> bottomLeftInnerCornerSprites = SLGS.bottomLeftInnerCornerSprites;
 
 
 		//foreach (Transform pathParents in pathwaysParent)
@@ -649,7 +652,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (room.RoomType != RoomType.Spawn && room.RoomType != RoomType.Boss)
 			{
 				int currentEnemyCount = 0;
-				foreach (EnemyGroup enemyGroup in LGS.EnemyGroups)
+				foreach (EnemyGroup enemyGroup in SLGS.EnemyGroups)
 				{
 					// The enemyCountPerRoom variable is a Min Man vector. so the X axis refers to the minimum amount of enemies and the Y to the max amount of enemies
 					while (currentEnemyCount < enemyGroup.enemyCountPerRoom.y)
@@ -694,6 +697,35 @@ public class LevelGeneratorV2 : MonoBehaviour
 		portal.SceneToLoadName = "Boss Testing";
 		portal.CurrentSceneName = "Jaydee Testing Scene";
 
+		// Spawn decorations throught the level
+		foreach (Room room in rooms)
+		{
+			if (room.RoomType == RoomType.Boss) break;
+
+			// Spawn Wall Decorations
+			// This will be done at a later date because this requires to tiles to store their orientation.
+
+			// Spawn Floor Decorations
+			foreach (Transform noncollideableTile in room.NoncollideableTiles)
+			{
+				int randDecorationSpawnChance = Random.Range(0, 100);
+				if (randDecorationSpawnChance < 7)
+				{
+					int randDecorationIndex = Random.Range(0, SLGS.floorDecorations.Count);
+					Sprite decorationSprite = SLGS.floorDecorations[randDecorationIndex].sprite;
+					GameObject decorationGO = new GameObject($"{decorationSprite.name}");
+					decorationGO.transform.position = new Vector3(Mathf.RoundToInt(noncollideableTile.position.x), Mathf.RoundToInt(noncollideableTile.position.y), 0);
+					decorationGO.transform.parent = decorationsParent;
+
+					SpriteRenderer spriteRenderer = decorationGO.AddComponent<SpriteRenderer>();
+					spriteRenderer.sprite = decorationSprite;
+					spriteRenderer.sortingOrder = 2;
+
+					decorations.Add(decorationGO);
+				}
+			}
+		}
+
 		executionTime.Stop();
 		diagnosticTimes.Add($"Decorating the level took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
@@ -715,10 +747,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 		int chunkX = currentChunkCoordinates.x;
 		int chunkY = currentChunkCoordinates.y;
 
-		Chunk topNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY + LGS.chunkSize));
-		Chunk rightNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX + LGS.chunkSize, chunkY));
-		Chunk bottomNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY - LGS.chunkSize));
-		Chunk leftNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX - LGS.chunkSize, chunkY));
+		Chunk topNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY + SLGS.chunkSize));
+		Chunk rightNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX + SLGS.chunkSize, chunkY));
+		Chunk bottomNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX, chunkY - SLGS.chunkSize));
+		Chunk leftNeighbour = GetChunkByCoordinates(new Vector2Int(chunkX - SLGS.chunkSize, chunkY));
 
 		if (topNeighbour != null && path.Contains(topNeighbour) == false) neighbourChunkIndeces.Add(topNeighbour);
 		if (rightNeighbour != null && path.Contains(rightNeighbour) == false) neighbourChunkIndeces.Add(rightNeighbour);
@@ -772,7 +804,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			{
 				Chunk chunk = chunks[i];
 				Gizmos.color = Color.white;
-				Gizmos.DrawWireCube(chunk.gameObject.transform.position, new Vector3(LGS.chunkSize, LGS.chunkSize));
+				Gizmos.DrawWireCube(chunk.gameObject.transform.position, new Vector3(SLGS.chunkSize, SLGS.chunkSize));
 			}
 		}
 
