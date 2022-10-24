@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class MiniBoss1 : EnemyBase
 {
-
-	private Color baseColor;
 	[SerializeField] PlayerHealthBar healthBar;
 	[SerializeField] private float maxHealthPoints = 1000;
+	[SerializeField] private float agitateTime = 5f;
+	[SerializeField] private SpriteRenderer bodyCharged;
+	private Color baseColor;
+	private float counter = 0f;
+
+	public GameObject[] addMobs;
 
 	private void Start()
 	{
@@ -24,6 +28,34 @@ public class MiniBoss1 : EnemyBase
 	{
 		base.Update();
 		healthBar.SetHP(HealthPoints);
+		AgitateTimer();
+	}
+
+	public void AgitateTimer()
+	{
+		counter += Time.fixedDeltaTime;
+
+		Color chargeColor = bodyCharged.color;
+		chargeColor.a = counter / agitateTime;
+		bodyCharged.color = chargeColor;
+
+		if (counter >= agitateTime)
+		{
+			foreach (GameObject addMob in addMobs)
+			{
+				if (addMob != null)
+				{
+					MBCirclingEnemy mobScript = addMob.GetComponent<MBCirclingEnemy>();
+					if (mobScript.agitated)
+					{
+						mobScript.aggro = true;
+						mobScript.agitated = false;
+					}
+				}
+			}
+			counter = 0f;
+			Debug.Log("ATTACK!!!");
+		}
 	}
 
 	public override IEnumerator FlashColor()

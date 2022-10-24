@@ -8,7 +8,6 @@ public class MBCirclingEnemy : EnemyBase
 
 	[SerializeField] private float damage;
 	[SerializeField] private GameObject player;
-	[SerializeField] private bool aggro = false;
 	[SerializeField] private bool hasHitbox = true;
 	private float checkMaxHP;
 
@@ -16,6 +15,8 @@ public class MBCirclingEnemy : EnemyBase
 	public float orbitRadius;
 	public float radiusSpeed = 10f;
 	public float rotationSpeed = 6f;
+	public bool agitated = false;
+	public bool aggro = false;
 
 	void Awake()
 	{
@@ -48,7 +49,7 @@ public class MBCirclingEnemy : EnemyBase
 		HealthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
-		aggro = true;
+		agitated = true;
 		if (HealthPoints <= 0) Die();
 	}
 

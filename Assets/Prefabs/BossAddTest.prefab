@@ -136,19 +136,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aace50b1d3022e4a88d9c9ab350a24f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 100
+  healthPoints: 75
   speed: 3
   aggroRange: 0
   attackRange: 0
   attacking: 0
   rb2d: {fileID: 5793724696057155425}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
+  enemySprite: {fileID: 0}
+  materialDefault: {fileID: 0}
+  materialHit: {fileID: 0}
   destinationSetter: {fileID: 0}
   aiPath: {fileID: 0}
   beingCrowdControlled: 0
   meleeTarget: 0
   castTarget: 0
-  layerMask:
+  avoidEnemyLayerMask:
     serializedVersion: 2
     m_Bits: 0
   damage: 25
