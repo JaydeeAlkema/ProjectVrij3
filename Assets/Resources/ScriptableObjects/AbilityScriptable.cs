@@ -7,6 +7,7 @@ using NaughtyAttributes;
 [CreateAssetMenu( fileName = "Ability", menuName = "ScriptableObjects/Ability" )]
 public class AbilityScriptable : ScriptableObject
 {
+	[SerializeField] private Sprite abilityImage;
 	[SerializeField] private Ability ability;
 	[SerializeField] private float coolDown = 0.001f;
 	[SerializeField] private float damage = 0f;
@@ -26,6 +27,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float attackTime = 200f;
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
+	public Sprite AbilityImage { get => abilityImage; set => abilityImage = value; }
 	public float CoolDown { get => coolDown; set => coolDown = value; }
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
