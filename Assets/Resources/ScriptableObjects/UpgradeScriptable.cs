@@ -6,6 +6,8 @@ using NaughtyAttributes;
 [CreateAssetMenu( fileName = "Upgrade", menuName = "ScriptableObjects/Upgrade" )]
 public class UpgradeScriptable : ScriptableObject
 {
+	[SerializeField] private Sprite upgradeImage;
+	public Sprite UpgradeImage { get => upgradeImage; set => upgradeImage = value; }
 	[SerializeField] private int damageUpgrade;
 	public int DamageUpgrade { get => damageUpgrade; set => damageUpgrade = value; }
 	[SerializeField] private float hitBoxUpgrade;

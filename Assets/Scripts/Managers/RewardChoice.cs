@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RewardChoice : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class RewardChoice : MonoBehaviour
     [SerializeField] private AbilityScriptable meleeAttack;
     [SerializeField] private AbilityScriptable rangedAttack;
     [SerializeField] private int roll;
+    [SerializeField] private Image abilityImg;
+    [SerializeField] private Image meleeUpgradeImg;
+    [SerializeField] private Image rangedUpgradeImg;
     //chances are based on a roll of 1-1000000
     [SerializeField] private int t1Chance = 1; //1-700000
     [SerializeField] private int t2Chance = 700001; //700001-995000
@@ -81,6 +85,10 @@ public class RewardChoice : MonoBehaviour
                 Debug.Log( upgradeToGive.name );
             }
         }
+
+        meleeUpgradeImg.sprite = upgradeToGive.UpgradeImage;
+        rangedUpgradeImg.sprite = upgradeToGive.UpgradeImage;
+        abilityImg.sprite = abilityToGive.BaseStats.AbilityImage;
     }
 
 	public void ChooseAbility()
