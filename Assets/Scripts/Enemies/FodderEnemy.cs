@@ -8,7 +8,7 @@ public class FodderEnemy : EnemyBase
 
 	public Animator fodderAnimator;
 
-	[SerializeField] private float damage;
+	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
@@ -66,7 +66,7 @@ public class FodderEnemy : EnemyBase
 	//	}
 	//}
 
-	public override void TakeDamage(float damage, int damageType)
+	public override void TakeDamage(int damage, int damageType)
 	{
 		if (damageType == 0 && meleeTarget)
 		{

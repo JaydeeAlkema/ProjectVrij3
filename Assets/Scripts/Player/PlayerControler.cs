@@ -15,7 +15,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private bool isDashing = false;
 	//[SerializeField]
 	//private Camera cam;
-	public Vector2 lookDir; // <-- private this after Dash is implemented correctly!
+	public Vector2 lookDir;
 	[SerializeField] private Transform castFromPoint;
 	[SerializeField] private Vector2 boxSize = new Vector2(4, 6);
 	[SerializeField] private float circleSize = 3f;
@@ -28,7 +28,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
 	[SerializeField] Animator animPlayer;
 
-	[SerializeField] PlayerHealthBar healthBar;
+	//[SerializeField] PlayerHealthBar healthBar;
 
 	public Material materialDefault = null;
 	public Material materialHit = null;
@@ -40,8 +40,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
 	private bool isAttacking = false;
 
-	[SerializeField] private float maxHealthPoints = 500;
-	[SerializeField] private float currentHealthPoints;
+	//[SerializeField] private int maxHealthPoints = 500;
+	//[SerializeField] private float currentHealthPoints;
 	private AbilityController abilityController;
 	public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 	public int Horizontal { get => horizontal; set => horizontal = value; }
@@ -94,11 +94,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		materialDefault = Sprite.material;
 
-		currentHealthPoints = maxHealthPoints;
-		if (healthBar != null)
-		{
-			healthBar.SetMaxHP(maxHealthPoints);
-		}
+		//currentHealthPoints = maxHealthPoints;
+		//if (healthBar != null)
+		//{
+		//	healthBar.SetMaxHP(maxHealthPoints);
+		//}
 
 		//Death screen test, remove later
 		if (deathScreenTest != null)
@@ -273,16 +273,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3, dash);
 	}
 
-	public void TakeDamage(float damage)
+	public void TakeDamage(int damage)
 	{
 		AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 		StartCoroutine(playerFlashColor());
-		currentHealthPoints -= damage;
-		healthBar.SetHP(currentHealthPoints);
-		if (currentHealthPoints <= 0 && !isDying) Die();
+		GameManager.Instance.RemoveHP(damage);
+		//healthBar.SetHP(currentHealthPoints);
+		if (GameManager.Instance.PlayerHP <= 0 && !isDying) Die(); //Dit later in GameManager regelen?
 	}
 
-	public void TakeDamage(float damage, int damageType)
+	public void TakeDamage(int damage, int damageType)
 	{
 
 	}

@@ -15,8 +15,8 @@ public class Projectile : MonoBehaviour
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	[SerializeField] private float force;
 	public float Force { get => force; set => force = value; }
-	private float damage;
-	public float Damage { get => damage; set => damage = value; }
+	private int damage;
+	public int Damage { get => damage; set => damage = value; }
 	[SerializeField] private int typeOfLayer = 6;
 	private GameObject addedTrail = null;
 

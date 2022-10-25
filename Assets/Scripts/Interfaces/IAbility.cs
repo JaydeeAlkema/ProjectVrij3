@@ -15,7 +15,7 @@ public interface IAbility
 	public float Angle { get; set; }
 	public float CoolDown { get; set; }
 	public float AttackTime { get; set; }
-	public float Damage { get; set; }
+	public int Damage { get; set; }
 	public float CritChance { get; set; }
 	public bool TrailUpgrade { get; set; }
 	public Vector2 BoxSize { get; set; }

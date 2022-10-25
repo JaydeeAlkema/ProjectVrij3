@@ -4,9 +4,9 @@ using UnityEngine;
 
 public interface IDamageable
 {
-	void TakeDamage(float damage);
+	void TakeDamage(int damage);
 
-	void TakeDamage(float damage, int damageType);
+	void TakeDamage(int damage, int damageType);
 
 	void GetSlowed(float slowAmount);
 

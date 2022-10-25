@@ -6,7 +6,7 @@ public class MiniBoss1 : EnemyBase
 {
 	[SerializeField] private GameObject mobPrefab;
 	[SerializeField] PlayerHealthBar healthBar;
-	[SerializeField] private float maxHealthPoints = 1000;
+	[SerializeField] private int maxHealthPoints = 1000;
 	[SerializeField] private float agitateTime = 5f;
 	[SerializeField] private float respawnTime = 15f;
 	[SerializeField] private SpriteRenderer bodyCharged;

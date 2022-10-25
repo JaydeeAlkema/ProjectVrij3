@@ -6,7 +6,7 @@ public class MBCirclingEnemy : EnemyBase
 {
 	private int playerLayer = 1 << 8;
 
-	[SerializeField] private float damage;
+	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 	[SerializeField] private bool hasHitbox = true;
 	private float checkMaxHP;
@@ -33,7 +33,7 @@ public class MBCirclingEnemy : EnemyBase
 		MoveToPlayer();
 	}
 
-	public override void TakeDamage(float damage, int damageType)
+	public override void TakeDamage(int damage, int damageType)
 	{
 		if (damageType == 0 && meleeTarget)
 		{

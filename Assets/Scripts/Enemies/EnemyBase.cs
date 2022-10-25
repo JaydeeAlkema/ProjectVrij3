@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 {
-	[SerializeField] private float healthPoints = 0;
+	[SerializeField] private int healthPoints = 0;
 	[SerializeField] private float speed = 0;
 	[SerializeField] private float aggroRange = 0;
 	[SerializeField] private float attackRange = 0;
+	[SerializeField] private int expAmount = 0;
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
 	[SerializeField] public Transform damageNumberText;
@@ -39,7 +40,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public bool Attacking { get => attacking; set => attacking = value; }
 	public Rigidbody2D Rb2d { get => rb2d; set => rb2d = value; }
 	public Transform Target { get => target; set => target = value; }
-	public float HealthPoints { get => healthPoints; set => healthPoints = value; }
+	public int HealthPoints { get => healthPoints; set => healthPoints = value; }
 	public Material MaterialDefault { get => materialDefault; set => materialDefault = value; }
 	public Material MaterialHit { get => materialHit; set => materialHit = value; }
 
@@ -101,7 +102,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		statusEffects.Remove(statusEffect);
 	}
 
-	public void TakeDamage(float damage)
+	public void TakeDamage(int damage)
 	{
 		DamagePopup(damage);
 		healthPoints -= damage;
@@ -110,9 +111,9 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (healthPoints <= 0) Die();
 	}
 
-	public virtual void TakeDamage(float damage, int damageType)
+	public virtual void TakeDamage(int damage, int damageType)
 	{
-		float damageToTake = damage;
+		int damageToTake = damage;
 		if (damageType == 0 && meleeTarget)
 		{
 			healthPoints -= damage;
@@ -186,7 +187,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		destinationSetter.target = null;
 	}
 
-	public virtual void DamagePopup(float damage)
+	public virtual void DamagePopup(int damage)
 	{
 		Transform damageNumber = Instantiate(damageNumberText, transform.position, Quaternion.identity);
 		damageNumber.GetComponent<DamageNumberPopup>()?.SetDamageText(damage);
@@ -201,6 +202,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void Die()
 	{
+		GameManager.Instance.ExpManager.AddExp(expAmount);
 		StopAllCoroutines();
 		Time.timeScale = 1f;
 		Destroy(this.gameObject);

@@ -9,7 +9,7 @@ public class AbilityScriptable : ScriptableObject
 {
 	[SerializeField] private Ability ability;
 	[SerializeField] private float coolDown = 0.001f;
-	[SerializeField] private float damage = 0f;
+	[SerializeField] private int damage = 0;
 	[SerializeField] private float critChance = 0f;
 	[SerializeField] private float distance = 0f;
 	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
@@ -29,7 +29,7 @@ public class AbilityScriptable : ScriptableObject
 	public float CoolDown { get => coolDown; set => coolDown = value; }
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
-	public float Damage { get => damage; set => damage = value; }
+	public int Damage { get => damage; set => damage = value; }
 	public float Force { get => force; set => force = value; }
 	public float Distance { get => distance; set => distance = value; }
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }

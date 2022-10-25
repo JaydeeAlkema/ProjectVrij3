@@ -6,7 +6,7 @@ public class AbilityDecorator : IAbility
 {
 	private IAbility ability;
 	protected float coolDown;
-	protected float damage;
+	protected int damage;
 	protected EdgeCollider2D shape;
 	protected float distance;
 	protected Vector2 boxSize;
@@ -29,7 +29,7 @@ public class AbilityDecorator : IAbility
 	public Transform CastFromPoint { get; set; }
 	public float Angle { get; set; }
 	public float CoolDown { get => coolDown; set => coolDown = value; }
-	public float Damage { get => damage; set => damage = value; }
+	public int Damage { get => damage; set => damage = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
