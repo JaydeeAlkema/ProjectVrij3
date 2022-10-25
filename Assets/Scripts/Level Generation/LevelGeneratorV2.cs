@@ -5,7 +5,6 @@
 
 using NaughtyAttributes;
 using Pathfinding;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -494,6 +493,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			{
 				SpriteRenderer spriteRenderer = pathTile.GetComponent<SpriteRenderer>();
 				BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
+				pathTile.gameObject.layer = LayerMask.GetMask("Unwalkable");
 
 				if (spriteRenderer == null) spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
 				if (boxCollider2D == null)
@@ -501,6 +501,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
 					boxCollider2D.size = Vector2.one;
 				}
+
 
 				List<GameObject> neighbouringTiles = new List<GameObject>();
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
@@ -558,7 +559,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
 				{
+					pathTile.gameObject.layer = LayerMask.GetMask("Walkable");
 					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
+					spriteRenderer.sortingOrder = 0;
 					boxCollider2D.enabled = false;
 				}
 
@@ -567,11 +570,15 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
+					spriteRenderer.sortingOrder = 1;
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
 				{
 					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
+					spriteRenderer.sortingOrder = 10;
+					boxCollider2D.offset = new Vector2(0, -0.25f);
+					boxCollider2D.size = new Vector2(1, 0.5f);
 				}
 				// Left Wall
 				else if (!leftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
