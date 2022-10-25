@@ -70,7 +70,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			}
 		}
 
-		if( aiPath != null )
+		if (aiPath != null)
 		{
 			aiPath.maxSpeed = speed;
 		}
@@ -85,7 +85,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		else
 		{
 			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-			
+
 		}
 	}
 
@@ -125,6 +125,17 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			castTarget = false;
 			damageToTake *= 2;
 		}
+
+		if (damageType == 0)
+		{
+			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+		}
+
+		if (damageType == 1)
+		{
+			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+		}
+
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
@@ -152,7 +163,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void LookAtTarget()
 	{
-		if(destinationSetter.target != null && enemySprite != null)
+		if (destinationSetter.target != null && enemySprite != null)
 		{
 			enemySprite.flipX = (destinationSetter.target.position - transform.position).normalized.x > 0 ? true : false;
 		}

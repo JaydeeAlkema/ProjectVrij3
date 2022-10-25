@@ -108,6 +108,9 @@ public class AbilityController : MonoBehaviour
             anim.CallAbility( this.GetComponent<PlayerControler>() );
             currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             currentMeleeAttack.CallAbility( player );
+
+            //Melee sound
+            AkSoundEngine.PostEvent("plr_attck_melee", this.gameObject);
         }
         return currentMeleeAttack;
 	}
@@ -149,6 +152,10 @@ public class AbilityController : MonoBehaviour
             anim.CallAbility( this.GetComponent<PlayerControler>() );
             currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             currentRangedAttack.CallAbility( player );
+
+            //Cast sound
+            AkSoundEngine.PostEvent("plr_attck_cast", this.gameObject);
+
         }
         return currentRangedAttack;
 	}

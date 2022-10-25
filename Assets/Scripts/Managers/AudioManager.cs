@@ -168,7 +168,7 @@ public class AudioManager : MonoBehaviour
         currentMusicState = MusicState;
     }
 
-    public void PostEvent(AK.Wwise.Event wwiseEvent)
+    public void PostEvent(AK.Wwise.Event wwiseEvent) // add 'GameObject gameObject' als parameter als we hieraan verder gaan
     {
         if (wwiseEvent == null)
         {

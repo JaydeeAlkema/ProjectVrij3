@@ -20,6 +20,8 @@ public class FodderEnemy : EnemyBase
 	public bool hasHitbox = false;
 	public CapsuleCollider2D hurtbox;
 
+	public AK.Wwise.Event Event;
+
 	void Awake()
 	{
 		//player = FindObjectOfType<PlayerControler>().gameObject;
@@ -76,6 +78,18 @@ public class FodderEnemy : EnemyBase
 			HealthPoints -= damage;
 			castTarget = false;
 		}
+
+		if (damageType == 0)
+		{
+			//AudioManager.PostEvent( , this.gameObject);   dit aanpassen als we wwise hebben enzo
+			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+		}
+
+		if (damageType == 1)
+		{
+			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+		}
+
 		DamagePopup(damage);
 		HealthPoints -= damage;
 		StartCoroutine(HitStop());

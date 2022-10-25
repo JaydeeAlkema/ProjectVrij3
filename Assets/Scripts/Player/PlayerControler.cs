@@ -17,7 +17,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//private Camera cam;
 	public Vector2 lookDir; // <-- private this after Dash is implemented correctly!
 	[SerializeField] private Transform castFromPoint;
-	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
+	[SerializeField] private Vector2 boxSize = new Vector2(4, 6);
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] SpriteRenderer Sprite;
@@ -49,7 +49,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
 	public TrailRenderer Trail { get => trail; set => trail = value; }
 
-	[Header( "Abilities" )]
+	[Header("Abilities")]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -110,9 +110,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void initAbilities()
 	{
-		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; abilityController.SetAbility(); }
-		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; abilityController.SetAbility(); }
-		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; abilityController.SetAbility(); }
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; abilityController.SetAbility(); }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; abilityController.SetAbility(); }
+		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; abilityController.SetAbility(); }
 	}
 
 	// Update is called once per frame
@@ -128,12 +128,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
-		if( !isDashing)
+		if (!isDashing)
 		{
 			trail.emitting = false;
-			horizontal = ( int )Input.GetAxisRaw( "Horizontal" );
-			vertical = ( int )Input.GetAxisRaw( "Vertical" );
-			rb2d.velocity = new Vector3( horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime ).normalized * MoveSpeed;
+			horizontal = (int)Input.GetAxisRaw("Horizontal");
+			vertical = (int)Input.GetAxisRaw("Vertical");
+			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed;
 		}
 
 		if (Input.GetMouseButtonDown(0)) MeleeAttack();
@@ -141,7 +141,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
 		if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
 		if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
-		if( Input.GetKeyDown( KeyCode.Space )) DashAbility();
+		if (Input.GetKeyDown(KeyCode.Space)) DashAbility();
 	}
 	void OnDrawGizmos()
 	{
@@ -178,33 +178,33 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void MeleeAttack()
 	{
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
-		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-		abilityController.MeleeAttacked( currentMeleeAttack );
+		abilityController.CurrentMeleeAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
+		abilityController.MeleeAttacked(currentMeleeAttack);
 	}
 
 	void RangedAttack()
 	{
 		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
-		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-		abilityController.RangeAttacked( currentRangedAttack );
+		abilityController.CurrentRangedAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
+		abilityController.RangeAttacked(currentRangedAttack);
 		//animPlayer.SetTrigger("isAttacking");
 	}
 
 	void DashAbility()
 	{
 		abilityController.CurrentDash.BaseStats = dash;
-		abilityController.CurrentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-		abilityController.Dashing( currentDash );
+		abilityController.CurrentDash.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
+		abilityController.Dashing(currentDash);
 	}
 
 	void AbilityOneAttack()
 	{
 		//ability1.Ability.SetPlayerValues(ability1);
 		//ability1.Ability.AbilityBehavior();
-		Debug.Log( CurrentAbility1 );
+		Debug.Log(CurrentAbility1);
 		abilityController.CurrentAbility1.BaseStats = ability1;
-		abilityController.CurrentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-		abilityController.AbilityOneAttacked( currentAbility1 );
+		abilityController.CurrentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
+		abilityController.AbilityOneAttacked(currentAbility1);
 	}
 
 	void AbilityTwoAttack()
@@ -224,25 +224,25 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if (meleeAttack != null)
 		{
 			meleeAttack.Start();
-			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (rangedAttack != null)
 		{
 			rangedAttack.Start();
-			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
-		if(dash != null)
+		if (dash != null)
 		{
 			dash.Start();
-			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (ability1 != null)
 		{
 			ability1.Start();
-			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			//ability1.Rb2d = rb2d;
 			//ability1.CastFromPoint = castFromPoint;
 			//ability1.MousePos = mousePos;
@@ -275,6 +275,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(float damage)
 	{
+		AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 		StartCoroutine(playerFlashColor());
 		currentHealthPoints -= damage;
 		healthBar.SetHP(currentHealthPoints);
