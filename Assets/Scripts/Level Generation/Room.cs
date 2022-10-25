@@ -18,10 +18,14 @@ public class Room : MonoBehaviour
 	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
 	public List<Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
 	public List<Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }
+	public RoomType RoomType { get => roomType; set => roomType = value; }
 
-	private void Start()
+	[Button]
+	private void FetchAllTiles()
 	{
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
+		collideableTiles.Clear();
+		noncollideableTiles.Clear();
 
 		foreach (Transform child in allChildren)
 		{

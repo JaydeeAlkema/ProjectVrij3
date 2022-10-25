@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
+  m_Name: MeleeAttack
+  m_EditorClassIdentifier: 
+  coolDown: 250
+  damage: 20
+  critChance: 0
+  distance: 1.41
+  boxSize: {x: 4.2, y: 1.8}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  castObject: {fileID: 0}
+  lifeSpan: 10
+  force: 30
+  burnObject: {fileID: 3246640220694370058, guid: f03f18e478811944e971e5f2638900a1, type: 3}
+  effects: 000000000000000000000000
+  statusEffectType: 0
+  slowAmount: 0.5
+  slowDuration: 4
+  markType: 1

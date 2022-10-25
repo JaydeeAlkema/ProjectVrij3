@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,19 +23,41 @@ public class GameManager : MonoBehaviour
 			instance = this;
 		}
 
-		// Use the awake method for fetching references.
-		levelGenerator = FindObjectOfType<LevelGeneratorV2>();
-		HubSceneManager = FindObjectOfType<HubSceneManager>();
-		playerInstance = FindObjectOfType<PlayerControler>().gameObject;
+		if (FindObjectOfType<LevelGeneratorV2>() == null)
+		{
+			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive).completed += FetchDungeonReferences;
+		}
+		else
+		{
+			// Use the awake method for fetching references.
+			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
+			HubSceneManager = FindObjectOfType<HubSceneManager>();
+			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 
-		playerInstance.SetActive(false);
-	}
+			playerInstance.SetActive(false);
+			StartCoroutine(SetupLevel());
+		}
 
-	private void Start()
-	{
-		StartCoroutine(SetupLevel());
+		//else
+		//{
+		//	FindObjectOfType<HubSceneManager>().StartFirstScenes();
+		//}
 	}
 	#endregion
+
+	private void FetchDungeonReferences(AsyncOperation asyncOperation)
+	{
+		if (FindObjectOfType<LevelGeneratorV2>() != null)
+		{
+			// Use the awake method for fetching references.
+			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
+			HubSceneManager = FindObjectOfType<HubSceneManager>();
+			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
+
+			playerInstance.SetActive(false);
+		}
+		StartCoroutine(SetupLevel());
+	}
 
 	/// <summary>
 	/// Basic method that handles the setup of the level and player.

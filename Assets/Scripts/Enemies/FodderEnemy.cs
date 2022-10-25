@@ -4,48 +4,149 @@ using UnityEngine;
 
 public class FodderEnemy : EnemyBase
 {
-    [SerializeField] private float damage;
-    [SerializeField] private float speed;
-    [SerializeField] private GameObject player;
-    [SerializeField] private Rigidbody2D rb2d;
-	private float baseSpeed;
-    void Awake()
-    {
-        player = FindObjectOfType<PlayerControler>().gameObject;
-        rb2d = GetComponent<Rigidbody2D>();
+	public LayerMask playerLayerMask;
 
-		baseSpeed = speed;
+	public Animator fodderAnimator;
+
+	[SerializeField] private float damage;
+	[SerializeField] private GameObject player;
+	private float baseSpeed;
+
+	[SerializeField] private float hitDetectionRadius = 1f;
+	[SerializeField] private float windUpTime = 0.3f;
+	[SerializeField] private float dashSpeed = 9;
+	[SerializeField] private float dashDuration = 0.5f;
+	[SerializeField] private float endLag = 0.8f;
+	public bool hasHitbox = false;
+	public CapsuleCollider2D hurtbox;
+
+	void Awake()
+	{
+		//player = FindObjectOfType<PlayerControler>().gameObject;
+		hurtbox = this.GetComponent<CapsuleCollider2D>();
+
+		baseSpeed = Speed;
 	}
-    // Update is called once per frame
-    void Update()
-    {
-        base.Update();
-        Vector3 targetDir = player.transform.position - this.rb2d.transform.position;
-        rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
-    }
+
+	void Update()
+	{
+		base.Update();
+		if (Target != null)
+		{
+			HitBox();
+		}
+		LookAtTarget();
+	}
+
+	void HitBox()
+	{
+		if (Vector2.Distance(transform.position, Target.position) <= 1)
+		{
+			if (Target.gameObject != null && hasHitbox)
+			{
+				AttackPlayer(Target.gameObject);
+				hasHitbox = false;
+			}
+		}
+		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
+	}
 
 	void AttackPlayer(GameObject playerObject)
 	{
-		playerObject.GetComponent<PlayerControler>().TakeDamage(damage);
+		playerObject.GetComponent<PlayerControler>()?.TakeDamage(damage);
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	//private void OnTriggerEnter2D(Collider2D collision)
+	//{
+	//	if (collision.gameObject.layer == 8)
+	//	{
+	//		AttackPlayer(collision.gameObject);
+	//	}
+	//}
+
+	public override void TakeDamage(float damage, int damageType)
 	{
-		if (collision.gameObject.layer == 8)
+		if (damageType == 0 && meleeTarget)
 		{
-			AttackPlayer(collision.gameObject);
+			HealthPoints -= damage;
+			meleeTarget = false;
 		}
+		if (damageType == 1 && castTarget)
+		{
+			HealthPoints -= damage;
+			castTarget = false;
+		}
+		DamagePopup(damage);
+		HealthPoints -= damage;
+		StartCoroutine(HitStop());
+		StartCoroutine(FlashColor());
+		if (HealthPoints <= 0) Die();
+	}
+
+	public override void MoveToTarget(Transform target)
+	{
+		base.MoveToTarget(target);
+		fodderAnimator.Play("Fodder1Walk");
 	}
 
 	public override void GetSlowed(float slowAmount)
 	{
-		if (baseSpeed == speed)
+		if (baseSpeed == Speed)
 		{
-			speed *= slowAmount;
+			Speed *= slowAmount;
 		}
 		if (slowAmount >= 1)
 		{
-			speed = baseSpeed;
+			Speed = baseSpeed;
 		}
+	}
+
+	public override void StartAttack(Transform target)
+	{
+		//StopCoroutine(FollowPath());
+		StartCoroutine(DashAttack(target));
+	}
+
+	public override IEnumerator FlashColor()
+	{
+		enemySprite.material = MaterialHit;
+		yield return new WaitForSeconds(0.09f);
+		enemySprite.material = MaterialDefault;
+	}
+
+	public IEnumerator DashAttack(Transform target)
+	{
+		//Windup starts
+		Attacking = true;
+		fodderAnimator.Play("Fodder1Windup");
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+		Rb2d.velocity = new Vector2(0, 0);
+		yield return new WaitForSeconds(windUpTime);
+
+		//Dash starts
+		hasHitbox = true;
+		fodderAnimator.Play("Fodder1Attack");
+		Vector2 dashDir = target.transform.position - Rb2d.transform.position;
+		float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
+		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+		enemySprite.flipX = false;
+		Rb2d.velocity = dashDir.normalized * dashSpeed;
+		yield return new WaitForSeconds(dashDuration);
+
+		//Landing starts
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+		fodderAnimator.Play("Fodder1Landing");
+		Rb2d.velocity = new Vector2(0, 0);
+		hasHitbox = false;
+		yield return new WaitForSeconds(endLag);
+		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+		Attacking = false;
+	}
+
+	public void OnDrawGizmosSelected()
+	{
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(transform.position, hitDetectionRadius);
 	}
 }
