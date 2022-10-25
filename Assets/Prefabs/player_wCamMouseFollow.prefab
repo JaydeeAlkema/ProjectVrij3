@@ -843,8 +843,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c003286158a798540a99b27669b79865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
+  moveSpeed: 7
   vel: 0
+  isDashing: 0
   lookDir: {x: 0, y: 0}
   castFromPoint: {fileID: 3607252476989244952}
   boxSize: {x: 4, y: 6}
@@ -862,7 +863,6 @@ MonoBehaviour:
   deathScreenTest: {fileID: 0}
   maxHealthPoints: 500
   currentHealthPoints: 0
-  abilityController: {fileID: 2121885897375394524}
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
   dash: {fileID: 11400000, guid: d0aa0c52c1c565d47a2076fec02e7279, type: 2}
@@ -881,6 +881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d1e7e19fdf527b43979dd376badd273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAttacking: 0
 --- !u!1001 &2662904538676441094
 PrefabInstance:
   m_ObjectHideFlags: 0
