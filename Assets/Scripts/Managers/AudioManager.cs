@@ -49,21 +49,21 @@ public class AudioManager : MonoBehaviour
         Initialize();
     }
 
-        // Start is called before the first frame update
-        void Start()
-        {
+    // Start is called before the first frame update
+    void Start()
+    {
         SetWwiseGameState(WwiseGameState.MainMenu);
         SetWwiseMusicState(WwiseMusicState.MainMenu);
 
         MainMusic_Play.Post(gameObject);
-        }
+    }
 
-        // Update is called once per frame
-        void Update()
-        {
-            //Only necessary for global RTPC's like a day night cycle
-            //or sliders for volume of different busses you've set up
-        }
+    // Update is called once per frame
+    void Update()
+    {
+        //Only necessary for global RTPC's like a day night cycle
+        //or sliders for volume of different busses you've set up
+    }
 
     void Initialize()
     {
@@ -85,8 +85,8 @@ public class AudioManager : MonoBehaviour
             LoadSoundbanks();
         }
 
-        SetWwiseGameState(WwiseGameState.None)
-        SetWwiseMusicState(WwiseMusicState.None)
+        SetWwiseGameState(WwiseGameState.None);
+        SetWwiseMusicState(WwiseMusicState.None);
 
         bIsInitialized = true;
     }
@@ -113,7 +113,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        switch(GameState)
+        switch (GameState)
         {
             default://default state for when all goes wrong
             case (WwiseGameState.MainMenu):
@@ -133,9 +133,9 @@ public class AudioManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log("New Wwise GameState: " + GameState + ".")
+        Debug.Log("New Wwise GameState: " + GameState + ".");
 
-        currentGameState = GameState
+        currentGameState = GameState;
     }
 
     public void SetWwiseMusicState(WwiseMusicState MusicState)
@@ -163,7 +163,7 @@ public class AudioManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log("New Wwise MusicState: " + MusicState + ".")
+        Debug.Log("New Wwise MusicState: " + MusicState + ".");
 
         currentMusicState = MusicState;
     }
@@ -178,3 +178,4 @@ public class AudioManager : MonoBehaviour
         var wwiseGameObject = GetComponent<AkGameObj>();
         wwiseGameObject.enabled = true;
     }
+}
