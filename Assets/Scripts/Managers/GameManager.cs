@@ -33,16 +33,16 @@ public class GameManager : MonoBehaviour
 
 		if (FindObjectOfType<LevelGeneratorV2>() == null)
 		{
-			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
 			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive).completed += FetchDungeonReferences;
+			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
 		}
 		else
 		{
 			// Use the awake method for fetching references.
 			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
 			HubSceneManager = FindObjectOfType<HubSceneManager>();
-			expManager = FindObjectOfType<ExpManager>();
-			uiManager = FindObjectOfType<UIManager>();
+			//expManager = FindObjectOfType<ExpManager>();
+			//uiManager = FindObjectOfType<UIManager>();
 			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 
 			playerInstance.SetActive(false);
@@ -58,6 +58,12 @@ public class GameManager : MonoBehaviour
 
 	}
 	#endregion
+
+	private void Start()
+	{
+		expManager = FindObjectOfType<ExpManager>();
+		uiManager = FindObjectOfType<UIManager>();
+	}
 
 	public void RemoveHP(int hp)
 	{
