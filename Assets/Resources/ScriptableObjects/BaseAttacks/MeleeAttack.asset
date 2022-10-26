@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
   m_Name: MeleeAttack
   m_EditorClassIdentifier: 
+  abilityImage: {fileID: 0}
+  ability: {fileID: 0}
   coolDown: 250
-  damage: 20
+  damage: 40
   critChance: 0
   distance: 1.41
   boxSize: {x: 4.2, y: 1.8}
+  circleSize: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -25,6 +28,10 @@ MonoBehaviour:
   force: 30
   burnObject: {fileID: 3246640220694370058, guid: f03f18e478811944e971e5f2638900a1, type: 3}
   effects: 000000000000000000000000
+  trailUpgrade: 0
+  dashSpeed: 100
+  dashDuration: 0.2
+  attackTime: 200
   statusEffectType: 0
   slowAmount: 0.5
   slowDuration: 4
