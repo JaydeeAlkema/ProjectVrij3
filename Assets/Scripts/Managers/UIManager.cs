@@ -11,6 +11,12 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Slider hpBarSlider;
 	[SerializeField] private TMP_Text pointText;
 
+	[SerializeField] private GameObject[] UIStates;
+	// 0 = Hub UI
+	// 1 = Dungeon UI
+	// 2 = Generation Loading Screen
+
+
 	void Start()
 	{
 		SetExpBar(GameManager.Instance.ExpManager.ExpToNextPoint);
@@ -26,6 +32,24 @@ public class UIManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.P))
 		{
 			GameManager.Instance.ExpManager.AddExp(5);
+		}
+	}
+
+	public void EnableUI(int uiStateNumber)
+	{
+		UIStates[uiStateNumber].SetActive(true);
+	}
+
+	public void DisableUI(int uiStateNumber)
+	{
+		UIStates[uiStateNumber].SetActive(false);
+	}
+
+	public void DisableAllUI()
+	{
+		foreach (GameObject uiState in UIStates)
+		{
+			uiState.SetActive(false);
 		}
 	}
 

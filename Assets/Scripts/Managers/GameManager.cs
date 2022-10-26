@@ -31,18 +31,19 @@ public class GameManager : MonoBehaviour
 			instance = this;
 		}
 
+
 		if (FindObjectOfType<LevelGeneratorV2>() == null)
 		{
-			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive).completed += FetchDungeonReferences;
 			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
+			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive).completed += FetchDungeonReferences;
 		}
 		else
 		{
 			// Use the awake method for fetching references.
 			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
 			HubSceneManager = FindObjectOfType<HubSceneManager>();
-			//expManager = FindObjectOfType<ExpManager>();
-			//uiManager = FindObjectOfType<UIManager>();
+			expManager = FindObjectOfType<ExpManager>();
+			uiManager = FindObjectOfType<UIManager>();
 			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 
 			playerInstance.SetActive(false);
@@ -59,11 +60,6 @@ public class GameManager : MonoBehaviour
 	}
 	#endregion
 
-	private void Start()
-	{
-		expManager = FindObjectOfType<ExpManager>();
-		uiManager = FindObjectOfType<UIManager>();
-	}
 
 	public void RemoveHP(int hp)
 	{
@@ -82,9 +78,12 @@ public class GameManager : MonoBehaviour
 			// Use the awake method for fetching references.
 			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
 			HubSceneManager = FindObjectOfType<HubSceneManager>();
+			expManager = FindObjectOfType<ExpManager>();
+			uiManager = FindObjectOfType<UIManager>();
 			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 
 			playerInstance.SetActive(false);
+			uiManager.DisableAllUI();
 		}
 		StartCoroutine(SetupLevel());
 	}
@@ -95,11 +94,18 @@ public class GameManager : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator SetupLevel()
 	{
+		//Show loading screen
+		uiManager.EnableUI(2);
+
 		yield return StartCoroutine(levelGenerator.GenerateLevel());
 		GameObject startingRoom = levelGenerator.Rooms[0].gameObject;
 		Vector3 playerSpawnPos = new Vector3(startingRoom.transform.position.x, startingRoom.transform.position.y, 0);
 		playerInstance.transform.position = playerSpawnPos;
 		playerInstance.SetActive(true);
+
+		//Show dungeon HUD
+		uiManager.DisableAllUI();
+		uiManager.EnableUI(1);
 	}
 
 
