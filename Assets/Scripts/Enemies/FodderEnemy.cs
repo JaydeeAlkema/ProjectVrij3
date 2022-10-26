@@ -79,20 +79,21 @@ public class FodderEnemy : EnemyBase
 			castTarget = false;
 		}
 
-		if (damageType == 0)
+		if (damageType == 0) //On melee hit
 		{
 			//AudioManager.PostEvent( , this.gameObject);   dit aanpassen als we wwise hebben enzo
 			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			StartCoroutine(HitStop());
 		}
 
-		if (damageType == 1)
+		if (damageType == 1) //On cast hit
 		{
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 
 		DamagePopup(damage);
 		HealthPoints -= damage;
-		StartCoroutine(HitStop());
+		
 		StartCoroutine(FlashColor());
 		if (HealthPoints <= 0) Die();
 	}

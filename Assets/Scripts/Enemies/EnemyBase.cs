@@ -231,8 +231,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public IEnumerator HitStop()
 	{
-		Time.timeScale = 0.2f;
-		yield return new WaitForSeconds(0.015f);
+		Time.timeScale = 0f;
+		yield return new WaitForSecondsRealtime(0.03f);
 		Time.timeScale = 1f;
 		yield return null;
 	}
