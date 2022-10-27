@@ -7,9 +7,10 @@ using NaughtyAttributes;
 [CreateAssetMenu( fileName = "Ability", menuName = "ScriptableObjects/Ability" )]
 public class AbilityScriptable : ScriptableObject
 {
+	[SerializeField] private Sprite abilityImage;
 	[SerializeField] private Ability ability;
 	[SerializeField] private float coolDown = 0.001f;
-	[SerializeField] private float damage = 0f;
+	[SerializeField] private int damage = 0;
 	[SerializeField] private float critChance = 0f;
 	[SerializeField] private float distance = 0f;
 	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
@@ -23,12 +24,14 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private bool trailUpgrade;
 	[SerializeField] private float dashSpeed = 100f;
 	[SerializeField] private float dashDuration = 0.2f;
+	[SerializeField] private float attackTime = 200f;
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
+	public Sprite AbilityImage { get => abilityImage; set => abilityImage = value; }
 	public float CoolDown { get => coolDown; set => coolDown = value; }
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
-	public float Damage { get => damage; set => damage = value; }
+	public int Damage { get => damage; set => damage = value; }
 	public float Force { get => force; set => force = value; }
 	public float Distance { get => distance; set => distance = value; }
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
@@ -39,6 +42,7 @@ public class AbilityScriptable : ScriptableObject
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	public float DashSpeed { get => dashSpeed; set => dashSpeed = value; }
 	public float DashDuration { get => dashDuration; set => dashDuration = value; }
+	public float AttackTime { get => attackTime; set => attackTime = value; }
 	public Ability Ability { get => ability; set => ability =  value ; }
 	public EffectType[] Effects { get => effects; set => effects = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;

@@ -277,10 +277,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a81d9c30750cbd46b9b9b8553665cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityToGive: {fileID: 11400000, guid: eb01a3aa93a60b94d981ae4869eb58ac, type: 2}
+  abilityStats: {fileID: 0}
+  rewardID: 0
   upgradeToGive: {fileID: 11400000, guid: 8b0d1e2205e7455448ed5bd6078c033d, type: 2}
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
+  roll: 0
+  abilityImg: {fileID: 2684081979843104788}
+  meleeUpgradeImg: {fileID: 8374394817332095920}
+  rangedUpgradeImg: {fileID: 8812187788534182734}
+  t1Chance: 1
+  t2Chance: 700001
+  t3Chance: 995001
 --- !u!1 &8803674279807195312
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,6 +787,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChooseRangedUpgrade
       objectReference: {fileID: 0}
+    - target: {fileID: 2020368338251867838, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2079830203134023281, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
@@ -803,17 +815,25 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChooseMeleeUpgrade
       objectReference: {fileID: 0}
+    - target: {fileID: 3673744085522410483, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4911724681014293045, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6571288266361586225, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7339037712705727397, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567576138458544488, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8092424814971712547, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
       propertyPath: m_Name
@@ -911,3 +931,36 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8092424814971712559, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
   m_PrefabInstance: {fileID: 5964478593503205702}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2684081979843104788 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8645174034717034834, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+  m_PrefabInstance: {fileID: 5964478593503205702}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8374394817332095920 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2806241859878105846, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+  m_PrefabInstance: {fileID: 5964478593503205702}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8812187788534182734 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2922057391232215560, guid: 03a5c967a0c460d4489927f754ddf9b0, type: 3}
+  m_PrefabInstance: {fileID: 5964478593503205702}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

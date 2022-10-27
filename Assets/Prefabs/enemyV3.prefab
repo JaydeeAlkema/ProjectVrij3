@@ -106,10 +106,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632c5f5b9042a6c459f46bcff76bdf27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 50
-  speed: 4
+  healthPoints: 200
+  speed: 6
   aggroRange: 10
   attackRange: 3
+  expAmount: 5
   attacking: 0
   rb2d: {fileID: 4442677197823009441}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
@@ -137,6 +138,10 @@ MonoBehaviour:
   endLag: 0.7
   hasHitbox: 0
   hurtbox: {fileID: 4468130794609170519}
+  Event:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
 --- !u!114 &7187582512883066473
 MonoBehaviour:
   m_ObjectHideFlags: 0

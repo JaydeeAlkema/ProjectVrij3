@@ -6,22 +6,23 @@ public class MBCirclingEnemy : EnemyBase
 {
 	private int playerLayer = 1 << 8;
 
-	[SerializeField] private float damage;
+	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
-	[SerializeField] private bool aggro = false;
 	[SerializeField] private bool hasHitbox = true;
 	private float checkMaxHP;
 
-	public Transform center;
+	public Vector3 center;
 	public float orbitRadius;
 	public float radiusSpeed = 10f;
 	public float rotationSpeed = 6f;
+	public bool agitated = false;
+	public bool aggro = false;
 
 	void Awake()
 	{
 		checkMaxHP = HealthPoints;
 		player = FindObjectOfType<PlayerControler>().gameObject;
-		transform.position = (transform.position - center.position).normalized * orbitRadius + center.position;
+		transform.position = (transform.position - center).normalized * orbitRadius + center;
 	}
 
 	void Update()
@@ -32,7 +33,7 @@ public class MBCirclingEnemy : EnemyBase
 		MoveToPlayer();
 	}
 
-	public override void TakeDamage(float damage, int damageType)
+	public override void TakeDamage(int damage, int damageType)
 	{
 		if (damageType == 0 && meleeTarget)
 		{
@@ -48,7 +49,7 @@ public class MBCirclingEnemy : EnemyBase
 		HealthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
-		aggro = true;
+		agitated = true;
 		if (HealthPoints <= 0) Die();
 	}
 
@@ -56,8 +57,8 @@ public class MBCirclingEnemy : EnemyBase
 	{
 		if (!aggro)
 		{
-			transform.RotateAround(center.position, Vector3.forward, rotationSpeed * Time.deltaTime);
-			var desiredPosition = (transform.position - center.position).normalized * orbitRadius + center.position;
+			transform.RotateAround(center, Vector3.forward, rotationSpeed * Time.deltaTime);
+			var desiredPosition = (transform.position - center).normalized * orbitRadius + center;
 			transform.position = Vector3.MoveTowards(transform.position, desiredPosition, radiusSpeed * Time.deltaTime);
 		}
 	}

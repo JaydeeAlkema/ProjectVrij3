@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Mac" BasePlatform="Mac" SchemaVersion="12" SoundbankVersion="140">
+	<RootPaths>
+		<ProjectRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\</ProjectRoot>
+		<SourceFilesRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Mac\</SourceFilesRoot>
+		<SoundBanksRoot>C:\Users\maxjo\Documents\Unity Projects\ProjectVrij3\Assets\StreamingAssets\Audio\GeneratedSoundBanks\Mac\</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\GeneratedSoundBanks\Mac</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles/>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="534561221" Language="SFX" Hash="1797642508">
+			<ObjectPath>\SoundBanks\Default Work Unit\MainSoundbank</ObjectPath>
+			<ShortName>MainSoundbank</ShortName>
+			<Path>MainSoundbank.bnk</Path>
+			<IncludedEvents>
+				<Event Id="3509614367" Name="npc_dmg_cast" ObjectPath="\Events\NPC\npc_dmg_cast" DurationType="OneShot" DurationMin="1.258499" DurationMax="1.333333">
+					<IncludedMemoryFiles>
+						<File Id="859909442" Language="SFX">
+							<ShortName>lb_sx_uni_npc_dmg_cast_01.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_dmg_cast_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="2025828010" Name="npc_dmg_melee" ObjectPath="\Events\NPC\npc_dmg_melee" DurationType="OneShot" DurationMin="0.747352" DurationMax="0.791792">
+					<IncludedMemoryFiles>
+						<File Id="457766068" Language="SFX">
+							<ShortName>lb_sx_uni_npc_dmg_melee_01.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_dmg_melee_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1994383775" Name="plr_attck_cast" ObjectPath="\Events\Player\Player Actions\plr_attck_cast" DurationType="OneShot" DurationMin="1.31639" DurationMax="1.394667">
+					<IncludedMemoryFiles>
+						<File Id="586357725" Language="SFX">
+							<ShortName>lb_sx_uni_plr_attck_cast_01.wav</ShortName>
+							<Path>SFX\lb_sx_uni_plr_attck_cast_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="3420739114" Name="plr_attck_melee" ObjectPath="\Events\Player\Player Actions\plr_attck_melee" DurationType="OneShot" DurationMin="0.896523" DurationMax="0.949833">
+					<IncludedMemoryFiles>
+						<File Id="201842440" Language="SFX">
+							<ShortName>lb_sx_uni_plr_attck_melee_01.wav</ShortName>
+							<Path>SFX\lb_sx_uni_plr_attck_melee_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="2474305640" Name="plr_dmg_npc" ObjectPath="\Events\Player\Player Actions\plr_dmg_npc" DurationType="OneShot" DurationMin="1.21278" DurationMax="1.284896">
+					<IncludedMemoryFiles>
+						<File Id="506543933" Language="SFX">
+							<ShortName>lb_sx_uni_plr_dmg_npc_01.wav</ShortName>
+							<Path>SFX\lb_sx_uni_plr_dmg_npc_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+			</IncludedEvents>
+		</SoundBank>
+		<SoundBank Id="1355168291" Language="SFX" Hash="2787789071">
+			<ObjectPath>Init</ObjectPath>
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+			<IncludedAuxBusses>
+				<AuxBus Id="247451540" Name="CaveBig" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\CaveBig"/>
+				<AuxBus Id="992774748" Name="Graveyard" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\Graveyard"/>
+				<AuxBus Id="3545700988" Name="Reverbs" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs"/>
+			</IncludedAuxBusses>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>

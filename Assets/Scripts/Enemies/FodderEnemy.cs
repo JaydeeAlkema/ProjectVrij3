@@ -8,7 +8,7 @@ public class FodderEnemy : EnemyBase
 
 	public Animator fodderAnimator;
 
-	[SerializeField] private float damage;
+	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
@@ -19,6 +19,8 @@ public class FodderEnemy : EnemyBase
 	[SerializeField] private float endLag = 0.8f;
 	public bool hasHitbox = false;
 	public CapsuleCollider2D hurtbox;
+
+	public AK.Wwise.Event Event;
 
 	void Awake()
 	{
@@ -64,7 +66,7 @@ public class FodderEnemy : EnemyBase
 	//	}
 	//}
 
-	public override void TakeDamage(float damage, int damageType)
+	public override void TakeDamage(int damage, int damageType)
 	{
 		if (damageType == 0 && meleeTarget)
 		{
@@ -76,9 +78,22 @@ public class FodderEnemy : EnemyBase
 			HealthPoints -= damage;
 			castTarget = false;
 		}
+
+		if (damageType == 0) //On melee hit
+		{
+			//AudioManager.PostEvent( , this.gameObject);   dit aanpassen als we wwise hebben enzo
+			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			StartCoroutine(HitStop());
+		}
+
+		if (damageType == 1) //On cast hit
+		{
+			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+		}
+
 		DamagePopup(damage);
 		HealthPoints -= damage;
-		StartCoroutine(HitStop());
+		
 		StartCoroutine(FlashColor());
 		if (HealthPoints <= 0) Die();
 	}

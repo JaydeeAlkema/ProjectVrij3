@@ -6,6 +6,7 @@ public interface IAbility
 {
 	AbilityScriptable BaseStats { get; set; }
 	PlayerControler Player { get; set; }
+	AbilityController Controller { get; set; }
 	public Rigidbody2D Rb2d { get; set; }
 	public Vector3 MousePos { get; set; }
 	public Vector2 LookDir { get; set; }
@@ -13,7 +14,8 @@ public interface IAbility
 	public int abilityID { get; set; }
 	public float Angle { get; set; }
 	public float CoolDown { get; set; }
-	public float Damage { get; set; }
+	public float AttackTime { get; set; }
+	public int Damage { get; set; }
 	public float CritChance { get; set; }
 	public bool TrailUpgrade { get; set; }
 	public Vector2 BoxSize { get; set; }
