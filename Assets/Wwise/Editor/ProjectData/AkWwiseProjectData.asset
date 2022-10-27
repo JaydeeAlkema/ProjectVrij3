@@ -174,7 +174,7 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: ba94794bf10feb46b0a481322224049e
     GuidInternal: 
-    m_lastTime: -8585353960006219878
+    m_lastTime: -8585349589322002116
     List:
     - name: MainSoundbank
       guid: 99c33cca48068b439cf0e7d85d5fbcc5
@@ -202,9 +202,56 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: 35c80cdc0d64e54b9b0b5eebc34ff9fd
     GuidInternal: 
-    m_lastTime: -8585361081606279646
+    m_lastTime: -8585349591785646078
     List: []
-  - PhysicalPath: Events\Player Attack.wwu
+  - PhysicalPath: Events\NPC.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: NPC
+      ObjectType: 12
+      guid: e4e67647559e7d4a83c9279d641b0dfd
+    ParentPath: Events\NPC
+    guid: e4e67647559e7d4a83c9279d641b0dfd
+    GuidInternal: 
+    m_lastTime: -8585349590655190527
+    List:
+    - name: npc_dmg_cast
+      guid: 3fac3a27ba39b3459e230f22eae37101
+      id: 3509614367
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: NPC
+        ObjectType: 12
+        guid: e4e67647559e7d4a83c9279d641b0dfd
+      - ElementName: npc_dmg_cast
+        ObjectType: 3
+        guid: 3fac3a27ba39b3459e230f22eae37101
+      Path: Events\NPC\npc_dmg_cast
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: npc_dmg_melee
+      guid: 160328d67a0ed84e9611cf9051d25153
+      id: 2025828010
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: NPC
+        ObjectType: 12
+        guid: e4e67647559e7d4a83c9279d641b0dfd
+      - ElementName: npc_dmg_melee
+        ObjectType: 3
+        guid: 160328d67a0ed84e9611cf9051d25153
+      Path: Events\NPC\npc_dmg_melee
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events\Player Actions.wwu
     PathAndIcons:
     - ElementName: Events
       ObjectType: 5
@@ -212,17 +259,17 @@ MonoBehaviour:
     - ElementName: Player
       ObjectType: 12
       guid: 183791ff7f3e3c43a8c1b839025a22e8
-    - ElementName: Player Attack
+    - ElementName: Player Actions
       ObjectType: 12
       guid: 94955df029b54d4f95809f93dfae9c56
-    ParentPath: Events\Player\Player Attack
+    ParentPath: Events\Player\Player Actions
     guid: 94955df029b54d4f95809f93dfae9c56
     GuidInternal: 
-    m_lastTime: -8585361091126305446
+    m_lastTime: -8585349590655330178
     List:
-    - name: Plyr_Attack_Cast
+    - name: plr_attck_cast
       guid: 5f05de29e0a9e348a44ab60b874044d6
-      id: 2843458411
+      id: 1994383775
       PathAndIcons:
       - ElementName: Events
         ObjectType: 5
@@ -230,16 +277,56 @@ MonoBehaviour:
       - ElementName: Player
         ObjectType: 12
         guid: 183791ff7f3e3c43a8c1b839025a22e8
-      - ElementName: Player Attack
+      - ElementName: Player Actions
         ObjectType: 12
         guid: 94955df029b54d4f95809f93dfae9c56
-      - ElementName: Plyr_Attack_Cast
+      - ElementName: plr_attck_cast
         ObjectType: 3
         guid: 5f05de29e0a9e348a44ab60b874044d6
-      Path: Events\Player\Player Attack\Plyr_Attack_Cast
+      Path: Events\Player\Player Actions\plr_attck_cast
       maxAttenuation: 0
-      maxDuration: 1.394667
-      minDuration: 1.31639
+      maxDuration: -1
+      minDuration: -1
+    - name: plr_attck_melee
+      guid: 8be3fdd7e0ea154dabaa723af766e7dd
+      id: 3420739114
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Player
+        ObjectType: 12
+        guid: 183791ff7f3e3c43a8c1b839025a22e8
+      - ElementName: Player Actions
+        ObjectType: 12
+        guid: 94955df029b54d4f95809f93dfae9c56
+      - ElementName: plr_attck_melee
+        ObjectType: 3
+        guid: 8be3fdd7e0ea154dabaa723af766e7dd
+      Path: Events\Player\Player Actions\plr_attck_melee
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: plr_dmg_npc
+      guid: f3f0aff4c363174881b31c752d953cbe
+      id: 2474305640
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Player
+        ObjectType: 12
+        guid: 183791ff7f3e3c43a8c1b839025a22e8
+      - ElementName: Player Actions
+        ObjectType: 12
+        guid: 94955df029b54d4f95809f93dfae9c56
+      - ElementName: plr_dmg_npc
+        ObjectType: 3
+        guid: f3f0aff4c363174881b31c752d953cbe
+      Path: Events\Player\Player Actions\plr_dmg_npc
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   - PhysicalPath: Events\Player Locomotion.wwu
     PathAndIcons:
     - ElementName: Events
@@ -286,7 +373,7 @@ MonoBehaviour:
     ParentPath: Events\Player
     guid: 183791ff7f3e3c43a8c1b839025a22e8
     GuidInternal: 
-    m_lastTime: -8585361091126544765
+    m_lastTime: -8585349591785915357
     List: []
   - PhysicalPath: Events\Test Events.wwu
     PathAndIcons:
