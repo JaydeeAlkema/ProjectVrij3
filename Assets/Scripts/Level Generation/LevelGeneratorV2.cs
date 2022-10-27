@@ -663,30 +663,64 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
+		// Fodder enemy spawning
 		foreach (Room room in rooms)
 		{
 			if (room.RoomType != RoomType.Spawn && room.RoomType != RoomType.Boss)
 			{
-				int currentEnemyCount = 0;
-				foreach (EnemyGroup enemyGroup in SLGS.EnemyGroups)
+				int currentFodderEnemyCount = 0;
+				EnemyGroup fodderEnemyGroup = SLGS.EnemyFodderGroup;
+				if (fodderEnemyGroup.enemyType == EnemyType.Fodder)
 				{
-					// The enemyCountPerRoom variable is a Min Man vector. so the X axis refers to the minimum amount of enemies and the Y to the max amount of enemies
-					while (currentEnemyCount < enemyGroup.enemyCountPerRoom.y)
+					// The enemyCountPerRoom variable is a Min Max vector. so the X axis refers to the minimum amount of enemies and the Y to the max amount of enemies
+					int enemyCount = Random.Range(fodderEnemyGroup.enemyCountPerRoom.x, fodderEnemyGroup.enemyCountPerRoom.y);
+					while (currentFodderEnemyCount < fodderEnemyGroup.enemyCountPerRoom.y)
 					{
 						// Always spawn atleast the minimum amount of enemies.
-						if (currentEnemyCount <= enemyGroup.enemyCountPerRoom.x)
+						if (currentFodderEnemyCount <= enemyCount)
 						{
 							Transform tileToSpawnEnemyUpon = room.NoncollideableTiles[Random.Range(0, room.NoncollideableTiles.Count)];
 							Vector2Int enemySpawnPoint = new Vector2Int(Mathf.RoundToInt(tileToSpawnEnemyUpon.position.x), Mathf.RoundToInt(tileToSpawnEnemyUpon.position.y));
 
-							GameObject enemyPrefab = enemyGroup.enemyPrefab;
+							GameObject enemyPrefab = fodderEnemyGroup.enemyPrefabs.GetRandom();
 							GameObject enemyGO = Instantiate(enemyPrefab, new Vector3(enemySpawnPoint.x, enemySpawnPoint.y, 0), Quaternion.identity, room.transform);
-
 						}
-						currentEnemyCount++;
+						currentFodderEnemyCount++;
 					}
 				}
 			}
+		}
+
+		// Reward enemy spawning
+		EnemyGroup rewardEnemyGroup = SLGS.EnemyRewardGroup;
+		List<int> roomIndecesForRewardEnemySpawning = new List<int>();
+		List<int> roomIndeces = new List<int>();
+
+		// not the best way of ensuring reward enemies spawn in unique rooms... But it works :)
+		for (int i = 0; i < rooms.Count; i++)
+		{
+			if (rooms[i].RoomType == RoomType.Generic)
+			{
+				roomIndeces.Add(i);
+			}
+		}
+		for (int re = 0; re < rewardEnemyGroup.enemyPrefabs.Count; re++)
+		{
+			if (roomIndeces.Count > 0)
+			{
+				int randIndex = Random.Range(0, roomIndeces.Count);
+				roomIndecesForRewardEnemySpawning.Add(roomIndeces[randIndex]);
+				roomIndeces.RemoveAt(randIndex);
+			}
+		}
+		foreach (int index in roomIndecesForRewardEnemySpawning)
+		{
+			Room room = rooms[index];
+			Transform tileToSpawnEnemyUpon = room.NoncollideableTiles[Random.Range(0, room.NoncollideableTiles.Count)];
+			Vector2Int enemySpawnPoint = new Vector2Int(Mathf.RoundToInt(tileToSpawnEnemyUpon.position.x), Mathf.RoundToInt(tileToSpawnEnemyUpon.position.y));
+
+			GameObject enemyPrefab = rewardEnemyGroup.enemyPrefabs.GetRandom();
+			GameObject enemyGO = Instantiate(enemyPrefab, new Vector3(enemySpawnPoint.x, enemySpawnPoint.y, 0), Quaternion.identity, room.transform);
 		}
 
 		executionTime.Stop();

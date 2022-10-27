@@ -89,7 +89,17 @@ MonoBehaviour:
   - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   bottomRightInnerCornerSprites:
   - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  EnemyGroups:
-  - enemyPrefab: {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
+  EnemyFodderGroup:
+    enemyType: 1
+    enemyPrefabs:
+      list:
+      - item: {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
+        weight: 1
     enemyCountPerRoom: {x: 5, y: 10}
-    spawnChance: 75
+  EnemyRewardGroup:
+    enemyType: 2
+    enemyPrefabs:
+      list:
+      - item: {fileID: 1972835925610663312, guid: cba955331c4327d4ab4ab3de6aaa9a75, type: 3}
+        weight: 1
+    enemyCountPerRoom: {x: 0, y: 0}

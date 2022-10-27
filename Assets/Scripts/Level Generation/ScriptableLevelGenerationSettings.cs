@@ -29,15 +29,22 @@ public class ScriptableLevelGenerationSettings : ScriptableObject
 	[Foldout("Sprites")] public List<Sprite> bottomLeftInnerCornerSprites = new List<Sprite>();
 	[Foldout("Sprites")] public List<Sprite> bottomRightInnerCornerSprites = new List<Sprite>();
 
-	[Foldout("Enemy Generation")] public List<EnemyGroup> EnemyGroups = new List<EnemyGroup>();
+	[Foldout("Enemy Generation")] public EnemyGroup EnemyFodderGroup = new EnemyGroup();
+	[Foldout("Enemy Generation")] public EnemyGroup EnemyRewardGroup = new EnemyGroup();
 }
+
+public enum EnemyType
+{
+	Fodder = 1,
+	Reward = 2,
+};
 
 [System.Serializable]
 public struct EnemyGroup
 {
-	public GameObject enemyPrefab;
-	public Vector2Int enemyCountPerRoom;
-	public int spawnChance;
+	public EnemyType enemyType;
+	public WeightedRandomList<GameObject> enemyPrefabs;
+	[AllowNesting, MinMaxSlider(0, 20), ShowIf("enemyType", EnemyType.Fodder)] public Vector2Int enemyCountPerRoom;
 }
 
 [System.Serializable]
