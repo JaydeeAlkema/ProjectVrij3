@@ -21,6 +21,7 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 			if (Input.GetKeyDown(KeyCode.F))
 			{
 				ChooseUI.gameObject.SetActive(true);
+				GameManager.Instance.TogglePauseGame();
 			}
 		}
 	}

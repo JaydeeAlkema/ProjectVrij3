@@ -13,6 +13,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private int horizontal = 0;
 	private int vertical = 0;
 	[SerializeField] private bool isDashing = false;
+	//[SerializeField] private bool canMove = true;
 	//[SerializeField]
 	//private Camera cam;
 	public Vector2 lookDir;
@@ -122,10 +123,23 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		vel = rb2d.velocity.magnitude;
 
-		MouseLook();
+		if (!GameManager.Instance.IsPaused)
+		{
+			if (Input.GetMouseButtonDown(0)) MeleeAttack();
+			if (Input.GetMouseButtonDown(1)) RangedAttack();
+			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
+			if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
+			if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
+			if (Input.GetKeyDown(KeyCode.Space)) DashAbility();
 
-		Sprite.flipX = lookDir.x > 0 ? true : false;
-		AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
+			MouseLook();
+
+			Sprite.flipX = lookDir.x > 0 ? true : false;
+			AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
+		}
+
+
+		
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing)
@@ -136,12 +150,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed;
 		}
 
-		if (Input.GetMouseButtonDown(0)) MeleeAttack();
-		if (Input.GetMouseButtonDown(1)) RangedAttack();
-		if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
-		if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
-		if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
-		if (Input.GetKeyDown(KeyCode.Space)) DashAbility();
+
 	}
 	void OnDrawGizmos()
 	{
