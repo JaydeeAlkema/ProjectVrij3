@@ -62,6 +62,14 @@ public class GameManager : MonoBehaviour
 	}
 	#endregion
 
+	public void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			TogglePauseGame();
+			UiManager.SetUIActive(3, isPaused);
+		}
+	}
 
 	public void RemoveHP(int hp)
 	{
@@ -103,7 +111,7 @@ public class GameManager : MonoBehaviour
 	private IEnumerator SetupLevel()
 	{
 		//Show loading screen
-		uiManager.EnableUI(2);
+		uiManager.SetUIActive(2, true);
 
 		yield return StartCoroutine(levelGenerator.GenerateLevel());
 		GameObject startingRoom = levelGenerator.Rooms[0].gameObject;
@@ -113,7 +121,7 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.EnableUI(1);
+		uiManager.SetUIActive(1, true);
 	}
 
 

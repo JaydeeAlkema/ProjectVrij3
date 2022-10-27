@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
 	// 0 = Hub UI
 	// 1 = Dungeon UI
 	// 2 = Generation Loading Screen
+	// 3 = Pause Screen
 
 
 	void Start()
@@ -35,14 +36,9 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	public void EnableUI(int uiStateNumber)
+	public void SetUIActive(int uiStateNumber, bool isActive)
 	{
-		UIStates[uiStateNumber].SetActive(true);
-	}
-
-	public void DisableUI(int uiStateNumber)
-	{
-		UIStates[uiStateNumber].SetActive(false);
+		UIStates[uiStateNumber].SetActive(isActive);
 	}
 
 	public void DisableAllUI()
