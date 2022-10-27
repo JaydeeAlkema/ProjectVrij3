@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RewardChoice : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class RewardChoice : MonoBehaviour
     [SerializeField] private Image abilityImg;
     [SerializeField] private Image meleeUpgradeImg;
     [SerializeField] private Image rangedUpgradeImg;
+    [SerializeField] private TMP_Text AbilityTitle;
+    [SerializeField] private TMP_Text MeleeTitle;
+    [SerializeField] private TMP_Text RangedTitle;
     //chances are based on a roll of 1-1000000
     [SerializeField] private int t1Chance = 1; //1-700000
     [SerializeField] private int t2Chance = 700001; //700001-995000
@@ -89,6 +93,9 @@ public class RewardChoice : MonoBehaviour
         meleeUpgradeImg.sprite = upgradeToGive.UpgradeImage;
         rangedUpgradeImg.sprite = upgradeToGive.UpgradeImage;
         abilityImg.sprite = abilityToGive.BaseStats.AbilityImage;
+        AbilityTitle.text = "" + abilityToGive.GetType().Name;
+        MeleeTitle.text = upgradeToGive.name + " Melee";
+        RangedTitle.text = upgradeToGive.name + " Ranged";
     }
 
 	public void ChooseAbility()
