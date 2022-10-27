@@ -34,6 +34,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private List<Chunk> path = new List<Chunk>();
 	[SerializeField] private List<Room> rooms = new List<Room>();
 	[SerializeField] private List<GameObject> decorations = new List<GameObject>();
+	[SerializeField] private AstarData astarData = null;
+	[SerializeField] private GridGraph gridGraph = null;
 	[Space(10)]
 
 	[Header("References")]
@@ -323,14 +325,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		// Setup Astar Graph
 		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
-		AstarData astarData = AstarPath.active.data;
-		GridGraph gg = astarData.gridGraph;
+		astarData = AstarPath.active.data;
+		gridGraph = astarData.gridGraph;
 
 		GameObject SeekerGO = new GameObject("Seeker");
 		Seeker seeker = SeekerGO.AddComponent<Seeker>();
 
-		gg.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
-		gg.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x + 1, SLGS.chunkSize * SLGS.chunkGridSize.y + 1, gg.nodeSize);
+		gridGraph.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
+		gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x + 1, SLGS.chunkSize * SLGS.chunkGridSize.y + 1, gridGraph.nodeSize);
 		AstarPath.active.Scan();
 
 		while (AstarPath.active.IsAnyGraphUpdateInProgress)
@@ -493,7 +495,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			{
 				SpriteRenderer spriteRenderer = pathTile.GetComponent<SpriteRenderer>();
 				BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
-				pathTile.gameObject.layer = LayerMask.GetMask("Unwalkable");
+				pathTile.gameObject.layer = LayerMask.NameToLayer("Unwalkable");
 
 				if (spriteRenderer == null) spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
 				if (boxCollider2D == null)
@@ -559,7 +561,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
 				{
-					pathTile.gameObject.layer = LayerMask.GetMask("Walkable");
+					pathTile.gameObject.layer = LayerMask.NameToLayer("Walkable");
 					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
 					spriteRenderer.sortingOrder = 0;
 					boxCollider2D.enabled = false;
@@ -738,6 +740,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 					decorations.Add(decorationGO);
 				}
 			}
+		}
+
+		// A final scan.
+		AstarPath.active.Scan();
+		while (AstarPath.active.IsAnyGraphUpdateInProgress)
+		{
+			yield return new WaitForEndOfFrame();
 		}
 
 		executionTime.Stop();
