@@ -129,12 +129,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 		if (damageType == 0)
 		{
-			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 		}
 
 		if (damageType == 1)
 		{
-			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 
 		DamagePopup(damageToTake);
