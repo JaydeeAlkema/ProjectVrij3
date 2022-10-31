@@ -30,7 +30,11 @@ public class MBCirclingEnemy : EnemyBase
 		base.Update();
 		HitBox();
 		CircleAroundBoss();
-		MoveToPlayer();
+		//MoveToPlayer();
+		if (aggro)
+		{
+			MoveToTarget(Target);
+		}
 	}
 
 	public override void TakeDamage(int damage, int damageType)

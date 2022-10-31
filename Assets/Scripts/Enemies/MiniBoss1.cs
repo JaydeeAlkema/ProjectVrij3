@@ -16,6 +16,7 @@ public class MiniBoss1 : EnemyBase
 	public float agitateCounter = 0f;
 	public float respawnCounter = 0f;
 	public float spawnTimeMultiplier = 1f;
+	public float spawnTimeMultiplierIncrement = 0.5f;
 
 	public List<GameObject> mobs = new List<GameObject>();
 	public Transform[] innerSpawnPoints;
@@ -73,7 +74,7 @@ public class MiniBoss1 : EnemyBase
 		{
 			if(mob == null)
 			{
-				spawnTimeMultiplier += 0.2f;
+				spawnTimeMultiplier += spawnTimeMultiplierIncrement;
 				mobs.Remove(mob);
 			}
 		}
@@ -113,6 +114,8 @@ public class MiniBoss1 : EnemyBase
 					MBCirclingEnemy mobScript = mob.GetComponent<MBCirclingEnemy>();
 					if (mobScript.agitated)
 					{
+						Transform player = FindObjectOfType<PlayerControler>().gameObject.transform;
+						mobScript.Target = player;
 						mobScript.aggro = true;
 						mobScript.agitated = false;
 					}
