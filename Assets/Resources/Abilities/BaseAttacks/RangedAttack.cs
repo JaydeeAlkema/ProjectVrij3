@@ -9,7 +9,7 @@ public class RangedAttack : Ability
 
 	public override void CallAbility(PlayerControler _player)
 	{
-		if( init )
+		if (init)
 		{
 			SetAbilityStats();
 			init = false;
@@ -17,7 +17,7 @@ public class RangedAttack : Ability
 	}
 	public override void AbilityBehavior()
 	{
-		CastedObject = Object.Instantiate( castObject, CastFromPoint.transform.position, CastFromPoint.rotation, CastFromPoint.transform );
+		CastedObject = Object.Instantiate(castObject, CastFromPoint.transform.position + (Vector3)LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform);
 		Projectile proj = CastedObject.GetComponent<Projectile>();
 		//TrailUpgrade = BaseStats.TrailUpgrade;
 		proj.TrailUpgrade = TrailUpgrade;
@@ -25,7 +25,7 @@ public class RangedAttack : Ability
 		proj.LifeSpan = lifeSpan;
 		proj.Force = force;
 		proj.CastedFrom = this;
-		CastedObject.transform.SetParent( null );
+		CastedObject.transform.SetParent(null);
 	}
 
 	void SetAbilityStats()

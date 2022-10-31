@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField] private ScriptableInt playerHP;
 	[SerializeField] private int playerMaxHP;
+	[SerializeField] private bool isPaused = false;
 
 	[Header("Managers")]
 	[SerializeField] private LevelGeneratorV2 levelGenerator = null;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
 	public UIManager UiManager { get => uiManager; private set => uiManager = value; }
 	public int PlayerHP { get => playerHP.value; set => playerHP.value = value; }
+	public bool IsPaused { get => isPaused; private set => isPaused = value; }
 
 	#region Unity Callbacks
 	private void Awake()
@@ -69,6 +71,12 @@ public class GameManager : MonoBehaviour
 	public void SetHP(int hp)
 	{
 		playerHP.value = hp;
+	}
+
+	public void TogglePauseGame()
+	{
+		isPaused = !isPaused;
+		Time.timeScale = isPaused ? 0f : 1f;
 	}
 
 	private void FetchDungeonReferences(AsyncOperation asyncOperation)

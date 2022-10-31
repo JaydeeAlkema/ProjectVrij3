@@ -95,7 +95,8 @@ public class RewardChoice : MonoBehaviour
     {
         // give AbilityScriptable
         //player.Ability1 = abilityToGive;
-       //IAbility giveAbility = abilityToGive;
+        //IAbility giveAbility = abilityToGive;
+        GameManager.Instance.TogglePauseGame();
         player.Ability1 = abilityStats;
         player.CurrentAbility1 = abilityToGive;
         player.initAbilities();
@@ -105,6 +106,7 @@ public class RewardChoice : MonoBehaviour
     public void ChooseMeleeUpgrade()
     {
         // give one of possible upgrades
+        GameManager.Instance.TogglePauseGame();
         player.CurrentMeleeAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
         player.CurrentMeleeAttack.Damage += upgradeToGive.DamageUpgrade;
         player.CurrentMeleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
@@ -117,6 +119,7 @@ public class RewardChoice : MonoBehaviour
     public void ChooseRangedUpgrade()
     {
         // give one of possible upgrades
+        GameManager.Instance.TogglePauseGame();
         player.CurrentRangedAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
         player.CurrentRangedAttack.Damage += upgradeToGive.DamageUpgrade;
         player.CurrentRangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
