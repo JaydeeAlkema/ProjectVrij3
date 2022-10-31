@@ -57,6 +57,23 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+## ---------------- ##
+##   WWise stuff    ##
+## ---------------- ##
+
+# project stuff
+WWiseProject/.cache/
+WWiseProject/*.prof
+WwiseProject/*_WwiseProject.*.validationcache
+WwiseProject/*_WwiseProject.*.wsettings
+WwiseProject/**/*.akd
+
+# Basic ignore, some paths omitted because of differences in saved paths. Update if needed
+
+## --------------- ##
+## End WWise Stuff ##
+## --------------- ##
+
 # Crashlytics generated file
 crashlytics-build.properties
 
