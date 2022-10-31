@@ -17,6 +17,7 @@ public class Dash : Ability
 			SetAbilityStats();
 			init = false;
 		}
+		AbilityBehavior();
 	}
 
 	public override void AbilityBehavior()

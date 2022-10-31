@@ -16,6 +16,7 @@ public class MeleeAttack : Ability
 			SetAbilityStats();
 			init = false;
 		}
+		AbilityBehavior();
 	}
 	public override void AbilityBehavior()
 	{

@@ -14,6 +14,7 @@ public class RangedAttack : Ability
 			SetAbilityStats();
 			init = false;
 		}
+		AbilityBehavior();
 	}
 	public override void AbilityBehavior()
 	{
