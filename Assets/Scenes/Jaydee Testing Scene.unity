@@ -204,6 +204,12 @@ MonoBehaviour:
   path: []
   rooms: []
   decorations: []
+  astarData:
+    dataString: 
+    upgradeData: 
+    file_cachedStartup: {fileID: 0}
+    data_cachedStartup: 
+    cacheStartup: 0
   chunksParent: {fileID: 10108052}
   roomsParent: {fileID: 1345135754}
   pathwaysParent: {fileID: 1618383058}
@@ -579,7 +585,7 @@ MonoBehaviour:
   - 29
   - 30
   - 31
-  heuristic: 2
+  heuristic: 0
   heuristicScale: 1
   threadCount: 1
   maxFrameTime: 10
