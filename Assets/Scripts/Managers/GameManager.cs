@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
 			instance = this;
 		}
 
+		QualitySettings.vSyncCount = 1;
 
 		if (FindObjectOfType<LevelGeneratorV2>() == null)
 		{
