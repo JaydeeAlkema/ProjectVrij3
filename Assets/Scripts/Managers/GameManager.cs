@@ -38,19 +38,11 @@ public class GameManager : MonoBehaviour
 		if (FindObjectOfType<LevelGeneratorV2>() == null)
 		{
 			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
-			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive).completed += FetchDungeonReferences;
+			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive);
 		}
 		else
 		{
-			// Use the awake method for fetching references.
-			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
-			HubSceneManager = FindObjectOfType<HubSceneManager>();
-			expManager = FindObjectOfType<ExpManager>();
-			uiManager = FindObjectOfType<UIManager>();
-			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
-
-			playerInstance.SetActive(false);
-			StartCoroutine(SetupLevel());
+			FetchDungeonReferences();
 		}
 
 		//else
@@ -58,7 +50,7 @@ public class GameManager : MonoBehaviour
 		//	FindObjectOfType<HubSceneManager>().StartFirstScenes();
 		//}
 
-		GameManager.Instance.SetHP(playerMaxHP);
+		ResetHP();
 
 	}
 	#endregion
@@ -82,13 +74,18 @@ public class GameManager : MonoBehaviour
 		playerHP.value = hp;
 	}
 
+	public void ResetHP()
+	{
+		SetHP(playerMaxHP);
+	}
+
 	public void TogglePauseGame()
 	{
 		isPaused = !isPaused;
 		Time.timeScale = isPaused ? 0f : 1f;
 	}
 
-	private void FetchDungeonReferences(AsyncOperation asyncOperation)
+	public void FetchDungeonReferences()
 	{
 		if (FindObjectOfType<LevelGeneratorV2>() != null)
 		{
@@ -100,7 +97,11 @@ public class GameManager : MonoBehaviour
 			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 
 			playerInstance.SetActive(false);
+
+			uiManager.SetupDungeonUI();
 			uiManager.DisableAllUI();
+
+			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
 		StartCoroutine(SetupLevel());
 	}

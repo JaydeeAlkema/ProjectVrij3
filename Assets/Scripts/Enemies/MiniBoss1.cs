@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MiniBoss1 : EnemyBase
 {
@@ -158,16 +159,19 @@ public class MiniBoss1 : EnemyBase
 
 	void OnDestroy()
 	{
-		GameObject reward = Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
-		healthBar.SetHP(HealthPoints);
-		foreach (GameObject mob in mobs)
+		if (SceneManager.GetActiveScene().name == "Boss Testing")
 		{
-			if (mob != null)
+			GameObject reward = Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
+			healthBar.SetHP(HealthPoints);
+			foreach (GameObject mob in mobs)
 			{
-				Destroy(mob);
+				if (mob != null)
+				{
+					Destroy(mob);
+				}
 			}
+			mobs.Clear();
+			Destroy(healthBar.gameObject, 1f);
 		}
-		mobs.Clear();
-		Destroy(healthBar.gameObject, 1f);
 	}
 }

@@ -16,13 +16,7 @@ public class UIManager : MonoBehaviour
 	// 1 = Dungeon UI
 	// 2 = Generation Loading Screen
 	// 3 = Pause Screen
-
-
-	void Start()
-	{
-		SetExpBar(GameManager.Instance.ExpManager.ExpToNextPoint);
-		SetHPBar(GameManager.Instance.PlayerHP);
-	}
+	// 4 = Death Screen
 
 	void Update()
 	{
@@ -34,6 +28,12 @@ public class UIManager : MonoBehaviour
 		{
 			GameManager.Instance.ExpManager.AddExp(5);
 		}
+	}
+
+	public void SetupDungeonUI()
+	{
+		SetExpBar(GameManager.Instance.ExpManager.ExpToNextPoint);
+		SetHPBar(GameManager.Instance.PlayerHP);
 	}
 
 	public void SetUIActive(int uiStateNumber, bool isActive)

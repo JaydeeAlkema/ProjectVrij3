@@ -102,10 +102,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		//}
 
 		//Death screen test, remove later
-		if (deathScreenTest != null)
-		{
-			deathScreenTest.gameObject.SetActive(false);
-		}
+		//if (deathScreenTest != null)
+		//{
+		//	deathScreenTest.gameObject.SetActive(false);
+		//}
 
 	}
 
@@ -325,7 +325,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void Respawn()
 	{
-		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", "EnemyBehaviourTest");
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+		GameManager.Instance.ResetHP();
 	}
 
 	IEnumerator DeathSequence()
@@ -336,11 +337,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Time.timeScale = 1f;
 		yield return new WaitForSecondsRealtime(1.5f);
 
-		//Deathscreen test
-		deathScreenTest.gameObject.SetActive(true);
+		//Deathscreen
+		GameManager.Instance.UiManager.DisableAllUI();
+		GameManager.Instance.UiManager.SetUIActive(4, true);
 		yield return new WaitForSecondsRealtime(3f);
 
 		Respawn();
+		GameManager.Instance.UiManager.DisableAllUI();
+		GameManager.Instance.UiManager.SetUIActive(0, true);
 		isDying = false;
 		yield return null;
 	}
