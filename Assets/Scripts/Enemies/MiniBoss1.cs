@@ -12,6 +12,8 @@ public class MiniBoss1 : EnemyBase
 	[SerializeField] private SpriteRenderer bodyCharged;
 	[SerializeField] private SpriteRenderer coreCharged;
 
+	[SerializeField] private GameObject rewardInstance;
+
 	private Color baseColor;
 	public float agitateCounter = 0f;
 	public float respawnCounter = 0f;
@@ -152,5 +154,20 @@ public class MiniBoss1 : EnemyBase
 	{
 		yield return new WaitForSeconds(0.08f);
 		this.GetComponent<SpriteRenderer>().color = baseColor;
+	}
+
+	void OnDestroy()
+	{
+		GameObject reward = Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
+		healthBar.SetHP(HealthPoints);
+		foreach (GameObject mob in mobs)
+		{
+			if (mob != null)
+			{
+				Destroy(mob);
+			}
+		}
+		mobs.Clear();
+		Destroy(healthBar.gameObject, 1f);
 	}
 }
