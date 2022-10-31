@@ -219,13 +219,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void AbilityTwoAttack()
 	{
 		//ability2.Ability.SetPlayerValues(ability2);
-		ability2.Ability.AbilityBehavior();
+		//ability2.Ability.AbilityBehavior();
 	}
 
 	void AbilityThreeAttack()
 	{
 		//ability3.Ability.SetPlayerValues(ability3);
-		ability3.Ability.AbilityBehavior();
+		//ability3.Ability.AbilityBehavior();
 	}
 
 	void CheckAbilityUpdate()
