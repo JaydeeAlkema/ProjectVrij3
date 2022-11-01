@@ -18,9 +18,10 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 	{
 		if (canInteract)
 		{
-			if (Input.GetKeyDown(KeyCode.F))
+			if (Input.GetKeyDown(KeyCode.F) && GameManager.Instance.ExpManager.PlayerPoints >= 1)
 			{
 				ChooseUI.gameObject.SetActive(true);
+				GameManager.Instance.ExpManager.PlayerPoints -= 1;
 				GameManager.Instance.TogglePauseGame();
 			}
 		}
