@@ -10,15 +10,20 @@ public class ScriptableInt : ScriptableObject
 
 	private void OnDestroy()
 	{
-		value = startValue;
+		ResetValue();
 	}
 
 	private void OnEnable()
 	{
-		value = startValue;
+		ResetValue();
 	}
 
 	private void OnDisable()
+	{
+		ResetValue();
+	}
+
+	public void ResetValue()
 	{
 		value = startValue;
 	}

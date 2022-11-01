@@ -325,6 +325,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void Respawn()
 	{
 		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+		GameManager.Instance.PlayerHP.ResetValue();
 	}
 
 	IEnumerator DeathSequence()
