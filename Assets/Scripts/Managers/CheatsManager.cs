@@ -12,12 +12,16 @@ public class CheatsManager : MonoBehaviour
 		if (splitcommand.Length >= 1) key = splitcommand[0].ToLower();
 		if (splitcommand.Length >= 2) value = splitcommand[1].ToLower();
 
+		CircleCollider2D playerCollider = GameManager.Instance.PlayerInstance.GetComponent<CircleCollider2D>();
 		ScriptableInt playerHP = GameManager.Instance.PlayerHP;
 		ScriptableFloat playerSpeed = GameManager.Instance.PlayerSpeed;
 
 		switch (key)
 		{
-			#region Health
+			#region Player
+			case "noclip":
+				playerCollider.enabled = !playerCollider.enabled;
+				break;
 			case "sethp":
 				playerHP.value = int.Parse(value);
 				break;
@@ -30,9 +34,6 @@ public class CheatsManager : MonoBehaviour
 			case "removehp":
 				playerHP.value -= int.Parse(value);
 				break;
-			#endregion
-
-			#region Speed
 			case "setmovespeed":
 				playerSpeed.value = float.Parse(value);
 				break;
