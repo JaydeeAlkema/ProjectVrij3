@@ -5,6 +5,7 @@ using UnityEngine;
 public class FodderEnemy : EnemyBase
 {
 	public LayerMask playerLayerMask;
+	[SerializeField] private LayerMask unwalkableDetection;
 
 	public Animator fodderAnimator;
 
@@ -15,7 +16,7 @@ public class FodderEnemy : EnemyBase
 	[SerializeField] private float hitDetectionRadius = 1f;
 	[SerializeField] private float windUpTime = 0.3f;
 	[SerializeField] private float dashSpeed = 9;
-	[SerializeField] private float dashDuration = 0.5f;
+	[SerializeField] private float dashDistance = 0.5f;
 	[SerializeField] private float endLag = 0.8f;
 	public bool hasHitbox = false;
 	public CapsuleCollider2D hurtbox;
@@ -136,20 +137,13 @@ public class FodderEnemy : EnemyBase
 		fodderAnimator.Play("Fodder1Windup");
 		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Rb2d.velocity = new Vector2(0, 0);
-		Vector2 dashDir = target.position - Rb2d.transform.position;
-		RaycastHit hit;
-		Physics.Raycast(this.transform.position, dashDir, out hit, 500f);
-		Vector3 dashTarget = new Vector3();
-		bool wallDash = false;
+		Vector2 dashDir = (target.position - transform.position).normalized;
+		RaycastHit2D hit = Physics2D.Raycast( this.transform.position, dashDir, dashDistance , unwalkableDetection);
+		Vector2 playerTarget = (Vector2)transform.position + dashDir * dashDistance;
 		Debug.Log(hit.collider);
-		if(hit.collider != null && hit.collider.gameObject.layer == 11)
-		{
-			dashTarget = hit.transform.position - Vector3.up;
-			wallDash = true;
-			Debug.Log( "i hit wall" );
-		}
-		yield return new WaitForSeconds(windUpTime);
 
+		yield return new WaitForSeconds(windUpTime);
+		Debug.DrawRay( this.transform.position, dashDir * dashDistance, Color.red, 1f);
 		//Dash starts
 		hasHitbox = true;
 		fodderAnimator.Play("Fodder1Attack");
@@ -157,16 +151,16 @@ public class FodderEnemy : EnemyBase
 		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 		enemySprite.flipX = false;
 		//Rb2d.velocity = dashDir.normalized * dashSpeed;
-		if(wallDash)
+		if( hit.point != Vector2.zero )
 		{
-			Rb2d.transform.position = Vector2.MoveTowards( Rb2d.transform.position, dashTarget, dashSpeed );
-			wallDash = false;
+			Debug.Log( "i hit wall" );
+			yield return StartCoroutine( DashToTarget( hit.point - dashDir/10f ) );
 		}
 		else
 		{
-			Rb2d.transform.position = Vector2.MoveTowards( Rb2d.transform.position, dashDir * dashSpeed, dashSpeed /3 );
+			yield return StartCoroutine( DashToTarget( playerTarget ) );
 		}
-		yield return new WaitForSeconds(dashDuration);
+
 
 		//Landing starts
 		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
@@ -177,6 +171,16 @@ public class FodderEnemy : EnemyBase
 		yield return new WaitForSeconds(endLag);
 		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Attacking = false;
+	}
+
+	IEnumerator DashToTarget(Vector2 target)
+	{
+		while(Vector2.Distance(transform.position, target) >= 0.01f)
+		{
+			Rb2d.transform.position = Vector2.MoveTowards( Rb2d.transform.position, target, dashSpeed * Time.deltaTime );
+			yield return new WaitForEndOfFrame();
+		}
+		yield return new WaitForEndOfFrame();
 	}
 
 	public void OnDrawGizmosSelected()
