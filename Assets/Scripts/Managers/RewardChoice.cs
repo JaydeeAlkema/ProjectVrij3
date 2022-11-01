@@ -111,7 +111,10 @@ public class RewardChoice : MonoBehaviour
         player.CurrentMeleeAttack.Damage += upgradeToGive.DamageUpgrade;
         player.CurrentMeleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
         player.CurrentMeleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+        if( !player.CurrentMeleeAttack.AbilityUpgrades.GetValueOrDefault( upgradeToGive.StatusEffect ) )
+        {
+            player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+        }
         Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
         Destroy( this.gameObject );
 	}
@@ -124,7 +127,10 @@ public class RewardChoice : MonoBehaviour
         player.CurrentRangedAttack.Damage += upgradeToGive.DamageUpgrade;
         player.CurrentRangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
         player.CurrentRangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        player.CurrentRangedAttack.AbilityUpgrades.Add(upgradeToGive.StatusEffect, true);
+        if( !player.CurrentRangedAttack.AbilityUpgrades.GetValueOrDefault( upgradeToGive.StatusEffect ) )
+        {
+            player.CurrentRangedAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+        }
         Debug.Log( "added " + upgradeToGive.name + " to player as ranged" );
         Destroy( this.gameObject );
     }

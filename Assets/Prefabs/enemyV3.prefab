@@ -128,13 +128,16 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  unwalkableDetection:
+    serializedVersion: 2
+    m_Bits: 1024
   fodderAnimator: {fileID: 6017575560788466592}
   damage: 25
   player: {fileID: 0}
   hitDetectionRadius: 0.55
   windUpTime: 0.3
-  dashSpeed: 9
-  dashDuration: 0.5
+  dashSpeed: 15
+  dashDistance: 5
   endLag: 0.7
   hasHitbox: 0
   hurtbox: {fileID: 4468130794609170519}
