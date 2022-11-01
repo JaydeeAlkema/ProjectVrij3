@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 	private static GameManager instance;
 
 	[SerializeField, Expandable] private ScriptableInt playerHP;
+	[SerializeField, Expandable] private ScriptableFloat playerSpeed;
 	[SerializeField] private bool isPaused = false;
 
 	[Header("Managers")]
@@ -24,7 +25,9 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
 	public UIManager UiManager { get => uiManager; private set => uiManager = value; }
+	public GameObject PlayerInstance { get => playerInstance; set => playerInstance = value; }
 	public ScriptableInt PlayerHP { get => playerHP; set => playerHP = value; }
+	public ScriptableFloat PlayerSpeed { get => playerSpeed; set => playerSpeed = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
 
 	#region Unity Callbacks

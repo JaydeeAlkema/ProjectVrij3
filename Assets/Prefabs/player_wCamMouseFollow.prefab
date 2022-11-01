@@ -776,7 +776,7 @@ Transform:
   - {fileID: 3607252477266376401}
   - {fileID: 6928733671148014491}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &8334970476083683797
 CapsuleCollider2D:
@@ -843,7 +843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c003286158a798540a99b27669b79865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
+  moveSpeed: {fileID: 11400000, guid: a68f778a3ea0dc348b38d85afbd4f57e, type: 2}
   vel: 0
   isDashing: 0
   lookDir: {x: 0, y: 0}

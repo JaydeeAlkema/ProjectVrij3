@@ -214,9 +214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab91ccb25220251488fbf71f09ed5d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commands:
-  - Key: godmode
-    Value: 0
 --- !u!1 &1150297116
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHP: {fileID: 11400000, guid: c577354bd3f8d04449749e16dc6498ac, type: 2}
-  playerMaxHP: 500
+  playerSpeed: {fileID: 11400000, guid: a68f778a3ea0dc348b38d85afbd4f57e, type: 2}
   isPaused: 0
   levelGenerator: {fileID: 0}
   HubSceneManager: {fileID: 0}

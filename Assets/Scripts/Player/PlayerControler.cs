@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
-	[SerializeField] private float moveSpeed = 1;
+	[SerializeField] private ScriptableFloat moveSpeed;
 	[SerializeField] private float vel = 0;
 
 	private Vector3 mousePos;
@@ -43,7 +43,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//[SerializeField] private int maxHealthPoints = 500;
 	//[SerializeField] private float currentHealthPoints;
 	private AbilityController abilityController;
-	public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+	public ScriptableFloat MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
@@ -146,7 +146,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			trail.emitting = false;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed;
+			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value;
 		}
 
 
