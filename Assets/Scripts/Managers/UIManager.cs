@@ -14,13 +14,8 @@ public class UIManager : MonoBehaviour
 	// 0 = Hub UI
 	// 1 = Dungeon UI
 	// 2 = Generation Loading Screen
-	// 3 = Cheat Menu
-
-	void Start()
-	{
-		SetExpBar(GameManager.Instance.ExpManager.ExpToNextPoint);
-		SetHPBar(GameManager.Instance.PlayerHP);
-	}
+	// 3 = Pause Screen
+	// 4 = Death Screen
 
 	void Update()
 	{
@@ -47,14 +42,15 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	public void EnableUI(int uiStateNumber)
+	public void SetupDungeonUI()
 	{
-		UIStates[uiStateNumber].SetActive(true);
+		SetExpBar(GameManager.Instance.ExpManager.ExpToNextPoint);
+		SetHPBar(GameManager.Instance.PlayerHP);
 	}
 
-	public void DisableUI(int uiStateNumber)
+	public void SetUIActive(int uiStateNumber, bool isActive)
 	{
-		UIStates[uiStateNumber].SetActive(false);
+		UIStates[uiStateNumber].SetActive(isActive);
 	}
 
 	public void DisableAllUI()

@@ -63,6 +63,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 		if (seed == 0) seed = Random.Range(0, int.MaxValue);
 
 		Random.InitState(seed);
+
+		GameManager.Instance.FetchDungeonReferences();
 	}
 
 	public IEnumerator GenerateLevel()

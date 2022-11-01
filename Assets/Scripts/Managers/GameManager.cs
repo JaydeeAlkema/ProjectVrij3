@@ -38,19 +38,11 @@ public class GameManager : MonoBehaviour
 		if (FindObjectOfType<LevelGeneratorV2>() == null)
 		{
 			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
-			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive).completed += FetchDungeonReferences;
+			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive);
 		}
 		else
 		{
-			// Use the awake method for fetching references.
-			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
-			HubSceneManager = FindObjectOfType<HubSceneManager>();
-			expManager = FindObjectOfType<ExpManager>();
-			uiManager = FindObjectOfType<UIManager>();
-			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
-
-			playerInstance.SetActive(false);
-			StartCoroutine(SetupLevel());
+			FetchDungeonReferences();
 		}
 
 		//else
@@ -58,11 +50,19 @@ public class GameManager : MonoBehaviour
 		//	FindObjectOfType<HubSceneManager>().StartFirstScenes();
 		//}
 
-		GameManager.Instance.SetHP(playerMaxHP);
+		ResetHP();
 
 	}
 	#endregion
 
+	public void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			TogglePauseGame();
+			UiManager.SetUIActive(3, isPaused);
+		}
+	}
 
 	public void RemoveHP(int hp)
 	{
@@ -74,13 +74,18 @@ public class GameManager : MonoBehaviour
 		playerHP.value = hp;
 	}
 
+	public void ResetHP()
+	{
+		SetHP(playerMaxHP);
+	}
+
 	public void TogglePauseGame()
 	{
 		isPaused = !isPaused;
 		Time.timeScale = isPaused ? 0f : 1f;
 	}
 
-	private void FetchDungeonReferences(AsyncOperation asyncOperation)
+	public void FetchDungeonReferences()
 	{
 		if (FindObjectOfType<LevelGeneratorV2>() != null)
 		{
@@ -92,7 +97,11 @@ public class GameManager : MonoBehaviour
 			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 
 			playerInstance.SetActive(false);
+
+			uiManager.SetupDungeonUI();
 			uiManager.DisableAllUI();
+
+			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
 		StartCoroutine(SetupLevel());
 	}
@@ -104,7 +113,7 @@ public class GameManager : MonoBehaviour
 	private IEnumerator SetupLevel()
 	{
 		//Show loading screen
-		uiManager.EnableUI(2);
+		uiManager.SetUIActive(2, true);
 
 		yield return StartCoroutine(levelGenerator.GenerateLevel());
 		GameObject startingRoom = levelGenerator.Rooms[0].gameObject;
@@ -114,7 +123,7 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.EnableUI(1);
+		uiManager.SetUIActive(1, true);
 	}
 
 
