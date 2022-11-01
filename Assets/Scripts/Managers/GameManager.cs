@@ -1,4 +1,6 @@
+using NaughtyAttributes;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,8 +8,7 @@ public class GameManager : MonoBehaviour
 {
 	private static GameManager instance;
 
-	[SerializeField] private ScriptableInt playerHP;
-	[SerializeField] private int playerMaxHP;
+	[SerializeField, Expandable] private ScriptableInt playerHP;
 	[SerializeField] private bool isPaused = false;
 
 	[Header("Managers")]
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private HubSceneManager HubSceneManager = null;
 	[SerializeField] private ExpManager expManager = null;
 	[SerializeField] private UIManager uiManager = null;
+	[SerializeField] private CheatsManager cheatsManager = null;
 
 	[Header("Player")]
 	[SerializeField] private GameObject playerInstance = null;
@@ -22,7 +24,7 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
 	public UIManager UiManager { get => uiManager; private set => uiManager = value; }
-	public int PlayerHP { get => playerHP.value; set => playerHP.value = value; }
+	public ScriptableInt PlayerHP { get => playerHP; set => playerHP = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
 
 	#region Unity Callbacks
@@ -44,14 +46,6 @@ public class GameManager : MonoBehaviour
 		{
 			FetchDungeonReferences();
 		}
-
-		//else
-		//{
-		//	FindObjectOfType<HubSceneManager>().StartFirstScenes();
-		//}
-
-		ResetHP();
-
 	}
 	#endregion
 
@@ -62,21 +56,6 @@ public class GameManager : MonoBehaviour
 			TogglePauseGame();
 			UiManager.SetUIActive(3, isPaused);
 		}
-	}
-
-	public void RemoveHP(int hp)
-	{
-		playerHP.value -= hp;
-	}
-
-	public void SetHP(int hp)
-	{
-		playerHP.value = hp;
-	}
-
-	public void ResetHP()
-	{
-		SetHP(playerMaxHP);
 	}
 
 	public void TogglePauseGame()
@@ -94,12 +73,16 @@ public class GameManager : MonoBehaviour
 			HubSceneManager = FindObjectOfType<HubSceneManager>();
 			expManager = FindObjectOfType<ExpManager>();
 			uiManager = FindObjectOfType<UIManager>();
-			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
+			cheatsManager = FindObjectOfType<CheatsManager>();
 
+			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 			playerInstance.SetActive(false);
 
 			uiManager.SetupDungeonUI();
 			uiManager.DisableAllUI();
+
+			TMP_InputField cheatsInputfield = uiManager.UiStates[5].GetComponentInChildren<TMP_InputField>();
+			cheatsInputfield.onEndEdit.AddListener(cheatsManager.ExecuteCommand);
 
 			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
@@ -125,7 +108,4 @@ public class GameManager : MonoBehaviour
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(1, true);
 	}
-
-
-
 }
