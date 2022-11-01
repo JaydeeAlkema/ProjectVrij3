@@ -43,6 +43,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public int HealthPoints { get => healthPoints; set => healthPoints = value; }
 	public Material MaterialDefault { get => materialDefault; set => materialDefault = value; }
 	public Material MaterialHit { get => materialHit; set => materialHit = value; }
+	public int ExpAmount { get => expAmount; set => expAmount = value; }
 
 	public void Start()
 	{

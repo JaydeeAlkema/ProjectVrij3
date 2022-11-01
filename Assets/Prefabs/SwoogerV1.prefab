@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4442677197823009441}
   - component: {fileID: 8395027121329697671}
   - component: {fileID: 4468130794609170519}
-  - component: {fileID: 1409221283}
+  - component: {fileID: 5236588915324034231}
   - component: {fileID: 7187582512883066473}
   - component: {fileID: 8561825498785388798}
   - component: {fileID: 1453729541019105252}
@@ -92,9 +92,9 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.5, y: 0.6}
+  m_Size: {x: 3.7, y: 1.83}
   m_Direction: 1
---- !u!114 &1409221283
+--- !u!114 &5236588915324034231
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,14 +103,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4442677197823009440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 632c5f5b9042a6c459f46bcff76bdf27, type: 3}
+  m_Script: {fileID: 11500000, guid: a5f2f1baca6e6504b9666f2d0e64cdc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 200
-  speed: 6
-  aggroRange: 10
-  attackRange: 3
-  expAmount: 5
+  healthPoints: 500
+  speed: 4
+  aggroRange: 13
+  attackRange: 6
+  expAmount: 20
   attacking: 0
   rb2d: {fileID: 4442677197823009441}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
@@ -125,19 +125,25 @@ MonoBehaviour:
   avoidEnemyLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  rewardInstance: {fileID: 8803674279633105925, guid: 48918328d3cd4fe49aa2f9889ad5481c, type: 3}
+  ability: {fileID: -1495277099781758936, guid: 8ee501e1a148c0b4c83363788b6d7b9b, type: 3}
+  abilityStats: {fileID: 11400000, guid: eb01a3aa93a60b94d981ae4869eb58ac, type: 2}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  fodderAnimator: {fileID: 6017575560788466592}
-  damage: 25
+  unwalkableDetection:
+    serializedVersion: 2
+    m_Bits: 1024
+  swoogerAnimator: {fileID: 6017575560788466592}
+  damage: 50
   player: {fileID: 0}
-  hitDetectionRadius: 0.55
-  windUpTime: 0.3
-  dashSpeed: 9
-  dashDuration: 0.5
-  endLag: 0.7
+  hitDetectionRadius: 2
+  windUpTime: 0.2
+  dashSpeed: 15
+  dashDistance: 8
+  endLag: 1
   hasHitbox: 0
-  hurtbox: {fileID: 4468130794609170519}
+  hurtbox: {fileID: 0}
   Event:
     idInternal: 0
     valueGuidInternal: 
@@ -155,7 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb2d: {fileID: 4442677197823009441}
-  enemyScript: {fileID: 1409221283}
+  enemyScript: {fileID: 5236588915324034231}
 --- !u!114 &8561825498785388798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +273,7 @@ Transform:
   m_GameObject: {fileID: 8879844763961028847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4442677197823009443}
@@ -313,7 +319,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 8
   m_Sprite: {fileID: 21300000, guid: a615828873ddaf748b25d9b10dc1cf86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
