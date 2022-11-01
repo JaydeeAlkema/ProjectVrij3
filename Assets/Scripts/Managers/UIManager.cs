@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,11 +9,12 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Slider hpBarSlider;
 	[SerializeField] private TMP_Text pointText;
 
+	//TODO: Create custom struct that holds UI elements so we don't have to user indeces for enabling/disabling UI, but instead call them by name/type etc.
 	[SerializeField] private GameObject[] UIStates;
 	// 0 = Hub UI
 	// 1 = Dungeon UI
 	// 2 = Generation Loading Screen
-
+	// 3 = Cheat Menu
 
 	void Start()
 	{
@@ -32,6 +31,19 @@ public class UIManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.P))
 		{
 			GameManager.Instance.ExpManager.AddExp(5);
+		}
+		if (Input.GetKeyDown(KeyCode.F1))
+		{
+			if (UIStates[3].activeInHierarchy)
+			{
+				DisableUI(3);
+				Time.timeScale = 1;
+			}
+			else
+			{
+				EnableUI(3);
+				Time.timeScale = 0;
+			}
 		}
 	}
 
