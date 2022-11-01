@@ -1,12 +1,12 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Scriptable Int", menuName = "ScriptableObjects/New Scriptable Int")]
-public class ScriptableInt : ScriptableObject
+[CreateAssetMenu(fileName = "Scriptable Float", menuName = "ScriptableObjects/New Scriptable Float")]
+public class ScriptableFloat : ScriptableObject
 {
-	public int value;
+	public float value;
 	public bool resetOnDestroy = false;
-	[ShowIf("resetOnDestroy")] public int startValue;
+	[ShowIf("resetOnDestroy")] public float startValue;
 
 	private void OnDestroy()
 	{
