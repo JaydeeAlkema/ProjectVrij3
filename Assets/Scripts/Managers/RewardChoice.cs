@@ -120,6 +120,10 @@ public class RewardChoice : MonoBehaviour
         player.CurrentMeleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
         player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
         Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
+
+        //Dev UI text, remove later
+        GameManager.Instance.UiManager.AddDevText(0, upgradeToGive.name);
+
         Destroy( this.gameObject );
 	}
 
@@ -133,6 +137,10 @@ public class RewardChoice : MonoBehaviour
         player.CurrentRangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
         player.CurrentRangedAttack.AbilityUpgrades.Add(upgradeToGive.StatusEffect, true);
         Debug.Log( "added " + upgradeToGive.name + " to player as ranged" );
+
+        //Dev UI text, remove later
+        GameManager.Instance.UiManager.AddDevText(1, upgradeToGive.name);
+
         Destroy( this.gameObject );
     }
 }

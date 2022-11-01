@@ -106,7 +106,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	{
 		DamagePopup(damage);
 		healthPoints -= damage;
-		this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
 	}

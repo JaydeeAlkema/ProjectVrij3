@@ -18,6 +18,10 @@ public class UIManager : MonoBehaviour
 	// 3 = Pause Screen
 	// 4 = Death Screen
 
+	[SerializeField] private Transform[] DevUIComponents;
+	// 0 = Melee Upgrades
+	// 1 = Cast Upgrades
+
 	void Update()
 	{
 		SetHP(GameManager.Instance.PlayerHP);
@@ -69,6 +73,11 @@ public class UIManager : MonoBehaviour
 	public void SetExp(int exp)
 	{
 		expBarSlider.value = exp;
+	}
+
+	public void AddDevText(int textComponent, string addText)
+	{
+		DevUIComponents[textComponent].GetComponent<TMP_Text>().text += (addText + ", ");
 	}
 
 }
