@@ -48,12 +48,12 @@ public class AbilityDecorator : IAbility
 	public virtual void CallAbility(PlayerControler _player)
 	{
 		Player = _player;
-		ability.CallAbility(Player);
+		//ability.CallAbility(Player);
 	}
 
 	public virtual void AbilityBehavior()
 	{
-		ability.AbilityBehavior();
+		//ability.AbilityBehavior();
 	}
 
 	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle, bool _trailUpgrade )

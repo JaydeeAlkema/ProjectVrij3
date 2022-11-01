@@ -30,7 +30,7 @@ public class CoolDownDecorator : AbilityDecorator
 			ability.BaseStats = baseStats;
 			ability.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle, TrailUpgrade);
 			ability.CallAbility(Player);
-			base.AbilityBehavior();
+			//base.AbilityBehavior();
 			Timer();
 		}
 	}

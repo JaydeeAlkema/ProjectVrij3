@@ -66,37 +66,37 @@ public class FodderEnemy : EnemyBase
 	//	}
 	//}
 
-	public override void TakeDamage(int damage, int damageType)
-	{
-		if (damageType == 0 && meleeTarget)
-		{
-			HealthPoints -= damage;
-			meleeTarget = false;
-		}
-		if (damageType == 1 && castTarget)
-		{
-			HealthPoints -= damage;
-			castTarget = false;
-		}
+	//public override void TakeDamage(int damage, int damageType)
+	//{
+	//	if (damageType == 0 && meleeTarget)
+	//	{
+	//		damage *= 2;
+	//		meleeTarget = false;
+	//	}
+	//	if (damageType == 1 && castTarget)
+	//	{
+	//		damage *= 2;
+	//		castTarget = false;
+	//	}
 
-		if (damageType == 0) //On melee hit
-		{
-			//AudioManager.PostEvent( , this.gameObject);   dit aanpassen als we wwise hebben enzo
-			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
-			StartCoroutine(HitStop());
-		}
+	//	if (damageType == 0) //On melee hit
+	//	{
+	//		//AudioManager.PostEvent( , this.gameObject);   dit aanpassen als we wwise hebben enzo
+	//		AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+	//		StartCoroutine(HitStop());
+	//	}
 
-		if (damageType == 1) //On cast hit
-		{
-			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
-		}
+	//	if (damageType == 1) //On cast hit
+	//	{
+	//		AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+	//	}
 
-		DamagePopup(damage);
-		HealthPoints -= damage;
+	//	DamagePopup(damage);
+	//	HealthPoints -= damage;
 		
-		StartCoroutine(FlashColor());
-		if (HealthPoints <= 0) Die();
-	}
+	//	StartCoroutine(FlashColor());
+	//	if (HealthPoints <= 0) Die();
+	//}
 
 	public override void MoveToTarget(Transform target)
 	{
@@ -136,16 +136,36 @@ public class FodderEnemy : EnemyBase
 		fodderAnimator.Play("Fodder1Windup");
 		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Rb2d.velocity = new Vector2(0, 0);
+		Vector2 dashDir = target.position - Rb2d.transform.position;
+		RaycastHit hit;
+		Physics.Raycast(this.transform.position, dashDir, out hit, 500f);
+		Vector3 dashTarget = new Vector3();
+		bool wallDash = false;
+		Debug.Log(hit.collider);
+		if(hit.collider != null && hit.collider.gameObject.layer == 11)
+		{
+			dashTarget = hit.transform.position - Vector3.up;
+			wallDash = true;
+			Debug.Log( "i hit wall" );
+		}
 		yield return new WaitForSeconds(windUpTime);
 
 		//Dash starts
 		hasHitbox = true;
 		fodderAnimator.Play("Fodder1Attack");
-		Vector2 dashDir = target.transform.position - Rb2d.transform.position;
 		float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
 		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 		enemySprite.flipX = false;
-		Rb2d.velocity = dashDir.normalized * dashSpeed;
+		//Rb2d.velocity = dashDir.normalized * dashSpeed;
+		if(wallDash)
+		{
+			Rb2d.transform.position = Vector2.MoveTowards( Rb2d.transform.position, dashTarget, dashSpeed );
+			wallDash = false;
+		}
+		else
+		{
+			Rb2d.transform.position = Vector2.MoveTowards( Rb2d.transform.position, dashDir * dashSpeed, dashSpeed /3 );
+		}
 		yield return new WaitForSeconds(dashDuration);
 
 		//Landing starts

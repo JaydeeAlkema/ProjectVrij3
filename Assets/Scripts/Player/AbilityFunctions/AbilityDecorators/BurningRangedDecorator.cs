@@ -14,7 +14,7 @@ public class BurningRangedDecorator : AbilityDecorator
 	public override void AbilityBehavior()
 	{
 		ability.TrailUpgrade = upgrade;
-		ability.CallAbility( ability.Player );
+		//ability.CallAbility( ability.Player );
 	}
 
 }
