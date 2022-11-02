@@ -505,7 +505,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
 					boxCollider2D.size = Vector2.one;
 				}
-				spriteRenderer.sortingOrder = Mathf.CeilToInt(pathTile.transform.position.y) + 1;
 
 				List<GameObject> neighbouringTiles = new List<GameObject>();
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
@@ -566,7 +565,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					pathTile.gameObject.layer = LayerMask.NameToLayer("Walkable");
 					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
-					spriteRenderer.sortingOrder -= Mathf.CeilToInt(pathTile.transform.position.y) - 10;
+					spriteRenderer.sortingOrder = Mathf.CeilToInt(pathTile.transform.position.y) - 10;
 					boxCollider2D.enabled = false;
 				}
 

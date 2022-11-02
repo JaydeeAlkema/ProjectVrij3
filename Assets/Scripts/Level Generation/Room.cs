@@ -20,6 +20,20 @@ public class Room : MonoBehaviour
 	public List<Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }
 	public RoomType RoomType { get => roomType; set => roomType = value; }
 
+	private void Start()
+	{
+		foreach (Transform collideableTile in collideableTiles)
+		{
+			collideableTile.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(collideableTile.transform.position.y) + 1;
+		}
+		foreach (Transform nonCollideableTile in noncollideableTiles)
+		{
+			nonCollideableTile.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(nonCollideableTile.transform.position.y) - 10;
+
+		}
+	}
+
+
 	[Button]
 	private void FetchAllTiles()
 	{
