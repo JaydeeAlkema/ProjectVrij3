@@ -66,6 +66,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void Update()
 	{
+		enemySprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
+
 		foreach (IStatusEffect statusEffect in statusEffects.ToArray())
 		{
 			IDamageable damageable = GetComponent<IDamageable>();
@@ -108,7 +110,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void TakeDamage(int damage)
 	{
-		Debug.Log( "i took " + damage + " damage without type" );
+		Debug.Log("i took " + damage + " damage without type");
 		DamagePopup(damage);
 		healthPoints -= damage;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
@@ -135,7 +137,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (damageType == 0)
 		{
 			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
-			StartCoroutine( HitStop() );
+			StartCoroutine(HitStop());
 		}
 
 		if (damageType == 1)
@@ -143,7 +145,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 
-		Debug.Log( "i took " + damage + " damage" );
+		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
@@ -204,7 +206,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public virtual IEnumerator FlashColor()
 	{
 		enemySprite.material = MaterialHit;
-		yield return new WaitForSeconds( 0.09f );
+		yield return new WaitForSeconds(0.09f);
 		enemySprite.material = MaterialDefault;
 	}
 
