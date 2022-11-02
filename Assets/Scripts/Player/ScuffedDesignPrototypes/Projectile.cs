@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour
 	[SerializeField] private float lifeSpan;
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	[SerializeField] private TrailRenderer trail = null;
+	[SerializeField] private GameObject explosion = null;
 	[SerializeField] private bool trailUpgrade = false;
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	[SerializeField] private float force;
@@ -76,5 +77,6 @@ public class Projectile : MonoBehaviour
 			addedTrail.GetComponent<TrailRenderer>().autodestruct = true;
 			addedTrail.GetComponent<TrailWithTrigger>().enabled = true;
 		}
+		Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
 }
