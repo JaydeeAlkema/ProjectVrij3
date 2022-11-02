@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 200
-  speed: 6
+  speed: 7
   aggroRange: 10
   attackRange: 3
   expAmount: 5
@@ -117,7 +117,6 @@ MonoBehaviour:
   fodderAnimator: {fileID: 6017575560788466592}
   damage: 25
   player: {fileID: 0}
-  hitDetectionRadius: 0.55
   windUpTime: 0.3
   dashSpeed: 15
   dashDistance: 5
@@ -186,7 +185,7 @@ MonoBehaviour:
   radius: 0.5
   height: 2
   canMove: 1
-  maxSpeed: 5
+  maxSpeed: 7
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
