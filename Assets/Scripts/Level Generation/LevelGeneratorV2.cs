@@ -506,6 +506,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 					boxCollider2D.size = Vector2.one;
 				}
 
+				spriteRenderer.sortingOrder = Mathf.CeilToInt(pathTile.transform.position.y) + 1;
 
 				List<GameObject> neighbouringTiles = new List<GameObject>();
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
@@ -574,13 +575,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
-					spriteRenderer.sortingOrder = 1;
+					spriteRenderer.sortingOrder -= 4;
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
 				{
 					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
-					spriteRenderer.sortingOrder = 10;
 					boxCollider2D.offset = new Vector2(0, -0.25f);
 					boxCollider2D.size = new Vector2(1, 0.5f);
 				}

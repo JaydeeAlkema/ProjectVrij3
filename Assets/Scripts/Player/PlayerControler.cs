@@ -137,7 +137,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
 
-
+		Sprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
 
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
