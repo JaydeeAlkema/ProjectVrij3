@@ -15,6 +15,11 @@ public class FodderBT : BTTree
 		{
 			new Sequence(new List<BTNode>
 			{
+				new CheckStunned(enemyScript),
+				new TaskStunned(enemyScript),
+			}),
+			new Sequence(new List<BTNode>
+			{
 				new CheckAttackRange(rb2d, enemyScript),
 				new TaskDashAttack(rb2d, enemyScript),
 			}),

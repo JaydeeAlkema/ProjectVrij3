@@ -13,7 +13,6 @@ public class FodderEnemy : EnemyBase
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
-	[SerializeField] private float hitDetectionRadius = 1f;
 	[SerializeField] private float windUpTime = 0.3f;
 	[SerializeField] private float dashSpeed = 9;
 	[SerializeField] private float dashDistance = 0.5f;
@@ -94,10 +93,45 @@ public class FodderEnemy : EnemyBase
 
 	//	DamagePopup(damage);
 	//	HealthPoints -= damage;
-		
+
 	//	StartCoroutine(FlashColor());
 	//	if (HealthPoints <= 0) Die();
 	//}
+	public override void TakeDamage(int damage, int damageType)
+	{
+		int damageToTake = damage;
+		if (damageType == 0 && meleeTarget)
+		{
+			HealthPoints -= damage;
+			meleeTarget = false;
+			damageToTake *= 2;
+		}
+		if (damageType == 1 && castTarget)
+		{
+			HealthPoints -= damage;
+			castTarget = false;
+			damageToTake *= 2;
+		}
+
+		if (damageType == 0)
+		{
+			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			//StartCoroutine(HitStop());
+		}
+
+		if (damageType == 1)
+		{
+			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+		}
+
+		Debug.Log("i took " + damage + " damage");
+		DamagePopup(damageToTake);
+		HealthPoints -= damage;
+		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+		IsStunned = true;
+		StartCoroutine(FlashColor());
+		if (HealthPoints <= 0) Die();
+	}
 
 	public override void MoveToTarget(Transform target)
 	{
@@ -126,6 +160,7 @@ public class FodderEnemy : EnemyBase
 	public override IEnumerator FlashColor()
 	{
 		enemySprite.material = MaterialHit;
+		fodderAnimator.Play("Fodder1Hit");
 		yield return new WaitForSeconds(0.09f);
 		enemySprite.material = MaterialDefault;
 	}
@@ -181,11 +216,5 @@ public class FodderEnemy : EnemyBase
 			yield return new WaitForEndOfFrame();
 		}
 		yield return new WaitForEndOfFrame();
-	}
-
-	public void OnDrawGizmosSelected()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, hitDetectionRadius);
 	}
 }

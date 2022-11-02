@@ -17,6 +17,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] public Material materialDefault = null;
 	[SerializeField] public Material materialHit = null;
 
+	private bool isStunned = false;
+
 	private Transform target = null;
 
 	[SerializeField] private Pathfinding.AIDestinationSetter destinationSetter;
@@ -44,6 +46,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public Material MaterialDefault { get => materialDefault; set => materialDefault = value; }
 	public Material MaterialHit { get => materialHit; set => materialHit = value; }
 	public int ExpAmount { get => expAmount; set => expAmount = value; }
+	public bool IsStunned { get => isStunned; set => isStunned = value; }
 
 	public void Start()
 	{
