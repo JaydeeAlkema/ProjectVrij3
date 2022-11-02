@@ -66,7 +66,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void Update()
 	{
-		enemySprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
+		if(enemySprite != null)
+		{
+			enemySprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
+		}
 
 		foreach (IStatusEffect statusEffect in statusEffects.ToArray())
 		{
