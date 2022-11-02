@@ -817,6 +817,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1726747652}
     m_Modifications:
+    - target: {fileID: 3607252477238657005, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
+      propertyPath: m_ShowCameraFrustum
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8334970476083683793, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
       propertyPath: m_Name
       value: player_wCamMouseFollow
@@ -864,6 +868,18 @@ PrefabInstance:
     - target: {fileID: 8334970476083683795, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8334970476083683799, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
+      propertyPath: m_Radius
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8334970476083683799, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8334970476083683799, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.25
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8334970474968766865, guid: 4d7f9c411cb4c284da327cd071cf27fd, type: 3}
