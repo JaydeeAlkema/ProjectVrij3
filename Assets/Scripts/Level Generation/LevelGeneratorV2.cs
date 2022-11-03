@@ -835,6 +835,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 		return null;
 	}
 
+	private Transform GetTileByCoordinates(Vector2Int coordinates, List<Transform> tiles)
+	{
+		return tiles.Find(t => new Vector2Int(Mathf.RoundToInt(t.transform.position.x), Mathf.RoundToInt(t.transform.position.y)) == coordinates);
+	}
+
 	/// <summary>
 	/// Returns a list of Vecttor2Int from Transforms.
 	/// </summary>
