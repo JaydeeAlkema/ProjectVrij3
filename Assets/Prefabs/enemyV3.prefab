@@ -89,10 +89,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632c5f5b9042a6c459f46bcff76bdf27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 200
+  healthPoints: 120
   speed: 7
   aggroRange: 10
-  attackRange: 3
+  attackRange: 5
   expAmount: 5
   attacking: 0
   rb2d: {fileID: 4442677197823009441}
@@ -119,7 +119,7 @@ MonoBehaviour:
   player: {fileID: 0}
   windUpTime: 0.3
   dashSpeed: 15
-  dashDistance: 5
+  dashDistance: 8
   endLag: 0.7
   hasHitbox: 0
   hurtbox: {fileID: 4468130794609170519}
