@@ -219,8 +219,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 			int roomsizeHalfX = room.RoomSize.x / 2;
 			int roomsizeHalfY = room.RoomSize.y / 2;
 
-			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + 3, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
-			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + 3, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
+			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
+			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
 
 			newRoomGO.transform.position = new Vector2(randX, randY);
 			newRoomGO.transform.parent = roomsParent;
