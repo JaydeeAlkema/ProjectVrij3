@@ -65,6 +65,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private AbilityScriptable ability1;
 	[SerializeField] private AbilityScriptable ability2;
 	[SerializeField] private AbilityScriptable ability3;
+	public AbilityScriptable MeleeAttackScr { get => meleeAttack; set => meleeAttack = value; }
+	public AbilityScriptable RangedAttackScr { get => rangedAttack; set => rangedAttack = value; }
 	public AbilityScriptable Dash { get => dash; set => dash = value; }
 	public AbilityScriptable Ability1 { get => ability1; set => ability1 = value; }
 	public AbilityScriptable Ability2 { get => ability2; set => ability2 = value; }
@@ -117,6 +119,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		//	deathScreenTest.gameObject.SetActive(false);
 		//}
 
+	}
+
+	public void ReloadAttacks()
+	{
+		currentMeleeAttack.BaseStats = meleeAttack;
+		currentRangedAttack.BaseStats = rangedAttack;
+		currentDash.BaseStats = dash;
+		abilityController.CurrentMeleeAttack = currentMeleeAttack;
+		abilityController.CurrentRangedAttack = currentRangedAttack;
+		abilityController.CurrentDash = currentDash;
+		abilityController.SetAttacks();
 	}
 
 	public void initAbilities()

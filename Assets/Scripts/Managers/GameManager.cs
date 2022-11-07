@@ -21,11 +21,13 @@ public class GameManager : MonoBehaviour
 
 	[Header("Player")]
 	[SerializeField] private GameObject playerInstance = null;
+	[SerializeField] private ScriptablePlayer scriptablePlayer = null;
 
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
 	public UIManager UiManager { get => uiManager; private set => uiManager = value; }
 	public GameObject PlayerInstance { get => playerInstance; set => playerInstance = value; }
+	public ScriptablePlayer ScriptablePlayer { get => scriptablePlayer; set => scriptablePlayer = value; }
 	public ScriptableInt PlayerHP { get => playerHP; set => playerHP = value; }
 	public ScriptableFloat PlayerSpeed { get => playerSpeed; set => playerSpeed = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour
 		}
 
 		QualitySettings.vSyncCount = 1;
+		scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance( "ScriptablePlayer" );
 
 		if (FindObjectOfType<LevelGeneratorV2>() == null)
 		{
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
 		{
 			FetchDungeonReferences();
 		}
+		
 	}
 	#endregion
 
@@ -89,6 +93,7 @@ public class GameManager : MonoBehaviour
 
 			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
+		scriptablePlayer.Player = playerInstance.GetComponent<PlayerControler>();
 		StartCoroutine(SetupLevel());
 	}
 
