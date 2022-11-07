@@ -39,16 +39,6 @@ public class GameManager : MonoBehaviour
 		}
 
 		QualitySettings.vSyncCount = 1;
-
-		if (FindObjectOfType<LevelGeneratorV2>() == null)
-		{
-			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
-			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive);
-		}
-		else
-		{
-			FetchDungeonReferences();
-		}
 	}
 	#endregion
 
