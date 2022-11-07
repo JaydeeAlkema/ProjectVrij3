@@ -37,6 +37,17 @@ public class HubSceneManager : MonoBehaviour
 	private void HubSceneManager_completed( AsyncOperation obj )
 	{
 		SceneManager.SetActiveScene( SceneManager.GetSceneByName( loadScene ) );
+		if( loadScene != "Hub Prototype" ) { HoldPlayerOnSceneLoad(); }
+	}
+
+	public void StartFirstScenes()
+	{
+		SceneManager.LoadSceneAsync( "UITest", LoadSceneMode.Additive );
+		SceneManager.LoadSceneAsync( "Hub Prototype", LoadSceneMode.Additive );
+	}
+
+	private void HoldPlayerOnSceneLoad()
+	{
 		PlayerControler playerValues = GameManager.Instance.ScriptablePlayer.Player;
 		PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
@@ -46,14 +57,15 @@ public class HubSceneManager : MonoBehaviour
 		player.RangedAttackScr = playerValues.RangedAttackScr;
 		player.CurrentDash = playerValues.CurrentDash;
 		player.Dash = playerValues.Dash;
+		player.CurrentAbility1 = playerValues.CurrentAbility1;
+		player.Ability1 = playerValues.Ability1;
+		player.CurrentAbility2 = playerValues.CurrentAbility2;
+		player.Ability2 = playerValues.Ability2;
+		player.CurrentAbility3 = playerValues.CurrentAbility3;
+		player.Ability3 = playerValues.Ability3;
 		player.ReloadAttacks();
+		player.initAbilities();
 		Debug.Log( player.CurrentMeleeAttack.AbilityUpgrades.Count );
 		Debug.Log( player.CurrentRangedAttack.AbilityUpgrades.Count );
-	}
-
-	public void StartFirstScenes()
-	{
-		SceneManager.LoadSceneAsync( "UITest", LoadSceneMode.Additive );
-		SceneManager.LoadSceneAsync( "Hub Prototype", LoadSceneMode.Additive );
 	}
 }
