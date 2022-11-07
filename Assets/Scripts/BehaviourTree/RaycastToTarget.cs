@@ -21,24 +21,34 @@ public class RaycastToTarget : BTNode
 		Transform target = (Transform)GetData("target");
 
 		Vector2 dashDir = (target.position - transform.position).normalized;
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, dashDir, fodderEnemyScript.DashDistance, fodderEnemyScript.UnwalkableDetection);
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, dashDir, fodderEnemyScript.DashDistance, fodderEnemyScript.UnwalkableDetection);
 		Vector2 maxDistanceTarget = (Vector2)transform.position + dashDir * fodderEnemyScript.DashDistance;
-		Debug.DrawRay(this.transform.position, dashDir * fodderEnemyScript.DashDistance, Color.red, 1f);
 
-		if (hit.point != Vector2.zero)
+		object d1 = GetData("dashDestination");
+		object d2 = GetData("dashDir");
+
+		if(d1 == null || d2 == null)
 		{
-			parent.SetData("dashDestination", hit.point - dashDir / 10f);
-			parent.SetData("dashDir", dashDir);
-			state = BTNodeState.SUCCESS;
-			return state;
+			if (hit.point != Vector2.zero)
+			{
+				Debug.DrawRay(this.transform.position, dashDir * fodderEnemyScript.DashDistance, Color.red, 1f);
+				parent.SetData("dashDestination", hit.point - dashDir / 10f);
+				parent.SetData("dashDir", dashDir);
+				state = BTNodeState.FAILURE;
+				return state;
+			}
+			else
+			{
+				Debug.DrawRay(this.transform.position, dashDir * fodderEnemyScript.DashDistance, Color.red, 1f);
+				parent.SetData("dashDestination", maxDistanceTarget);
+				parent.SetData("dashDir", dashDir);
+				state = BTNodeState.FAILURE;
+				return state;
+			}
 		}
-		else
-		{
-			parent.SetData("dashDestination", maxDistanceTarget);
-			parent.SetData("dashDir", dashDir);
-			state = BTNodeState.SUCCESS;
-			return state;
-		}
+		state = BTNodeState.SUCCESS;
+		return state;
+
 	}
 
 }

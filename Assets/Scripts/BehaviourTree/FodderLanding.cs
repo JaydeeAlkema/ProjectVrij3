@@ -20,28 +20,37 @@ public class FodderLanding : BTNode
 	public override BTNodeState Evaluate()
 	{
 
-		Transform target = (Transform)GetData("target");
+		bool ready = (bool)GetData("ready");
 
-		if (counter == 0f)
+		if (ready)
 		{
-			fodderEnemyScript.enemySprite.flipX = (target.position - fodderEnemyScript.transform.position).normalized.x > 0 ? true : false;
-			fodderEnemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-			fodderEnemyScript.fodderAnimator.Play("Fodder1Landing");
-			fodderEnemyScript.hasHitbox = false;
-		}
-
-		if (counter < fodderEnemyScript.EndLag)
-		{
-			counter += Time.deltaTime;
+			if (counter >= fodderEnemyScript.EndLag)
+			{
+				counter = 0f;
+				ClearData("ready");
+				ClearData("target");
+				ClearData("dashDestination");
+				ClearData("dashDir");
+			}
+			else
+			{
+				if (!fodderEnemyScript.fodderAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Landing"))
+				{
+					fodderEnemyScript.fodderAnimator.Play("Fodder1Landing");
+				}
+				fodderEnemyScript.StopMovingToTarget();
+				Transform target = (Transform)GetData("target");
+				fodderEnemyScript.enemySprite.flipX = (target.position - fodderEnemyScript.transform.position).normalized.x > 0 ? true : false;
+				fodderEnemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+				fodderEnemyScript.hasHitbox = false;
+				counter += Time.deltaTime;
+				Debug.Log(counter);
+				fodderEnemyScript.coroutineText.text = "FodderLanding";
+			}
 			state = BTNodeState.RUNNING;
 			return state;
 		}
-		else
-		{
-			fodderEnemyScript.Attacking = false;
-			counter = 0f;
-			state = BTNodeState.SUCCESS;
-			return state;
-		}
+		state = BTNodeState.FAILURE;
+		return state;
 	}
 }

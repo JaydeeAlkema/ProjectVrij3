@@ -7,33 +7,51 @@ using BehaviourTree;
 public class FodderWindup : BTNode
 {
 	private float counter;
+	private Rigidbody2D rb2d;
 	private FodderEnemy fodderEnemyScript;
 
-	public FodderWindup(EnemyBase enemyScript)
+	public FodderWindup(EnemyBase enemyScript, Rigidbody2D rb2d)
 	{
 		name = "FodderWindup";
 		fodderEnemyScript = enemyScript.GetComponent<FodderEnemy>();
+		this.rb2d = rb2d;
 		counter = 0f;
-
 	}
 
 	public override BTNodeState Evaluate()
 	{
-		if (!fodderEnemyScript.fodderAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Windup"))
+		object r = GetData("ready");
+		if(r == null)
 		{
-			fodderEnemyScript.fodderAnimator.Play("Fodder1Windup");
+			parent.SetData("ready", false);
+			counter = 0f;
 		}
 
-		if (counter < fodderEnemyScript.WindUpTime)
+		bool ready = (bool)GetData("ready");
+
+		if (ready)
 		{
-			counter += Time.deltaTime;
-			state = BTNodeState.RUNNING;
+			state = BTNodeState.SUCCESS;
 			return state;
 		}
 		else
 		{
-			counter = 0f;
-			state = BTNodeState.SUCCESS;
+			if (counter >= fodderEnemyScript.WindUpTime)
+			{
+				parent.SetData("ready", true);
+			}
+			else
+			{
+				if (!fodderEnemyScript.fodderAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Windup"))
+				{
+					fodderEnemyScript.fodderAnimator.Play("Fodder1Windup");
+				}
+				fodderEnemyScript.StopMovingToTarget();
+				counter += Time.deltaTime;
+				Debug.Log(counter);
+				fodderEnemyScript.coroutineText.text = "FodderWindup";
+			}
+			state = BTNodeState.RUNNING;
 			return state;
 		}
 	}
