@@ -490,8 +490,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room roomA = rooms[i];
 			Room roomB = rooms[i + 1];
 
+			// Only add the collideable tiles from the origin room per default.
 			childPathTiles.AddRange(roomA.CollideableTiles);
-			childPathTiles.AddRange(roomB.CollideableTiles);
+
+			// For the last room we do need to add both room collideable tiles since this is the last pass.
+			if (i == pathwayParents.Count - 1)
+			{
+				childPathTiles.AddRange(roomB.CollideableTiles);
+			}
 
 			foreach (Transform pathTile in childPathTiles)
 			{
@@ -835,9 +841,27 @@ public class LevelGeneratorV2 : MonoBehaviour
 		return null;
 	}
 
-	private Transform GetTileByCoordinates(Vector2Int coordinates, List<Transform> tiles)
+	/// <summary>
+	/// Get the surrounding neighbouring tiles by coordinates from list.
+	/// </summary>
+	/// <param name="coordinates"> Origin coordinates to check for neighbours from. </param>
+	/// <param name="tiles"> List to check in for neighbours. </param>
+	/// <returns></returns>
+	private List<Transform> GetTileNeighbours(Vector2Int coordinates, List<Transform> tiles)
 	{
-		return tiles.Find(t => new Vector2Int(Mathf.RoundToInt(t.transform.position.x), Mathf.RoundToInt(t.transform.position.y)) == coordinates);
+		List<Transform> neighbouringTiles = new List<Transform>
+		{
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x, coordinates.y + 1)),	// Top Neighbour
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x + 1, coordinates.y + 1)),	// Top Right Neighbour
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x + 1, coordinates.y )),	// Right Neighbour
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x + 1, coordinates.y - 1)),	// Bottom Right Neighbour
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x, coordinates.y - 1)),	// Bottom Neighbour
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x - 1, coordinates.y - 1)),	// Bottom Left Neighbour
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x - 1, coordinates.y)),	// Left Neighbour
+			tiles.Find(tile => new Vector2Int(Mathf.RoundToInt(tile.position.x), Mathf.RoundToInt(tile.position.y)) == new Vector2Int(coordinates.x - 1, coordinates.y + 1))	// Top Left Neighbour
+		};
+
+		return neighbouringTiles;
 	}
 
 	/// <summary>
