@@ -15,12 +15,17 @@ public enum StatusEffectType
 
 public class OnTriggerStatusEffectApply : MonoBehaviour
 {
+	[SerializeField] private int burnDamage = 1;
+	[SerializeField] private float slowAmount = 0.5f;
+	[SerializeField] private float slowDuration = 4f;
+
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-	public float slowAmount;
-	public float slowDuration;
+	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
+	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
+	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
 	public int markType;	//0 = Melee, 1 = Cast
 
 	private void Start()
@@ -30,7 +35,7 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 			case StatusEffectType.none:
 				break;
 			case StatusEffectType.Burn:
-				statusEffects.Add(new StatusEffect_Burning());
+				statusEffects.Add(new StatusEffect_Burning(burnDamage));
 				break;
 			case StatusEffectType.Stun:
 				break;

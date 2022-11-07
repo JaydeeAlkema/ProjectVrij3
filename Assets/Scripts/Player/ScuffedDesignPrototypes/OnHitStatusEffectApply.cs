@@ -5,12 +5,17 @@ using UnityEngine;
 
 public class OnHitStatusEffectApply : MonoBehaviour
 {
+	[SerializeField] private int burnDamage;
+	[SerializeField] private float slowAmount;
+	[SerializeField] private float slowDuration;
+
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-	public float slowAmount;
-	public float slowDuration;
+	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
+	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
+	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
 	public int markType;    //0 = Melee, 1 = Cast
 
 	private void Start()
@@ -20,7 +25,7 @@ public class OnHitStatusEffectApply : MonoBehaviour
 			case StatusEffectType.none:
 				break;
 			case StatusEffectType.Burn:
-				statusEffects.Add(new StatusEffect_Burning());
+				statusEffects.Add(new StatusEffect_Burning(burnDamage));
 				break;
 			case StatusEffectType.Stun:
 				break;

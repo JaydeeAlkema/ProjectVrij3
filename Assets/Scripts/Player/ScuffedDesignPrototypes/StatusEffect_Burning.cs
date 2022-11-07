@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class StatusEffect_Burning : IStatusEffect
 {
+	readonly int damageNumber;
 	private float interval = 0.5f;
 	private float counter = 0f;
+
+	public StatusEffect_Burning(int getDamage)
+	{
+		damageNumber = getDamage;
+	}
 
 	void Start()
 	{
@@ -17,7 +23,6 @@ public class StatusEffect_Burning : IStatusEffect
 		counter += Time.deltaTime;
 		if (counter >= interval)
 		{
-			int damageNumber = 1;
 			damageable.TakeDamage(damageNumber);
 			Debug.Log($"Ouch! ({damageNumber} damage!)");
 			counter = 0f;

@@ -11,6 +11,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private Ability ability;
 	[SerializeField] private float coolDown = 0.001f;
 	[SerializeField] private int damage = 0;
+	[SerializeField] private int pierce = 1;
 	[SerializeField] private float critChance = 0f;
 	[SerializeField] private float distance = 0f;
 	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
@@ -25,6 +26,11 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float dashSpeed = 100f;
 	[SerializeField] private float dashDuration = 0.2f;
 	[SerializeField] private float attackTime = 200f;
+
+	[SerializeField] private int burnDamage = 1;
+	[SerializeField] private float slowAmount = 0.5f;
+	[SerializeField] private float slowDuration = 4f;
+
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	public Sprite AbilityImage { get => abilityImage; set => abilityImage = value; }
@@ -47,9 +53,12 @@ public class AbilityScriptable : ScriptableObject
 	public EffectType[] Effects { get => effects; set => effects = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
+
+	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
+	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
+	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
+
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
-	public float slowAmount;
-	public float slowDuration;
 	public int markType;
 
 	public void Start()
@@ -59,7 +68,7 @@ public class AbilityScriptable : ScriptableObject
 			case StatusEffectType.none:
 				break;
 			case StatusEffectType.Burn:
-				statusEffects.Add( new StatusEffect_Burning() );
+				statusEffects.Add( new StatusEffect_Burning(burnDamage) );
 				break;
 			case StatusEffectType.Stun:
 				break;

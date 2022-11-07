@@ -118,17 +118,44 @@ public class RewardChoice : MonoBehaviour
         player.CurrentMeleeAttack.Damage += upgradeToGive.DamageUpgrade;
         player.CurrentMeleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
         player.CurrentMeleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        if( !player.CurrentMeleeAttack.AbilityUpgrades.GetValueOrDefault( upgradeToGive.StatusEffect ) )
-        {
-            player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+		foreach( KeyValuePair<StatusEffectType, bool> pair in player.CurrentMeleeAttack.AbilityUpgrades )
+		{
+            if( !player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+            {
+                player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+                Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
+            }
+            else
+            {
+                UpgradeMelee();
+            }
         }
-        Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
-
         //Dev UI text, remove later
         GameManager.Instance.UiManager.AddDevText(0, upgradeToGive.name);
 
         Destroy( this.gameObject );
 	}
+
+    public void UpgradeMelee()
+    {
+		switch( upgradeToGive.StatusEffect )
+        {
+            case StatusEffectType.none:
+                break;
+            case StatusEffectType.Burn:
+                player.CurrentMeleeAttack.BurnDamage *= 2;
+                break;
+            case StatusEffectType.Stun:
+                break;
+            case StatusEffectType.Slow:
+                player.CurrentMeleeAttack.SlowAmount = ( player.CurrentMeleeAttack.SlowAmount / 2 );
+                break;
+            case StatusEffectType.Marked:
+                break;
+                default:
+		    break;
+		}
+    }
 
     public void ChooseRangedUpgrade()
     {

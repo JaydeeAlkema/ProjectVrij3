@@ -60,7 +60,7 @@ public class AbilityController : MonoBehaviour
     //makes it so the cooldowns actually update when getting upgrades
     public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable cd)
     {
-        if( currentMeleeAttack != null ) { currentMeleeAttack.CoolDown = melee.CoolDown; }
+        if( currentMeleeAttack != null ) { currentMeleeAttack.CoolDown = melee.CoolDown; currentMeleeAttack.BurnDamage = melee.BurnDamage; }
         if( currentRangedAttack != null ) { currentRangedAttack.CoolDown = ranged.CoolDown; }
         if(currentDash != null) { currentDash.CoolDown = cd.CoolDown; }
         if( currentAbility1 != null ) { currentAbility1.CoolDown = ab1.CoolDown; }
