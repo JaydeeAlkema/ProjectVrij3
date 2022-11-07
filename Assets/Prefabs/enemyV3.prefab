@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4442677197823009443}
   - component: {fileID: 4442677197823009441}
-  - component: {fileID: 8395027121329697671}
   - component: {fileID: 4468130794609170519}
   - component: {fileID: 1409221283}
   - component: {fileID: 7187582512883066473}
@@ -62,22 +61,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &8395027121329697671
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4442677197823009440}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.3
 --- !u!70 &4468130794609170519
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -106,10 +89,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632c5f5b9042a6c459f46bcff76bdf27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 200
-  speed: 6
+  healthPoints: 120
+  speed: 7
   aggroRange: 10
-  attackRange: 3
+  attackRange: 5
   expAmount: 5
   attacking: 0
   rb2d: {fileID: 4442677197823009441}
@@ -134,10 +117,9 @@ MonoBehaviour:
   fodderAnimator: {fileID: 6017575560788466592}
   damage: 25
   player: {fileID: 0}
-  hitDetectionRadius: 0.55
   windUpTime: 0.3
   dashSpeed: 15
-  dashDistance: 5
+  dashDistance: 8
   endLag: 0.7
   hasHitbox: 0
   hurtbox: {fileID: 4468130794609170519}
@@ -203,7 +185,7 @@ MonoBehaviour:
   radius: 0.5
   height: 2
   canMove: 1
-  maxSpeed: 5
+  maxSpeed: 7
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2

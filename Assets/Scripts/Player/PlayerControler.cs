@@ -1,11 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
-	[SerializeField] private float moveSpeed = 1;
+	[SerializeField] private ScriptableFloat moveSpeed;
 	[SerializeField] private float vel = 0;
 
 	private Vector3 mousePos;
@@ -31,6 +30,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	//[SerializeField] PlayerHealthBar healthBar;
 
+	private float bufferCounterMelee = 0f;
+	[SerializeField] private float bufferTimeMelee = 0.2f;
+	private float bufferCounterCast = 0f;
+	[SerializeField] private float bufferTimeCast = 0.2f;
+	private float bufferCounterDash = 0f;
+	[SerializeField] private float bufferTimeDash = 0.2f;
+
+
 	public Material materialDefault = null;
 	public Material materialHit = null;
 
@@ -44,7 +51,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//[SerializeField] private int maxHealthPoints = 500;
 	//[SerializeField] private float currentHealthPoints;
 	private AbilityController abilityController;
-	public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+	public ScriptableFloat MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
@@ -75,6 +82,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
 	public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
 	public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
+	public float BufferCounterMelee { get => bufferCounterMelee; set => bufferCounterMelee = value; }
+	public float BufferCounterCast { get => bufferCounterCast; set => bufferCounterCast = value; }
+	public float BufferCounterDash { get => bufferCounterDash; set => bufferCounterDash = value; }
 	#endregion
 
 
@@ -102,10 +112,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		//}
 
 		//Death screen test, remove later
-		if (deathScreenTest != null)
-		{
-			deathScreenTest.gameObject.SetActive(false);
-		}
+		//if (deathScreenTest != null)
+		//{
+		//	deathScreenTest.gameObject.SetActive(false);
+		//}
 
 	}
 
@@ -125,12 +135,43 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (!GameManager.Instance.IsPaused)
 		{
-			if (Input.GetMouseButtonDown(0)) MeleeAttack();
-			if (Input.GetMouseButtonDown(1)) RangedAttack();
+			//Melee input
+			if (Input.GetMouseButtonDown(0))
+			{
+				bufferCounterMelee = bufferTimeMelee;
+			}
+			else
+			{
+				bufferCounterMelee -= Time.fixedDeltaTime;
+			}
+			if (bufferCounterMelee > 0f) MeleeAttack();
+
+			//Cast input
+			if (Input.GetMouseButtonDown(1))
+			{
+				bufferCounterCast = bufferTimeCast;
+			}
+			else
+			{
+				bufferCounterCast -= Time.fixedDeltaTime;
+			}
+			if (bufferCounterCast > 0f) RangedAttack();
+
+
 			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
 			if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
 			if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
-			if (Input.GetKeyDown(KeyCode.Space)) DashAbility();
+
+			//Dash input
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				bufferCounterDash = bufferTimeDash;
+			}
+			else
+			{
+				bufferCounterDash -= Time.fixedDeltaTime;
+			}
+			if (bufferCounterDash > 0f) DashAbility();
 
 			MouseLook();
 
@@ -138,8 +179,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
 
+		Sprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
 
-		
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing)
@@ -147,7 +188,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			trail.emitting = false;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed;
+			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value;
 		}
 
 
@@ -286,9 +327,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 		StartCoroutine(playerFlashColor());
-		GameManager.Instance.RemoveHP(damage);
+		GameManager.Instance.PlayerHP.value -= damage;
 		//healthBar.SetHP(currentHealthPoints);
-		if (GameManager.Instance.PlayerHP <= 0 && !isDying) Die(); //Dit later in GameManager regelen?
+		if (GameManager.Instance.PlayerHP.value <= 0 && !isDying) Die(); //Dit later in GameManager regelen?
 	}
 
 	public void TakeDamage(int damage, int damageType)
@@ -325,7 +366,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void Respawn()
 	{
-		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", "EnemyBehaviourTest");
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+		GameManager.Instance.PlayerHP.ResetValue();
 	}
 
 	IEnumerator DeathSequence()
@@ -336,11 +378,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Time.timeScale = 1f;
 		yield return new WaitForSecondsRealtime(1.5f);
 
-		//Deathscreen test
-		deathScreenTest.gameObject.SetActive(true);
+		//Deathscreen
+		GameManager.Instance.UiManager.DisableAllUI();
+		GameManager.Instance.UiManager.SetUIActive(4, true);
 		yield return new WaitForSecondsRealtime(3f);
 
 		Respawn();
+		GameManager.Instance.UiManager.DisableAllUI();
+		GameManager.Instance.UiManager.SetUIActive(0, true);
 		isDying = false;
 		yield return null;
 	}

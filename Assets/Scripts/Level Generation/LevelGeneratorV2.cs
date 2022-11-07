@@ -63,6 +63,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 		if (seed == 0) seed = Random.Range(0, int.MaxValue);
 
 		Random.InitState(seed);
+
+		GameManager.Instance.FetchDungeonReferences();
 	}
 
 	public IEnumerator GenerateLevel()
@@ -504,7 +506,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					boxCollider2D.size = Vector2.one;
 				}
 
-
 				List<GameObject> neighbouringTiles = new List<GameObject>();
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
 
@@ -540,6 +541,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					GameObject childPathTile = occupiedTiles[t].gameObject;
 					Vector2Int childPathTileCoord = new Vector2Int(Mathf.RoundToInt(childPathTile.transform.position.x), Mathf.RoundToInt(childPathTile.transform.position.y));
+
 					if (childPathTileCoord == topTileCoord) topTile = childPathTile;
 					else if (childPathTileCoord == topRightTileCoord) topRightTile = childPathTile;
 					else if (childPathTileCoord == rightTileCoord) rightTile = childPathTile;
@@ -563,7 +565,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					pathTile.gameObject.layer = LayerMask.NameToLayer("Walkable");
 					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
-					spriteRenderer.sortingOrder = 0;
+					spriteRenderer.sortingOrder = Mathf.CeilToInt(pathTile.transform.position.y) - 10;
 					boxCollider2D.enabled = false;
 				}
 
@@ -572,13 +574,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
-					spriteRenderer.sortingOrder = 1;
+					spriteRenderer.sortingOrder -= 4;
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
 				{
 					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
-					spriteRenderer.sortingOrder = 10;
 					boxCollider2D.offset = new Vector2(0, -0.25f);
 					boxCollider2D.size = new Vector2(1, 0.5f);
 				}
@@ -832,6 +833,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 		}
 		return null;
+	}
+
+	private Transform GetTileByCoordinates(Vector2Int coordinates, List<Transform> tiles)
+	{
+		return tiles.Find(t => new Vector2Int(Mathf.RoundToInt(t.transform.position.x), Mathf.RoundToInt(t.transform.position.y)) == coordinates);
 	}
 
 	/// <summary>

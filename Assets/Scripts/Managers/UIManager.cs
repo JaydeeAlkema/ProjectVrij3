@@ -1,53 +1,66 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-
 	[SerializeField] private Slider expBarSlider;
 	[SerializeField] private Slider hpBarSlider;
 	[SerializeField] private TMP_Text pointText;
 
-	[SerializeField] private GameObject[] UIStates;
+	//TODO: Create custom struct that holds UI elements so we don't have to user indeces for enabling/disabling UI, but instead call them by name/type etc.
+	[SerializeField] private GameObject[] uiStates;
+
+	public GameObject[] UiStates { get => uiStates; private set => uiStates = value; }
+
 	// 0 = Hub UI
 	// 1 = Dungeon UI
 	// 2 = Generation Loading Screen
+	// 3 = Pause Screen
+	// 4 = Death Screen
+	// 5 = Cheat Menu
 
-
-	void Start()
-	{
-		SetExpBar(GameManager.Instance.ExpManager.ExpToNextPoint);
-		SetHPBar(GameManager.Instance.PlayerHP);
-	}
+	[SerializeField] private Transform[] DevUIComponents;
+	// 0 = Melee Upgrades
+	// 1 = Cast Upgrades
 
 	void Update()
 	{
-		SetHP(GameManager.Instance.PlayerHP);
+		SetHP(GameManager.Instance.PlayerHP.value);
 		SetExp(GameManager.Instance.ExpManager.PlayerExp);
 		pointText.text = GameManager.Instance.ExpManager.PlayerPoints.ToString();
 
-		if (Input.GetKeyDown(KeyCode.P))
+		if (Input.GetKeyDown(KeyCode.P) && uiStates[5].activeInHierarchy == false)
 		{
 			GameManager.Instance.ExpManager.AddExp(5);
 		}
+		if (Input.GetKeyDown(KeyCode.F1))
+		{
+			if (uiStates[5].activeInHierarchy)
+			{
+				SetUIActive(5, false);
+			}
+			else
+			{
+				SetUIActive(5, true);
+			}
+		}
 	}
 
-	public void EnableUI(int uiStateNumber)
+	public void SetupDungeonUI()
 	{
-		UIStates[uiStateNumber].SetActive(true);
+		SetExpBar(GameManager.Instance.ExpManager.ExpToNextPoint);
+		SetHPBar(GameManager.Instance.PlayerHP.startValue);
 	}
 
-	public void DisableUI(int uiStateNumber)
+	public void SetUIActive(int uiStateNumber, bool isActive)
 	{
-		UIStates[uiStateNumber].SetActive(false);
+		uiStates[uiStateNumber].SetActive(isActive);
 	}
 
 	public void DisableAllUI()
 	{
-		foreach (GameObject uiState in UIStates)
+		foreach (GameObject uiState in uiStates)
 		{
 			uiState.SetActive(false);
 		}
@@ -75,4 +88,13 @@ public class UIManager : MonoBehaviour
 		expBarSlider.value = exp;
 	}
 
+	public void AddDevText(int textComponent, string addText)
+	{
+		DevUIComponents[textComponent].GetComponent<TMP_Text>().text += (addText + ", ");
+	}
+
+	public void ResetCheatMenu()
+	{
+		uiStates[5].GetComponentInChildren<TMP_InputField>().text = string.Empty;
+	}
 }

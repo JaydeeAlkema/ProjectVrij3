@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   chunkSize: 40
-  maxRooms: 5
+  maxRooms: 8
   pathDepth: 2
   decorationSpawnChance: 5
   chunkGridSize: {x: 5, y: 5}
   spawnableRooms:
   - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
   - {fileID: 11400000, guid: 14383afd7cabf874b95581c1b59291b5, type: 2}
+  - {fileID: 11400000, guid: 65d75481ec620bc489af6a3a97b82fc8, type: 2}
+  - {fileID: 11400000, guid: 3579932cb5c260343b7f1cf0125e6335, type: 2}
+  - {fileID: 11400000, guid: d2a3f44e1fc78ca47823b94227a85f48, type: 2}
   spawnableBossRooms:
   - {fileID: 11400000, guid: 24cdcc7d440975742896b2ee3db3cae1, type: 2}
   floorDecorations:
@@ -74,9 +77,9 @@ MonoBehaviour:
   - {fileID: 1397102630, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   - {fileID: 341539676, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   topLeftOuterCornerSprites:
-  - {fileID: 1295239396, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: 1172881229, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   topRightOuterCornerSprites:
-  - {fileID: -1067463408, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - {fileID: -1355762240, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   bottomLeftOuterCornerSprites:
   - {fileID: 1295239396, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   bottomRightOuterCornerSprites:
@@ -100,6 +103,10 @@ MonoBehaviour:
     enemyType: 2
     enemyPrefabs:
       list:
-      - item: {fileID: 1972835925610663312, guid: cba955331c4327d4ab4ab3de6aaa9a75, type: 3}
+      - item: {fileID: 4442677197823009440, guid: 61fc9d0ea1da44b4d98702d03a3351c7, type: 3}
+        weight: 1
+      - item: {fileID: 4442677197823009440, guid: 61fc9d0ea1da44b4d98702d03a3351c7, type: 3}
+        weight: 1
+      - item: {fileID: 4442677197823009440, guid: 61fc9d0ea1da44b4d98702d03a3351c7, type: 3}
         weight: 1
     enemyCountPerRoom: {x: 0, y: 0}

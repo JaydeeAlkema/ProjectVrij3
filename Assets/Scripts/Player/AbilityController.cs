@@ -109,6 +109,9 @@ public class AbilityController : MonoBehaviour
             currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             currentMeleeAttack.CallAbility( player );
 
+            //Reset buffer counter
+            player.BufferCounterMelee = 0f;
+
             //Melee sound
             AkSoundEngine.PostEvent("plr_attck_melee", this.gameObject);
         }
@@ -153,6 +156,9 @@ public class AbilityController : MonoBehaviour
             currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             currentRangedAttack.CallAbility( player );
 
+            //Reset buffer counter
+            player.BufferCounterCast = 0f;
+
             //Cast sound
             AkSoundEngine.PostEvent("plr_attck_cast", this.gameObject);
 
@@ -185,6 +191,10 @@ public class AbilityController : MonoBehaviour
         }
         currentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
         currentDash.CallAbility( player );
+
+        //Reset buffer counter
+        player.BufferCounterDash = 0f;
+
         return currentDash;
 	}
 

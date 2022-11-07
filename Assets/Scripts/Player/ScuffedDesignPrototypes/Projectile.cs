@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour
 	[SerializeField] private float lifeSpan;
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	[SerializeField] private TrailRenderer trail = null;
+	[SerializeField] private GameObject explosion = null;
 	[SerializeField] private bool trailUpgrade = false;
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	[SerializeField] private float force;
@@ -49,6 +50,7 @@ public class Projectile : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
+		//Destroy projectile when overlapping with enemies
 		if (collision.gameObject.layer == 7 || collision.gameObject.layer == typeOfLayer)
 		{
 			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, 1);
@@ -60,9 +62,9 @@ public class Projectile : MonoBehaviour
 			Destroy(this.gameObject);
 		}
 
+		//Destroy projectile when overlapping with object on 'Unwalkable' layer
 		if (collision.gameObject.layer == 10)
 		{
-			Debug.Log("AAAAA");
 			Destroy(this.gameObject);
 		}
 	}
@@ -75,5 +77,6 @@ public class Projectile : MonoBehaviour
 			addedTrail.GetComponent<TrailRenderer>().autodestruct = true;
 			addedTrail.GetComponent<TrailWithTrigger>().enabled = true;
 		}
+		Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
 }

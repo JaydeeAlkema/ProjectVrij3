@@ -13,7 +13,6 @@ public class FodderEnemy : EnemyBase
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
-	[SerializeField] private float hitDetectionRadius = 1f;
 	[SerializeField] private float windUpTime = 0.3f;
 	[SerializeField] private float dashSpeed = 9;
 	[SerializeField] private float dashDistance = 0.5f;
@@ -94,10 +93,45 @@ public class FodderEnemy : EnemyBase
 
 	//	DamagePopup(damage);
 	//	HealthPoints -= damage;
-		
+
 	//	StartCoroutine(FlashColor());
 	//	if (HealthPoints <= 0) Die();
 	//}
+	public override void TakeDamage(int damage, int damageType)
+	{
+		int damageToTake = damage;
+		if (damageType == 0 && meleeTarget)
+		{
+			HealthPoints -= damage;
+			meleeTarget = false;
+			damageToTake *= 2;
+		}
+		if (damageType == 1 && castTarget)
+		{
+			HealthPoints -= damage;
+			castTarget = false;
+			damageToTake *= 2;
+		}
+
+		if (damageType == 0)
+		{
+			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			//StartCoroutine(HitStop());
+		}
+
+		if (damageType == 1)
+		{
+			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+		}
+
+		Debug.Log("i took " + damage + " damage");
+		DamagePopup(damageToTake);
+		HealthPoints -= damage;
+		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+		IsStunned = true;
+		StartCoroutine(FlashColor());
+		if (HealthPoints <= 0) Die();
+	}
 
 	public override void MoveToTarget(Transform target)
 	{
@@ -126,43 +160,68 @@ public class FodderEnemy : EnemyBase
 	public override IEnumerator FlashColor()
 	{
 		enemySprite.material = MaterialHit;
+		fodderAnimator.Play("Fodder1Hit");
 		yield return new WaitForSeconds(0.09f);
 		enemySprite.material = MaterialDefault;
+	}
+
+	public IEnumerator Stunned()
+	{
+
+		yield return new WaitForSeconds(0.1f);
+
+		IsStunned = false;
+
+		yield return new WaitForEndOfFrame();
 	}
 
 	public IEnumerator DashAttack(Transform target)
 	{
 		//Windup starts
-		Attacking = true;
-		fodderAnimator.Play("Fodder1Windup");
-		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
-		Rb2d.velocity = new Vector2(0, 0);
-		Vector2 dashDir = (target.position - transform.position).normalized;
-		RaycastHit2D hit = Physics2D.Raycast( this.transform.position, dashDir, dashDistance , unwalkableDetection);
-		Vector2 playerTarget = (Vector2)transform.position + dashDir * dashDistance;
-		Debug.Log(hit.collider);
-
-		yield return new WaitForSeconds(windUpTime);
-		Debug.DrawRay( this.transform.position, dashDir * dashDistance, Color.red, 1f);
-		//Dash starts
-		hasHitbox = true;
-		fodderAnimator.Play("Fodder1Attack");
-		float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
-		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-		enemySprite.flipX = false;
-		//Rb2d.velocity = dashDir.normalized * dashSpeed;
-		if( hit.point != Vector2.zero )
+		while (!IsStunned)
 		{
-			Debug.Log( "i hit wall" );
-			yield return StartCoroutine( DashToTarget( hit.point - dashDir/10f ) );
-		}
-		else
-		{
-			yield return StartCoroutine( DashToTarget( playerTarget ) );
-		}
+			Attacking = true;
+			fodderAnimator.Play("Fodder1Windup");
+			enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+			Rb2d.velocity = new Vector2(0, 0);
+			Vector2 dashDir = (target.position - transform.position).normalized;
+			RaycastHit2D hit = Physics2D.Raycast(this.transform.position, dashDir, dashDistance, unwalkableDetection);
+			Vector2 playerTarget = (Vector2)transform.position + dashDir * dashDistance;
+			Debug.Log(hit.collider);
+
+			yield return new WaitForSeconds(windUpTime);
+			Debug.DrawRay(this.transform.position, dashDir * dashDistance, Color.red, 1f);
+			//Dash starts
+			hasHitbox = true;
+			fodderAnimator.Play("Fodder1Attack");
+			float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
+			enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+			enemySprite.flipX = false;
+			//Rb2d.velocity = dashDir.normalized * dashSpeed;
+			if (hit.point != Vector2.zero)
+			{
+				Debug.Log("i hit wall");
+				yield return StartCoroutine(DashToTarget(hit.point - dashDir / 10f));
+			}
+			else
+			{
+				yield return StartCoroutine(DashToTarget(playerTarget));
+			}
 
 
-		//Landing starts
+			//Landing starts
+			enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+			enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+			fodderAnimator.Play("Fodder1Landing");
+			Rb2d.velocity = new Vector2(0, 0);
+			hasHitbox = false;
+			yield return new WaitForSeconds(endLag);
+			enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+			Attacking = false;
+
+			yield return new WaitForEndOfFrame();
+		}
+
 		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		fodderAnimator.Play("Fodder1Landing");
@@ -171,21 +230,22 @@ public class FodderEnemy : EnemyBase
 		yield return new WaitForSeconds(endLag);
 		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
 		Attacking = false;
+
+		yield return new WaitForEndOfFrame();
 	}
 
 	IEnumerator DashToTarget(Vector2 target)
 	{
+		
 		while(Vector2.Distance(transform.position, target) >= 0.01f)
 		{
 			Rb2d.transform.position = Vector2.MoveTowards( Rb2d.transform.position, target, dashSpeed * Time.deltaTime );
+			if (IsStunned)
+			{
+				target = transform.position;
+			}
 			yield return new WaitForEndOfFrame();
 		}
 		yield return new WaitForEndOfFrame();
-	}
-
-	public void OnDrawGizmosSelected()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, hitDetectionRadius);
 	}
 }

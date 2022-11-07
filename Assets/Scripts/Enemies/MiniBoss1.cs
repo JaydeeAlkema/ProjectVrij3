@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MiniBoss1 : EnemyBase
 {
@@ -12,10 +13,13 @@ public class MiniBoss1 : EnemyBase
 	[SerializeField] private SpriteRenderer bodyCharged;
 	[SerializeField] private SpriteRenderer coreCharged;
 
+	[SerializeField] private GameObject rewardInstance;
+
 	private Color baseColor;
 	public float agitateCounter = 0f;
 	public float respawnCounter = 0f;
 	public float spawnTimeMultiplier = 1f;
+	public float spawnTimeMultiplierIncrement = 0.5f;
 
 	public List<GameObject> mobs = new List<GameObject>();
 	public Transform[] innerSpawnPoints;
@@ -73,7 +77,7 @@ public class MiniBoss1 : EnemyBase
 		{
 			if(mob == null)
 			{
-				spawnTimeMultiplier += 0.2f;
+				spawnTimeMultiplier += spawnTimeMultiplierIncrement;
 				mobs.Remove(mob);
 			}
 		}
@@ -113,6 +117,8 @@ public class MiniBoss1 : EnemyBase
 					MBCirclingEnemy mobScript = mob.GetComponent<MBCirclingEnemy>();
 					if (mobScript.agitated)
 					{
+						Transform player = FindObjectOfType<PlayerControler>().gameObject.transform;
+						mobScript.Target = player;
 						mobScript.aggro = true;
 						mobScript.agitated = false;
 					}
@@ -149,5 +155,23 @@ public class MiniBoss1 : EnemyBase
 	{
 		yield return new WaitForSeconds(0.08f);
 		this.GetComponent<SpriteRenderer>().color = baseColor;
+	}
+
+	void OnDestroy()
+	{
+		if (SceneManager.GetActiveScene().name == "Boss Testing")
+		{
+			GameObject reward = Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
+			healthBar.SetHP(HealthPoints);
+			foreach (GameObject mob in mobs)
+			{
+				if (mob != null)
+				{
+					Destroy(mob);
+				}
+			}
+			mobs.Clear();
+			Destroy(healthBar.gameObject, 1f);
+		}
 	}
 }

@@ -1,4 +1,6 @@
+using NaughtyAttributes;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,8 +8,8 @@ public class GameManager : MonoBehaviour
 {
 	private static GameManager instance;
 
-	[SerializeField] private ScriptableInt playerHP;
-	[SerializeField] private int playerMaxHP;
+	[SerializeField, Expandable] private ScriptableInt playerHP;
+	[SerializeField, Expandable] private ScriptableFloat playerSpeed;
 	[SerializeField] private bool isPaused = false;
 
 	[Header("Managers")]
@@ -15,6 +17,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private HubSceneManager HubSceneManager = null;
 	[SerializeField] private ExpManager expManager = null;
 	[SerializeField] private UIManager uiManager = null;
+	[SerializeField] private CheatsManager cheatsManager = null;
 
 	[Header("Player")]
 	[SerializeField] private GameObject playerInstance = null;
@@ -22,7 +25,9 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
 	public UIManager UiManager { get => uiManager; private set => uiManager = value; }
-	public int PlayerHP { get => playerHP.value; set => playerHP.value = value; }
+	public GameObject PlayerInstance { get => playerInstance; set => playerInstance = value; }
+	public ScriptableInt PlayerHP { get => playerHP; set => playerHP = value; }
+	public ScriptableFloat PlayerSpeed { get => playerSpeed; set => playerSpeed = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
 
 	#region Unity Callbacks
@@ -33,44 +38,27 @@ public class GameManager : MonoBehaviour
 			instance = this;
 		}
 
+		QualitySettings.vSyncCount = 1;
 
 		if (FindObjectOfType<LevelGeneratorV2>() == null)
 		{
 			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
-			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive).completed += FetchDungeonReferences;
+			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive);
 		}
 		else
 		{
-			// Use the awake method for fetching references.
-			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
-			HubSceneManager = FindObjectOfType<HubSceneManager>();
-			expManager = FindObjectOfType<ExpManager>();
-			uiManager = FindObjectOfType<UIManager>();
-			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
-
-			playerInstance.SetActive(false);
-			StartCoroutine(SetupLevel());
+			FetchDungeonReferences();
 		}
-
-		//else
-		//{
-		//	FindObjectOfType<HubSceneManager>().StartFirstScenes();
-		//}
-
-		GameManager.Instance.SetHP(playerMaxHP);
-
 	}
 	#endregion
 
-
-	public void RemoveHP(int hp)
+	public void Update()
 	{
-		playerHP.value -= hp;
-	}
-
-	public void SetHP(int hp)
-	{
-		playerHP.value = hp;
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			TogglePauseGame();
+			UiManager.SetUIActive(3, isPaused);
+		}
 	}
 
 	public void TogglePauseGame()
@@ -79,7 +67,7 @@ public class GameManager : MonoBehaviour
 		Time.timeScale = isPaused ? 0f : 1f;
 	}
 
-	private void FetchDungeonReferences(AsyncOperation asyncOperation)
+	public void FetchDungeonReferences()
 	{
 		if (FindObjectOfType<LevelGeneratorV2>() != null)
 		{
@@ -88,10 +76,18 @@ public class GameManager : MonoBehaviour
 			HubSceneManager = FindObjectOfType<HubSceneManager>();
 			expManager = FindObjectOfType<ExpManager>();
 			uiManager = FindObjectOfType<UIManager>();
-			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
+			cheatsManager = FindObjectOfType<CheatsManager>();
 
+			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
 			playerInstance.SetActive(false);
+
+			uiManager.SetupDungeonUI();
 			uiManager.DisableAllUI();
+
+			TMP_InputField cheatsInputfield = uiManager.UiStates[5].GetComponentInChildren<TMP_InputField>();
+			cheatsInputfield.onEndEdit.AddListener(cheatsManager.ExecuteCommand);
+
+			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
 		StartCoroutine(SetupLevel());
 	}
@@ -103,7 +99,7 @@ public class GameManager : MonoBehaviour
 	private IEnumerator SetupLevel()
 	{
 		//Show loading screen
-		uiManager.EnableUI(2);
+		uiManager.SetUIActive(2, true);
 
 		yield return StartCoroutine(levelGenerator.GenerateLevel());
 		GameObject startingRoom = levelGenerator.Rooms[0].gameObject;
@@ -113,9 +109,6 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.EnableUI(1);
+		uiManager.SetUIActive(1, true);
 	}
-
-
-
 }

@@ -22,7 +22,7 @@ public class DamageNumberPopup : MonoBehaviour
 		textMesh = GetComponent<TextMeshPro>();
 		textColor = textMesh.color;
 		flyDir = new Vector2(Random.Range(-1f, 1f), Random.Range(0f, 1f));
-		sizeSmall = transform.localScale * 0.7f;
+		sizeSmall = transform.localScale * 0.4f;
 		StartCoroutine(ResizeText());
 	}
 
@@ -45,14 +45,14 @@ public class DamageNumberPopup : MonoBehaviour
 
 	IEnumerator ResizeText()
 	{
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForSeconds(0.15f);
 		while (transform.localScale.magnitude > sizeSmall.magnitude)
 		{
 			transform.localScale -= Vector3.one * resizeRate * Time.deltaTime;
 			yield return new WaitForFixedUpdate();
 		}
 		transform.localScale = sizeSmall;
-		yield return new WaitForSeconds(0.3f);
+		yield return new WaitForSeconds(0.15f);
 		isDisappearing = true;
 		yield return null;
 	}
