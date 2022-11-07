@@ -19,6 +19,7 @@ namespace BehaviourTree
 			if (_root != null)
 			{
 				_root.Evaluate();
+				Debug.Log(_root.name);
 			}
 		}
 

@@ -26,11 +26,6 @@ public class TaskMoveToPlayer : BTNode
 			Debug.Log("Moving to target");
 		}
 
-		//VERVANGEN MET PATHING
-		//Vector3 targetDir = target.transform.position - this.rb2d.transform.position;
-		//rb2d.velocity = targetDir.normalized * speed * Time.deltaTime;
-		//VERVANGEN MET PATHING
-
 		state = BTNodeState.RUNNING;
 		return state;
 	}
