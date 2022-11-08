@@ -51,6 +51,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//[SerializeField] private int maxHealthPoints = 500;
 	//[SerializeField] private float currentHealthPoints;
 	private AbilityController abilityController;
+	public AbilityController AbilityController { get => abilityController; set => abilityController = value; }
 	public ScriptableFloat MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }

@@ -28,7 +28,7 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
 	public int markType;	//0 = Melee, 1 = Cast
 
-	private void Start()
+	public void Start()
 	{
 		switch (statusEffectType)
 		{

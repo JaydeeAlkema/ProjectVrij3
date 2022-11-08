@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatusEffect_Burning : IStatusEffect
 {
-	readonly int damageNumber;
+	private int damageNumber;
 	private float interval = 0.5f;
 	private float counter = 0f;
 

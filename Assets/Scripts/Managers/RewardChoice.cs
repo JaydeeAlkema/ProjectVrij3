@@ -122,13 +122,14 @@ public class RewardChoice : MonoBehaviour
 		{
             if( !player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
             {
-                player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
-                Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
+                UpgradeMelee(upgradeToGive.StatusEffect);
+                Debug.Log( "upgraded melee" );
             }
-            else
-            {
-                UpgradeMelee();
-            }
+        }
+        if( !player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+        {
+            player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+            Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
         }
         //Dev UI text, remove later
         GameManager.Instance.UiManager.AddDevText(0, upgradeToGive.name);
@@ -136,19 +137,21 @@ public class RewardChoice : MonoBehaviour
         Destroy( this.gameObject );
 	}
 
-    public void UpgradeMelee()
+    public void UpgradeMelee(StatusEffectType status)
     {
-		switch( upgradeToGive.StatusEffect )
+		switch( status )
         {
             case StatusEffectType.none:
                 break;
             case StatusEffectType.Burn:
-                player.CurrentMeleeAttack.BurnDamage *= 2;
+                player.AbilityController.CurrentMeleeAttack.BurnDamage *= 2;
+                Debug.Log( "Upgraded burn" );
                 break;
             case StatusEffectType.Stun:
                 break;
             case StatusEffectType.Slow:
                 player.CurrentMeleeAttack.SlowAmount = ( player.CurrentMeleeAttack.SlowAmount / 2 );
+                Debug.Log( "Upgraded slow" );
                 break;
             case StatusEffectType.Marked:
                 break;
