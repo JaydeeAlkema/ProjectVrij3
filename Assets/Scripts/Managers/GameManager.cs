@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
 		}
 
 		QualitySettings.vSyncCount = 1;
+
+		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
 	}
 	#endregion
 
