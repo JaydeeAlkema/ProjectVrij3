@@ -36,7 +36,7 @@ public class FodderDashAttack : BTNode
 			}
 
 			rb2d.transform.position = Vector2.MoveTowards(rb2d.transform.position, dashDestination, fodderEnemyScript.DashSpeed * Time.deltaTime);
-			fodderEnemyScript.coroutineText.text = "FodderDashAttack";
+			//fodderEnemyScript.coroutineText.text = "FodderDashAttack";
 			state = BTNodeState.RUNNING;
 			return state;
 		}

@@ -45,7 +45,7 @@ public class FodderLanding : BTNode
 				fodderEnemyScript.hasHitbox = false;
 				counter += Time.deltaTime;
 				Debug.Log(counter);
-				fodderEnemyScript.coroutineText.text = "FodderLanding";
+				//fodderEnemyScript.coroutineText.text = "FodderLanding";
 			}
 			state = BTNodeState.RUNNING;
 			return state;

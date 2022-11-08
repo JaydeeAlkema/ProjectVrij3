@@ -49,7 +49,7 @@ public class FodderWindup : BTNode
 				fodderEnemyScript.StopMovingToTarget();
 				counter += Time.deltaTime;
 				Debug.Log(counter);
-				fodderEnemyScript.coroutineText.text = "FodderWindup";
+				//fodderEnemyScript.coroutineText.text = "FodderWindup";
 			}
 			state = BTNodeState.RUNNING;
 			return state;
