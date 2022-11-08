@@ -29,6 +29,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] public Material materialHit = null;
 
 	private bool isStunned = false;
+	private bool isAggro = false;
 
 	private Transform target = null;
 
@@ -64,6 +65,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public float WindUpTime { get => windUpTime; private set => windUpTime = value; }
 	public LayerMask UnwalkableDetection { get => unwalkableDetection; private set => unwalkableDetection = value; }
 	public bool HasHitbox { get => hasHitbox; set => hasHitbox = value; }
+	public bool IsAggro { get => isAggro; set => isAggro = value; }
 
 	public void Start()
 	{
@@ -133,6 +135,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Debug.Log("i took " + damage + " damage without type");
 		DamagePopup(damage);
 		healthPoints -= damage;
+		isAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
@@ -168,6 +171,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
+		isAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();

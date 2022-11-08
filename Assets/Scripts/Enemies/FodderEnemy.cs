@@ -125,6 +125,7 @@ public class FodderEnemy : EnemyBase
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		HealthPoints -= damage;
+		IsAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		IsStunned = true;
 		StartCoroutine(FlashColor());
