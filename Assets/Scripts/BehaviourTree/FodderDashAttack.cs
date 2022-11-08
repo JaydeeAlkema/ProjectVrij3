@@ -7,13 +7,15 @@ using BehaviourTree;
 public class FodderDashAttack : BTNode
 {
 	private Rigidbody2D rb2d;
-	private FodderEnemy fodderEnemyScript;
+	private EnemyBase enemyScript;
+	private bool isSwooger;
 
-	public FodderDashAttack(EnemyBase enemyScript, Rigidbody2D rb2d)
+	public FodderDashAttack(EnemyBase enemyScript, Rigidbody2D rb2d, bool isSwooger)
 	{
 		name = "FodderDashAttack";
-		fodderEnemyScript = enemyScript.GetComponent<FodderEnemy>();
+		this.enemyScript = enemyScript;
 		this.rb2d = rb2d;
+		this.isSwooger = isSwooger;
 	}
 
 	public override BTNodeState Evaluate()
@@ -24,18 +26,32 @@ public class FodderDashAttack : BTNode
 
 		Vector2 dashDestination = (Vector2)GetData("dashDestination");
 
-		if (Vector2.Distance(fodderEnemyScript.transform.position, dashDestination) >= 0.1f)
+		if (Vector2.Distance(enemyScript.transform.position, dashDestination) >= 0.1f)
 		{
-			if (!fodderEnemyScript.fodderAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Attack"))
+			if (isSwooger)
 			{
-				fodderEnemyScript.fodderAnimator.Play("Fodder1Attack");
-				float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
-				fodderEnemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-				fodderEnemyScript.enemySprite.flipX = false;
-				fodderEnemyScript.hasHitbox = true;
+				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerAttack"))
+				{
+					enemyScript.enemyAnimator.Play("SwoogerAttack");
+					float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
+					enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+					enemyScript.enemySprite.flipX = false;
+					enemyScript.HasHitbox = true;
+				}
+			}
+			else
+			{
+				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Attack"))
+				{
+					enemyScript.enemyAnimator.Play("Fodder1Attack");
+					float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
+					enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+					enemyScript.enemySprite.flipX = false;
+					enemyScript.HasHitbox = true;
+				}
 			}
 
-			rb2d.transform.position = Vector2.MoveTowards(rb2d.transform.position, dashDestination, fodderEnemyScript.DashSpeed * Time.deltaTime);
+			rb2d.transform.position = Vector2.MoveTowards(rb2d.transform.position, dashDestination, enemyScript.DashSpeed * Time.deltaTime);
 			//fodderEnemyScript.coroutineText.text = "FodderDashAttack";
 			state = BTNodeState.RUNNING;
 			return state;

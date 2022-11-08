@@ -7,30 +7,18 @@ using TMPro;
 public class FodderEnemy : EnemyBase
 {
 	public LayerMask playerLayerMask;
-	[SerializeField] private LayerMask unwalkableDetection;
 
 	//[SerializeField] public TMP_Text coroutineText;
-
-	public Animator fodderAnimator;
 
 	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
-	[SerializeField] private float windUpTime = 0.3f;
-	[SerializeField] private float dashSpeed = 9;
-	[SerializeField] private float dashDistance = 0.5f;
-	[SerializeField] private float endLag = 0.8f;
-	public bool hasHitbox = false;
 	public CapsuleCollider2D hurtbox;
 
 	public AK.Wwise.Event Event;
 
-	public float DashDistance { get => dashDistance; private set => dashDistance = value; }
-	public float DashSpeed { get => dashSpeed; private set => dashSpeed = value; }
-	public float EndLag { get => endLag; private set => endLag = value; }
-	public float WindUpTime { get => windUpTime; private set => windUpTime = value; }
-	public LayerMask UnwalkableDetection { get => unwalkableDetection; private set => unwalkableDetection = value; }
+
 
 	void Awake()
 	{
@@ -54,10 +42,10 @@ public class FodderEnemy : EnemyBase
 	{
 		if (Vector2.Distance(transform.position, Target.position) <= 1)
 		{
-			if (Target.gameObject != null && hasHitbox)
+			if (Target.gameObject != null && HasHitbox)
 			{
 				AttackPlayer(Target.gameObject);
-				hasHitbox = false;
+				HasHitbox = false;
 			}
 		}
 		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
@@ -146,7 +134,7 @@ public class FodderEnemy : EnemyBase
 	public override void MoveToTarget(Transform target)
 	{
 		base.MoveToTarget(target);
-		fodderAnimator.Play("Fodder1Walk");
+		enemyAnimator.Play("Fodder1Walk");
 	}
 
 	public override void GetSlowed(float slowAmount)
@@ -171,7 +159,7 @@ public class FodderEnemy : EnemyBase
 	public override IEnumerator FlashColor()
 	{
 		enemySprite.material = MaterialHit;
-		fodderAnimator.Play("Fodder1Hit");
+		enemyAnimator.Play("Fodder1Hit");
 		yield return new WaitForSeconds(0.09f);
 		enemySprite.material = MaterialDefault;
 	}
@@ -185,9 +173,9 @@ public class FodderEnemy : EnemyBase
 		//StopCoroutine("LandingDashAttack");
 
 		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-		fodderAnimator.Play("Fodder1Landing");
+		enemyAnimator.Play("Fodder1Landing");
 		Rb2d.velocity = new Vector2(0, 0);
-		hasHitbox = false;
+		HasHitbox = false;
 		Attacking = false;
 
 

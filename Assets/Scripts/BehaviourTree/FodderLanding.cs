@@ -6,14 +6,15 @@ using BehaviourTree;
 public class FodderLanding : BTNode
 {
 
-	private FodderEnemy fodderEnemyScript;
+	private EnemyBase enemyScript;
 	private float counter;
+	private bool isSwooger;
 
-
-	public FodderLanding(EnemyBase enemyScript)
+	public FodderLanding(EnemyBase enemyScript, bool isSwooger)
 	{
 		name = "FodderLanding";
-		fodderEnemyScript = enemyScript.GetComponent<FodderEnemy>();
+		this.enemyScript = enemyScript;
+		this.isSwooger = isSwooger;
 		counter = 0f;
 	}
 
@@ -24,7 +25,7 @@ public class FodderLanding : BTNode
 
 		if (ready)
 		{
-			if (counter >= fodderEnemyScript.EndLag)
+			if (counter >= enemyScript.EndLag)
 			{
 				counter = 0f;
 				ClearData("ready");
@@ -34,15 +35,25 @@ public class FodderLanding : BTNode
 			}
 			else
 			{
-				if (!fodderEnemyScript.fodderAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Landing"))
+				if (isSwooger)
 				{
-					fodderEnemyScript.fodderAnimator.Play("Fodder1Landing");
+					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerLanding"))
+					{
+						enemyScript.enemyAnimator.Play("SwoogerLanding");
+					}
 				}
-				fodderEnemyScript.StopMovingToTarget();
+				else
+				{
+					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Landing"))
+					{
+						enemyScript.enemyAnimator.Play("Fodder1Landing");
+					}
+				}
+				enemyScript.StopMovingToTarget();
 				Transform target = (Transform)GetData("target");
-				fodderEnemyScript.enemySprite.flipX = (target.position - fodderEnemyScript.transform.position).normalized.x > 0 ? true : false;
-				fodderEnemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-				fodderEnemyScript.hasHitbox = false;
+				enemyScript.enemySprite.flipX = (target.position - enemyScript.transform.position).normalized.x > 0 ? true : false;
+				enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+				enemyScript.HasHitbox = false;
 				counter += Time.deltaTime;
 				Debug.Log(counter);
 				//fodderEnemyScript.coroutineText.text = "FodderLanding";

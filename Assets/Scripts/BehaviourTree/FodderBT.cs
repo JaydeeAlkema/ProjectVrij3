@@ -8,6 +8,7 @@ public class FodderBT : BTTree
 {
 	public Rigidbody2D rb2d;
 	public EnemyBase enemyScript;
+	public bool isSwooger = false;
 
 	protected override BTNode SetupTree()
 	{
@@ -24,9 +25,9 @@ public class FodderBT : BTTree
 				new Sequence(new List<BTNode>
 				{
 					new RaycastToTarget(enemyScript),
-					new FodderWindup(enemyScript, rb2d),
-					new FodderDashAttack(enemyScript, rb2d),
-					new FodderLanding(enemyScript),
+					new FodderWindup(enemyScript, rb2d, isSwooger),
+					new FodderDashAttack(enemyScript, rb2d, isSwooger),
+					new FodderLanding(enemyScript, isSwooger),
 					//new TaskDashAttack(rb2d, enemyScript),
 				})
 			}),

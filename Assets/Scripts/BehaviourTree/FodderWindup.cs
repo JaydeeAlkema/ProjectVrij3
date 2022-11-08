@@ -8,14 +8,16 @@ public class FodderWindup : BTNode
 {
 	private float counter;
 	private Rigidbody2D rb2d;
-	private FodderEnemy fodderEnemyScript;
+	private EnemyBase enemyScript;
+	private bool isSwooger;
 
-	public FodderWindup(EnemyBase enemyScript, Rigidbody2D rb2d)
+	public FodderWindup(EnemyBase enemyScript, Rigidbody2D rb2d, bool isSwooger)
 	{
 		name = "FodderWindup";
-		fodderEnemyScript = enemyScript.GetComponent<FodderEnemy>();
+		this.enemyScript = enemyScript;
 		this.rb2d = rb2d;
 		counter = 0f;
+		this.isSwooger = isSwooger;
 	}
 
 	public override BTNodeState Evaluate()
@@ -36,17 +38,28 @@ public class FodderWindup : BTNode
 		}
 		else
 		{
-			if (counter >= fodderEnemyScript.WindUpTime)
+			if (counter >= enemyScript.WindUpTime)
 			{
 				parent.parent.parent.SetData("ready", true);
 			}
 			else
 			{
-				if (!fodderEnemyScript.fodderAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Windup"))
+				if (isSwooger)
 				{
-					fodderEnemyScript.fodderAnimator.Play("Fodder1Windup");
+					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerWindup"))
+					{
+						enemyScript.enemyAnimator.Play("SwoogerWindup");
+					}
 				}
-				fodderEnemyScript.StopMovingToTarget();
+				else
+				{
+					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Windup"))
+					{
+						enemyScript.enemyAnimator.Play("Fodder1Windup");
+					}
+				}
+
+				enemyScript.StopMovingToTarget();
 				counter += Time.deltaTime;
 				Debug.Log(counter);
 				//fodderEnemyScript.coroutineText.text = "FodderWindup";

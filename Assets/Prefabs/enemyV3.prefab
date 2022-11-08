@@ -98,6 +98,15 @@ MonoBehaviour:
   rb2d: {fileID: 4442677197823009441}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
+  enemyAnimator: {fileID: 6017575560788466592}
+  hasHitbox: 0
+  unwalkableDetection:
+    serializedVersion: 2
+    m_Bits: 1024
+  windUpTime: 0.3
+  dashSpeed: 15
+  dashDistance: 8
+  endLag: 0.7
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   destinationSetter: {fileID: 5571211868668841190}
@@ -111,18 +120,8 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  unwalkableDetection:
-    serializedVersion: 2
-    m_Bits: 1024
-  coroutineText: {fileID: 0}
-  fodderAnimator: {fileID: 6017575560788466592}
   damage: 25
   player: {fileID: 0}
-  windUpTime: 0.3
-  dashSpeed: 15
-  dashDistance: 8
-  endLag: 0.7
-  hasHitbox: 0
   hurtbox: {fileID: 4468130794609170519}
   Event:
     idInternal: 0
@@ -142,6 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2d: {fileID: 4442677197823009441}
   enemyScript: {fileID: 1409221283}
+  isSwooger: 0
 --- !u!114 &8561825498785388798
 MonoBehaviour:
   m_ObjectHideFlags: 0

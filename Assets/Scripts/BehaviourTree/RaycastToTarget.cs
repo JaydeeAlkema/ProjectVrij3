@@ -6,14 +6,14 @@ using BehaviourTree;
 
 public class RaycastToTarget : BTNode
 {
-	private FodderEnemy fodderEnemyScript;
+	private EnemyBase enemyScript;
 	private Transform transform;
 
 	public RaycastToTarget(EnemyBase enemyScript)
 	{
 		name = "RaycastToTarget";
 		transform = enemyScript.gameObject.transform;
-		fodderEnemyScript = enemyScript.GetComponent<FodderEnemy>();
+		this.enemyScript = enemyScript;
 	}
 
 	public override BTNodeState Evaluate()
@@ -21,8 +21,8 @@ public class RaycastToTarget : BTNode
 		Transform target = (Transform)GetData("target");
 
 		Vector2 dashDir = (target.position - transform.position).normalized;
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, dashDir, fodderEnemyScript.DashDistance, fodderEnemyScript.UnwalkableDetection);
-		Vector2 maxDistanceTarget = (Vector2)transform.position + dashDir * fodderEnemyScript.DashDistance;
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, dashDir, enemyScript.DashDistance, enemyScript.UnwalkableDetection);
+		Vector2 maxDistanceTarget = (Vector2)transform.position + dashDir * enemyScript.DashDistance;
 
 		object d1 = GetData("dashDestination");
 		object d2 = GetData("dashDir");
@@ -31,7 +31,7 @@ public class RaycastToTarget : BTNode
 		{
 			if (hit.point != Vector2.zero)
 			{
-				Debug.DrawRay(this.transform.position, dashDir * fodderEnemyScript.DashDistance, Color.red, 1f);
+				Debug.DrawRay(this.transform.position, dashDir * enemyScript.DashDistance, Color.red, 1f);
 				parent.parent.parent.SetData("dashDestination", hit.point - dashDir / 10f);
 				parent.parent.parent.SetData("dashDir", dashDir);
 				state = BTNodeState.FAILURE;
@@ -39,7 +39,7 @@ public class RaycastToTarget : BTNode
 			}
 			else
 			{
-				Debug.DrawRay(this.transform.position, dashDir * fodderEnemyScript.DashDistance, Color.red, 1f);
+				Debug.DrawRay(this.transform.position, dashDir * enemyScript.DashDistance, Color.red, 1f);
 				parent.parent.parent.SetData("dashDestination", maxDistanceTarget);
 				parent.parent.parent.SetData("dashDir", dashDir);
 				state = BTNodeState.FAILURE;
