@@ -147,7 +147,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 10000
   m_Time: 0.1
   m_Parameters:
     serializedVersion: 3
@@ -874,6 +874,9 @@ MonoBehaviour:
   animAttack: {fileID: 547846125462354599}
   trail: {fileID: 3607252478168810823}
   animPlayer: {fileID: 2846144575864148852}
+  bufferTimeMelee: 0.4
+  bufferTimeCast: 0.45
+  bufferTimeDash: 0.65
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   deathScreenTest: {fileID: 0}

@@ -14,10 +14,22 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
 
+	public Animator enemyAnimator;
+
+	[SerializeField] private bool hasHitbox = false;
+
+	[SerializeField] private LayerMask unwalkableDetection;
+
+	[SerializeField] private float windUpTime = 0.3f;
+	[SerializeField] private float dashSpeed = 9;
+	[SerializeField] private float dashDistance = 0.5f;
+	[SerializeField] private float endLag = 0.8f;
+
 	[SerializeField] public Material materialDefault = null;
 	[SerializeField] public Material materialHit = null;
 
 	private bool isStunned = false;
+	private bool isAggro = false;
 
 	private Transform target = null;
 
@@ -47,6 +59,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public Material MaterialHit { get => materialHit; set => materialHit = value; }
 	public int ExpAmount { get => expAmount; set => expAmount = value; }
 	public bool IsStunned { get => isStunned; set => isStunned = value; }
+	public float DashDistance { get => dashDistance; private set => dashDistance = value; }
+	public float DashSpeed { get => dashSpeed; private set => dashSpeed = value; }
+	public float EndLag { get => endLag; private set => endLag = value; }
+	public float WindUpTime { get => windUpTime; private set => windUpTime = value; }
+	public LayerMask UnwalkableDetection { get => unwalkableDetection; private set => unwalkableDetection = value; }
+	public bool HasHitbox { get => hasHitbox; set => hasHitbox = value; }
+	public bool IsAggro { get => isAggro; set => isAggro = value; }
 
 	public void Start()
 	{
@@ -116,6 +135,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Debug.Log("i took " + damage + " damage without type");
 		DamagePopup(damage);
 		healthPoints -= damage;
+		isAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
@@ -151,6 +171,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
+		isAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();

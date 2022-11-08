@@ -22,6 +22,11 @@ public class CheckPlayerAggro : BTNode
 		object t = GetData("target");
 		if (t == null)
 		{
+			if (enemyScript.IsAggro)
+			{
+				aggroRange = 1000;
+			}
+
 			Collider2D playerCollider = Physics2D.OverlapCircle(rb2d.transform.position, aggroRange, layerMask);
 
 			if (playerCollider != null)

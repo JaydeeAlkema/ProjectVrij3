@@ -30,6 +30,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	//[SerializeField] PlayerHealthBar healthBar;
 
+	private float bufferCounterMelee = 0f;
+	[SerializeField] private float bufferTimeMelee = 0.2f;
+	private float bufferCounterCast = 0f;
+	[SerializeField] private float bufferTimeCast = 0.2f;
+	private float bufferCounterDash = 0f;
+	[SerializeField] private float bufferTimeDash = 0.2f;
+
+
 	public Material materialDefault = null;
 	public Material materialHit = null;
 
@@ -74,6 +82,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
 	public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
 	public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
+	public float BufferCounterMelee { get => bufferCounterMelee; set => bufferCounterMelee = value; }
+	public float BufferCounterCast { get => bufferCounterCast; set => bufferCounterCast = value; }
+	public float BufferCounterDash { get => bufferCounterDash; set => bufferCounterDash = value; }
 	#endregion
 
 
@@ -124,12 +135,43 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (!GameManager.Instance.IsPaused)
 		{
-			if (Input.GetMouseButtonDown(0)) MeleeAttack();
-			if (Input.GetMouseButtonDown(1)) RangedAttack();
+			//Melee input
+			if (Input.GetMouseButtonDown(0))
+			{
+				bufferCounterMelee = bufferTimeMelee;
+			}
+			else
+			{
+				bufferCounterMelee -= Time.fixedDeltaTime;
+			}
+			if (bufferCounterMelee > 0f) MeleeAttack();
+
+			//Cast input
+			if (Input.GetMouseButtonDown(1))
+			{
+				bufferCounterCast = bufferTimeCast;
+			}
+			else
+			{
+				bufferCounterCast -= Time.fixedDeltaTime;
+			}
+			if (bufferCounterCast > 0f) RangedAttack();
+
+
 			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
 			if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
 			if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
-			if (Input.GetKeyDown(KeyCode.Space)) DashAbility();
+
+			//Dash input
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				bufferCounterDash = bufferTimeDash;
+			}
+			else
+			{
+				bufferCounterDash -= Time.fixedDeltaTime;
+			}
+			if (bufferCounterDash > 0f) DashAbility();
 
 			MouseLook();
 
