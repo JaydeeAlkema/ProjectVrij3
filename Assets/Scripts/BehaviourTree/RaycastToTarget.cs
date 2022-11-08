@@ -32,16 +32,16 @@ public class RaycastToTarget : BTNode
 			if (hit.point != Vector2.zero)
 			{
 				Debug.DrawRay(this.transform.position, dashDir * fodderEnemyScript.DashDistance, Color.red, 1f);
-				parent.SetData("dashDestination", hit.point - dashDir / 10f);
-				parent.SetData("dashDir", dashDir);
+				parent.parent.parent.SetData("dashDestination", hit.point - dashDir / 10f);
+				parent.parent.parent.SetData("dashDir", dashDir);
 				state = BTNodeState.FAILURE;
 				return state;
 			}
 			else
 			{
 				Debug.DrawRay(this.transform.position, dashDir * fodderEnemyScript.DashDistance, Color.red, 1f);
-				parent.SetData("dashDestination", maxDistanceTarget);
-				parent.SetData("dashDir", dashDir);
+				parent.parent.parent.SetData("dashDestination", maxDistanceTarget);
+				parent.parent.parent.SetData("dashDir", dashDir);
 				state = BTNodeState.FAILURE;
 				return state;
 			}

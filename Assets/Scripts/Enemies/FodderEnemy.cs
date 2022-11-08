@@ -9,7 +9,7 @@ public class FodderEnemy : EnemyBase
 	public LayerMask playerLayerMask;
 	[SerializeField] private LayerMask unwalkableDetection;
 
-	[SerializeField] public TMP_Text coroutineText;
+	//[SerializeField] public TMP_Text coroutineText;
 
 	public Animator fodderAnimator;
 

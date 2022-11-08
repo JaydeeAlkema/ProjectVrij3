@@ -23,7 +23,7 @@ public class FodderWindup : BTNode
 		object r = GetData("ready");
 		if(r == null)
 		{
-			parent.SetData("ready", false);
+			parent.parent.parent.SetData("ready", false);
 			counter = 0f;
 		}
 
@@ -38,7 +38,7 @@ public class FodderWindup : BTNode
 		{
 			if (counter >= fodderEnemyScript.WindUpTime)
 			{
-				parent.SetData("ready", true);
+				parent.parent.parent.SetData("ready", true);
 			}
 			else
 			{
