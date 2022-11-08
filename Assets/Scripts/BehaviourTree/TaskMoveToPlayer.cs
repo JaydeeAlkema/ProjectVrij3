@@ -20,12 +20,13 @@ public class TaskMoveToPlayer : BTNode
 	public override BTNodeState Evaluate()
 	{
 		Transform target = (Transform)GetData("target");
-		if (!enemyScript.Attacking && target != null)
+		if (target != null)
 		{
 			enemyScript.MoveToTarget(target);
+			enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+			enemyScript.enemySprite.flipY = false;
 			Debug.Log("Moving to target");
 		}
-
 		state = BTNodeState.RUNNING;
 		return state;
 	}

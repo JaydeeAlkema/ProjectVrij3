@@ -36,6 +36,7 @@ public class FodderDashAttack : BTNode
 					float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
 					enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 					enemyScript.enemySprite.flipX = false;
+					enemyScript.enemySprite.flipY = (dashDestination - (Vector2)enemyScript.transform.position).normalized.x > 0 ? true : false;
 					enemyScript.HasHitbox = true;
 				}
 			}
@@ -47,6 +48,7 @@ public class FodderDashAttack : BTNode
 					float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
 					enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 					enemyScript.enemySprite.flipX = false;
+					enemyScript.enemySprite.flipY = (dashDestination - (Vector2)enemyScript.transform.position).normalized.x > 0 ? true : false;
 					enemyScript.HasHitbox = true;
 				}
 			}

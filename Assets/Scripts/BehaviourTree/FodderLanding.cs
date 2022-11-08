@@ -29,7 +29,7 @@ public class FodderLanding : BTNode
 			{
 				counter = 0f;
 				ClearData("ready");
-				ClearData("target");
+				//("target");
 				ClearData("dashDestination");
 				ClearData("dashDir");
 			}
@@ -51,11 +51,11 @@ public class FodderLanding : BTNode
 				}
 				enemyScript.StopMovingToTarget();
 				Transform target = (Transform)GetData("target");
-				enemyScript.enemySprite.flipX = (target.position - enemyScript.transform.position).normalized.x > 0 ? true : false;
+				//enemyScript.enemySprite.flipX = (target.position - enemyScript.transform.position).normalized.x > 0 ? true : false;
 				enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+				enemyScript.enemySprite.flipY = false;
 				enemyScript.HasHitbox = false;
 				counter += Time.deltaTime;
-				Debug.Log(counter);
 				//fodderEnemyScript.coroutineText.text = "FodderLanding";
 			}
 			state = BTNodeState.RUNNING;
