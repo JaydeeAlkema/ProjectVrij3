@@ -36,6 +36,11 @@ public class Projectile : MonoBehaviour
 		projectileAnimation.GetComponent<SpriteRenderer>().flipY = transform.rotation.eulerAngles.z > 180 ? true : false;
 		LifeTime(lifeSpan);
 		transform.Translate(Vector3.up * force * Time.deltaTime);
+
+		if (GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerProjectile1_fizzle"))
+		{
+			Destroy(this.gameObject, GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).length * GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).speed);
+		}
 	}
 
 	void LifeTime(float lifeSpan)
@@ -44,7 +49,7 @@ public class Projectile : MonoBehaviour
 		if (counter >= lifeSpan && GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerProjectile1"))
 		{
 			GetComponentInChildren<Animator>().Play("PlayerProjectile1_fizzle");
-			Destroy(this.gameObject, GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).length);
+			
 		}
 	}
 

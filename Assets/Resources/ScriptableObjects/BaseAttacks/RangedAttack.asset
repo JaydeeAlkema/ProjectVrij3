@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityImage: {fileID: 0}
   ability: {fileID: 0}
-  coolDown: 500
+  coolDown: 200
   damage: 25
+  pierce: 1
   critChance: 0
   distance: 0
   boxSize: {x: 4, y: 6}
@@ -24,15 +25,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   castObject: {fileID: 3210017399674347035, guid: f65b5458f6dbcfa4da1048f4471f7ade, type: 3}
-  lifeSpan: 0.7
-  force: 17
+  lifeSpan: 0.6
+  force: 25
   burnObject: {fileID: 0}
   effects: 000000000000000000000000
   trailUpgrade: 0
   dashSpeed: 100
   dashDuration: 0.2
   attackTime: 200
-  statusEffectType: 0
+  burnDamage: 1
   slowAmount: 0.5
   slowDuration: 4
+  statusEffectType: 0
   markType: 0

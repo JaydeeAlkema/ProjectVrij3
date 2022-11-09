@@ -121,7 +121,7 @@ public class FodderEnemy : EnemyBase
 		{
 			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
-
+		StartCoroutine(HitStop());
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		HealthPoints -= damage;

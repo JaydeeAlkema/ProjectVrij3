@@ -160,14 +160,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (damageType == 0)
 		{
 			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
-			StartCoroutine(HitStop());
+			//StartCoroutine(HitStop());
 		}
 
 		if (damageType == 1)
 		{
 			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
-
+		StartCoroutine(HitStop());
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
@@ -266,7 +266,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public IEnumerator HitStop()
 	{
 		Time.timeScale = 0f;
-		yield return new WaitForSecondsRealtime(0.03f);
+		yield return new WaitForSecondsRealtime(0.01f);
 		Time.timeScale = 1f;
 		yield return null;
 	}

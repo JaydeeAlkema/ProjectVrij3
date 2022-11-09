@@ -109,6 +109,9 @@ public class AbilityController : MonoBehaviour
             currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             currentMeleeAttack.CallAbility( player );
 
+            //Camera shake
+            CameraShake.Instance.ShakeCamera(4f, 0.1f);
+
             //Reset buffer counter
             player.BufferCounterMelee = 0f;
 
@@ -155,6 +158,9 @@ public class AbilityController : MonoBehaviour
             anim.CallAbility( this.GetComponent<PlayerControler>() );
             currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             currentRangedAttack.CallAbility( player );
+
+            //Camera shake
+            CameraShake.Instance.ShakeCamera(4f, 0.1f);
 
             //Reset buffer counter
             player.BufferCounterCast = 0f;
