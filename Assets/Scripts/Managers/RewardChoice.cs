@@ -118,12 +118,16 @@ public class RewardChoice : MonoBehaviour
         player.CurrentMeleeAttack.Damage += upgradeToGive.DamageUpgrade;
         player.CurrentMeleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
         player.CurrentMeleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
+        //check for existing upgrades to rank up
 		foreach( KeyValuePair<StatusEffectType, bool> pair in player.CurrentMeleeAttack.AbilityUpgrades )
 		{
-            if( !player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+            if( pair.Key == upgradeToGive.StatusEffect )
             {
-                UpgradeMelee(upgradeToGive.StatusEffect);
-                Debug.Log( "upgraded melee" );
+                if( player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+                {
+                    UpgradeMelee( upgradeToGive.StatusEffect );
+                    Debug.Log( "upgraded melee" );
+                }
             }
         }
         if( !player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
@@ -144,13 +148,16 @@ public class RewardChoice : MonoBehaviour
             case StatusEffectType.none:
                 break;
             case StatusEffectType.Burn:
-                player.AbilityController.CurrentMeleeAttack.BurnDamage *= 2;
+                //player.AbilityController.CurrentMeleeAttack.BurnDamage *= 2;
+                player.MeleeAttackScr.BurnDamage *= 2;
+                player.MeleeAttackScr.UpdateStatusEffects();
                 Debug.Log( "Upgraded burn" );
                 break;
             case StatusEffectType.Stun:
                 break;
             case StatusEffectType.Slow:
-                player.CurrentMeleeAttack.SlowAmount = ( player.CurrentMeleeAttack.SlowAmount / 2 );
+                player.MeleeAttackScr.SlowAmount = ( player.CurrentMeleeAttack.SlowAmount / 2 );
+                player.MeleeAttackScr.UpdateStatusEffects();
                 Debug.Log( "Upgraded slow" );
                 break;
             case StatusEffectType.Marked:
@@ -168,15 +175,53 @@ public class RewardChoice : MonoBehaviour
         player.CurrentRangedAttack.Damage += upgradeToGive.DamageUpgrade;
         player.CurrentRangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
         player.CurrentRangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
-        if( !player.CurrentRangedAttack.AbilityUpgrades.GetValueOrDefault( upgradeToGive.StatusEffect ) )
+        //check for existing upgrades to rank up
+        foreach( KeyValuePair<StatusEffectType, bool> pair in player.CurrentRangedAttack.AbilityUpgrades )
+        {
+            if( pair.Key == upgradeToGive.StatusEffect )
+            {
+                if( player.CurrentRangedAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+                {
+                    UpgradeRanged( upgradeToGive.StatusEffect );
+                    Debug.Log( "upgraded ranged" );
+                }
+            }
+        }
+        if( !player.CurrentRangedAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
         {
             player.CurrentRangedAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
+            Debug.Log( "added " + upgradeToGive.name + " to player as ranged" );
         }
-        Debug.Log( "added " + upgradeToGive.name + " to player as ranged" );
 
         //Dev UI text, remove later
         GameManager.Instance.UiManager.AddDevText(1, upgradeToGive.name);
 
         Destroy( this.gameObject );
+    }
+
+    public void UpgradeRanged( StatusEffectType status )
+    {
+        switch( status )
+        {
+            case StatusEffectType.none:
+                break;
+            case StatusEffectType.Burn:
+                //player.AbilityController.CurrentMeleeAttack.BurnDamage *= 2;
+                player.RangedAttackScr.BurnDamage *= 2;
+                player.RangedAttackScr.UpdateStatusEffects();
+                Debug.Log( "Upgraded burn" );
+                break;
+            case StatusEffectType.Stun:
+                break;
+            case StatusEffectType.Slow:
+                player.RangedAttackScr.SlowAmount = ( player.CurrentRangedAttack.SlowAmount / 2 );
+                player.RangedAttackScr.UpdateStatusEffects();
+                Debug.Log( "Upgraded slow" );
+                break;
+            case StatusEffectType.Marked:
+                break;
+            default:
+                break;
+        }
     }
 }

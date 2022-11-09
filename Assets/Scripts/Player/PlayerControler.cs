@@ -287,25 +287,25 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (meleeAttack != null)
 		{
-			meleeAttack.Start();
+			meleeAttack.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (rangedAttack != null)
 		{
-			rangedAttack.Start();
+			rangedAttack.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (dash != null)
 		{
-			dash.Start();
+			dash.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (ability1 != null)
 		{
-			ability1.Start();
+			ability1.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			//ability1.Rb2d = rb2d;
 			//ability1.CastFromPoint = castFromPoint;

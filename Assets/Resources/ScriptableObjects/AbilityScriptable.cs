@@ -61,8 +61,9 @@ public class AbilityScriptable : ScriptableObject
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public int markType;
 
-	public void Start()
+	public void UpdateStatusEffects()
 	{
+		statusEffects.Clear();
 		switch( statusEffectType )
 		{
 			case StatusEffectType.none:
