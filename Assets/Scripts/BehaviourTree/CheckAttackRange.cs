@@ -26,6 +26,7 @@ public class CheckAttackRange : BTNode
 		object t = GetData("target");
 		if(t == null)
 		{
+			ClearData("hitWallPoint");
 			state = BTNodeState.FAILURE;
 			return state;
 		}
@@ -49,6 +50,7 @@ public class CheckAttackRange : BTNode
 		//ClearData("dashDir");
 		//fodderEnemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		//fodderEnemyScript.hasHitbox = false;
+		ClearData("hitWallPoint");
 		state = BTNodeState.FAILURE;
 		return state;
 	}
