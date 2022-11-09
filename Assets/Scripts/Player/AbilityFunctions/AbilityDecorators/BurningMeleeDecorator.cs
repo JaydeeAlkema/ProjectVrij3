@@ -22,7 +22,9 @@ public class BurningMeleeDecorator : AbilityDecorator
 	{
 		for( int i = 0; i < 3; i++ )
 		{
-			Object.Instantiate( burnObject, Rb2d.transform.position + CastFromPoint.transform.right * ( i - 1 ) + CastFromPoint.transform.up * distance, Quaternion.identity );
+			GameObject burnGround = Object.Instantiate( burnObject, Rb2d.transform.position + CastFromPoint.transform.right * ( i - 1 ) + CastFromPoint.transform.up * distance, Quaternion.identity );
+			burnGround.GetComponent<OnTriggerStatusEffectApply>().BurnDamage = ability.BurnDamage;
+			burnGround.GetComponent<OnTriggerStatusEffectApply>().UpdateStatusEffects();
 			Debug.Log( "burn instantiated" );
 		}
 	}

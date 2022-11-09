@@ -51,6 +51,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//[SerializeField] private int maxHealthPoints = 500;
 	//[SerializeField] private float currentHealthPoints;
 	private AbilityController abilityController;
+	public AbilityController AbilityController { get => abilityController; set => abilityController = value; }
 	public ScriptableFloat MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }
@@ -65,6 +66,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private AbilityScriptable ability1;
 	[SerializeField] private AbilityScriptable ability2;
 	[SerializeField] private AbilityScriptable ability3;
+	public AbilityScriptable MeleeAttackScr { get => meleeAttack; set => meleeAttack = value; }
+	public AbilityScriptable RangedAttackScr { get => rangedAttack; set => rangedAttack = value; }
 	public AbilityScriptable Dash { get => dash; set => dash = value; }
 	public AbilityScriptable Ability1 { get => ability1; set => ability1 = value; }
 	public AbilityScriptable Ability2 { get => ability2; set => ability2 = value; }
@@ -117,6 +120,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		//	deathScreenTest.gameObject.SetActive(false);
 		//}
 
+	}
+
+	public void ReloadAttacks()
+	{
+		currentMeleeAttack.BaseStats = meleeAttack;
+		currentRangedAttack.BaseStats = rangedAttack;
+		currentDash.BaseStats = dash;
+		abilityController.CurrentMeleeAttack = currentMeleeAttack;
+		abilityController.CurrentRangedAttack = currentRangedAttack;
+		abilityController.CurrentDash = currentDash;
+		abilityController.SetAttacks();
 	}
 
 	public void initAbilities()
@@ -273,25 +287,25 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (meleeAttack != null)
 		{
-			meleeAttack.Start();
+			meleeAttack.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (rangedAttack != null)
 		{
-			rangedAttack.Start();
+			rangedAttack.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (dash != null)
 		{
-			dash.Start();
+			dash.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (ability1 != null)
 		{
-			ability1.Start();
+			ability1.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			//ability1.Rb2d = rb2d;
 			//ability1.CastFromPoint = castFromPoint;

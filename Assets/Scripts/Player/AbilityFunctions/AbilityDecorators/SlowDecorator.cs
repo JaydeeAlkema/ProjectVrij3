@@ -6,6 +6,6 @@ public class SlowDecorator : AbilityDecorator
 {
 	public SlowDecorator( IAbility _ability ) : base( _ability )
 	{
-		_ability.BaseStats.statusEffects.Add( new StatusEffect_Slow( _ability.BaseStats.slowAmount, _ability.BaseStats.slowDuration ) );
+		_ability.BaseStats.statusEffects.Add( new StatusEffect_Slow( _ability.SlowAmount, _ability.SlowDuration ) );
 	}
 }

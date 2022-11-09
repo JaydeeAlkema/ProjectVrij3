@@ -37,6 +37,9 @@ public abstract class Ability : MonoBehaviour ,IAbility
 	public int abilityID { get; set; }
 	public AbilityController Controller { get; set; }
 	public float AttackTime { get; set; }
+	public int BurnDamage { get; set; }
+	public float SlowAmount { get; set; }
+	public float SlowDuration { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void AbilityBehavior(){ }

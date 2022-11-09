@@ -15,30 +15,41 @@ public enum StatusEffectType
 
 public class OnTriggerStatusEffectApply : MonoBehaviour
 {
+	[SerializeField] private int burnDamage;
+	[SerializeField] private float slowAmount = 0.5f;
+	[SerializeField] private float slowDuration = 4f;
+
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-	public float slowAmount;
-	public float slowDuration;
+	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
+	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
+	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
 	public int markType;	//0 = Melee, 1 = Cast
 
-	private void Start()
+	public void Start()
 	{
-		switch (statusEffectType)
+		UpdateStatusEffects();
+	}
+
+	public void UpdateStatusEffects()
+	{
+		statusEffects.Clear();
+		switch( statusEffectType )
 		{
 			case StatusEffectType.none:
 				break;
 			case StatusEffectType.Burn:
-				statusEffects.Add(new StatusEffect_Burning());
+				statusEffects.Add( new StatusEffect_Burning( burnDamage ) );
 				break;
 			case StatusEffectType.Stun:
 				break;
 			case StatusEffectType.Slow:
-				statusEffects.Add(new StatusEffect_Slow(slowAmount, slowDuration));
+				statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
 				break;
 			case StatusEffectType.Marked:
-				statusEffects.Add(new StatusEffect_Marked(markType));
+				statusEffects.Add( new StatusEffect_Marked( markType ) );
 				break;
 			default:
 				break;
