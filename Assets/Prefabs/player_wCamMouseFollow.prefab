@@ -494,8 +494,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 1
-  m_FrequencyGain: 3
+  m_AmplitudeGain: 0
+  m_FrequencyGain: 4
   mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &3607252477769851809
 GameObject:
@@ -905,8 +905,8 @@ MonoBehaviour:
   animAttack: {fileID: 547846125462354599}
   trail: {fileID: 3607252478168810823}
   animPlayer: {fileID: 2846144575864148852}
-  bufferTimeMelee: 0.4
-  bufferTimeCast: 0.45
+  bufferTimeMelee: 0.3
+  bufferTimeCast: 0.3
   bufferTimeDash: 0.65
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}

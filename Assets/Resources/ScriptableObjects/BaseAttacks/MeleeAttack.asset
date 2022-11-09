@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityImage: {fileID: 0}
   ability: {fileID: 0}
-  coolDown: 250
-  damage: 40
+  coolDown: 150
+  damage: 50
+  pierce: 1
   critChance: 0
   distance: 1.41
   boxSize: {x: 4.2, y: 1.8}
@@ -32,7 +33,8 @@ MonoBehaviour:
   dashSpeed: 100
   dashDuration: 0.2
   attackTime: 200
-  statusEffectType: 0
+  burnDamage: 1
   slowAmount: 0.5
   slowDuration: 4
+  statusEffectType: 0
   markType: 1

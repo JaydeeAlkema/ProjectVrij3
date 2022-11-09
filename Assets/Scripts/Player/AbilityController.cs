@@ -110,7 +110,7 @@ public class AbilityController : MonoBehaviour
             currentMeleeAttack.CallAbility( player );
 
             //Camera shake
-            CameraShake.Instance.ShakeCamera(3f, 0.1f);
+            CameraShake.Instance.ShakeCamera(2f, 0.1f);
 
             //Reset buffer counter
             player.BufferCounterMelee = 0f;
@@ -160,7 +160,7 @@ public class AbilityController : MonoBehaviour
             currentRangedAttack.CallAbility( player );
 
             //Camera shake
-            CameraShake.Instance.ShakeCamera(3f, 0.1f);
+            CameraShake.Instance.ShakeCamera(2f, 0.1f);
 
             //Reset buffer counter
             player.BufferCounterCast = 0f;
