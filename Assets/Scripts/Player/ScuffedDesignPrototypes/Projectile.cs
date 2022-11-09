@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
 	public float Force { get => force; set => force = value; }
 	private int damage;
 	public int Damage { get => damage; set => damage = value; }
-	[SerializeField] private LayerMask typeOfLayer;
+	[SerializeField] private int typeOfLayer = 6;
 	private GameObject addedTrail = null;
 
 	private void Awake()
