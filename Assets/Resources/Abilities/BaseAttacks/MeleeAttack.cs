@@ -17,6 +17,7 @@ public class MeleeAttack : Ability
 			init = false;
 		}
 		AbilityBehavior();
+		caller.CallCoroutine( TestCoroutine() );
 	}
 	public override void AbilityBehavior()
 	{
@@ -38,5 +39,11 @@ public class MeleeAttack : Ability
 		distance = BaseStats.Distance;
 		coolDown = BaseStats.CoolDown;
 		AttackTime = BaseStats.AttackTime;
+	}
+
+	public IEnumerator TestCoroutine()
+	{
+		yield return new WaitForEndOfFrame();
+		Debug.Log( "yes you can call this bs" );
 	}
 }

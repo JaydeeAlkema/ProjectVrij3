@@ -40,6 +40,7 @@ public abstract class Ability : MonoBehaviour ,IAbility
 	public int BurnDamage { get; set; }
 	public float SlowAmount { get; set; }
 	public float SlowDuration { get; set; }
+	public CoroutineCaller caller { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void AbilityBehavior(){ }
@@ -51,6 +52,7 @@ public abstract class Ability : MonoBehaviour ,IAbility
 		CastFromPoint = _castFromPoint;
 		Angle = _angle;
 		TrailUpgrade = _trailUpgrade;
+		caller = CoroutineCaller.CallerInstance;
 	}
 
 	public void OnHitApplyStatusEffects( IDamageable damageable )
