@@ -193,7 +193,8 @@ public class FodderEnemy : EnemyBase
 
 	public void OnDestroy()
 	{
-		Instantiate(SplatterDecal, transform.position, Quaternion.identity);
+		GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
+		splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
 	}
 
 	//public IEnumerator WindupDashAttack(Transform target)
