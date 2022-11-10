@@ -938,6 +938,14 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 8334970476083683795}
     m_Modifications:
+    - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -1008,6 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingMode: 2
   roundingMode: 0
+  positionReference: 1
   sortingOrderOffset: 0
 --- !u!4 &6928733671148014491 stripped
 Transform:

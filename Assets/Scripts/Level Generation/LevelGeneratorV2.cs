@@ -418,19 +418,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Room roomA = rooms[pathwayParents.Count - 1];
 		Room roomB = rooms[pathwayParents.Count];
 
-		List<Vector2Int> occupiedTiles = new List<Vector2Int>();
-		occupiedTiles.AddRange(TransformListToVector2IntList(roomA.CollideableTiles));
-		occupiedTiles.AddRange(TransformListToVector2IntList(roomA.NoncollideableTiles));
-		occupiedTiles.AddRange(TransformListToVector2IntList(roomB.CollideableTiles));
-		occupiedTiles.AddRange(TransformListToVector2IntList(roomB.NoncollideableTiles));
-
 		List<Vector2Int> pathPoints = new List<Vector2Int>();
 
 		// Instantiate all the initial tiles. These tiles will have not been configurated yet, this will need to be done is a separate pass.
 		foreach (Vector3 pathCoord in p.vectorPath)
 		{
 			Vector2Int pathCoordInt = new Vector2Int(Mathf.RoundToInt(pathCoord.x), Mathf.RoundToInt(pathCoord.y));
-			pathPoints.Add(pathCoordInt);
+			//pathPoints.Add(pathCoordInt);
 
 			for (int x = -SLGS.pathDepth; x < SLGS.pathDepth + 1; x++)
 			{
@@ -438,7 +432,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
 
-					if (pathPoints.Contains(newCoord) == false && occupiedTiles.Contains(newCoord) == false)
+					if (pathPoints.Contains(newCoord) == false)
 					{
 						GameObject newPathPointGO = new GameObject($"PathPoint[{newCoord.x}][{newCoord.y}]");
 						newPathPointGO.transform.position = new Vector3(newCoord.x, newCoord.y, 0);
@@ -485,7 +479,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room roomA = rooms[i];
 			Room roomB = rooms[i + 1];
 
-
 			// Only add the collideable tiles from the origin room per default.
 			// For the last room we do need to add both room collideable tiles since this is the last pass.
 			childPathTiles.AddRange(roomA.CollideableTiles);
@@ -493,8 +486,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 			{
 				childPathTiles.AddRange(roomB.CollideableTiles);
 			}
-
-			//childPathTiles.AddRange(GetTileNeighbours())
 
 			foreach (Transform pathTile in childPathTiles)
 			{
@@ -592,12 +583,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					spriteRenderer.sprite = topLeftOuterCornerSprites[Random.Range(0, topLeftOuterCornerSprites.Count)];
 					spriteRenderer.flipY = true;
+					boxCollider2D.offset = new Vector2(0, -0.25f);
+					boxCollider2D.size = new Vector2(1, 0.5f);
 				}
 				// Top Right Outer Corner
 				else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					spriteRenderer.sprite = topRightOuterCornerSprites[Random.Range(0, topRightOuterCornerSprites.Count)];
 					spriteRenderer.flipY = true;
+					boxCollider2D.offset = new Vector2(0, -0.25f);
+					boxCollider2D.size = new Vector2(1, 0.5f);
 				}
 				// Bottom Right Outer Corner
 				else if (!rightTile && !bottomRightTile && !bottomTile && leftTile && topLeftTile && topTile)
