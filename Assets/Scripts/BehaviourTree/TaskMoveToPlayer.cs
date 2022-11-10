@@ -25,7 +25,7 @@ public class TaskMoveToPlayer : BTNode
 			enemyScript.MoveToTarget(target);
 			enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 			enemyScript.enemySprite.flipY = false;
-			Debug.Log("Moving to target");
+			//Debug.Log("Moving to target");
 		}
 		state = BTNodeState.RUNNING;
 		return state;
