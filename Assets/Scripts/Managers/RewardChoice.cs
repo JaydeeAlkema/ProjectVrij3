@@ -148,9 +148,10 @@ public class RewardChoice : MonoBehaviour
             case StatusEffectType.none:
                 break;
             case StatusEffectType.Burn:
-                //player.AbilityController.CurrentMeleeAttack.BurnDamage *= 2;
-                player.MeleeAttackScr.BurnDamage *= 2;
-                player.MeleeAttackScr.UpdateStatusEffects();
+                player.AbilityController.CurrentMeleeAttack.BaseStats.BurnDamage *= 2;
+                player.AbilityController.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
+                //player.MeleeAttackScr.BurnDamage *= 2;
+                //player.MeleeAttackScr.UpdateStatusEffects();
                 Debug.Log( "Upgraded burn" );
                 break;
             case StatusEffectType.Stun:

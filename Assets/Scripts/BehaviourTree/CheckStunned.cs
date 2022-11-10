@@ -17,6 +17,10 @@ public class CheckStunned : BTNode
 	{
 		if (enemyScript.IsStunned)
 		{
+			ClearData("dashDestination");
+			ClearData("dashDir");
+			ClearData("target");
+			ClearData("ready");
 			state = BTNodeState.SUCCESS;
 			return state;
 		}

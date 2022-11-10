@@ -140,7 +140,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		diagnosticTimes.Add($"Chunk Generation took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
-		yield return new WaitForEndOfFrame();
+		yield return null;
 	}
 
 	/// <summary>
@@ -183,7 +183,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		diagnosticTimes.Add($"Chunk path generation took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
-		yield return new WaitForEndOfFrame();
+		yield return null;
 	}
 
 	/// <summary>
@@ -219,8 +219,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 			int roomsizeHalfX = room.RoomSize.x / 2;
 			int roomsizeHalfY = room.RoomSize.y / 2;
 
-			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX + 3, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
-			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY + 3, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
+			int randX = Random.Range(chunk.Coordinates.x - chunkSizeHalf + roomsizeHalfX, chunk.Coordinates.x + chunkSizeHalf - roomsizeHalfX);
+			int randY = Random.Range(chunk.Coordinates.y - chunkSizeHalf + roomsizeHalfY, chunk.Coordinates.y + chunkSizeHalf - roomsizeHalfY);
 
 			newRoomGO.transform.position = new Vector2(randX, randY);
 			newRoomGO.transform.parent = roomsParent;
@@ -254,7 +254,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		diagnosticTimes.Add($"Empty rooms generation took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
-		yield return new WaitForEndOfFrame();
+		yield return null;
 	}
 
 	/// <summary>
@@ -334,12 +334,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Seeker seeker = SeekerGO.AddComponent<Seeker>();
 
 		gridGraph.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
-		gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x + 1, SLGS.chunkSize * SLGS.chunkGridSize.y + 1, gridGraph.nodeSize);
-		AstarPath.active.Scan();
+		gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x + 1, SLGS.chunkSize * SLGS.chunkGridSize.y + 1, 1);
+		AstarPath.active.Scan(gridGraph);
 
 		while (AstarPath.active.IsAnyGraphUpdateInProgress)
 		{
-			yield return new WaitForEndOfFrame();
+			yield return null;
 		}
 
 		for (int r = 0; r < rooms.Count - 1; r++)
@@ -378,7 +378,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			while (seeker.IsDone() == false)
 			{
-				yield return new WaitForEndOfFrame();
+				yield return null;
 			}
 
 			Path path = null;
@@ -387,7 +387,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		while (AstarPath.active.IsAnyGraphUpdateInProgress || seeker.IsDone() == false)
 		{
-			yield return new WaitForEndOfFrame();
+			yield return null;
 		}
 
 		Destroy(SeekerGO);
@@ -395,7 +395,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		diagnosticTimes.Add($"Generating pathways between empty rooms took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
-		yield return new WaitForEndOfFrame();
+		yield return null;
 	}
 
 	/// <summary>
@@ -432,15 +432,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Vector2Int pathCoordInt = new Vector2Int(Mathf.RoundToInt(pathCoord.x), Mathf.RoundToInt(pathCoord.y));
 			pathPoints.Add(pathCoordInt);
 
-			//GameObject pathPointGO = new GameObject($"PathPoint[{pathCoordInt.x}][{pathCoordInt.y}]");
-			//pathPointGO.transform.position = new Vector3(pathCoordInt.x, pathCoordInt.y, 0);
-			//pathPointGO.transform.parent = pathPointParentGO.transform;
-
 			for (int x = -SLGS.pathDepth; x < SLGS.pathDepth + 1; x++)
 			{
 				for (int y = -SLGS.pathDepth; y < SLGS.pathDepth + 1; y++)
 				{
 					Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
+
 					if (pathPoints.Contains(newCoord) == false && occupiedTiles.Contains(newCoord) == false)
 					{
 						GameObject newPathPointGO = new GameObject($"PathPoint[{newCoord.x}][{newCoord.y}]");
@@ -479,8 +476,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 		List<Sprite> bottomRightInnerCornerSprites = SLGS.bottomRightInnerCornerSprites;
 		List<Sprite> bottomLeftInnerCornerSprites = SLGS.bottomLeftInnerCornerSprites;
 
-
-		//foreach (Transform pathParents in pathwaysParent)
 		for (int i = 0; i < pathwayParents.Count; i++)
 		{
 			Transform pathParents = pathwayParents[i].transform;
@@ -490,8 +485,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Room roomA = rooms[i];
 			Room roomB = rooms[i + 1];
 
+
+			// Only add the collideable tiles from the origin room per default.
+			// For the last room we do need to add both room collideable tiles since this is the last pass.
 			childPathTiles.AddRange(roomA.CollideableTiles);
-			childPathTiles.AddRange(roomB.CollideableTiles);
+			if (i == pathwayParents.Count - 1)
+			{
+				childPathTiles.AddRange(roomB.CollideableTiles);
+			}
+
+			//childPathTiles.AddRange(GetTileNeighbours())
 
 			foreach (Transform pathTile in childPathTiles)
 			{
@@ -505,8 +508,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
 					boxCollider2D.size = Vector2.one;
 				}
-
-				List<GameObject> neighbouringTiles = new List<GameObject>();
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
 
 				Vector2Int topTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y + 1);
@@ -528,11 +529,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 				GameObject topLeftTile = null;
 
 				List<Transform> occupiedTiles = new List<Transform>();
-				occupiedTiles.AddRange(childPathTiles);
-				occupiedTiles.AddRange(roomA.CollideableTiles);
-				occupiedTiles.AddRange(roomA.NoncollideableTiles);
-				occupiedTiles.AddRange(roomB.CollideableTiles);
-				occupiedTiles.AddRange(roomB.NoncollideableTiles);
+				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, childPathTiles));
+				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomA.CollideableTiles));
+				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomA.NoncollideableTiles));
+				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomB.CollideableTiles));
+				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomB.NoncollideableTiles));
 
 				if (i < pathwayParents.Count - 1) occupiedTiles.AddRange(pathwayParents[i + 1].GetComponentsInChildren<Transform>());
 				if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
@@ -551,15 +552,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					else if (childPathTileCoord == leftTileCoord) leftTile = childPathTile;
 					else if (childPathTileCoord == topLeftTileCoord) topLeftTile = childPathTile;
 				}
-
-				if (topTile) neighbouringTiles.Add(topTile);
-				if (topRightTile) neighbouringTiles.Add(topRightTile);
-				if (rightTile) neighbouringTiles.Add(rightTile);
-				if (bottomRightTile) neighbouringTiles.Add(bottomRightTile);
-				if (bottomTile) neighbouringTiles.Add(bottomTile);
-				if (bottomLeftTile) neighbouringTiles.Add(bottomLeftTile);
-				if (leftTile) neighbouringTiles.Add(leftTile);
-				if (topLeftTile) neighbouringTiles.Add(topLeftTile);
 
 				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
 				{
@@ -652,7 +644,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		diagnosticTimes.Add($"Configuring pathways took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
-		yield return new WaitForEndOfFrame();
+		yield return null;
 	}
 
 	/// <summary>
@@ -728,7 +720,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		diagnosticTimes.Add($"Spawning enemies in rooms took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
-		yield return new WaitForEndOfFrame();
+		yield return null;
 	}
 
 	/// <summary>
@@ -781,14 +773,14 @@ public class LevelGeneratorV2 : MonoBehaviour
 		AstarPath.active.Scan();
 		while (AstarPath.active.IsAnyGraphUpdateInProgress)
 		{
-			yield return new WaitForEndOfFrame();
+			yield return null;
 		}
 
 		executionTime.Stop();
 		diagnosticTimes.Add($"Decorating the level took: {executionTime.ElapsedMilliseconds}ms");
 		totalGenerationTimeInMilliseconds += executionTime.ElapsedMilliseconds;
 
-		yield return new WaitForEndOfFrame();
+		yield return null;
 	}
 
 	#region Helpers
@@ -835,9 +827,49 @@ public class LevelGeneratorV2 : MonoBehaviour
 		return null;
 	}
 
-	private Transform GetTileByCoordinates(Vector2Int coordinates, List<Transform> tiles)
+	/// <summary>
+	/// Get the surrounding neighbouring tiles by coordinates from list.
+	/// </summary>
+	/// <param name="coordinates"> Origin coordinates to check for neighbours from. </param>
+	/// <param name="tiles"> List to check in for neighbours. </param>
+	/// <returns></returns>
+	private List<Transform> GetTileNeighbours(Vector2Int coordinates, List<Transform> tiles)
 	{
-		return tiles.Find(t => new Vector2Int(Mathf.RoundToInt(t.transform.position.x), Mathf.RoundToInt(t.transform.position.y)) == coordinates);
+		List<Transform> neighbouringTiles = new List<Transform>();
+
+		Transform topNeighbour = null;
+		Transform topRightNeighbour = null;
+		Transform rightNeighbour = null;
+		Transform bottomRightNeighbour = null;
+		Transform bottomNeighbour = null;
+		Transform bottomLeftNeighbour = null;
+		Transform leftNeighbour = null;
+		Transform topLeftNeighbour = null;
+
+		foreach (Transform neighbourTileTransform in tiles)
+		{
+			Vector2Int neighbourTileCoord = new Vector2Int(Mathf.RoundToInt(neighbourTileTransform.position.x), Mathf.RoundToInt(neighbourTileTransform.position.y));
+
+			if (neighbourTileCoord == new Vector2Int(coordinates.x, coordinates.y + 1)) topNeighbour = neighbourTileTransform;
+			else if (neighbourTileCoord == new Vector2Int(coordinates.x + 1, coordinates.y + 1)) topRightNeighbour = neighbourTileTransform;
+			else if (neighbourTileCoord == new Vector2Int(coordinates.x + 1, coordinates.y)) rightNeighbour = neighbourTileTransform;
+			else if (neighbourTileCoord == new Vector2Int(coordinates.x + 1, coordinates.y - 1)) bottomRightNeighbour = neighbourTileTransform;
+			else if (neighbourTileCoord == new Vector2Int(coordinates.x, coordinates.y - 1)) bottomNeighbour = neighbourTileTransform;
+			else if (neighbourTileCoord == new Vector2Int(coordinates.x - 1, coordinates.y - 1)) bottomLeftNeighbour = neighbourTileTransform;
+			else if (neighbourTileCoord == new Vector2Int(coordinates.x - 1, coordinates.y)) leftNeighbour = neighbourTileTransform;
+			else if (neighbourTileCoord == new Vector2Int(coordinates.x - 1, coordinates.y + 1)) topLeftNeighbour = neighbourTileTransform;
+		}
+
+		if (topNeighbour) neighbouringTiles.Add(topNeighbour);
+		if (topRightNeighbour) neighbouringTiles.Add(topRightNeighbour);
+		if (rightNeighbour) neighbouringTiles.Add(rightNeighbour);
+		if (bottomRightNeighbour) neighbouringTiles.Add(bottomRightNeighbour);
+		if (bottomNeighbour) neighbouringTiles.Add(bottomNeighbour);
+		if (bottomLeftNeighbour) neighbouringTiles.Add(bottomLeftNeighbour);
+		if (leftNeighbour) neighbouringTiles.Add(leftNeighbour);
+		if (topLeftNeighbour) neighbouringTiles.Add(topLeftNeighbour);
+
+		return neighbouringTiles;
 	}
 
 	/// <summary>

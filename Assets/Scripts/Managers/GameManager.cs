@@ -43,16 +43,7 @@ public class GameManager : MonoBehaviour
 		QualitySettings.vSyncCount = 1;
 		scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance( "ScriptablePlayer" );
 
-		if (FindObjectOfType<LevelGeneratorV2>() == null)
-		{
-			SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
-			SceneManager.LoadSceneAsync("Jaydee Testing Scene", LoadSceneMode.Additive);
-		}
-		else
-		{
-			FetchDungeonReferences();
-		}
-		
+		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
 	}
 	#endregion
 

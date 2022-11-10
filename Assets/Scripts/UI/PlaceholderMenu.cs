@@ -13,7 +13,9 @@ public class PlaceholderMenu : MonoBehaviour
 
 	public void StartGame()
 	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+		SceneManager.LoadScene("UIScene", LoadSceneMode.Additive);
+		SceneManager.LoadScene("Jaydee Testing Scene", LoadSceneMode.Additive);
+		SceneManager.UnloadSceneAsync("MainMenu");
 	}
 
 	public void QuitGame()

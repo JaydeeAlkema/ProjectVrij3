@@ -11,20 +11,12 @@ public class SwoogerEnemy : EnemyBase
 
 	//Enemy
 	public LayerMask playerLayerMask;
-	[SerializeField] private LayerMask unwalkableDetection;
-
-	public Animator swoogerAnimator;
 
 	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
 	[SerializeField] private float hitDetectionRadius = 1f;
-	[SerializeField] private float windUpTime = 0.3f;
-	[SerializeField] private float dashSpeed = 9;
-	[SerializeField] private float dashDistance = 0.5f;
-	[SerializeField] private float endLag = 0.8f;
-	public bool hasHitbox = false;
 	public CapsuleCollider2D hurtbox;
 
 	public AK.Wwise.Event Event;
@@ -51,10 +43,10 @@ public class SwoogerEnemy : EnemyBase
 	{
 		if (Vector2.Distance(transform.position, Target.position) <= 1)
 		{
-			if (Target.gameObject != null && hasHitbox)
+			if (Target.gameObject != null && HasHitbox)
 			{
 				AttackPlayer(Target.gameObject);
-				hasHitbox = false;
+				HasHitbox = false;
 			}
 		}
 		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
@@ -108,7 +100,7 @@ public class SwoogerEnemy : EnemyBase
 	public override void MoveToTarget(Transform target)
 	{
 		base.MoveToTarget(target);
-		swoogerAnimator.Play("SwoogerWalk");
+		enemyAnimator.Play("SwoogerWalk");
 	}
 
 	public override void GetSlowed(float slowAmount)
@@ -126,7 +118,7 @@ public class SwoogerEnemy : EnemyBase
 	public override void StartAttack(Transform target)
 	{
 		//StopCoroutine(FollowPath());
-		StartCoroutine(DashAttack(target));
+		//StartCoroutine(DashAttack(target));
 	}
 
 	public override void Die()
@@ -149,58 +141,58 @@ public class SwoogerEnemy : EnemyBase
 		enemySprite.material = MaterialDefault;
 	}
 
-	public IEnumerator DashAttack(Transform target)
-	{
-		//Windup starts
-		Attacking = true;
-		swoogerAnimator.Play("SwoogerWindup");
-		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
-		Rb2d.velocity = new Vector2(0, 0);
-		Vector2 dashDir = (target.position - transform.position).normalized;
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, dashDir, dashDistance, unwalkableDetection);
-		Vector2 playerTarget = (Vector2)transform.position + dashDir * dashDistance;
-		Debug.Log(hit.collider);
+	//public IEnumerator DashAttack(Transform target)
+	//{
+	//	//Windup starts
+	//	Attacking = true;
+	//	enemyAnimator.Play("SwoogerWindup");
+	//	enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+	//	Rb2d.velocity = new Vector2(0, 0);
+	//	Vector2 dashDir = (target.position - transform.position).normalized;
+	//	RaycastHit2D hit = Physics2D.Raycast(this.transform.position, dashDir, dashDistance, unwalkableDetection);
+	//	Vector2 playerTarget = (Vector2)transform.position + dashDir * dashDistance;
+	//	Debug.Log(hit.collider);
 
-		yield return new WaitForSeconds(windUpTime);
-		Debug.DrawRay(this.transform.position, dashDir * dashDistance, Color.red, 1f);
-		//Dash starts
-		hasHitbox = true;
-		swoogerAnimator.Play("SwoogerAttack");
-		float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
-		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-		enemySprite.flipX = false;
-		//Rb2d.velocity = dashDir.normalized * dashSpeed;
-		if (hit.point != Vector2.zero)
-		{
-			Debug.Log("i hit wall");
-			yield return StartCoroutine(DashToTarget(hit.point - dashDir / 10f));
-		}
-		else
-		{
-			yield return StartCoroutine(DashToTarget(playerTarget));
-		}
+	//	yield return new WaitForSeconds(windUpTime);
+	//	Debug.DrawRay(this.transform.position, dashDir * dashDistance, Color.red, 1f);
+	//	//Dash starts
+	//	hasHitbox = true;
+	//	enemyAnimator.Play("SwoogerAttack");
+	//	float angle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg - 180;
+	//	enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+	//	enemySprite.flipX = false;
+	//	//Rb2d.velocity = dashDir.normalized * dashSpeed;
+	//	if (hit.point != Vector2.zero)
+	//	{
+	//		Debug.Log("i hit wall");
+	//		yield return StartCoroutine(DashToTarget(hit.point - dashDir / 10f));
+	//	}
+	//	else
+	//	{
+	//		yield return StartCoroutine(DashToTarget(playerTarget));
+	//	}
 
 
-		//Landing starts
-		//enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
-		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-		swoogerAnimator.Play("SwoogerLanding");
-		Rb2d.velocity = new Vector2(0, 0);
-		hasHitbox = false;
-		yield return new WaitForSeconds(endLag);
-		enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
-		Attacking = false;
-	}
+	//	//Landing starts
+	//	//enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+	//	enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+	//	enemyAnimator.Play("SwoogerLanding");
+	//	Rb2d.velocity = new Vector2(0, 0);
+	//	hasHitbox = false;
+	//	yield return new WaitForSeconds(endLag);
+	//	enemySprite.flipX = (target.position - transform.position).normalized.x > 0 ? true : false;
+	//	Attacking = false;
+	//}
 
-	IEnumerator DashToTarget(Vector2 target)
-	{
-		while (Vector2.Distance(transform.position, target) >= 0.01f)
-		{
-			Rb2d.transform.position = Vector2.MoveTowards(Rb2d.transform.position, target, dashSpeed * Time.deltaTime);
-			yield return new WaitForEndOfFrame();
-		}
-		yield return new WaitForEndOfFrame();
-	}
+	//IEnumerator DashToTarget(Vector2 target)
+	//{
+	//	while (Vector2.Distance(transform.position, target) >= 0.01f)
+	//	{
+	//		Rb2d.transform.position = Vector2.MoveTowards(Rb2d.transform.position, target, dashSpeed * Time.deltaTime);
+	//		yield return new WaitForEndOfFrame();
+	//	}
+	//	yield return new WaitForEndOfFrame();
+	//}
 
 	public void OnDrawGizmosSelected()
 	{

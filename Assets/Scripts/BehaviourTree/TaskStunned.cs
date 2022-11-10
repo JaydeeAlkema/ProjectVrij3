@@ -19,17 +19,18 @@ public class TaskStunned : BTNode
 	public override BTNodeState Evaluate()
 	{
 
-		if(enemyScript.IsStunned)
-		{
-			enemyScript.StopMovingToTarget();
-			enemyScript.StartCoroutine("Stunned");
-			ClearData("target");
-		}
-		else
-		{
-			state = BTNodeState.FAILURE;
-			return state;
-		}
+		//if (enemyScript.IsStunned)
+		//{
+		enemyScript.StopMovingToTarget();
+		ClearData("target");
+		enemyScript.StartCoroutine("Stunned");
+		
+		//}
+		//else
+		//{
+		//	state = BTNodeState.FAILURE;
+		//	return state;
+		//}
 
 		state = BTNodeState.RUNNING;
 		return state;

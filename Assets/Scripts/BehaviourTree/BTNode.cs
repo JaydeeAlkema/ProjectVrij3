@@ -12,6 +12,8 @@ namespace BehaviourTree
 	}
 	public class BTNode
 	{
+		public string name;
+
 		protected BTNodeState state;
 
 		public BTNode parent;

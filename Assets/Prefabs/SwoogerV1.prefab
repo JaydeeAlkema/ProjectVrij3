@@ -106,8 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5f2f1baca6e6504b9666f2d0e64cdc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 500
-  speed: 6
+  healthPoints: 700
+  speed: 8
   aggroRange: 13
   attackRange: 6
   expAmount: 20
@@ -115,6 +115,15 @@ MonoBehaviour:
   rb2d: {fileID: 4442677197823009441}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
+  enemyAnimator: {fileID: 6017575560788466592}
+  hasHitbox: 0
+  unwalkableDetection:
+    serializedVersion: 2
+    m_Bits: 1024
+  windUpTime: 0.2
+  dashSpeed: 20
+  dashDistance: 10
+  endLag: 0.7
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   destinationSetter: {fileID: 5571211868668841190}
@@ -131,18 +140,9 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  unwalkableDetection:
-    serializedVersion: 2
-    m_Bits: 1024
-  swoogerAnimator: {fileID: 6017575560788466592}
-  damage: 50
+  damage: 100
   player: {fileID: 0}
   hitDetectionRadius: 2
-  windUpTime: 0.2
-  dashSpeed: 15
-  dashDistance: 8
-  endLag: 1
-  hasHitbox: 0
   hurtbox: {fileID: 0}
   Event:
     idInternal: 0
@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2d: {fileID: 4442677197823009441}
   enemyScript: {fileID: 5236588915324034231}
+  isSwooger: 1
 --- !u!114 &8561825498785388798
 MonoBehaviour:
   m_ObjectHideFlags: 0
