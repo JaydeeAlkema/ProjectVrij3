@@ -29,6 +29,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] Animator animPlayer;
 
 	//[SerializeField] PlayerHealthBar healthBar;
+	private float selfSlowTime = 0.35f;
+	private float selfSlowCounter = 0f;
+	private float selfSlowMultiplier = 1f;
 
 	private float bufferCounterMelee = 0f;
 	[SerializeField] private float bufferTimeMelee = 0.2f;
@@ -89,6 +92,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float BufferCounterCast { get => bufferCounterCast; set => bufferCounterCast = value; }
 	public float BufferCounterDash { get => bufferCounterDash; set => bufferCounterDash = value; }
 	public bool IsAttackPositionLocked { get => isAttackPositionLocked; set => isAttackPositionLocked = value; }
+	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
 	#endregion
 
 
@@ -108,6 +112,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		trail.emitting = false;
 
 		materialDefault = Sprite.material;
+
+		selfSlowCounter = selfSlowTime;
 
 		//currentHealthPoints = maxHealthPoints;
 		//if (healthBar != null)
@@ -203,9 +209,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			trail.emitting = false;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value;
+			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
 		}
-
+		CastSelfSlow();
 
 	}
 	void OnDrawGizmos()
@@ -216,6 +222,19 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		//Gizmos.color = Color.red;
 		//Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 5, castFromPoint.transform.rotation, new Vector3(circleSize, circleSize, 0));
 		//Gizmos.DrawWireSphere(Vector3.zero, 1);
+	}
+
+	void CastSelfSlow()
+	{
+		if (selfSlowCounter < selfSlowTime)
+		{
+			selfSlowCounter += Time.deltaTime;
+			selfSlowMultiplier = 0.4f;
+		}
+		else
+		{
+			selfSlowMultiplier = 1f;
+		}
 	}
 
 	void MouseLook()
