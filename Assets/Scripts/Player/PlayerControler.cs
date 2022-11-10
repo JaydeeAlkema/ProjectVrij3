@@ -46,7 +46,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private bool isDying = false;
 
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
-	private bool isAttackPositionLocked = false;
+	[SerializeField] private bool isAttackPositionLocked = false;
 
 	//[SerializeField] private int maxHealthPoints = 500;
 	//[SerializeField] private float currentHealthPoints;
@@ -220,11 +220,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MouseLook()
 	{
-		if (animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
-		{
-			isAttackPositionLocked = true;
-		}
-		else
+		if (!animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
 		{
 			isAttackPositionLocked = false;
 		}
