@@ -116,6 +116,7 @@ public class FodderEnemy : EnemyBase
 
 		if (damageType == 0)
 		{
+			IsStunned = true;
 			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 			//StartCoroutine(HitStop());
 		}
@@ -130,7 +131,6 @@ public class FodderEnemy : EnemyBase
 		HealthPoints -= damage;
 		IsAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-		IsStunned = true;
 		StartCoroutine(FlashColor());
 		if (HealthPoints <= 0) Die();
 	}
