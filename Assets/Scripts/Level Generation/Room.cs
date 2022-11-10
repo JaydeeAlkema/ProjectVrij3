@@ -56,6 +56,18 @@ public class Room : MonoBehaviour
 		}
 	}
 
+	public void RandomizeFloorTiles(List<Sprite> sprites)
+	{
+		foreach (Transform floorTile in noncollideableTiles)
+		{
+			SpriteRenderer spriteRenderer = floorTile.GetComponent<SpriteRenderer>();
+			if (spriteRenderer)
+			{
+				spriteRenderer.sprite = sprites[Random.Range(0, sprites.Count)];
+			}
+		}
+	}
+
 	public void AddConnectedRoom(Room connectedRoom)
 	{
 		if (connectedRooms.Contains(connectedRoom)) return;

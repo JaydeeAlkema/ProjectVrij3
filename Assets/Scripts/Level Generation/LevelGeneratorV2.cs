@@ -247,6 +247,8 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (roomIndex - 1 >= 0 && path[roomIndex - 1].Room != null) room.AddConnectedRoom(path[roomIndex - 1].Room);
 			if (roomIndex + 1 < path.Count && path[roomIndex + 1].Room != null) room.AddConnectedRoom(path[roomIndex + 1].Room);
 
+			room.RandomizeFloorTiles(SLGS.floorSprites);
+
 			roomIndex++;
 		}
 
