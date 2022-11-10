@@ -22,7 +22,7 @@ public interface IAbility
 	public GameObject CastObject { get; set; }
 	public GameObject CastedObject { get; set; }
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get; set; }
-
+	public CoroutineCaller caller { get; set; }
 	public int BurnDamage { get; set; }
 	public float SlowAmount { get; set; }
 	public float SlowDuration { get; set; }
