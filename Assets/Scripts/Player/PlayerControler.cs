@@ -46,7 +46,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private bool isDying = false;
 
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
-	private bool isAttacking = false;
+	private bool isAttackPositionLocked = false;
 
 	//[SerializeField] private int maxHealthPoints = 500;
 	//[SerializeField] private float currentHealthPoints;
@@ -88,6 +88,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float BufferCounterMelee { get => bufferCounterMelee; set => bufferCounterMelee = value; }
 	public float BufferCounterCast { get => bufferCounterCast; set => bufferCounterCast = value; }
 	public float BufferCounterDash { get => bufferCounterDash; set => bufferCounterDash = value; }
+	public bool IsAttackPositionLocked { get => isAttackPositionLocked; set => isAttackPositionLocked = value; }
 	#endregion
 
 
@@ -221,14 +222,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
 		{
-			isAttacking = true;
+			isAttackPositionLocked = true;
 		}
 		else
 		{
-			isAttacking = false;
+			isAttackPositionLocked = false;
 		}
 
-		if (!isAttacking)
+		if (!isAttackPositionLocked)
 		{
 			mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			lookDir = mousePos - rb2d.transform.position;
