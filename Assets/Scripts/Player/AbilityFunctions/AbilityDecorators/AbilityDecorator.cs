@@ -42,6 +42,7 @@ public class AbilityDecorator : IAbility
 	public int BurnDamage { get; set; }
 	public float SlowAmount { get; set; }
 	public float SlowDuration { get; set; }
+	public CoroutineCaller caller { get; set; }
 
 	public AbilityDecorator(IAbility _ability)
 	{
@@ -67,6 +68,7 @@ public class AbilityDecorator : IAbility
 		CastFromPoint = _castFromPoint;
 		Angle = _angle;
 		TrailUpgrade = _trailUpgrade;
+		caller = CoroutineCaller.CallerInstance;
 	}
 
 	public void OnHitApplyStatusEffects( IDamageable damageable )

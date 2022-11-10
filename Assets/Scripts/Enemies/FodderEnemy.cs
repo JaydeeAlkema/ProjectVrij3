@@ -12,6 +12,9 @@ public class FodderEnemy : EnemyBase
 
 	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
+
+	[SerializeField] private GameObject SplatterDecal;
+
 	private float baseSpeed;
 
 	public CapsuleCollider2D hurtbox;
@@ -186,6 +189,11 @@ public class FodderEnemy : EnemyBase
 		IsStunned = false;
 
 		yield return new WaitForEndOfFrame();
+	}
+
+	public void OnDestroy()
+	{
+		Instantiate(SplatterDecal, transform.position, Quaternion.identity);
 	}
 
 	//public IEnumerator WindupDashAttack(Transform target)
