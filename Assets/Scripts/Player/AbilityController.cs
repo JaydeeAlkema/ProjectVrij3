@@ -158,7 +158,7 @@ public class AbilityController : MonoBehaviour
             anim.CallAbility( this.GetComponent<PlayerControler>() );
             currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
             currentRangedAttack.CallAbility( player );
-
+            player.SelfSlowCounter = 0f;
             //Camera shake
             //CameraShake.Instance.ShakeCamera(4f, 0.1f);
 

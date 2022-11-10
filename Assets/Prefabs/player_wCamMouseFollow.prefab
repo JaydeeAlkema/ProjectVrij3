@@ -501,7 +501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 8334970474968766866}
   player: {fileID: 8334970476083683795}
-  threshold: 4
+  threshold: 6
 --- !u!1 &3607252477726364974
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 9
+  m_CameraDistance: 12
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -607,7 +607,7 @@ MonoBehaviour:
   m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 0
   m_FrequencyGain: 5
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
+  mNoiseOffsets: {x: 178.7771, y: -179.19101, z: -643.6334}
 --- !u!1 &3607252477769851809
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +634,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3607252477769851809}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -12.857142}
+  m_LocalPosition: {x: 0, y: 0, z: -17.142857}
   m_LocalScale: {x: 1.4285713, y: 1.4285713, z: 1.4285713}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -664,7 +664,7 @@ MonoBehaviour:
   m_Follow: {fileID: 3607252477266376401}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 8
+    OrthographicSize: 7.5
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -752,7 +752,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8334970474968766864}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -12.857142}
+  m_LocalPosition: {x: 0, y: 0, z: -17.142857}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -786,7 +786,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 7.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1024,6 +1024,7 @@ MonoBehaviour:
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   deathScreenTest: {fileID: 0}
+  isAttackPositionLocked: 0
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
   dash: {fileID: 11400000, guid: d0aa0c52c1c565d47a2076fec02e7279, type: 2}
@@ -1063,6 +1064,14 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 8334970476083683795}
     m_Modifications:
+    - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -1133,6 +1142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingMode: 2
   roundingMode: 0
+  positionReference: 1
   sortingOrderOffset: 0
 --- !u!4 &6928733671148014491 stripped
 Transform:

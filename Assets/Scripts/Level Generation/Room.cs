@@ -29,10 +29,8 @@ public class Room : MonoBehaviour
 		foreach (Transform nonCollideableTile in noncollideableTiles)
 		{
 			nonCollideableTile.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(nonCollideableTile.transform.position.y) - 10;
-
 		}
 	}
-
 
 	[Button]
 	private void FetchAllTiles()
@@ -52,6 +50,18 @@ public class Room : MonoBehaviour
 			else if (!boxCollider2D && spriteRenderer)
 			{
 				NoncollideableTiles.Add(child);
+			}
+		}
+	}
+
+	public void RandomizeFloorTileSprites(List<Sprite> sprites)
+	{
+		foreach (Transform floorTile in noncollideableTiles)
+		{
+			SpriteRenderer spriteRenderer = floorTile.GetComponent<SpriteRenderer>();
+			if (spriteRenderer)
+			{
+				spriteRenderer.sprite = sprites[Random.Range(0, sprites.Count)];
 			}
 		}
 	}
