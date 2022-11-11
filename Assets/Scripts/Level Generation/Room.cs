@@ -33,11 +33,10 @@ public class Room : MonoBehaviour
 	}
 
 	[Button]
-	private void FetchAllTiles()
+	private void FetchCollideableTiles()
 	{
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
 		collideableTiles.Clear();
-		noncollideableTiles.Clear();
 
 		foreach (Transform child in allChildren)
 		{
@@ -47,7 +46,20 @@ public class Room : MonoBehaviour
 			{
 				CollideableTiles.Add(child);
 			}
-			else if (!boxCollider2D && spriteRenderer)
+		}
+	}
+
+	[Button]
+	private void FetchNonCollideableTiles()
+	{
+		Transform[] allChildren = GetComponentsInChildren<Transform>();
+		noncollideableTiles.Clear();
+
+		foreach (Transform child in allChildren)
+		{
+			BoxCollider2D boxCollider2D = child.GetComponent<BoxCollider2D>();
+			SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+			if (!boxCollider2D && spriteRenderer)
 			{
 				NoncollideableTiles.Add(child);
 			}
