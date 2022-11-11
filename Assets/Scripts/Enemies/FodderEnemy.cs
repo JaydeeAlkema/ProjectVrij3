@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class FodderEnemy : EnemyBase
 {
@@ -193,8 +194,12 @@ public class FodderEnemy : EnemyBase
 
 	public void OnDestroy()
 	{
-		GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
-		splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
+		//Change name to dungeon name if changed later
+		if (SceneManager.GetActiveScene().name == "Jaydee Testing Scene")
+		{
+			GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
+			splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
+		}
 	}
 
 	//public IEnumerator WindupDashAttack(Transform target)

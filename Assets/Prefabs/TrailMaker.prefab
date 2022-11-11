@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3039639571562466239}
   - component: {fileID: 1788556927361173705}
   - component: {fileID: 21261142293983336}
+  - component: {fileID: 8211700699858251659}
   m_Layer: 9
   m_Name: TrailMaker
   m_TagString: Untagged
@@ -200,3 +201,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8977de4e5de34242aefe470ac3e5fc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8211700699858251659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863625429953767869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8d47f8ee31e404199829b659edc2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingMode: 0
+  roundingMode: 0
+  positionReference: 1
+  sortingOrderOffset: -5
