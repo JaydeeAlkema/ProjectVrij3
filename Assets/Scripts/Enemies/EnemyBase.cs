@@ -14,6 +14,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private Rigidbody2D rb2d;
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
+	[SerializeField] private GameObject vfxHitSpark = null;
 
 	public Animator enemyAnimator;
 
@@ -170,6 +171,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
+		OnHitVFX();
 		StartCoroutine(HitStop());
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
@@ -178,6 +180,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
+	}
+
+	public void OnHitVFX()
+	{
+		Instantiate(vfxHitSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
 
 	public void GetMarked(int markType)

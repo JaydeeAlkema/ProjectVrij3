@@ -126,6 +126,7 @@ public class FodderEnemy : EnemyBase
 		{
 			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
+		OnHitVFX();
 		StartCoroutine(HitStop());
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
