@@ -12,22 +12,25 @@ public class ScriptableLevelGenerationSettings : ScriptableObject
 	[Foldout("Base Level Generation")] public Vector2Int chunkGridSize = new Vector2Int(10, 10);
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableRooms = new List<ScriptableRoom>();
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> spawnableBossRooms = new List<ScriptableRoom>();
-	[Foldout("Base Level Generation")] public List<Decoration> floorDecorations = new List<Decoration>();
-	[Foldout("Base Level Generation")] public List<Decoration> wallDecorations = new List<Decoration>();
 
-	[Foldout("Sprites")] public List<Sprite> floorSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> topWallSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> bottomWallSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> leftWallSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> rightWallSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> topLeftOuterCornerSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> topRightOuterCornerSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> bottomLeftOuterCornerSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> bottomRightOuterCornerSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> topLeftInnerCornerSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> topRightInnerCornerSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> bottomLeftInnerCornerSprites = new List<Sprite>();
-	[Foldout("Sprites")] public List<Sprite> bottomRightInnerCornerSprites = new List<Sprite>();
+	[Foldout("Decorations")] public List<Decoration> floorDecorations = new List<Decoration>();
+	[Foldout("Decorations")] public List<Decoration> topWallDecorations = new List<Decoration>();
+	[Foldout("Decorations")] public List<Decoration> leftWallDecorations = new List<Decoration>();
+	[Foldout("Decorations")] public List<Decoration> rightWallDecorations = new List<Decoration>();
+
+	[Foldout("Environmental Sprites")] public List<Sprite> floorSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> topWallSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> bottomWallSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> leftWallSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> rightWallSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> topLeftOuterCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> topRightOuterCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> bottomLeftOuterCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> bottomRightOuterCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> topLeftInnerCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> topRightInnerCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> bottomLeftInnerCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public List<Sprite> bottomRightInnerCornerSprites = new List<Sprite>();
 
 	[Foldout("Enemy Generation")] public EnemyGroup EnemyFodderGroup = new EnemyGroup();
 	[Foldout("Enemy Generation")] public EnemyGroup EnemyRewardGroup = new EnemyGroup();
@@ -50,6 +53,6 @@ public struct EnemyGroup
 [System.Serializable]
 public struct Decoration
 {
-	public Sprite sprite;
+	public GameObject prefab;
 	public int spawnChance;
 }

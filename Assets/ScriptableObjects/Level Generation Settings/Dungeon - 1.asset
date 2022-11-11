@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 839aebb8859c3664da18d858255d4c27, type: 3}
-  m_Name: Default
+  m_Name: Dungeon - 1
   m_EditorClassIdentifier: 
   chunkSize: 45
   maxRooms: 8
@@ -26,22 +26,24 @@ MonoBehaviour:
   spawnableBossRooms:
   - {fileID: 11400000, guid: 24cdcc7d440975742896b2ee3db3cae1, type: 2}
   floorDecorations:
-  - sprite: {fileID: 1754463617, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: fde85dfd2deae2a4b949119e18619b6f, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 1465405479, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: a11e6fdf8216c6a4299a8376e0afa509, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 2027542645, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: 9b6b9b6488d213c479839e03a45438b0, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 235064338, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: dff909bc7f3cb314d91a05a93958ea07, type: 3}
     spawnChance: 0
-  wallDecorations:
-  - sprite: {fileID: -724776260, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topWallDecorations:
+  - prefab: {fileID: 2218761167129531356, guid: 4a8a1549c93bd264b8b6b060251ae6db, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 1735270170, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 2218761167129531356, guid: 0fb597080695756478a8bee7b89c4941, type: 3}
     spawnChance: 0
-  - sprite: {fileID: -586220766, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  leftWallDecorations:
+  - prefab: {fileID: 2218761167129531356, guid: e49f06ed68f119041a01702ca32fbcf6, type: 3}
     spawnChance: 0
-  - sprite: {fileID: -2041788793, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  rightWallDecorations:
+  - prefab: {fileID: 2218761167129531356, guid: 2110b0f5fe64ae14883a225983c22699, type: 3}
     spawnChance: 0
   floorSprites:
   - {fileID: -1994589904, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
