@@ -24,7 +24,7 @@ public class HubSceneManager : MonoBehaviour
 	public void ChangeScene(string sceneToLoad, string currentScene)
 	{
 		loadScene = sceneToLoad;
-		if(sceneToLoad != "Hub Prototype")
+		if(sceneToLoad != "Hub Prototype" && GameManager.Instance.PlayerInstance != null)
 		{
 			GameManager.Instance.ScriptablePlayer.Player = GameManager.Instance.PlayerInstance.GetComponent<PlayerControler>();
 		}
