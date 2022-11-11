@@ -434,6 +434,11 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					Vector2Int newCoord = new Vector2Int(Mathf.RoundToInt(pathCoordInt.x + x), Mathf.RoundToInt(pathCoordInt.y + y));
 
+					CheckForOverlappingTileAndDestroy(roomA.CollideableTiles, newCoord);
+					CheckForOverlappingTileAndDestroy(roomA.NoncollideableTiles, newCoord);
+					CheckForOverlappingTileAndDestroy(roomB.CollideableTiles, newCoord);
+					CheckForOverlappingTileAndDestroy(roomB.NoncollideableTiles, newCoord);
+
 					if (pathPoints.Contains(newCoord) == false)
 					{
 						GameObject newPathPointGO = new GameObject($"PathPoint[{newCoord.x}][{newCoord.y}]");
@@ -743,7 +748,34 @@ public class LevelGeneratorV2 : MonoBehaviour
 			if (room.RoomType == RoomType.Boss) break;
 
 			// Spawn Wall Decorations
-			// This will be done at a later date because this requires the tiles to store their orientation.
+			foreach (Transform collideableTile in room.CollideableTiles)
+			{
+				int randDecorationSpawnChance = Random.Range(0, 100);
+				if (randDecorationSpawnChance < SLGS.decorationSpawnChance)
+				{
+					// Top wall decorations
+					if (collideableTile.name.ToLower().Contains("top") && !collideableTile.name.ToLower().Contains("corner"))
+					{
+						int randDecorationIndex = Random.Range(0, SLGS.topWallDecorations.Count);
+						GameObject decorationGO = Instantiate(SLGS.topWallDecorations[randDecorationIndex].prefab, new Vector3(Mathf.RoundToInt(collideableTile.position.x), Mathf.RoundToInt(collideableTile.position.y), 0), Quaternion.identity, decorationsParent);
+						decorations.Add(decorationGO);
+					}
+					// Left wall decorations
+					else if (collideableTile.name.ToLower().Contains("left") && !collideableTile.name.ToLower().Contains("corner"))
+					{
+						int randDecorationIndex = Random.Range(0, SLGS.leftWallDecorations.Count);
+						GameObject decorationGO = Instantiate(SLGS.leftWallDecorations[randDecorationIndex].prefab, new Vector3(Mathf.RoundToInt(collideableTile.position.x + 1), Mathf.RoundToInt(collideableTile.position.y), 0), Quaternion.identity, decorationsParent);
+						decorations.Add(decorationGO);
+					}
+					// Right wall decorations
+					else if (collideableTile.name.ToLower().Contains("right") && !collideableTile.name.ToLower().Contains("corner"))
+					{
+						int randDecorationIndex = Random.Range(0, SLGS.rightWallDecorations.Count);
+						GameObject decorationGO = Instantiate(SLGS.rightWallDecorations[randDecorationIndex].prefab, new Vector3(Mathf.RoundToInt(collideableTile.position.x - 1), Mathf.RoundToInt(collideableTile.position.y), 0), Quaternion.identity, decorationsParent);
+						decorations.Add(decorationGO);
+					}
+				}
+			}
 
 			// Spawn Floor Decorations
 			foreach (Transform noncollideableTile in room.NoncollideableTiles)
@@ -752,14 +784,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 				if (randDecorationSpawnChance < SLGS.decorationSpawnChance)
 				{
 					int randDecorationIndex = Random.Range(0, SLGS.floorDecorations.Count);
-					Sprite decorationSprite = SLGS.floorDecorations[randDecorationIndex].sprite;
-					GameObject decorationGO = new GameObject($"{decorationSprite.name}");
+					GameObject decorationGO = Instantiate(SLGS.floorDecorations[randDecorationIndex].prefab);
 					decorationGO.transform.position = new Vector3(Mathf.RoundToInt(noncollideableTile.position.x), Mathf.RoundToInt(noncollideableTile.position.y), 0);
 					decorationGO.transform.parent = decorationsParent;
-
-					SpriteRenderer spriteRenderer = decorationGO.AddComponent<SpriteRenderer>();
-					spriteRenderer.sprite = decorationSprite;
-					spriteRenderer.sortingOrder = 1;
 
 					decorations.Add(decorationGO);
 				}
@@ -869,6 +896,29 @@ public class LevelGeneratorV2 : MonoBehaviour
 		return neighbouringTiles;
 	}
 
+	/// <summary>
+	/// Loops through the list checking for overlapping coordinates. If an overlap is found, the object is destroyed.
+	/// </summary>
+	/// <param name="list"> List to loop through to check for overlapping objects. </param>
+	/// <param name="coord"> coordinate to check for overlaps with. </param>
+	private void CheckForOverlappingTileAndDestroy(List<Transform> list, Vector2Int coord)
+	{
+		Transform[] array = list.ToArray();
+		for (int i = array.Length - 1; i >= 0; i--)
+		{
+			Transform occupiedTile = array[i];
+			if (occupiedTile != null)
+			{
+				Vector2Int occupiedTileCoord = new Vector2Int(Mathf.RoundToInt(occupiedTile.position.x), Mathf.RoundToInt(occupiedTile.position.y));
+
+				if (occupiedTileCoord == coord)
+				{
+					Destroy(occupiedTile.gameObject);
+					list.Remove(occupiedTile);
+				}
+			}
+		}
+	}
 	/// <summary>
 	/// Returns a list of Vecttor2Int from Transforms.
 	/// </summary>
