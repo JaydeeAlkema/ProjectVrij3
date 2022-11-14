@@ -234,7 +234,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	{
 		Transform damageNumber = Instantiate(damageNumberText, transform.position, Quaternion.identity);
 		damageNumber.GetComponent<DamageNumberPopup>()?.SetDamageText(damage);
-		Debug.Log("TEXT CREATED WITH DAMAGE: " + damage);
+		//Debug.Log("TEXT CREATED WITH DAMAGE: " + damage);
 	}
 
 	public virtual IEnumerator FlashColor()
