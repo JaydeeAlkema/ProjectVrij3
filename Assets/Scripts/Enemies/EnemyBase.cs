@@ -172,7 +172,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		StartCoroutine(HitStop());
+		StartCoroutine(HitStop(0.03f));
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
@@ -273,10 +273,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		this.pullPoint = pullPoint;
 	}
 
-	public IEnumerator HitStop()
+	public IEnumerator HitStop(float duration)
 	{
 		Time.timeScale = 0f;
-		yield return new WaitForSecondsRealtime(0.01f);
+		yield return new WaitForSecondsRealtime(duration);
 		Time.timeScale = 1f;
 		yield return null;
 	}
