@@ -35,7 +35,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private List<Room> rooms = new List<Room>();
 	[SerializeField] private List<GameObject> decorations = new List<GameObject>();
 	[SerializeField] private AstarData astarData = null;
-	[SerializeField] private GridGraph gridGraph = null;
 	[Space(10)]
 
 	[Header("References")]
@@ -330,14 +329,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 		// Setup Astar Graph
 		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
 		astarData = AstarPath.active.data;
-		gridGraph = astarData.gridGraph;
 
 		GameObject SeekerGO = new GameObject("Seeker");
 		Seeker seeker = SeekerGO.AddComponent<Seeker>();
 
-		gridGraph.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
-		gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x + 1, SLGS.chunkSize * SLGS.chunkGridSize.y + 1, 1);
-		AstarPath.active.Scan(gridGraph);
+		foreach (GridGraph gridGraph in astarData.graphs)
+		{
+			gridGraph.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
+			gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x, SLGS.chunkSize * SLGS.chunkGridSize.y, gridGraph.nodeSize);
+			AstarPath.active.Scan(gridGraph);
+		}
 
 		while (AstarPath.active.IsAnyGraphUpdateInProgress)
 		{
