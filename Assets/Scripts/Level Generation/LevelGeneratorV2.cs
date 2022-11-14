@@ -35,7 +35,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private List<Room> rooms = new List<Room>();
 	[SerializeField] private List<GameObject> decorations = new List<GameObject>();
 	[SerializeField] private AstarData astarData = null;
-	[SerializeField] private GridGraph gridGraph = null;
 	[Space(10)]
 
 	[Header("References")]
@@ -330,14 +329,16 @@ public class LevelGeneratorV2 : MonoBehaviour
 		// Setup Astar Graph
 		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
 		astarData = AstarPath.active.data;
-		gridGraph = astarData.gridGraph;
 
 		GameObject SeekerGO = new GameObject("Seeker");
 		Seeker seeker = SeekerGO.AddComponent<Seeker>();
 
-		gridGraph.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
-		gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x + 1, SLGS.chunkSize * SLGS.chunkGridSize.y + 1, 1);
-		AstarPath.active.Scan(gridGraph);
+		foreach (GridGraph gridGraph in astarData.graphs)
+		{
+			gridGraph.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
+			gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x, SLGS.chunkSize * SLGS.chunkGridSize.y, gridGraph.nodeSize);
+			AstarPath.active.Scan(gridGraph);
+		}
 
 		while (AstarPath.active.IsAnyGraphUpdateInProgress)
 		{
@@ -500,7 +501,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 				BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
 				pathTile.gameObject.layer = LayerMask.NameToLayer("Unwalkable");
 
-				if (spriteRenderer == null) spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				if (spriteRenderer == null)
+				{
+					spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				}
 				if (boxCollider2D == null)
 				{
 					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
@@ -551,12 +555,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 					else if (childPathTileCoord == topLeftTileCoord) topLeftTile = childPathTile;
 				}
 
+				// Floor Tile
 				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
 				{
 					pathTile.gameObject.layer = LayerMask.NameToLayer("Walkable");
 					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
-					spriteRenderer.sortingOrder = Mathf.CeilToInt(pathTile.transform.position.y) - 10;
-					boxCollider2D.enabled = false;
+					spriteRenderer.sortingOrder -= 10;
+					Destroy(boxCollider2D);
 				}
 
 				#region Cardinal Walls
@@ -564,7 +569,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
-					spriteRenderer.sortingOrder -= 4;
+					spriteRenderer.sortingOrder -= 2;
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
