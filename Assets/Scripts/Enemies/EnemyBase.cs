@@ -163,13 +163,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 		if (damageType == 0)
 		{
-			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 			//StartCoroutine(HitStop());
 		}
 
 		if (damageType == 1)
 		{
-			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
 		StartCoroutine(HitStop(0.03f));

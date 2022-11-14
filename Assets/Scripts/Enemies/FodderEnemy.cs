@@ -118,13 +118,13 @@ public class FodderEnemy : EnemyBase
 		if (damageType == 0)
 		{
 			IsStunned = true;
-			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 			//StartCoroutine(HitStop());
 		}
 
 		if (damageType == 1)
 		{
-			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
 		StartCoroutine(HitStop(0.03f));
