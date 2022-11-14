@@ -23,6 +23,7 @@ public class SwoogerEnemy : EnemyBase
 
 	void Awake()
 	{
+		base.Awake();
 		//player = FindObjectOfType<PlayerControler>().gameObject;
 		hurtbox = this.GetComponent<CapsuleCollider2D>();
 

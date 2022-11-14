@@ -36,11 +36,13 @@ public class LevelManager : MonoBehaviour
     {
         currentLevel++;
         pointToLevel = Mathf.RoundToInt( pointToLevelBase * Mathf.Pow( levelCostModifier, currentLevel ) );
-        enemies = FindObjectsOfType<EnemyBase>();
-		foreach( EnemyBase enemy in enemies )
-		{
-            enemy.ExpAmount = Mathf.RoundToInt( enemy.ExpAmountBase * Mathf.Pow( dificultyModifier, currentLevel ) );
-            Debug.Log( "level increased, exp reward: " + enemy.ExpAmount );
-		}
+        if( OnLevelIncrease != null )
+        {
+            OnLevelIncrease( currentLevel, dificultyModifier );
+        }
     }
+
+    public delegate void LevelHasIncreased(int level, float dificulty);
+
+    public event LevelHasIncreased OnLevelIncrease;
 }

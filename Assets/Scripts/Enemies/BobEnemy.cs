@@ -28,6 +28,7 @@ public class BobEnemy : EnemyBase
 
 	void Awake()
 	{
+		base.Awake();
 		hurtbox = this.GetComponent<CapsuleCollider2D>();
 
 		baseSpeed = Speed;

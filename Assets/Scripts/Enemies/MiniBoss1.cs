@@ -129,7 +129,7 @@ public class MiniBoss1 : EnemyBase
 				}
 			}
 			agitateCounter = 0f;
-			Debug.Log("ATTACK!!!");
+			//Debug.Log("ATTACK!!!");
 		}
 	}
 

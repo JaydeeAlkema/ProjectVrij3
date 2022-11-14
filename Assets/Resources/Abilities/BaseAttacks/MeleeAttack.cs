@@ -34,10 +34,10 @@ public class MeleeAttack : Ability
 	{
 		if (enemyList != null)
 		{
-			Debug.Log("Starting enemy damaging");
+			//Debug.Log("Starting enemy damaging");
 			enemy.GetComponent<IDamageable>()?.TakeDamage(damage, 0);
 			OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
-			Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
+			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
 
 		}
 	}
@@ -69,7 +69,7 @@ public class MeleeAttack : Ability
 				}
 			}
 			//Debug.Log("Detecting Enemies");
-			Debug.Log("Enemies: " + enemyList.Count);
+			//Debug.Log("Enemies: " + enemyList.Count);
 
 			yield return new WaitForEndOfFrame();
 		}
