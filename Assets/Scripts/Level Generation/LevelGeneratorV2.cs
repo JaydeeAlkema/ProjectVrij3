@@ -501,7 +501,10 @@ public class LevelGeneratorV2 : MonoBehaviour
 				BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
 				pathTile.gameObject.layer = LayerMask.NameToLayer("Unwalkable");
 
-				if (spriteRenderer == null) spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				if (spriteRenderer == null)
+				{
+					spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+				}
 				if (boxCollider2D == null)
 				{
 					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
@@ -552,12 +555,13 @@ public class LevelGeneratorV2 : MonoBehaviour
 					else if (childPathTileCoord == topLeftTileCoord) topLeftTile = childPathTile;
 				}
 
+				// Floor Tile
 				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
 				{
 					pathTile.gameObject.layer = LayerMask.NameToLayer("Walkable");
 					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
-					spriteRenderer.sortingOrder = Mathf.CeilToInt(pathTile.transform.position.y) - 10;
-					boxCollider2D.enabled = false;
+					spriteRenderer.sortingOrder -= 10;
+					Destroy(boxCollider2D);
 				}
 
 				#region Cardinal Walls
@@ -565,7 +569,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
 				{
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
-					spriteRenderer.sortingOrder -= 4;
+					spriteRenderer.sortingOrder -= 2;
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
