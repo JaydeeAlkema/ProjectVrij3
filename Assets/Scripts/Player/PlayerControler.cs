@@ -12,6 +12,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private int horizontal = 0;
 	private int vertical = 0;
 	[SerializeField] private bool isDashing = false;
+	[SerializeField] private bool invulnerable = false;
+	[SerializeField] private int hitIFrames = 1;
+	[SerializeField] private int dashIFrames = 1;
 	//[SerializeField] private bool canMove = true;
 	//[SerializeField]
 	//private Camera cam;
@@ -275,6 +278,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentDash.BaseStats = dash;
 		abilityController.CurrentDash.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
 		abilityController.Dashing(currentDash);
+		StartCoroutine( PlayerIFrames(dashIFrames) );
 	}
 
 	void AbilityOneAttack()
@@ -355,11 +359,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(int damage)
 	{
-		AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
-		StartCoroutine(playerFlashColor());
-		GameManager.Instance.PlayerHP.value -= damage;
-		//healthBar.SetHP(currentHealthPoints);
-		if (GameManager.Instance.PlayerHP.value <= 0 && !isDying) Die(); //Dit later in GameManager regelen?
+		if( !invulnerable )
+		{
+			AkSoundEngine.PostEvent( "plr_dmg_npc", this.gameObject );
+			StartCoroutine( playerFlashColor() );
+			GameManager.Instance.PlayerHP.value -= damage;
+			//healthBar.SetHP(currentHealthPoints);
+			if( GameManager.Instance.PlayerHP.value <= 0 && !isDying ) Die(); //Dit later in GameManager regelen?
+			invulnerable = true;
+			StartCoroutine( PlayerIFrames(hitIFrames) );
+		}
 	}
 
 	public void TakeDamage(int damage, int damageType)
@@ -425,5 +434,15 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Sprite.material = materialHit;
 		yield return new WaitForSeconds(0.09f);
 		Sprite.material = materialDefault;
+	}
+
+	IEnumerator PlayerIFrames(int iFrameAmount)
+	{
+		for( int i = 0; i < iFrameAmount; i++ )
+		{
+			yield return new WaitForEndOfFrame();
+		}
+		invulnerable = false;
+		yield return new WaitForEndOfFrame();
 	}
 }
