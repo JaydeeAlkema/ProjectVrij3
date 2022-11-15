@@ -112,11 +112,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 		if (healthPoints <= 0) { Die(); }
 
-		if (beingCrowdControlled)
-		{
-			beingDisplaced();
-			StopMovingToTarget();
-		}
+		
 		else
 		{
 			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
@@ -265,16 +261,19 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		damage = Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) );
 	}
 
-	private void beingDisplaced()
+	public void beingDisplaced()
 	{
-		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
+		StopMovingToTarget();
+		if(Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
+			Debug.Log( "actually gonna pull" );
 			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
-
 		}
 		else
 		{
+			Debug.Log( "already at pullpoint: " + pullPoint + ", my position is: " + transform.position );
 			beingCrowdControlled = false;
+			this.pullPoint = Vector2.zero;
 			Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, true);
 		}
 	}

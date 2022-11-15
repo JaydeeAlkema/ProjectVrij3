@@ -12,6 +12,7 @@ public class LineUpAbility : Ability
 			SetAbilityStats();
 			init = false;
 		}
+		AbilityBehavior();
 	}
 	
 	public override void AbilityBehavior()
