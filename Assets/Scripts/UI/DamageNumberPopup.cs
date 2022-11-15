@@ -48,9 +48,11 @@ public class DamageNumberPopup : MonoBehaviour
 		else
 		{
 			sizeBig = (damage / 100) * transform.localScale;
+			resizeRate *= (damage / 100);
 			if (sizeBig.magnitude > 2f)
 			{
 				sizeBig = new Vector3(2f, 2f, 2f);
+				resizeRate = 10f;
 			}
 		}
 	}
