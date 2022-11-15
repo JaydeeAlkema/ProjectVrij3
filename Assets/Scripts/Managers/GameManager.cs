@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,13 @@ public class GameManager : MonoBehaviour
 	[SerializeField, Expandable] private ScriptableInt playerHP;
 	[SerializeField, Expandable] private ScriptableFloat playerSpeed;
 	[SerializeField] private bool isPaused = false;
+
+	public enum GameState
+	{
+		Hub,//1
+		Dungeon,//2
+		GameOver,//3
+	}
 
 	[Header("Managers")]
 	[SerializeField] private LevelGeneratorV2 levelGenerator = null;
@@ -22,6 +30,8 @@ public class GameManager : MonoBehaviour
 	[Header("Player")]
 	[SerializeField] private GameObject playerInstance = null;
 	[SerializeField] private ScriptablePlayer scriptablePlayer = null;
+
+	public GameState currentGameState;
 
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
@@ -41,7 +51,7 @@ public class GameManager : MonoBehaviour
 		}
 
 		QualitySettings.vSyncCount = 1;
-		scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance( "ScriptablePlayer" );
+		scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance("ScriptablePlayer");
 
 		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
 	}
@@ -49,10 +59,15 @@ public class GameManager : MonoBehaviour
 
 	public void Update()
 	{
+		if (PlayerHP.value <= 0 && currentGameState == GameState.Dungeon)
+		{
+			ChangeGameState(GameState.GameOver);
+		}
+
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			TogglePauseGame();
-			UiManager.SetUIActive(3, isPaused);
+			uiManager.SetUIActive(3, isPaused);
 		}
 	}
 
@@ -88,6 +103,21 @@ public class GameManager : MonoBehaviour
 		StartCoroutine(SetupLevel());
 	}
 
+	private void ChangeGameState(GameState newGameState)
+	{
+		currentGameState = newGameState;
+		switch (currentGameState)
+		{
+			case GameState.Dungeon:
+				break;
+			case GameState.GameOver:
+				StartCoroutine(GameOver());
+				break;
+			case GameState.Hub:
+				break;
+		}
+	}
+
 	/// <summary>
 	/// Basic method that handles the setup of the level and player.
 	/// </summary>
@@ -102,9 +132,44 @@ public class GameManager : MonoBehaviour
 		Vector3 playerSpawnPos = new Vector3(startingRoom.transform.position.x, startingRoom.transform.position.y, 0);
 		playerInstance.transform.position = playerSpawnPos;
 		playerInstance.SetActive(true);
+		ChangeGameState(GameState.Dungeon);
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(1, true);
+	}
+
+	IEnumerator GameOver()
+	{
+		uiManager.DisableAllUI();
+		playerInstance.GetComponentInChildren<CameraToMouseFollow>().gameObject.transform.localPosition = Vector3.zero;
+		playerInstance.GetComponent<PlayerControler>().GameOverVFX(1);
+		Time.timeScale = 0f;	//Hitstop
+		yield return new WaitForSecondsRealtime(0.2f);
+
+		playerInstance.GetComponent<PlayerControler>().GameOverVFX(2);
+		playerInstance.GetComponent<PlayerControler>().enabled = false;
+		SpriteRenderer[] playerSprites = playerInstance.GetComponentsInChildren<SpriteRenderer>();
+		foreach (SpriteRenderer playerSprite in playerSprites)
+		{
+			playerSprite.gameObject.SetActive(false);
+		}
+		Time.timeScale = 0.3f;    //Slowdown
+		yield return new WaitForSecondsRealtime(1.3f);
+
+		//Return to normal time
+		Time.timeScale = 1f;
+		yield return new WaitForSecondsRealtime(1.5f);
+
+		//Deathscreen
+		uiManager.SetUIActive(4, true);
+		yield return new WaitForSecondsRealtime(3f);
+
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+		PlayerHP.ResetValue();
+		uiManager.DisableAllUI();
+		uiManager.SetUIActive(0, true);
+		ChangeGameState(GameState.Hub);
+		yield return null;
 	}
 }
