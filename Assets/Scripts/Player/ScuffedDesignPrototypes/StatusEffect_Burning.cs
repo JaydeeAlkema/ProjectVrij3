@@ -24,7 +24,7 @@ public class StatusEffect_Burning : IStatusEffect
 		if (counter >= interval)
 		{
 			damageable.TakeDamage(damageNumber);
-			Debug.Log($"Ouch! ({damageNumber} damage!)");
+			//Debug.Log($"Ouch! ({damageNumber} damage!)");
 			counter = 0f;
 		}
 	}

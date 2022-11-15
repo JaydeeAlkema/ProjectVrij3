@@ -7,6 +7,7 @@ public class HubSceneManager : MonoBehaviour
 {
     public static HubSceneManager sceneManagerInstance { get; private set; }
 	private string loadScene;
+	private PlayerControler playerValues;
 
 	private void Awake()
 	{
@@ -27,6 +28,7 @@ public class HubSceneManager : MonoBehaviour
 		if(sceneToLoad != "Hub Prototype" && GameManager.Instance.PlayerInstance != null)
 		{
 			GameManager.Instance.ScriptablePlayer.Player = GameManager.Instance.PlayerInstance.GetComponent<PlayerControler>();
+			playerValues = GameManager.Instance.ScriptablePlayer.Player;
 		}
 		SceneManager.UnloadSceneAsync( currentScene );
 		SceneManager.LoadSceneAsync( sceneToLoad, LoadSceneMode.Additive ).completed += HubSceneManager_completed;
@@ -48,7 +50,6 @@ public class HubSceneManager : MonoBehaviour
 
 	private void HoldPlayerOnSceneLoad()
 	{
-		PlayerControler playerValues = GameManager.Instance.ScriptablePlayer.Player;
 		PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
 		player.CurrentMeleeAttack = playerValues.CurrentMeleeAttack;
@@ -67,5 +68,6 @@ public class HubSceneManager : MonoBehaviour
 		player.initAbilities();
 		Debug.Log( player.CurrentMeleeAttack.AbilityUpgrades.Count );
 		Debug.Log( player.CurrentRangedAttack.AbilityUpgrades.Count );
+		GameManager.Instance.PlayerInstance = null;
 	}
 }

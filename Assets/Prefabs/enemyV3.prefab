@@ -90,6 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 100
+  damageBase: 30
+  damage: 0
   speed: 9
   aggroRange: 10
   attackRange: 5
@@ -123,7 +125,6 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  damage: 30
   player: {fileID: 0}
   SplatterDecal: {fileID: 9146685385211105292, guid: 8520c82b6b3ad944587f46b40f1e7d1a, type: 3}
   hurtbox: {fileID: 4468130794609170519}

@@ -11,7 +11,7 @@ public class FodderEnemy : EnemyBase
 
 	//[SerializeField] public TMP_Text coroutineText;
 
-	[SerializeField] private int damage;
+	//[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 
 	[SerializeField] private GameObject SplatterDecal;
@@ -26,6 +26,7 @@ public class FodderEnemy : EnemyBase
 
 	void Awake()
 	{
+		base.Awake();
 		//player = FindObjectOfType<PlayerControler>().gameObject;
 		hurtbox = this.GetComponent<CapsuleCollider2D>();
 

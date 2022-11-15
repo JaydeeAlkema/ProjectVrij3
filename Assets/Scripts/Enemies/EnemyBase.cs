@@ -5,10 +5,12 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 {
 	[SerializeField] private int healthPoints = 0;
+	[SerializeField] private int damageBase = 0;
+	[SerializeField] protected int damage = 0;
 	[SerializeField] private float speed = 0;
 	[SerializeField] private float aggroRange = 0;
 	[SerializeField] private float attackRange = 0;
-	[SerializeField] private int expAmount = 0;
+	[SerializeField] protected int expAmount = 0;
 	[SerializeField] private int expAmountBase;
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
@@ -51,6 +53,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
+	public int Damage { get => damage; set => damage = value; }
 	public float Speed { get => speed; set => speed = value; }
 	public float AggroRange { get => aggroRange; set => aggroRange = value; }
 	public float AttackRange { get => attackRange; set => attackRange = value; }
@@ -61,7 +64,6 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public Material MaterialDefault { get => materialDefault; set => materialDefault = value; }
 	public Material MaterialHit { get => materialHit; set => materialHit = value; }
 	public int ExpAmount { get => expAmount; set => expAmount = value; }
-	public int ExpAmountBase { get => expAmountBase; set => expAmountBase = value; }
 	public bool IsStunned { get => isStunned; set => isStunned = value; }
 	public float DashDistance { get => dashDistance; private set => dashDistance = value; }
 	public float DashSpeed { get => dashSpeed; private set => dashSpeed = value; }
@@ -77,6 +79,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			materialDefault = enemySprite.material;
 		}
+		LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
 	}
 
 	public void Awake()
@@ -85,7 +88,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		rb2d = GetComponent<Rigidbody2D>();
 		destinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
 		aiPath = GetComponent<Pathfinding.AIPath>();
-		expAmount = expAmountBase;
+		SetValueToBase();
 	}
 
 	public void Update()
@@ -121,6 +124,16 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
 
 		}
+	}
+	private void OnDestroy()
+	{
+		LevelManager.LevelManagerInstance.OnLevelIncrease -= OnLeveled;
+	}
+
+	private void SetValueToBase()
+	{
+		expAmount = expAmountBase;
+		damage = damageBase;
 	}
 
 	public void ApplyStatusEffect(IStatusEffect statusEffect)
@@ -252,6 +265,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		StopAllCoroutines();
 		Time.timeScale = 1f;
 		Destroy(this.gameObject);
+	}
+
+
+	public void OnLeveled(int level , float dificultyModifier)
+	{
+		expAmount = Mathf.RoundToInt( expAmountBase * Mathf.Pow( dificultyModifier, level ) );
+		damage = Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) );
 	}
 
 	private void beingDisplaced()
