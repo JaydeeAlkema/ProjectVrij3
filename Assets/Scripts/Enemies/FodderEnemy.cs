@@ -134,7 +134,12 @@ public class FodderEnemy : EnemyBase
 		IsAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
-		if (HealthPoints <= 0) Die();
+		if (HealthPoints <= 0)
+		{
+			GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
+			splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
+			Die();
+		}
 	}
 
 	public override void MoveToTarget(Transform target)
@@ -196,11 +201,11 @@ public class FodderEnemy : EnemyBase
 	public void OnDestroy()
 	{
 		//Change name to dungeon name if changed later
-		if (SceneManager.GetActiveScene().name == "Jaydee Testing Scene")
-		{
-			GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
-			splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
-		}
+		//if (SceneManager.GetActiveScene().name == "Jaydee Testing Scene")
+		//{
+		//	GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
+		//	splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
+		//}
 	}
 
 	//public IEnumerator WindupDashAttack(Transform target)

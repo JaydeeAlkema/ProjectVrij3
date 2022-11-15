@@ -12,6 +12,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private int expAmountBase;
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
+	[SerializeField] private GameObject deathPoof;
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
 	[SerializeField] private GameObject vfxHitSpark = null;
@@ -246,6 +247,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void Die()
 	{
+		GameObject poof = Instantiate(deathPoof, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
 		GameManager.Instance.ExpManager.AddExp(expAmount);
 		StopAllCoroutines();
 		Time.timeScale = 1f;
