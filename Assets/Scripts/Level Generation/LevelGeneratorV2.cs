@@ -683,35 +683,46 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
-		// Fodder enemy spawning
+		#region Fodder Enemy Spawning
 		foreach (Room room in rooms)
 		{
 			if (room.RoomType != RoomType.Spawn && room.RoomType != RoomType.Boss)
 			{
-				int currentFodderEnemyCount = 0;
 				EnemyGroup fodderEnemyGroup = SLGS.EnemyFodderGroup;
 				if (fodderEnemyGroup.enemyType == EnemyType.Fodder)
 				{
-					// The enemyCountPerRoom variable is a Min Max vector. so the X axis refers to the minimum amount of enemies and the Y to the max amount of enemies
-					int enemyCount = Random.Range(fodderEnemyGroup.enemyCountPerRoom.x, fodderEnemyGroup.enemyCountPerRoom.y);
-					while (currentFodderEnemyCount < fodderEnemyGroup.enemyCountPerRoom.y)
+					int groupCount = Random.Range(fodderEnemyGroup.groupCountPerRoom.x, fodderEnemyGroup.groupCountPerRoom.y);
+					for (int gc = 0; gc < groupCount; gc++)
 					{
-						// Always spawn atleast the minimum amount of enemies.
-						if (currentFodderEnemyCount <= enemyCount)
-						{
-							Transform tileToSpawnEnemyUpon = room.NoncollideableTiles[Random.Range(0, room.NoncollideableTiles.Count)];
-							Vector2Int enemySpawnPoint = new Vector2Int(Mathf.RoundToInt(tileToSpawnEnemyUpon.position.x), Mathf.RoundToInt(tileToSpawnEnemyUpon.position.y));
+						int enemyCount = Random.Range(fodderEnemyGroup.enemyCountPerGroup.x, fodderEnemyGroup.enemyCountPerGroup.y);
+						int enemyCountSqr = (int)Mathf.Sqrt(enemyCount);
+						int randTileIndex = Random.Range(0, room.NoncollideableTiles.Count);
+						Transform randTileTransform = room.NoncollideableTiles[randTileIndex];
+						Vector2Int groupSpawnOriginCoordinates = new Vector2Int(Mathf.RoundToInt(randTileTransform.position.x), Mathf.RoundToInt(randTileTransform.position.y));
 
-							GameObject enemyPrefab = fodderEnemyGroup.enemyPrefabs.GetRandom();
-							GameObject enemyGO = Instantiate(enemyPrefab, new Vector3(enemySpawnPoint.x, enemySpawnPoint.y, 0), Quaternion.identity, room.transform);
+						for (int x = -enemyCountSqr; x < enemyCountSqr + 1; x++)
+						{
+							for (int y = -enemyCountSqr; y < enemyCountSqr + 1; y++)
+							{
+								Vector2Int enemySpawnCoordinate = new Vector2Int(groupSpawnOriginCoordinates.x + x, groupSpawnOriginCoordinates.y + y);
+								foreach (Transform nonCollideableTile in room.NoncollideableTiles)
+								{
+									Vector2Int nonCollideableTileCoordinate = new Vector2Int(Mathf.RoundToInt(nonCollideableTile.position.x), Mathf.RoundToInt(nonCollideableTile.position.y));
+									if (enemySpawnCoordinate != nonCollideableTileCoordinate)
+									{
+										GameObject newEnemyGO = new GameObject("Enemy");
+										newEnemyGO.transform.position = new Vector2(enemySpawnCoordinate.x, enemySpawnCoordinate.y);
+									}
+								}
+							}
 						}
-						currentFodderEnemyCount++;
 					}
 				}
 			}
 		}
+		#endregion
 
-		// Reward enemy spawning
+		#region Reward Enemy Spawning
 		EnemyGroup rewardEnemyGroup = SLGS.EnemyRewardGroup;
 		List<int> roomIndecesForRewardEnemySpawning = new List<int>();
 		List<int> roomIndeces = new List<int>();
@@ -742,6 +753,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 			GameObject enemyPrefab = rewardEnemyGroup.enemyPrefabs.GetRandom();
 			GameObject enemyGO = Instantiate(enemyPrefab, new Vector3(enemySpawnPoint.x, enemySpawnPoint.y, 0), Quaternion.identity, room.transform);
 		}
+		#endregion
 
 		executionTime.Stop();
 		diagnosticTimes.Add($"Spawning enemies in rooms took: {executionTime.ElapsedMilliseconds}ms");

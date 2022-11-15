@@ -42,12 +42,20 @@ public enum EnemyType
 	Reward = 2,
 };
 
+public enum EnemySpawnMode
+{
+	Singulair,
+	Grouped
+}
+
 [System.Serializable]
 public struct EnemyGroup
 {
 	public EnemyType enemyType;
+	public EnemySpawnMode enemySpawnMode;
 	public WeightedRandomList<GameObject> enemyPrefabs;
-	[AllowNesting, MinMaxSlider(0, 20), ShowIf("enemyType", EnemyType.Fodder)] public Vector2Int enemyCountPerRoom;
+	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemyType", EnemySpawnMode.Grouped)] public Vector2Int groupCountPerRoom;
+	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemyType", EnemySpawnMode.Grouped)] public Vector2Int enemyCountPerGroup;
 }
 
 [System.Serializable]
