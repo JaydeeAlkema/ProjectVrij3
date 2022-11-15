@@ -480,9 +480,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 		for (int i = 0; i < pathwayParents.Count; i++)
 		{
-			Transform pathParents = pathwayParents[i].transform;
+			Transform pathParent = pathwayParents[i].transform;
 			List<Transform> childPathTiles = new List<Transform>();
-			childPathTiles.AddRange(pathParents.GetComponentsInChildren<Transform>());
+			childPathTiles.AddRange(pathParent.GetComponentsInChildren<Transform>());
 
 			Room roomA = rooms[i];
 			Room roomB = rooms[i + 1];
@@ -497,153 +497,173 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 			foreach (Transform pathTile in childPathTiles)
 			{
-				SpriteRenderer spriteRenderer = pathTile.GetComponent<SpriteRenderer>();
-				BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
-				pathTile.gameObject.layer = LayerMask.NameToLayer("Unwalkable");
+				if (pathTile != pathParent)
+				{
+					SpriteRenderer spriteRenderer = pathTile.GetComponent<SpriteRenderer>();
+					BoxCollider2D boxCollider2D = pathTile.GetComponent<BoxCollider2D>();
+					pathTile.gameObject.layer = LayerMask.NameToLayer("Unwalkable");
 
-				if (spriteRenderer == null)
-				{
-					spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
-				}
-				if (boxCollider2D == null)
-				{
-					boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
-					boxCollider2D.size = Vector2.one;
-				}
-				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
+					if (spriteRenderer == null)
+					{
+						spriteRenderer = pathTile.AddComponent<SpriteRenderer>();
+					}
+					if (boxCollider2D == null)
+					{
+						boxCollider2D = pathTile.AddComponent<BoxCollider2D>();
+						boxCollider2D.size = Vector2.one;
+					}
+					Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTile.transform.position.x), Mathf.RoundToInt(pathTile.transform.position.y));
 
-				Vector2Int topTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y + 1);
-				Vector2Int topRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y + 1);
-				Vector2Int rightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y);
-				Vector2Int bottomRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y - 1);
-				Vector2Int bottomTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y - 1);
-				Vector2Int bottomLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y - 1);
-				Vector2Int leftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y);
-				Vector2Int topLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y + 1);
+					Vector2Int topTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y + 1);
+					Vector2Int topRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y + 1);
+					Vector2Int rightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y);
+					Vector2Int bottomRightTileCoord = new Vector2Int(pathTileCoord.x + 1, pathTileCoord.y - 1);
+					Vector2Int bottomTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y - 1);
+					Vector2Int bottomLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y - 1);
+					Vector2Int leftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y);
+					Vector2Int topLeftTileCoord = new Vector2Int(pathTileCoord.x - 1, pathTileCoord.y + 1);
 
-				GameObject topTile = null;
-				GameObject topRightTile = null;
-				GameObject rightTile = null;
-				GameObject bottomRightTile = null;
-				GameObject bottomTile = null;
-				GameObject bottomLeftTile = null;
-				GameObject leftTile = null;
-				GameObject topLeftTile = null;
+					GameObject topTile = null;
+					GameObject topRightTile = null;
+					GameObject rightTile = null;
+					GameObject bottomRightTile = null;
+					GameObject bottomTile = null;
+					GameObject bottomLeftTile = null;
+					GameObject leftTile = null;
+					GameObject topLeftTile = null;
 
-				List<Transform> occupiedTiles = new List<Transform>();
-				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, childPathTiles));
-				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomA.CollideableTiles));
-				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomA.NoncollideableTiles));
-				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomB.CollideableTiles));
-				occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomB.NoncollideableTiles));
+					List<Transform> occupiedTiles = new List<Transform>();
+					occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, childPathTiles));
+					occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomA.CollideableTiles));
+					occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomA.NoncollideableTiles));
+					occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomB.CollideableTiles));
+					occupiedTiles.AddRange(GetTileNeighbours(pathTileCoord, roomB.NoncollideableTiles));
 
-				if (i < pathwayParents.Count - 1) occupiedTiles.AddRange(pathwayParents[i + 1].GetComponentsInChildren<Transform>());
-				if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
+					if (i < pathwayParents.Count - 1) occupiedTiles.AddRange(pathwayParents[i + 1].GetComponentsInChildren<Transform>());
+					if (i > 0) occupiedTiles.AddRange(pathwayParents[i - 1].GetComponentsInChildren<Transform>());
 
-				for (int t = 0; t < occupiedTiles.Count; t++)
-				{
-					GameObject childPathTile = occupiedTiles[t].gameObject;
-					Vector2Int childPathTileCoord = new Vector2Int(Mathf.RoundToInt(childPathTile.transform.position.x), Mathf.RoundToInt(childPathTile.transform.position.y));
+					for (int t = 0; t < occupiedTiles.Count; t++)
+					{
+						GameObject childPathTile = occupiedTiles[t].gameObject;
+						Vector2Int childPathTileCoord = new Vector2Int(Mathf.RoundToInt(childPathTile.transform.position.x), Mathf.RoundToInt(childPathTile.transform.position.y));
 
-					if (childPathTileCoord == topTileCoord) topTile = childPathTile;
-					else if (childPathTileCoord == topRightTileCoord) topRightTile = childPathTile;
-					else if (childPathTileCoord == rightTileCoord) rightTile = childPathTile;
-					else if (childPathTileCoord == bottomRightTileCoord) bottomRightTile = childPathTile;
-					else if (childPathTileCoord == bottomTileCoord) bottomTile = childPathTile;
-					else if (childPathTileCoord == bottomLeftTileCoord) bottomLeftTile = childPathTile;
-					else if (childPathTileCoord == leftTileCoord) leftTile = childPathTile;
-					else if (childPathTileCoord == topLeftTileCoord) topLeftTile = childPathTile;
-				}
+						if (childPathTileCoord == topTileCoord) topTile = childPathTile;
+						else if (childPathTileCoord == topRightTileCoord) topRightTile = childPathTile;
+						else if (childPathTileCoord == rightTileCoord) rightTile = childPathTile;
+						else if (childPathTileCoord == bottomRightTileCoord) bottomRightTile = childPathTile;
+						else if (childPathTileCoord == bottomTileCoord) bottomTile = childPathTile;
+						else if (childPathTileCoord == bottomLeftTileCoord) bottomLeftTile = childPathTile;
+						else if (childPathTileCoord == leftTileCoord) leftTile = childPathTile;
+						else if (childPathTileCoord == topLeftTileCoord) topLeftTile = childPathTile;
+					}
 
-				// Floor Tile
-				if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
-				{
-					pathTile.gameObject.layer = LayerMask.NameToLayer("Walkable");
-					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
-					spriteRenderer.sortingOrder -= 10;
-					Destroy(boxCollider2D);
-				}
+					// Floor Tile
+					if (topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile)
+					{
+						pathTile.gameObject.layer = LayerMask.NameToLayer("Walkable");
+						pathTile.name = "Floor Tile";
+						spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
+						spriteRenderer.sortingOrder -= 10;
+						Destroy(boxCollider2D);
+					}
 
-				#region Cardinal Walls
-				// Top Wall
-				else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
-				{
-					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
-					spriteRenderer.sortingOrder -= 2;
+					#region Cardinal Walls
+					// Top Wall
+					else if (rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
+					{
+						pathTile.name = "Top Wall";
+						spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
+						spriteRenderer.sortingOrder -= 2;
+					}
+					// Bottom Wall
+					else if (!bottomTile && leftTile && topTile && rightTile)
+					{
+						pathTile.name = "Bottom Wall";
+						spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
+						boxCollider2D.offset = new Vector2(0, -0.25f);
+						boxCollider2D.size = new Vector2(1, 0.5f);
+					}
+					// Left Wall
+					else if (!leftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
+					{
+						pathTile.name = "Left Wall";
+						spriteRenderer.sprite = leftWallSprites[Random.Range(0, leftWallSprites.Count)];
+					}
+					// Right Wall
+					else if (!rightTile && bottomTile && bottomLeftTile && leftTile & topLeftTile && topTile)
+					{
+						pathTile.name = "Right Wall";
+						spriteRenderer.sprite = rightWallSprites[Random.Range(0, rightWallSprites.Count)];
+					}
+					#endregion
+					#region Outer Corners
+					// Top Left Outer Corner
+					else if (!leftTile && !topLeftTile && !topTile && rightTile && bottomRightTile && bottomTile)
+					{
+						pathTile.name = "Top Left Outer Corner";
+						spriteRenderer.sprite = topLeftOuterCornerSprites[Random.Range(0, topLeftOuterCornerSprites.Count)];
+						spriteRenderer.flipY = true;
+						boxCollider2D.offset = new Vector2(0.25f, 0);
+						boxCollider2D.size = new Vector2(0.5f, 1);
+					}
+					// Top Right Outer Corner
+					else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
+					{
+						pathTile.name = "Top Right Outer Corner";
+						spriteRenderer.sprite = topRightOuterCornerSprites[Random.Range(0, topRightOuterCornerSprites.Count)];
+						spriteRenderer.flipY = true;
+						boxCollider2D.offset = new Vector2(-0.25f, 0);
+						boxCollider2D.size = new Vector2(0.5f, 1);
+					}
+					// Bottom Right Outer Corner
+					else if (!rightTile && !bottomRightTile && !bottomTile && leftTile && topLeftTile && topTile)
+					{
+						pathTile.name = "Bottom Right Outer Corner";
+						spriteRenderer.sprite = bottomRightOuterCornerSprites[Random.Range(0, bottomRightOuterCornerSprites.Count)];
+					}
+					// Bottom Left Outer Corner
+					else if (!bottomTile && !bottomLeftTile && !leftTile && topTile && topRightTile && rightTile)
+					{
+						pathTile.name = "Bottom Left Outer Corner";
+						spriteRenderer.sprite = bottomLeftOuterCornerSprites[Random.Range(0, bottomLeftOuterCornerSprites.Count)];
+					}
+					#endregion
+					#region Inner Corners
+					// Top Left Inner Corner
+					else if (!topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
+					{
+						pathTile.name = "Top Left Inner Corner";
+						spriteRenderer.sprite = topLeftInnerCornerSprites[Random.Range(0, topLeftInnerCornerSprites.Count)];
+						spriteRenderer.flipY = true;
+					}
+					// Top Right Inner Corner
+					else if (!topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topLeftTile)
+					{
+						pathTile.name = "Top Right Inner Corner";
+						spriteRenderer.sprite = topRightInnerCornerSprites[Random.Range(0, topRightInnerCornerSprites.Count)];
+						spriteRenderer.flipX = true;
+						spriteRenderer.flipY = true;
+					}
+					// Bottom Right Inner Corner
+					else if (!bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile)
+					{
+						pathTile.name = "Bottom Right Inner Corner";
+						spriteRenderer.sprite = bottomRightInnerCornerSprites[Random.Range(0, bottomRightInnerCornerSprites.Count)];
+						spriteRenderer.flipX = true;
+						boxCollider2D.offset = new Vector2(0, -0.25f);
+						boxCollider2D.size = new Vector2(1, 0.5f);
+					}
+					// Bottom Left Inner Corner
+					else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
+					{
+						pathTile.name = "Bottom Left Inner Corner";
+						spriteRenderer.sprite = bottomLeftInnerCornerSprites[Random.Range(0, bottomLeftInnerCornerSprites.Count)];
+						spriteRenderer.flipX = true;
+						boxCollider2D.offset = new Vector2(0, -0.25f);
+						boxCollider2D.size = new Vector2(1, 0.5f);
+					}
+					#endregion
 				}
-				// Bottom Wall
-				else if (!bottomTile && leftTile && topTile && rightTile)
-				{
-					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
-					boxCollider2D.offset = new Vector2(0, -0.25f);
-					boxCollider2D.size = new Vector2(1, 0.5f);
-				}
-				// Left Wall
-				else if (!leftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
-				{
-					spriteRenderer.sprite = leftWallSprites[Random.Range(0, leftWallSprites.Count)];
-				}
-				// Right Wall
-				else if (!rightTile && bottomTile && bottomLeftTile && leftTile & topLeftTile && topTile)
-				{
-					spriteRenderer.sprite = rightWallSprites[Random.Range(0, rightWallSprites.Count)];
-				}
-				#endregion
-				#region Outer Corners
-				// Top Left Outer Corner
-				else if (!leftTile && !topLeftTile && !topTile && rightTile && bottomRightTile && bottomTile)
-				{
-					spriteRenderer.sprite = topLeftOuterCornerSprites[Random.Range(0, topLeftOuterCornerSprites.Count)];
-					spriteRenderer.flipY = true;
-					boxCollider2D.offset = new Vector2(0, -0.25f);
-					boxCollider2D.size = new Vector2(1, 0.5f);
-				}
-				// Top Right Outer Corner
-				else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
-				{
-					spriteRenderer.sprite = topRightOuterCornerSprites[Random.Range(0, topRightOuterCornerSprites.Count)];
-					spriteRenderer.flipY = true;
-					boxCollider2D.offset = new Vector2(0, -0.25f);
-					boxCollider2D.size = new Vector2(1, 0.5f);
-				}
-				// Bottom Right Outer Corner
-				else if (!rightTile && !bottomRightTile && !bottomTile && leftTile && topLeftTile && topTile)
-				{
-					spriteRenderer.sprite = bottomRightOuterCornerSprites[Random.Range(0, bottomRightOuterCornerSprites.Count)];
-				}
-				// Bottom Left Outer Corner
-				else if (!bottomTile && !bottomLeftTile && !leftTile && topTile && topRightTile && rightTile)
-				{
-					spriteRenderer.sprite = bottomLeftOuterCornerSprites[Random.Range(0, bottomLeftOuterCornerSprites.Count)];
-				}
-				#endregion
-				#region Inner Corners
-				// Top Left Inner Corner
-				else if (!topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile)
-				{
-					spriteRenderer.sprite = topLeftInnerCornerSprites[Random.Range(0, topLeftInnerCornerSprites.Count)];
-					spriteRenderer.flipY = true;
-				}
-				// Top Right Inner Corner
-				else if (!topRightTile && rightTile && bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topLeftTile)
-				{
-					spriteRenderer.sprite = topRightInnerCornerSprites[Random.Range(0, topRightInnerCornerSprites.Count)];
-					spriteRenderer.flipX = true;
-					spriteRenderer.flipY = true;
-				}
-				// Bottom Right Inner Corner
-				else if (!bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile)
-				{
-					spriteRenderer.sprite = bottomRightInnerCornerSprites[Random.Range(0, bottomRightInnerCornerSprites.Count)];
-					spriteRenderer.flipX = true;
-				}
-				// Bottom Left Inner Corner
-				else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
-				{
-					spriteRenderer.sprite = bottomLeftInnerCornerSprites[Random.Range(0, bottomLeftInnerCornerSprites.Count)];
-					spriteRenderer.flipX = true;
-				}
-				#endregion
 			}
 		}
 
