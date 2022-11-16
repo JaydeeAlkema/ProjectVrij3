@@ -54,8 +54,8 @@ public struct EnemyGroup
 	public EnemyType enemyType;
 	public EnemySpawnMode enemySpawnMode;
 	public WeightedRandomList<GameObject> enemyPrefabs;
-	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemyType", EnemySpawnMode.Grouped)] public Vector2Int groupCountPerRoom;
-	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemyType", EnemySpawnMode.Grouped)] public Vector2Int enemyCountPerGroup;
+	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemySpawnMode", EnemySpawnMode.Grouped)] public Vector2Int groupCountPerRoom;
+	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemySpawnMode", EnemySpawnMode.Grouped)] public Vector2Int enemyCountPerGroup;
 }
 
 [System.Serializable]

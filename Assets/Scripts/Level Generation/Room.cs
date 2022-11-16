@@ -1,5 +1,8 @@
 using NaughtyAttributes;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Room : MonoBehaviour
@@ -7,70 +10,94 @@ public class Room : MonoBehaviour
 	[SerializeField] private RoomType roomType = RoomType.Generic;
 	[SerializeField] private Vector2Int roomSize = Vector2Int.one;
 	[Space]
+	[SerializeField] private Transform wallsParent = null;
+	[SerializeField] private Transform floorsParent = null;
+	[SerializeField] private Transform propsParent = null;
 	[SerializeField] private List<GameObject> pathwayOpenings = new List<GameObject>();
 	[Space]
 	[SerializeField, ReadOnly] private List<Room> connectedRooms = new List<Room>();
-	[SerializeField, ReadOnly] private List<Transform> collideableTiles = new List<Transform>();
-	[SerializeField, ReadOnly] private List<Transform> noncollideableTiles = new List<Transform>();
+	[SerializeField, ReadOnly] private Dictionary<Vector2Int, Transform> collideableTiles = new Dictionary<Vector2Int, Transform>();
+	[SerializeField, ReadOnly] private Dictionary<Vector2Int, Transform> noncollideableTiles = new Dictionary<Vector2Int, Transform>();
 
+	public RoomType RoomType { get => roomType; set => roomType = value; }
+	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
 	public List<GameObject> PathwayOpenings { get => pathwayOpenings; set => pathwayOpenings = value; }
 	public List<Room> ConnectedRooms { get => connectedRooms; set => connectedRooms = value; }
-	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
-	public List<Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
-	public List<Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }
-	public RoomType RoomType { get => roomType; set => roomType = value; }
+	public Dictionary<Vector2Int, Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
+	public Dictionary<Vector2Int, Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }
 
-	private void Start()
+	public IEnumerator InitRoom()
 	{
-		foreach (Transform collideableTile in collideableTiles)
+		yield return StartCoroutine(FetchCollideableTiles());
+		yield return StartCoroutine(FetchNonCollideableTiles());
+
+		foreach (KeyValuePair<Vector2Int, Transform> collideableTile in collideableTiles)
 		{
-			collideableTile.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(collideableTile.transform.position.y) + 1;
+			collideableTile.Value.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(collideableTile.Value.transform.position.y) + 1;
 		}
-		foreach (Transform nonCollideableTile in noncollideableTiles)
+		foreach (KeyValuePair<Vector2Int, Transform> nonCollideableTile in noncollideableTiles)
 		{
-			nonCollideableTile.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(nonCollideableTile.transform.position.y) - 10;
+			nonCollideableTile.Value.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(nonCollideableTile.Value.transform.position.y) - 10;
 		}
 	}
 
-	[Button]
-	private void FetchCollideableTiles()
+	private IEnumerator FetchCollideableTiles()
 	{
-		Transform[] allChildren = GetComponentsInChildren<Transform>();
+		List<Transform> allChildren = wallsParent.GetComponentsInChildren<Transform>().ToList();
 		collideableTiles.Clear();
 
+		foreach (GameObject pathwayOpeningTile in pathwayOpenings)
+		{
+			allChildren.AddRange(pathwayOpeningTile.GetComponentInChildren<Transform>());
+		}
 		foreach (Transform child in allChildren)
 		{
 			BoxCollider2D boxCollider2D = child.GetComponent<BoxCollider2D>();
 			SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+			Vector2Int childCoordinate = new Vector2Int(Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.y));
 			if (boxCollider2D && spriteRenderer)
 			{
-				CollideableTiles.Add(child);
+				bool added = collideableTiles.TryAdd(childCoordinate, child);
+				//if (!added)
+				//{
+				//	Debug.Log(child.name, child);
+				//}
 			}
 		}
+
+		//Debug.Log(collideableTiles.Count);
+		yield return null;
 	}
 
-	[Button]
-	private void FetchNonCollideableTiles()
+	private IEnumerator FetchNonCollideableTiles()
 	{
-		Transform[] allChildren = GetComponentsInChildren<Transform>();
+		Transform[] allChildren = floorsParent.GetComponentsInChildren<Transform>();
 		noncollideableTiles.Clear();
 
 		foreach (Transform child in allChildren)
 		{
 			BoxCollider2D boxCollider2D = child.GetComponent<BoxCollider2D>();
 			SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+			Vector2Int childCoordinate = new Vector2Int(Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.y));
 			if (!boxCollider2D && spriteRenderer)
 			{
-				NoncollideableTiles.Add(child);
+				bool added = noncollideableTiles.TryAdd(childCoordinate, child);
+				//if (!added)
+				//{
+				//	Debug.Log(child.name, child);
+				//}
 			}
 		}
+
+		//Debug.Log(noncollideableTiles.Count);
+		yield return null;
 	}
 
 	public void RandomizeFloorTileSprites(List<Sprite> sprites)
 	{
-		foreach (Transform floorTile in noncollideableTiles)
+		foreach (KeyValuePair<Vector2Int, Transform> floorTile in noncollideableTiles)
 		{
-			SpriteRenderer spriteRenderer = floorTile.GetComponent<SpriteRenderer>();
+			SpriteRenderer spriteRenderer = floorTile.Value.GetComponent<SpriteRenderer>();
 			if (spriteRenderer)
 			{
 				spriteRenderer.sprite = sprites[Random.Range(0, sprites.Count)];
