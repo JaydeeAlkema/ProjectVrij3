@@ -201,13 +201,17 @@ public class LevelGeneratorV2 : MonoBehaviour
 			Chunk chunk = path[r];
 			ScriptableRoom randRoom = null;
 			// Spawn roomType depending on how far along the path we are (the end of the path should always be a boss room)
-			if (r == path.Count - 1)
+			if (r == 0)
 			{
-				randRoom = SLGS.spawnableBossRooms[Random.Range(0, SLGS.spawnableBossRooms.Count)];
+				randRoom = SLGS.spawnRooms[Random.Range(0, SLGS.spawnRooms.Count)];
+			}
+			else if (r == path.Count - 1)
+			{
+				randRoom = SLGS.bossRooms[Random.Range(0, SLGS.bossRooms.Count)];
 			}
 			else
 			{
-				randRoom = SLGS.spawnableRooms[Random.Range(0, SLGS.spawnableRooms.Count)];
+				randRoom = SLGS.genericRooms[Random.Range(0, SLGS.genericRooms.Count)];
 			}
 
 			GameObject newRoomGO = Instantiate(randRoom.Prefab, new Vector2(0, 0), Quaternion.identity);

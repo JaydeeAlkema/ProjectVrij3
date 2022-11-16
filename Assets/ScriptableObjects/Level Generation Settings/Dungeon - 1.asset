@@ -17,13 +17,15 @@ MonoBehaviour:
   pathDepth: 2
   decorationSpawnChance: 5
   chunkGridSize: {x: 5, y: 5}
-  spawnableRooms:
+  spawnRooms:
+  - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
+  genericRooms:
   - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
   - {fileID: 11400000, guid: 14383afd7cabf874b95581c1b59291b5, type: 2}
   - {fileID: 11400000, guid: 65d75481ec620bc489af6a3a97b82fc8, type: 2}
   - {fileID: 11400000, guid: 3579932cb5c260343b7f1cf0125e6335, type: 2}
   - {fileID: 11400000, guid: d2a3f44e1fc78ca47823b94227a85f48, type: 2}
-  spawnableBossRooms:
+  bossRooms:
   - {fileID: 11400000, guid: 24cdcc7d440975742896b2ee3db3cae1, type: 2}
   floorDecorations:
   - prefab: {fileID: 5302086374462805747, guid: fde85dfd2deae2a4b949119e18619b6f, type: 3}
@@ -101,8 +103,8 @@ MonoBehaviour:
       list:
       - item: {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
         weight: 1
-    groupCountPerRoom: {x: 3, y: 6}
-    enemyCountPerGroup: {x: 2, y: 5}
+    groupCountPerRoom: {x: 3, y: 5}
+    enemyCountPerGroup: {x: 3, y: 6}
   EnemyRewardGroup:
     enemyType: 2
     enemySpawnMode: 0
