@@ -525,6 +525,24 @@ MonoBehaviour:
   playerHP: {fileID: 11400000, guid: c577354bd3f8d04449749e16dc6498ac, type: 2}
   playerSpeed: {fileID: 11400000, guid: a68f778a3ea0dc348b38d85afbd4f57e, type: 2}
   isPaused: 0
+  SoundStateCalm:
+    idInternal: 0
+    valueGuidInternal: 
+    groupIdInternal: 0
+    groupGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f2b6579481e246c4a9d6838f252e0cc1, type: 2}
+  SoundStateCrowded:
+    idInternal: 0
+    valueGuidInternal: 
+    groupIdInternal: 0
+    groupGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: a6b7fd6dad4dfd64688326f613a3cebc, type: 2}
+  CurrentSoundState:
+    idInternal: 0
+    valueGuidInternal: 
+    groupIdInternal: 0
+    groupGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: b37cc9ba1574e324eb9d3cac1a650b1d, type: 2}
   levelGenerator: {fileID: 0}
   HubSceneManager: {fileID: 0}
   expManager: {fileID: 0}

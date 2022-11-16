@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 	[SerializeField, Expandable] private ScriptableInt playerHP;
 	[SerializeField, Expandable] private ScriptableFloat playerSpeed;
 	[SerializeField] private bool isPaused = false;
+	[SerializeField] private AK.Wwise.State SoundStateCalm;
+	[SerializeField] private AK.Wwise.State SoundStateCrowded;
+	[SerializeField] private AK.Wwise.State CurrentSoundState;
 
 	public enum GameState
 	{
