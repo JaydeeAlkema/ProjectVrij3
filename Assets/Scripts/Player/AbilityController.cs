@@ -86,8 +86,8 @@ public class AbilityController : MonoBehaviour
                             break;
                         case StatusEffectType.Burn:
                             IAbility burn = new BurningMeleeDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats );
-                            burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
-                            burn.AbilityBehavior();
+                            burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+                            burn.CallAbility(player);
                             Debug.Log( "should be burning" );
                             break;
                         case StatusEffectType.Stun:
@@ -104,9 +104,9 @@ public class AbilityController : MonoBehaviour
                 }
             }
             IAbility anim = new AnimationDecorator( currentMeleeAttack, "MeleeAttack1", "isAttacking" );
-            anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             anim.CallAbility( this.GetComponent<PlayerControler>() );
-            currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             currentMeleeAttack.CallAbility( player );
 
             //Camera shake
@@ -156,7 +156,7 @@ public class AbilityController : MonoBehaviour
             }
             IAbility anim = new AnimationDecorator( currentMeleeAttack, "", "isAttacking" );
             anim.CallAbility( this.GetComponent<PlayerControler>() );
-            currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             currentRangedAttack.CallAbility( player );
             player.SelfSlowCounter = 0f;
             //Camera shake
@@ -195,7 +195,7 @@ public class AbilityController : MonoBehaviour
                 }
             }
         }
-        currentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentDash.CallAbility( player );
 
         //Reset buffer counter
@@ -229,7 +229,7 @@ public class AbilityController : MonoBehaviour
             //currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             //return currentAbility1;
         }
-        currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility1.CallAbility( player );
         return currentAbility1;
 	}
@@ -256,10 +256,10 @@ public class AbilityController : MonoBehaviour
                         break;
                 }
             }
-            currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle);
             return currentAbility2;
         }
-        currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility2.CallAbility( player );
         return currentAbility2;
 	}
@@ -286,10 +286,10 @@ public class AbilityController : MonoBehaviour
                         break;
                 }
             }
-            currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+            currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             return currentAbility3;
         }
-        currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle, false );
+        currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility3.CallAbility( player );
         return currentAbility3;
 	}

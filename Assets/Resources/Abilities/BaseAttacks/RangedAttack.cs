@@ -21,7 +21,10 @@ public class RangedAttack : Ability
 		CastedObject = Object.Instantiate(castObject, CastFromPoint.transform.position + (Vector3)LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform);
 		Projectile proj = CastedObject.GetComponent<Projectile>();
 		//TrailUpgrade = BaseStats.TrailUpgrade;
+		proj.BurnDamage = BurnDamage;
 		proj.TrailUpgrade = TrailUpgrade;
+		Debug.Log( TrailUpgrade );
+		proj.TurnOnTrail();
 		proj.Damage = damage;
 		proj.LifeSpan = lifeSpan;
 		proj.Force = force;
