@@ -15,11 +15,11 @@ public class TrailWithTrigger : MonoBehaviour
 	{
 		fireTrail = this.GetComponent<TrailRenderer>();
 
-		GameObject colliderGameObject = new GameObject("TrailCollider", typeof(EdgeCollider2D));
+		GameObject colliderGameObject = new GameObject("TrailCollider", typeof(EdgeCollider2D), typeof(OnTriggerStatusEffectApply));
 		trailCollider = colliderGameObject.GetComponent<EdgeCollider2D>();
 		trailCollider.isTrigger = true;
 		trailCollider.edgeRadius = 0.25f;
-		trailCollider.gameObject.AddComponent<OnTriggerStatusEffectApply>();
+		//trailCollider.gameObject.AddComponent<OnTriggerStatusEffectApply>();
 		trailCollider.gameObject.GetComponent<OnTriggerStatusEffectApply>().statusEffectType = StatusEffectType.Burn;
 		trailCollider.gameObject.GetComponent<OnTriggerStatusEffectApply>().BurnDamage = burnDamage;
 		trailCollider.gameObject.GetComponent<OnTriggerStatusEffectApply>().UpdateStatusEffects();
