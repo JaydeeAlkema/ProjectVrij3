@@ -168,10 +168,23 @@ public class AudioManager : MonoBehaviour
         currentMusicState = MusicState;
     }
 
-    public void PostEvent(AK.Wwise.Event wwiseEvent) // add 'GameObject gameObject' als parameter als we hieraan verder gaan
+    public void PostEventLocal(AK.Wwise.Event wwiseEvent, GameObject TargetObject)
     {
         if (wwiseEvent == null)
         {
+            Debug.LogError(wwiseEvent.Name + " is null! Check the AudioManager");
+            return;
+        }
+        wwiseEvent.Post(TargetObject);
+        var wwiseGameObject = GetComponent<AkGameObj>();
+        wwiseGameObject.enabled = true;
+    }
+
+    public void PostEventGlobal(AK.Wwise.Event wwiseEvent)
+    {
+        if (wwiseEvent == null)
+        {
+            Debug.LogError(wwiseEvent.Name + " is null! Check the AudioManager");
             return;
         }
         wwiseEvent.Post(gameObject);
