@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 515b4651826ea3f4ca44253b49596a4b
+guid: 3ea7187453278224dbc25bbc0dffde2e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,13 +43,13 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.4845, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 924, y: 169, z: 988, w: 169}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -117,7 +117,28 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: HPBar1
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 126
+        width: 203
+        height: 1794
+      alignment: 9
+      pivot: {x: 0.4845, y: 0.5}
+      border: {x: 34, y: 37, z: 34, w: 39}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc45f8edc7314624986306cc124a3b9e
+      internalID: 78078388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -128,7 +149,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      HPBar1: 78078388
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
