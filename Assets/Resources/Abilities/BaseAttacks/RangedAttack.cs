@@ -5,10 +5,13 @@ using UnityEngine;
 public class RangedAttack : Ability
 {
 	private bool init = true;
+	private AK.Wwise.Event abilitySound;
+	private PlayerControler player;
 	System.Timers.Timer attackTimer = new System.Timers.Timer();
 
 	public override void CallAbility(PlayerControler _player)
 	{
+		player = _player;
 		if (init)
 		{
 			SetAbilityStats();
@@ -18,6 +21,7 @@ public class RangedAttack : Ability
 	}
 	public override void AbilityBehavior()
 	{
+		AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
 		CastedObject = Object.Instantiate(castObject, CastFromPoint.transform.position + (Vector3)LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform);
 		Projectile proj = CastedObject.GetComponent<Projectile>();
 		//TrailUpgrade = BaseStats.TrailUpgrade;
@@ -36,5 +40,6 @@ public class RangedAttack : Ability
 		force = BaseStats.Force;
 		damage = BaseStats.Damage;
 		AttackTime = BaseStats.AttackTime;
+		abilitySound = BaseStats.AbilitySound1;
 	}
 }

@@ -12,6 +12,7 @@ public class MeleeAttack : Ability
 	private Collider2D[] enemiesInBox;
 	private bool hitDetecting = false;
 	private PlayerControler player;
+	private AK.Wwise.Event abilitySound;
 
 	public override void CallAbility(PlayerControler _player)
 	{
@@ -25,6 +26,7 @@ public class MeleeAttack : Ability
 	}
 	public override void AbilityBehavior()
 	{
+		AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
 		player.IsAttackPositionLocked = true;
 		caller.CallCoroutine(TestCoroutine());
 
@@ -50,6 +52,7 @@ public class MeleeAttack : Ability
 		distance = BaseStats.Distance;
 		coolDown = BaseStats.CoolDown;
 		AttackTime = BaseStats.AttackTime;
+		abilitySound = BaseStats.AbilitySound1;
 	}
 
 	public IEnumerator TestCoroutine()

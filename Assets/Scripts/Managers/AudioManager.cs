@@ -176,7 +176,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
         wwiseEvent.Post(TargetObject);
-        var wwiseGameObject = GetComponent<AkGameObj>();
+        var wwiseGameObject = TargetObject.GetComponent<AkGameObj>();
         wwiseGameObject.enabled = true;
     }
 

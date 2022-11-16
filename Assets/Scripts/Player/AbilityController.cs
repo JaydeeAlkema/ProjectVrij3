@@ -116,7 +116,8 @@ public class AbilityController : MonoBehaviour
             player.BufferCounterMelee = 0f;
 
             //Melee sound
-            AkSoundEngine.PostEvent("plr_attck_melee", this.gameObject);
+            //AkSoundEngine.PostEvent("plr_attck_melee", this.gameObject);
+            
         }
         return currentMeleeAttack;
 	}
@@ -166,7 +167,7 @@ public class AbilityController : MonoBehaviour
             player.BufferCounterCast = 0f;
 
             //Cast sound
-            AkSoundEngine.PostEvent("plr_attck_cast", this.gameObject);
+            //AkSoundEngine.PostEvent("plr_attck_cast", this.gameObject);
 
         }
         return currentRangedAttack;

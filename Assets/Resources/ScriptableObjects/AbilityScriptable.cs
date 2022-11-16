@@ -31,6 +31,8 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float slowAmount = 0.5f;
 	[SerializeField] private float slowDuration = 4f;
 
+	[SerializeField] private AK.Wwise.Event abilitySound1;
+
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	public Sprite AbilityImage { get => abilityImage; set => abilityImage = value; }
@@ -59,6 +61,8 @@ public class AbilityScriptable : ScriptableObject
 	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
 
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
+	public AK.Wwise.Event AbilitySound1 { get => abilitySound1; set => abilitySound1 = value; }
+
 	public int markType;
 
 	public void UpdateStatusEffects()
