@@ -35,7 +35,7 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 
 	public void SetBurnValue(int _burnDamage)
 	{
-		BurnDamage = _burnDamage;
+		burnDamage = _burnDamage;
 		UpdateStatusEffects();
 	}
 

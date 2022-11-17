@@ -57,4 +57,16 @@ public interface IAbility
 			damageable.ApplyStatusEffect( statusEffect );
 		}
 	}
+
+	virtual void SetStartValues()
+	{
+		CoolDown = BaseStats.CoolDown;
+		AttackTime = BaseStats.AttackTime;
+		Damage = BaseStats.Damage;
+		CritChance = BaseStats.CritChance;
+		BoxSize = BaseStats.BoxSize;
+		BurnDamage = BaseStats.BurnDamage;
+		SlowAmount = BaseStats.SlowAmount;
+		SlowDuration = BaseStats.SlowDuration;
+	}
 }

@@ -115,9 +115,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		currentMeleeAttack.BaseStats = meleeAttack;
 		currentRangedAttack.BaseStats = rangedAttack;
 		currentDash.BaseStats = dash;
+		currentMeleeAttack.SetStartValues();
+		currentRangedAttack.SetStartValues();
+		currentDash.SetStartValues();
 		abilityController.CurrentMeleeAttack = currentMeleeAttack;
 		abilityController.CurrentRangedAttack = currentRangedAttack;
 		abilityController.CurrentDash = currentDash;
+		Debug.Log( currentMeleeAttack.BurnDamage );
 		abilityController.SetAttacks();
 		trail.emitting = false;
 
