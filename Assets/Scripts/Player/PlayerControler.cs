@@ -240,7 +240,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			selfSlowMultiplier = 0.4f;
 		}
 		//Speed-up player while melee attacking
-		else if (abilityController.IsAttacking)
+		else if (isAttackPositionLocked)
 		{
 			selfSlowMultiplier = 2f;
 		} 
@@ -252,10 +252,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MouseLook()
 	{
-		if (!animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
-		{
-			isAttackPositionLocked = false;
-		}
+		//if (!animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
+		//{
+		//	isAttackPositionLocked = false;
+		//}
 
 		if (!isAttackPositionLocked)
 		{

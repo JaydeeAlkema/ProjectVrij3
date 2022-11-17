@@ -30,7 +30,7 @@ public class MeleeAttack : Ability
 	public override void AbilityBehavior()
 	{
 		AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
-		player.IsAttackPositionLocked = true;
+		//player.IsAttackPositionLocked = true;
 		caller.CallCoroutine(TestCoroutine());
 
 	}
@@ -92,6 +92,7 @@ public class MeleeAttack : Ability
 
 		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
 		{
+			player.IsAttackPositionLocked = true;
 			enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
 			foreach (Collider2D enemy in enemiesInBox)
 			{
@@ -106,6 +107,7 @@ public class MeleeAttack : Ability
 
 			yield return new WaitForEndOfFrame();
 		}
+		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
 		yield return null;
 	}
