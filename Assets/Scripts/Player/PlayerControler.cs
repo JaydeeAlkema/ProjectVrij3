@@ -242,7 +242,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		//Speed-up player while melee attacking
 		else if (abilityController.IsAttacking)
 		{
-			selfSlowMultiplier = 1.5f;
+			selfSlowMultiplier = 2f;
 		} 
 		else
 		{
