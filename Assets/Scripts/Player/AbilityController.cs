@@ -71,43 +71,43 @@ public class AbilityController : MonoBehaviour
 
 	//Shit show of switches for all the effects with decorators
 	public IAbility MeleeAttacked(IAbility melee)
-	{
-		if (!isAttacking)
-		{
-			isAttacking = true;
-			foreach (KeyValuePair<StatusEffectType, bool> effect in melee.AbilityUpgrades)
-			{
-				Debug.Log("effect in effects is: " + effect);
-				if (effect.Value)
-				{
-					switch (effect.Key)
-					{
-						case StatusEffectType.none:
-							break;
-						case StatusEffectType.Burn:
-							IAbility burn = new BurningMeleeDecorator(currentMeleeAttack, currentMeleeAttack.BaseStats);
-							burn.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-							burn.AbilityBehavior();
-							Debug.Log("should be burning");
-							break;
-						case StatusEffectType.Stun:
-							break;
-						case StatusEffectType.Slow:
-							IAbility slow = new SlowDecorator(currentMeleeAttack);
-							break;
-						case StatusEffectType.Marked:
-							IAbility mark = new MarkDecorator(currentMeleeAttack);
-							break;
-						default:
-							break;
-					}
-				}
-			}
-			IAbility anim = new AnimationDecorator(currentMeleeAttack, "MeleeAttack1", "isAttacking");
-			anim.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-			anim.CallAbility(this.GetComponent<PlayerControler>());
-			currentMeleeAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-			currentMeleeAttack.CallAbility(player);
+    {
+        if( !isAttacking )
+        {
+            isAttacking = true;
+            foreach( KeyValuePair<StatusEffectType, bool> effect in melee.AbilityUpgrades )
+            {
+                Debug.Log( "effect in effects is: " + effect );
+                if( effect.Value )
+                {
+                    switch( effect.Key )
+                    {
+                        case StatusEffectType.none:
+                            break;
+                        case StatusEffectType.Burn:
+                            IAbility burn = new BurningMeleeDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats );
+                            burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+                            burn.CallAbility(player);
+                            Debug.Log( "should be burning" );
+                            break;
+                        case StatusEffectType.Stun:
+                            break;
+                        case StatusEffectType.Slow:
+                            IAbility slow = new SlowDecorator( currentMeleeAttack );
+                            break;
+                        case StatusEffectType.Marked:
+                            IAbility mark = new MarkDecorator( currentMeleeAttack );
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            IAbility anim = new AnimationDecorator( currentMeleeAttack, "MeleeAttack1", "isAttacking" );
+            anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            anim.CallAbility( this.GetComponent<PlayerControler>() );
+            currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            currentMeleeAttack.CallAbility( player );
 
 			//Camera shake
 			//CameraShake.Instance.ShakeCamera(4f, 0.1f);
@@ -122,46 +122,46 @@ public class AbilityController : MonoBehaviour
 		return currentMeleeAttack;
 	}
 
-	public IAbility RangeAttacked(IAbility ranged)
-	{
-		if (!isAttacking)
-		{
-			isAttacking = true;
-			foreach (KeyValuePair<StatusEffectType, bool> effect in ranged.AbilityUpgrades)
-			{
-				if (effect.Value)
-				{
-					switch (effect.Key)
-					{
-						case StatusEffectType.none:
-							break;
-						case StatusEffectType.Burn:
-							Debug.Log("burning");
-							IAbility burn = new BurningRangedDecorator(currentRangedAttack, true);
-							burn.AbilityBehavior();
-							break;
-						case StatusEffectType.Stun:
-							break;
-						case StatusEffectType.Slow:
-							IAbility slow = new SlowDecorator(currentRangedAttack);
-							break;
-						case StatusEffectType.Marked:
-							IAbility mark = new MarkDecorator(currentRangedAttack);
-							break;
-						default:
-							break;
-					}
-				}
-				//currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-				//return currentRangedAttack;
-			}
-			IAbility anim = new AnimationDecorator(currentMeleeAttack, "", "isAttacking");
-			anim.CallAbility(this.GetComponent<PlayerControler>());
-			currentRangedAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-			currentRangedAttack.CallAbility(player);
-			player.SelfSlowCounter = 0f;
-			//Camera shake
-			//CameraShake.Instance.ShakeCamera(4f, 0.1f);
+    public IAbility RangeAttacked(IAbility ranged)
+    {
+        if( !isAttacking )
+        {
+            isAttacking = true;
+            foreach( KeyValuePair<StatusEffectType, bool> effect in ranged.AbilityUpgrades )
+            {
+                if( effect.Value )
+                {
+                    switch( effect.Key )
+                    {
+                        case StatusEffectType.none:
+                            break;
+                        case StatusEffectType.Burn:
+                            Debug.Log( "burning" );
+                            IAbility burn = new BurningRangedDecorator( currentRangedAttack, true );
+                            burn.AbilityBehavior();
+                            break;
+                        case StatusEffectType.Stun:
+                            break;
+                        case StatusEffectType.Slow:
+                            IAbility slow = new SlowDecorator( currentRangedAttack );
+                            break;
+                        case StatusEffectType.Marked:
+                            IAbility mark = new MarkDecorator( currentRangedAttack );
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                //currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+                //return currentRangedAttack;
+            }
+            IAbility anim = new AnimationDecorator( currentMeleeAttack, "", "isAttacking" );
+            anim.CallAbility( this.GetComponent<PlayerControler>() );
+            currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            currentRangedAttack.CallAbility( player );
+            player.SelfSlowCounter = 0f;
+            //Camera shake
+            //CameraShake.Instance.ShakeCamera(4f, 0.1f);
 
 			//Reset buffer counter
 			player.BufferCounterCast = 0f;
@@ -173,31 +173,31 @@ public class AbilityController : MonoBehaviour
 		return currentRangedAttack;
 	}
 
-	public IAbility Dashing(IAbility dash)
-	{
-		foreach (KeyValuePair<StatusEffectType, bool> effect in dash.AbilityUpgrades)
-		{
-			if (effect.Value)
-			{
-				switch (effect.Key)
-				{
-					case StatusEffectType.none:
-						break;
-					case StatusEffectType.Burn:
-						break;
-					case StatusEffectType.Stun:
-						break;
-					case StatusEffectType.Slow:
-						break;
-					case StatusEffectType.Marked:
-						break;
-					default:
-						break;
-				}
-			}
-		}
-		currentDash.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-		currentDash.CallAbility(player);
+    public IAbility Dashing(IAbility dash)
+    {
+        foreach( KeyValuePair<StatusEffectType, bool> effect in dash.AbilityUpgrades )
+        {
+            if( effect.Value )
+            {
+                switch( effect.Key )
+                {
+                    case StatusEffectType.none:
+                        break;
+                    case StatusEffectType.Burn:
+                        break;
+                    case StatusEffectType.Stun:
+                        break;
+                    case StatusEffectType.Slow:
+                        break;
+                    case StatusEffectType.Marked:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        currentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentDash.CallAbility( player );
 
 		//Reset buffer counter
 		player.BufferCounterDash = 0f;
@@ -205,94 +205,94 @@ public class AbilityController : MonoBehaviour
 		return currentDash;
 	}
 
-	public IAbility AbilityOneAttacked(IAbility ability1)
-	{
-		foreach (KeyValuePair<StatusEffectType, bool> effect in ability1.AbilityUpgrades)
-		{
-			if (effect.Value)
-			{
-				switch (effect.Key)
-				{
-					case StatusEffectType.none:
-						break;
-					case StatusEffectType.Burn:
-						break;
-					case StatusEffectType.Stun:
-						break;
-					case StatusEffectType.Slow:
-						break;
-					case StatusEffectType.Marked:
-						break;
-					default:
-						break;
-				}
-			}
-			//currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			//return currentAbility1;
-		}
-		currentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-		currentAbility1.CallAbility(player);
-		return currentAbility1;
+    public IAbility AbilityOneAttacked(IAbility ability1)
+    {
+        foreach( KeyValuePair<StatusEffectType, bool> effect in ability1.AbilityUpgrades )
+        {
+            if( effect.Value )
+            {
+                switch( effect.Key )
+                {
+                    case StatusEffectType.none:
+                        break;
+                    case StatusEffectType.Burn:
+                        break;
+                    case StatusEffectType.Stun:
+                        break;
+                    case StatusEffectType.Slow:
+                        break;
+                    case StatusEffectType.Marked:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            //currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            //return currentAbility1;
+        }
+        currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentAbility1.CallAbility( player );
+        return currentAbility1;
 	}
 
-	public IAbility AbilityTwoAttacked(IAbility ability2)
-	{
-		foreach (KeyValuePair<StatusEffectType, bool> effect in currentAbility2.AbilityUpgrades)
-		{
-			if (effect.Value)
-			{
-				switch (effect.Key)
-				{
-					case StatusEffectType.none:
-						break;
-					case StatusEffectType.Burn:
-						break;
-					case StatusEffectType.Stun:
-						break;
-					case StatusEffectType.Slow:
-						break;
-					case StatusEffectType.Marked:
-						break;
-					default:
-						break;
-				}
-			}
-			currentAbility2.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-			return currentAbility2;
-		}
-		currentAbility2.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-		currentAbility2.CallAbility(player);
-		return currentAbility2;
+    public IAbility AbilityTwoAttacked(IAbility ability2)
+    {
+        foreach( KeyValuePair<StatusEffectType, bool> effect in currentAbility2.AbilityUpgrades )
+        {
+            if( effect.Value )
+            {
+                switch( effect.Key )
+                {
+                    case StatusEffectType.none:
+                        break;
+                    case StatusEffectType.Burn:
+                        break;
+                    case StatusEffectType.Stun:
+                        break;
+                    case StatusEffectType.Slow:
+                        break;
+                    case StatusEffectType.Marked:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle);
+            return currentAbility2;
+        }
+        currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentAbility2.CallAbility( player );
+        return currentAbility2;
 	}
 
-	public IAbility AbilityThreeAttacked(IAbility ability3)
-	{
-		foreach (KeyValuePair<StatusEffectType, bool> effect in ability3.AbilityUpgrades)
-		{
-			if (effect.Value)
-			{
-				switch (effect.Key)
-				{
-					case StatusEffectType.none:
-						break;
-					case StatusEffectType.Burn:
-						break;
-					case StatusEffectType.Stun:
-						break;
-					case StatusEffectType.Slow:
-						break;
-					case StatusEffectType.Marked:
-						break;
-					default:
-						break;
-				}
-			}
-			currentAbility3.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-			return currentAbility3;
-		}
-		currentAbility3.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle, false);
-		currentAbility3.CallAbility(player);
-		return currentAbility3;
+    public IAbility AbilityThreeAttacked(IAbility ability3)
+    {
+        foreach( KeyValuePair<StatusEffectType, bool> effect in ability3.AbilityUpgrades )
+        {
+            if( effect.Value )
+            {
+                switch( effect.Key )
+                {
+                    case StatusEffectType.none:
+                        break;
+                    case StatusEffectType.Burn:
+                        break;
+                    case StatusEffectType.Stun:
+                        break;
+                    case StatusEffectType.Slow:
+                        break;
+                    case StatusEffectType.Marked:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            return currentAbility3;
+        }
+        currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentAbility3.CallAbility( player );
+        return currentAbility3;
 	}
 
 

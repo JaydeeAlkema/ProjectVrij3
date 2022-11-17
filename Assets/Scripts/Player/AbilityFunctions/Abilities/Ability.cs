@@ -44,15 +44,24 @@ public abstract class Ability : MonoBehaviour ,IAbility
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void AbilityBehavior(){ }
-	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle, bool _trailUpgrade ) 
+	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle) 
 	{
 		Rb2d = _rb2d;
 		MousePos = _mousePos;
 		LookDir = _lookDir;
 		CastFromPoint = _castFromPoint;
 		Angle = _angle;
-		TrailUpgrade = _trailUpgrade;
 		caller = CoroutineCaller.CallerInstance;
+	}
+	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle, bool _trailUpgrade )
+	{
+		Rb2d = _rb2d;
+		MousePos = _mousePos;
+		LookDir = _lookDir;
+		CastFromPoint = _castFromPoint;
+		Angle = _angle;
+		caller = CoroutineCaller.CallerInstance;
+		TrailUpgrade = _trailUpgrade;
 	}
 
 	public void OnHitApplyStatusEffects( IDamageable damageable )

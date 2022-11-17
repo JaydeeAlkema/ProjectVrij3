@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1628312603111042578}
   - component: {fileID: 3071299147307218352}
   - component: {fileID: 2900950211128587912}
-  - component: {fileID: 2947048837384982487}
   - component: {fileID: 8631467547771518718}
   m_Layer: 9
   m_Name: TestProjectile 2
@@ -147,23 +146,6 @@ MonoBehaviour:
   trailUpgrade: 0
   force: 0
   typeOfLayer: 6
---- !u!114 &2947048837384982487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210017399674347035}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7f65aecbb78324478211c2e68c87d9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  burnDamage: 0
-  slowAmount: 0.5
-  slowDuration: 4
-  statusEffectType: 8
-  markType: 0
 --- !u!114 &8631467547771518718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28cb1fa9a3710b4f836821a7aa0567b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  burnDamage: 0
+  burnDamage: 1
   slowAmount: 0.5
   slowDuration: 4
   statusEffectType: 0

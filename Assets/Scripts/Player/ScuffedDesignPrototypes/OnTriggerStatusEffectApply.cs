@@ -15,7 +15,7 @@ public enum StatusEffectType
 
 public class OnTriggerStatusEffectApply : MonoBehaviour
 {
-	[SerializeField] private int burnDamage;
+	[SerializeField] private int burnDamage = 1;
 	[SerializeField] private float slowAmount = 0.5f;
 	[SerializeField] private float slowDuration = 4f;
 
@@ -30,6 +30,12 @@ public class OnTriggerStatusEffectApply : MonoBehaviour
 
 	public void Start()
 	{
+		UpdateStatusEffects();
+	}
+
+	public void SetBurnValue(int _burnDamage)
+	{
+		BurnDamage = _burnDamage;
 		UpdateStatusEffects();
 	}
 

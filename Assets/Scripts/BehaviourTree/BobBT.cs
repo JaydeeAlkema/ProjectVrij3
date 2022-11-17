@@ -16,6 +16,10 @@ public class BobBT : BTTree
 		{
 			new Sequence(new List<BTNode>
 			{
+				new GetCrowdControlled(enemyScript),
+			}),
+			new Sequence(new List<BTNode>
+			{
 				new BobCheckClose(rb2d, enemyScript, tooCloseRange),
 				new BobRunAway(rb2d, enemyScript, tooCloseRange),
 			}),

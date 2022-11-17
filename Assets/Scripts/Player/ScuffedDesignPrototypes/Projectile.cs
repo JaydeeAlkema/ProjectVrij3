@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
 	[SerializeField] private GameObject projectileAnimation;
 	private float counter = 0f;
 	[SerializeField] private float lifeSpan;
+	private int burnDamage;
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	[SerializeField] private TrailRenderer trail = null;
 	[SerializeField] private GameObject explosion = null;
@@ -20,19 +21,15 @@ public class Projectile : MonoBehaviour
 	public int Damage { get => damage; set => damage = value; }
 	[SerializeField] private int typeOfLayer = 6;
 	private GameObject addedTrail = null;
+	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
 
 	private void Awake()
 	{
 		
 	}
 
-	private void FixedUpdate()
+	private void Update()
 	{
-		if( trailUpgrade )
-		{
-			addedTrail = Instantiate( trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform );
-			trailUpgrade = false;
-		}
 		projectileAnimation.GetComponent<SpriteRenderer>().flipY = transform.rotation.eulerAngles.z > 180 ? true : false;
 		LifeTime(lifeSpan);
 		transform.Translate(Vector3.up * force * Time.deltaTime);
@@ -40,6 +37,20 @@ public class Projectile : MonoBehaviour
 		if (GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerProjectile1_fizzle"))
 		{
 			Destroy(this.gameObject, GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).length * GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).speed);
+		}
+	}
+
+	public void TurnOnTrail()
+	{
+		Debug.Log( "trail got called" );
+		if( trailUpgrade )
+		{
+			Debug.Log( "trail is on" );
+			addedTrail = Object.Instantiate( trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform );
+			TrailWithTrigger trailTrigger = addedTrail.GetComponent<TrailWithTrigger>();
+			trailTrigger.SetBurnValue( burnDamage );
+			Debug.Log( "projectile burn damage is: " + burnDamage );
+			trailUpgrade = false;
 		}
 	}
 

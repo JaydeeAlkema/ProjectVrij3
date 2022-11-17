@@ -12,6 +12,7 @@ public class BlackHoleAbility : Ability
 			SetAbilityStats();
 			init = false;
 		}
+		AbilityBehavior();
 	}
 
 	public override void AbilityBehavior()
@@ -25,6 +26,8 @@ public class BlackHoleAbility : Ability
 			Vector3 newPoint = circlePos;
 			enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
 		}
+
+		enemiesInCircle = null;
 	}
 
 	public void SetAbilityStats()

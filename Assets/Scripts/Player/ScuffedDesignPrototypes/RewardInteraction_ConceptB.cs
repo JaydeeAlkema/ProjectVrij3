@@ -18,10 +18,9 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 	{
 		if (canInteract)
 		{
-			if (Input.GetKeyDown(KeyCode.F) && GameManager.Instance.ExpManager.PlayerPoints >= 1)
+			if (Input.GetKeyDown(KeyCode.F))
 			{
 				ChooseUI.gameObject.SetActive(true);
-				GameManager.Instance.ExpManager.PlayerPoints -= 1;
 				GameManager.Instance.TogglePauseGame();
 			}
 		}
@@ -44,5 +43,12 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 			buttonPrompt.gameObject.SetActive(false);
 			ChooseUI.gameObject.SetActive(false);
 		}
+	}
+
+	public void CloseRewardScreen()
+	{
+		buttonPrompt.gameObject.SetActive( false );
+		ChooseUI.gameObject.SetActive( false );
+		GameManager.Instance.TogglePauseGame();
 	}
 }
