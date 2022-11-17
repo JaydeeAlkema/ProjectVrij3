@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3246640220694370056}
   - component: {fileID: 3246640220694370059}
   - component: {fileID: 6258730924349755621}
+  - component: {fileID: 2917704130622556586}
   m_Layer: 9
   m_Name: BurnArea
   m_TagString: Untagged
@@ -33,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3246640220694370057
 SpriteRenderer:
@@ -143,3 +144,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeSpan: 4
+--- !u!114 &2917704130622556586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3246640220694370058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8d47f8ee31e404199829b659edc2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingMode: 0
+  roundingMode: 0
+  positionReference: 1
+  sortingOrderOffset: 0
