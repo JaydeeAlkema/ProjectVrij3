@@ -144,11 +144,12 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator GameOver()
 	{
+		playerInstance.GetComponent<PlayerControler>().Invulnerable = true;
 		uiManager.DisableAllUI();
 		playerInstance.GetComponentInChildren<CameraToMouseFollow>().gameObject.transform.localPosition = Vector3.zero;
 		playerInstance.GetComponent<PlayerControler>().GameOverVFX(1);
 		Time.timeScale = 0f;	//Hitstop
-		yield return new WaitForSecondsRealtime(0.2f);
+		yield return new WaitForSecondsRealtime(0.3f);
 
 		playerInstance.GetComponent<PlayerControler>().GameOverVFX(2);
 		playerInstance.GetComponent<PlayerControler>().enabled = false;
@@ -158,7 +159,7 @@ public class GameManager : MonoBehaviour
 			playerSprite.gameObject.SetActive(false);
 		}
 		Time.timeScale = 0.3f;    //Slowdown
-		yield return new WaitForSecondsRealtime(1.3f);
+		yield return new WaitForSecondsRealtime(2f);
 
 		//Return to normal time
 		Time.timeScale = 1f;
