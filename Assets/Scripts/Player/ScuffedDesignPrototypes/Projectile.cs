@@ -46,8 +46,10 @@ public class Projectile : MonoBehaviour
 		if( trailUpgrade )
 		{
 			Debug.Log( "trail is on" );
-			addedTrail = Instantiate( trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform );
-			addedTrail.GetComponent<TrailWithTrigger>().BurnDamage = burnDamage;
+			addedTrail = Object.Instantiate( trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform );
+			TrailWithTrigger trailTrigger = addedTrail.GetComponent<TrailWithTrigger>();
+			trailTrigger.SetBurnValue( burnDamage );
+			Debug.Log( "projectile burn damage is: " + burnDamage );
 			trailUpgrade = false;
 		}
 	}

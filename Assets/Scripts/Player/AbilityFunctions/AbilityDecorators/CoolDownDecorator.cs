@@ -21,6 +21,11 @@ public class CoolDownDecorator : AbilityDecorator
 		AbilityBehavior();
 	}
 
+	public void CallAbility(bool resetCooldown)
+	{
+		cooledDown = resetCooldown;
+	}
+
 	public override void AbilityBehavior()
 	{
 		if( cooledDown )
