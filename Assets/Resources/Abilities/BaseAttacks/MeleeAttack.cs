@@ -13,6 +13,9 @@ public class MeleeAttack : Ability
 	private bool hitDetecting = false;
 	private PlayerControler player;
 	private AK.Wwise.Event abilitySound;
+	private int comboCounter = 0;
+	private float comboTimer = 0f;
+	private IEnumerator comboTimerCoroutine;
 
 	public override void CallAbility(PlayerControler _player)
 	{
@@ -37,7 +40,7 @@ public class MeleeAttack : Ability
 		if (enemyList != null)
 		{
 			//Debug.Log("Starting enemy damaging");
-			enemy.GetComponent<IDamageable>()?.TakeDamage(damage, 0);
+			enemy.GetComponent<IDamageable>()?.TakeDamage(damage + (20 * comboCounter), 0);
 			OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
 			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
 
@@ -55,8 +58,32 @@ public class MeleeAttack : Ability
 		abilitySound = BaseStats.AbilitySound1;
 	}
 
+	public void ResetComboTimer()
+	{
+		if (comboTimerCoroutine != null)
+		{
+			caller.CancelCoroutine(comboTimerCoroutine);
+		}
+		comboTimerCoroutine = ComboTimer();
+		caller.CallCoroutine(comboTimerCoroutine);
+		Debug.Log("Combo timer has been reset");
+	}
+
 	public IEnumerator TestCoroutine()
 	{
+		ResetComboTimer();
+
+		if (comboCounter < 3)
+		{
+			comboCounter++;
+			Debug.Log("Combo: " + comboCounter);
+		}
+		else
+		{
+			comboCounter = 0;
+			Debug.Log("Combo reset");
+		}
+
 		hitDetecting = true;
 		yield return new WaitForFixedUpdate();
 
@@ -78,5 +105,13 @@ public class MeleeAttack : Ability
 		}
 		enemyList.Clear();
 		yield return null;
+	}
+
+	public IEnumerator ComboTimer()
+	{
+		yield return new WaitForSeconds(3f);
+
+		comboCounter = 0;
+		Debug.Log("Combo timer ends, combo counter is: " + comboCounter);
 	}
 }
