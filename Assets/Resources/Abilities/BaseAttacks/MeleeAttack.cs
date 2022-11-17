@@ -73,15 +73,18 @@ public class MeleeAttack : Ability
 	{
 		ResetComboTimer();
 
-		if (comboCounter < 3)
+		if (comboCounter < 2)
 		{
 			comboCounter++;
 			Debug.Log("Combo: " + comboCounter);
+			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialDefault;
 		}
 		else
 		{
 			comboCounter = 0;
-			Debug.Log("Combo reset");
+			Debug.Log("Full combo!");
+			AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
+			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialHit;
 		}
 
 		hitDetecting = true;

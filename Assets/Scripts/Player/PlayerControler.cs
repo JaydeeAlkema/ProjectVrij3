@@ -25,12 +25,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] private SpriteRenderer playerSprite;
 	[SerializeField] GameObject Pivot_AttackAnimation;
-	[SerializeField] GameObject AttackAnimation;
+	[SerializeField] GameObject attackAnimation;
 	[SerializeField] Animator animAttack;
 	[SerializeField] private TrailRenderer trail;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
+
 	[SerializeField] Animator animPlayer;
 
 	//[SerializeField] PlayerHealthBar healthBar;
@@ -54,6 +55,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//private bool isDying = false;
 
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
+	public GameObject AttackAnimation { get => attackAnimation; set => attackAnimation = value; }
+
 	[SerializeField] private bool isAttackPositionLocked = false;
 
 	//[SerializeField] private int maxHealthPoints = 500;
@@ -204,7 +207,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			MouseLook();
 
 			playerSprite.flipX = lookDir.x > 0 ? true : false;
-			AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
+			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
@@ -230,11 +233,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void CastSelfSlow()
 	{
+		//Slow player while using ranged attack
 		if (selfSlowCounter < selfSlowTime)
 		{
 			selfSlowCounter += Time.deltaTime;
 			selfSlowMultiplier = 0.4f;
 		}
+		//Speed-up player while melee attacking
+		else if (abilityController.IsAttacking)
+		{
+			selfSlowMultiplier = 1.5f;
+		} 
 		else
 		{
 			selfSlowMultiplier = 1f;
