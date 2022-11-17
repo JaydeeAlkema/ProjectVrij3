@@ -43,6 +43,7 @@ public abstract class Ability : MonoBehaviour ,IAbility
 	public CoroutineCaller caller { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
+	public virtual void CallAbility( bool resetCooldown ) { }
 	public virtual void AbilityBehavior(){ }
 	public virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle) 
 	{

@@ -28,6 +28,7 @@ public interface IAbility
 	public float SlowDuration { get; set; }
 
 	virtual void CallAbility(PlayerControler _player) { }
+	virtual void CallAbility( bool resetCooldown ) { }
 	virtual void AbilityBehavior() { }
 	virtual void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle) 
 	{
