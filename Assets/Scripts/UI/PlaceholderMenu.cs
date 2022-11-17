@@ -8,7 +8,7 @@ public class PlaceholderMenu : MonoBehaviour
 {
 	public void MainMenu()
 	{
-		Time.timeScale = 1f;
+		GameManager.Instance.ChangeGameState(GameManager.GameState.Menu);
 		SceneManager.LoadScene(0);
 	}
 

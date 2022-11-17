@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 		Hub,//1
 		Dungeon,//2
 		GameOver,//3
+		Menu,//4
 	}
 
 	[Header("Managers")]
@@ -106,7 +107,7 @@ public class GameManager : MonoBehaviour
 		StartCoroutine(SetupLevel());
 	}
 
-	private void ChangeGameState(GameState newGameState)
+	public void ChangeGameState(GameState newGameState)
 	{
 		currentGameState = newGameState;
 		switch (currentGameState)
@@ -117,6 +118,8 @@ public class GameManager : MonoBehaviour
 				StartCoroutine(GameOver());
 				break;
 			case GameState.Hub:
+				break;
+			case GameState.Menu:
 				break;
 		}
 	}
@@ -144,11 +147,12 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator GameOver()
 	{
+		playerInstance.GetComponent<PlayerControler>().Invulnerable = true;
 		uiManager.DisableAllUI();
 		playerInstance.GetComponentInChildren<CameraToMouseFollow>().gameObject.transform.localPosition = Vector3.zero;
 		playerInstance.GetComponent<PlayerControler>().GameOverVFX(1);
 		Time.timeScale = 0f;	//Hitstop
-		yield return new WaitForSecondsRealtime(0.2f);
+		yield return new WaitForSecondsRealtime(0.3f);
 
 		playerInstance.GetComponent<PlayerControler>().GameOverVFX(2);
 		playerInstance.GetComponent<PlayerControler>().enabled = false;
@@ -158,7 +162,7 @@ public class GameManager : MonoBehaviour
 			playerSprite.gameObject.SetActive(false);
 		}
 		Time.timeScale = 0.3f;    //Slowdown
-		yield return new WaitForSecondsRealtime(1.3f);
+		yield return new WaitForSecondsRealtime(2f);
 
 		//Return to normal time
 		Time.timeScale = 1f;

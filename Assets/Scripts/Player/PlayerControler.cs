@@ -102,6 +102,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float BufferCounterDash { get => bufferCounterDash; set => bufferCounterDash = value; }
 	public bool IsAttackPositionLocked { get => isAttackPositionLocked; set => isAttackPositionLocked = value; }
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
+	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
 
 	#endregion
 
@@ -373,7 +374,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(int damage)
 	{
-		if (!invulnerable)
+		if (!invulnerable && GameManager.Instance.currentGameState == GameManager.GameState.Dungeon)
 		{
 			AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 			StartCoroutine(playerFlashColor());
