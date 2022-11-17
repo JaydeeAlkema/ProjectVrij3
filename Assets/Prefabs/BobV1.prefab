@@ -110,7 +110,7 @@ MonoBehaviour:
   damageBase: 0
   damage: 50
   speed: 6
-  aggroRange: 15
+  aggroRange: 16
   attackRange: 9
   expAmount: 20
   expAmountBase: 20
@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 7867117982870332738}
   - component: {fileID: 4605739585943561647}
   - component: {fileID: 6017575560788466592}
+  - component: {fileID: 3866040332005460931}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -359,6 +360,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3866040332005460931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8879844763961028847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8d47f8ee31e404199829b659edc2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingMode: 1
+  roundingMode: 1
+  positionReference: 0
+  sortingOrderOffset: 0
 --- !u!1001 &2899608669614392189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -385,11 +402,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0195503
+      value: 2.7858193
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.26702243
+      value: 0.72961205
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.9034283
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -397,7 +418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.301
+      value: -2.65
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_LocalPosition.z
