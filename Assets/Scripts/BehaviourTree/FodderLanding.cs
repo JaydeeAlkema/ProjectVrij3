@@ -54,7 +54,7 @@ public class FodderLanding : BTNode
 				//enemyScript.enemySprite.flipX = (target.position - enemyScript.transform.position).normalized.x > 0 ? true : false;
 				enemyScript.enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 				enemyScript.enemySprite.flipY = false;
-				enemyScript.HasHitbox = false;
+				//enemyScript.HasHitbox = false;
 				counter += Time.deltaTime;
 				//fodderEnemyScript.coroutineText.text = "FodderLanding";
 			}

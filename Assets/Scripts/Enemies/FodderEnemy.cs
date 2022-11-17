@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class FodderEnemy : EnemyBase
 {
@@ -49,7 +50,7 @@ public class FodderEnemy : EnemyBase
 			if (Target.gameObject != null && HasHitbox)
 			{
 				AttackPlayer(Target.gameObject);
-				HasHitbox = false;
+				//HasHitbox = false;
 			}
 		}
 		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
@@ -118,22 +119,28 @@ public class FodderEnemy : EnemyBase
 		if (damageType == 0)
 		{
 			IsStunned = true;
-			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 			//StartCoroutine(HitStop());
 		}
 
 		if (damageType == 1)
 		{
-			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
-		StartCoroutine(HitStop());
+		OnHitVFX();
+		StartCoroutine(HitStop(0.03f));
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		HealthPoints -= damage;
 		IsAggro = true;
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
-		if (HealthPoints <= 0) Die();
+		if (HealthPoints <= 0)
+		{
+			GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
+			splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
+			Die();
+		}
 	}
 
 	public override void MoveToTarget(Transform target)
@@ -180,7 +187,7 @@ public class FodderEnemy : EnemyBase
 		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		enemyAnimator.Play("Fodder1Landing");
 		Rb2d.velocity = new Vector2(0, 0);
-		HasHitbox = false;
+		//HasHitbox = false;
 		Attacking = false;
 
 
@@ -194,8 +201,12 @@ public class FodderEnemy : EnemyBase
 
 	public void OnDestroy()
 	{
-		GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
-		splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
+		//Change name to dungeon name if changed later
+		//if (SceneManager.GetActiveScene().name == "Jaydee Testing Scene")
+		//{
+		//	GameObject splatter = Instantiate(SplatterDecal, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
+		//	splatter.GetComponent<SpriteRenderer>().flipX = (Random.value > 0.5f);
+		//}
 	}
 
 	//public IEnumerator WindupDashAttack(Transform target)

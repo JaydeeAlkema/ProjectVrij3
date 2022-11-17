@@ -186,8 +186,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flyDir: {x: 0, y: 0}
+  damage: 0
   fadeSpeed: 6
   flySpeed: 1
-  sizeSmall: {x: 0, y: 0, z: 0}
+  sizeSmall: {x: 0.4, y: 0.4, z: 0.4}
+  sizeBig: {x: 0, y: 0, z: 0}
   resizeRate: 5
   isDisappearing: 0

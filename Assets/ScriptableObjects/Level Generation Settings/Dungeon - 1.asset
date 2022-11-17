@@ -10,38 +10,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 839aebb8859c3664da18d858255d4c27, type: 3}
-  m_Name: Default
+  m_Name: Dungeon - 1
   m_EditorClassIdentifier: 
   chunkSize: 45
   maxRooms: 8
   pathDepth: 2
   decorationSpawnChance: 5
   chunkGridSize: {x: 5, y: 5}
-  spawnableRooms:
+  spawnRooms:
+  - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
+  genericRooms:
   - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
   - {fileID: 11400000, guid: 14383afd7cabf874b95581c1b59291b5, type: 2}
   - {fileID: 11400000, guid: 65d75481ec620bc489af6a3a97b82fc8, type: 2}
   - {fileID: 11400000, guid: 3579932cb5c260343b7f1cf0125e6335, type: 2}
   - {fileID: 11400000, guid: d2a3f44e1fc78ca47823b94227a85f48, type: 2}
-  spawnableBossRooms:
+  bossRooms:
   - {fileID: 11400000, guid: 24cdcc7d440975742896b2ee3db3cae1, type: 2}
   floorDecorations:
-  - sprite: {fileID: 1754463617, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: fde85dfd2deae2a4b949119e18619b6f, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 1465405479, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: a11e6fdf8216c6a4299a8376e0afa509, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 2027542645, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: 9b6b9b6488d213c479839e03a45438b0, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 235064338, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 5302086374462805747, guid: dff909bc7f3cb314d91a05a93958ea07, type: 3}
     spawnChance: 0
-  wallDecorations:
-  - sprite: {fileID: -724776260, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  topWallDecorations:
+  - prefab: {fileID: 2218761167129531356, guid: 4a8a1549c93bd264b8b6b060251ae6db, type: 3}
     spawnChance: 0
-  - sprite: {fileID: 1735270170, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  - prefab: {fileID: 2218761167129531356, guid: 0fb597080695756478a8bee7b89c4941, type: 3}
     spawnChance: 0
-  - sprite: {fileID: -586220766, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  leftWallDecorations:
+  - prefab: {fileID: 2218761167129531356, guid: e49f06ed68f119041a01702ca32fbcf6, type: 3}
     spawnChance: 0
-  - sprite: {fileID: -2041788793, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+  rightWallDecorations:
+  - prefab: {fileID: 2218761167129531356, guid: 2110b0f5fe64ae14883a225983c22699, type: 3}
     spawnChance: 0
   floorSprites:
   - {fileID: -1994589904, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
@@ -94,13 +98,16 @@ MonoBehaviour:
   - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   EnemyFodderGroup:
     enemyType: 1
+    enemySpawnMode: 1
     enemyPrefabs:
       list:
       - item: {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
         weight: 1
-    enemyCountPerRoom: {x: 10, y: 20}
+    groupCountPerRoom: {x: 3, y: 5}
+    enemyCountPerGroup: {x: 2, y: 6}
   EnemyRewardGroup:
     enemyType: 2
+    enemySpawnMode: 0
     enemyPrefabs:
       list:
       - item: {fileID: 4442677197823009440, guid: 61fc9d0ea1da44b4d98702d03a3351c7, type: 3}
@@ -115,4 +122,5 @@ MonoBehaviour:
         weight: 1
       - item: {fileID: 4442677197823009440, guid: f738b166daa0c6e4db190bb79a6c9c3a, type: 3}
         weight: 1
-    enemyCountPerRoom: {x: 0, y: 0}
+    groupCountPerRoom: {x: 0, y: 0}
+    enemyCountPerGroup: {x: 0, y: 0}

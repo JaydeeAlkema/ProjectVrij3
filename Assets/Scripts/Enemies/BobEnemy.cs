@@ -51,7 +51,7 @@ public class BobEnemy : EnemyBase
 			if (Target.gameObject != null && HasHitbox)
 			{
 				AttackPlayer(Target.gameObject);
-				HasHitbox = false;
+				//HasHitbox = false;
 			}
 		}
 		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);

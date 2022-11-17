@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 public class OneShotVFX : MonoBehaviour
 {
 	[SerializeField] private Animator animator;
-	[SerializeField] private Light2D light2D;
+	[SerializeField] private Light2D light2D = null;
 
 	private void Awake()
 	{
@@ -15,7 +15,7 @@ public class OneShotVFX : MonoBehaviour
 
 	private void Update()
 	{
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("HitSpark1"))
+		if (animator.GetCurrentAnimatorStateInfo(0).IsName("HitSpark1") && light2D != null)
 		{
 			while (light2D.intensity > 0f)
 			{

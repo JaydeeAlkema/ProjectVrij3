@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7143805035472647704}
   - component: {fileID: 2846144575864148852}
   - component: {fileID: 3607252478168810823}
+  - component: {fileID: 2573989293339601903}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -208,6 +209,22 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &2573989293339601903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851697940821381925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8d47f8ee31e404199829b659edc2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingMode: 1
+  roundingMode: 1
+  positionReference: 0
+  sortingOrderOffset: 0
 --- !u!1 &1261354564871183732
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,23 +1024,27 @@ MonoBehaviour:
   moveSpeed: {fileID: 11400000, guid: a68f778a3ea0dc348b38d85afbd4f57e, type: 2}
   vel: 0
   isDashing: 0
+  invulnerable: 0
+  hitIFrames: 30
+  dashIFrames: 1
   lookDir: {x: 0, y: 0}
   castFromPoint: {fileID: 3607252476989244952}
   boxSize: {x: 4, y: 6}
   circleSize: 3
   rb2d: {fileID: 8334970476083683798}
-  Sprite: {fileID: 7143805035472647704}
+  playerSprite: {fileID: 7143805035472647704}
   Pivot_AttackAnimation: {fileID: 3778431377053427336}
-  AttackAnimation: {fileID: 1261354564871183732}
+  attackAnimation: {fileID: 1261354564871183732}
   animAttack: {fileID: 547846125462354599}
   trail: {fileID: 3607252478168810823}
+  playerDeathSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
+  playerDeathPoof: {fileID: 6120905142384714952, guid: 7f48faa6ddcfbd848adbc4009d1e75eb, type: 3}
   animPlayer: {fileID: 2846144575864148852}
   bufferTimeMelee: 0.3
   bufferTimeCast: 0.3
   bufferTimeDash: 0.65
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
-  deathScreenTest: {fileID: 0}
   isAttackPositionLocked: 0
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
@@ -1141,9 +1162,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortingMode: 2
-  roundingMode: 0
-  positionReference: 1
-  sortingOrderOffset: 0
+  roundingMode: 1
+  positionReference: 0
+  sortingOrderOffset: -1
 --- !u!4 &6928733671148014491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}

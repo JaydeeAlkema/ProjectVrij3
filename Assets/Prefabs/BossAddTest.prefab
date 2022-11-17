@@ -144,10 +144,22 @@ MonoBehaviour:
   aggroRange: 0
   attackRange: 0
   expAmount: 0
+  expAmountBase: 0
   attacking: 0
   rb2d: {fileID: 5793724696057155425}
+  deathPoof: {fileID: 6120905142384714952, guid: 89bbbe65ccd36084b8f301d8530e047f, type: 3}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 0}
+  vfxHitSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
+  enemyAnimator: {fileID: 0}
+  hasHitbox: 1
+  unwalkableDetection:
+    serializedVersion: 2
+    m_Bits: 0
+  windUpTime: 0.3
+  dashSpeed: 9
+  dashDistance: 0.5
+  endLag: 0.8
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   destinationSetter: {fileID: -8632110837534704342}

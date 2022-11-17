@@ -14,12 +14,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private int expAmountBase;
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
+	[SerializeField] private GameObject deathPoof;
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
+	[SerializeField] private GameObject vfxHitSpark = null;
 
 	public Animator enemyAnimator;
 
-	[SerializeField] private bool hasHitbox = false;
+	[SerializeField] private bool hasHitbox = true;
 
 	[SerializeField] private LayerMask unwalkableDetection;
 
@@ -171,15 +173,16 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 		if (damageType == 0)
 		{
-			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 			//StartCoroutine(HitStop());
 		}
 
 		if (damageType == 1)
 		{
-			//AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
+			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
-		StartCoroutine(HitStop());
+		OnHitVFX();
+		StartCoroutine(HitStop(0.03f));
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
@@ -187,6 +190,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
+	}
+
+	public void OnHitVFX()
+	{
+		Instantiate(vfxHitSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
 
 	public void GetMarked(int markType)
@@ -248,6 +256,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void Die()
 	{
+		GameObject poof = Instantiate(deathPoof, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
 		GameManager.Instance.ExpManager.AddExp(expAmount);
 		StopAllCoroutines();
 		Time.timeScale = 1f;
@@ -285,10 +294,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		this.pullPoint = pullPoint;
 	}
 
-	public IEnumerator HitStop()
+	public IEnumerator HitStop(float duration)
 	{
 		Time.timeScale = 0f;
-		yield return new WaitForSecondsRealtime(0.01f);
+		yield return new WaitForSecondsRealtime(duration);
 		Time.timeScale = 1f;
 		yield return null;
 	}

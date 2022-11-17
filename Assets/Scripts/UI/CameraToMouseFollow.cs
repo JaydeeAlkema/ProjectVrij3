@@ -11,7 +11,7 @@ public class CameraToMouseFollow : MonoBehaviour
 
 	void Update()
 	{
-		if (!GameManager.Instance.IsPaused)
+		if (!GameManager.Instance.IsPaused && GameManager.Instance.currentGameState != GameManager.GameState.GameOver)
 		{
 			Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 			Vector3 followDir = mousePos - player.transform.localPosition;

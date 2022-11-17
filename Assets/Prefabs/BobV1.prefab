@@ -107,6 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 400
+  damageBase: 0
+  damage: 50
   speed: 6
   aggroRange: 15
   attackRange: 9
@@ -114,10 +116,12 @@ MonoBehaviour:
   expAmountBase: 20
   attacking: 0
   rb2d: {fileID: 4442677197823009441}
+  deathPoof: {fileID: 6120905142384714952, guid: 89bbbe65ccd36084b8f301d8530e047f, type: 3}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
+  vfxHitSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
   enemyAnimator: {fileID: 6017575560788466592}
-  hasHitbox: 0
+  hasHitbox: 1
   unwalkableDetection:
     serializedVersion: 2
     m_Bits: 1024
@@ -193,7 +197,7 @@ MonoBehaviour:
   traversableTags: -1
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
-    value: -1
+    value: 2
 --- !u!114 &1453729541019105252
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -64,23 +64,33 @@ public class Projectile : MonoBehaviour
 		}
 	}
 
+	void SpawnProjectileExplosion()
+	{
+		GameObject aoe = Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+		aoe.GetComponent<PlayerProjectileExplosionDamage>().CastedFrom = castedFrom;
+		aoe.GetComponent<PlayerProjectileExplosionDamage>().Damage = damage;
+		//aoe.GetComponent<PlayerProjectileExplosionDamage>().Radius = aoeRadius;
+	}
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		//Destroy projectile when overlapping with enemies
 		if (collision.gameObject.layer == 7 || collision.gameObject.layer == typeOfLayer)
 		{
-			collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, 1);
+			//collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, 1);
 			if (collision.gameObject.GetComponent<IDamageable>() != null)
 			{
 				//GetComponent<OnHitStatusEffectApply>().OnHitApplyStatusEffects(collision.gameObject.GetComponent<IDamageable>());
 				castedFrom.OnHitApplyStatusEffects( collision.gameObject.GetComponent<IDamageable>());
 			}
+			//Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 			Destroy(this.gameObject);
 		}
 
 		//Destroy projectile when overlapping with object on 'Unwalkable' layer
 		if (collision.gameObject.layer == 10)
 		{
+			//Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 			Destroy(this.gameObject);
 		}
 	}
@@ -93,6 +103,6 @@ public class Projectile : MonoBehaviour
 			addedTrail.GetComponent<TrailRenderer>().autodestruct = true;
 			addedTrail.GetComponent<TrailWithTrigger>().enabled = true;
 		}
-		Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+		SpawnProjectileExplosion();
 	}
 }

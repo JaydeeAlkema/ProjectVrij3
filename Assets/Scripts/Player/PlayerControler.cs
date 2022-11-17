@@ -23,12 +23,15 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private Vector2 boxSize = new Vector2(4, 6);
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
-	[SerializeField] SpriteRenderer Sprite;
+	[SerializeField] private SpriteRenderer playerSprite;
 	[SerializeField] GameObject Pivot_AttackAnimation;
-	[SerializeField] GameObject AttackAnimation;
+	[SerializeField] GameObject attackAnimation;
 	[SerializeField] Animator animAttack;
 	[SerializeField] private TrailRenderer trail;
+	[SerializeField] private GameObject playerDeathSpark = null;
+	[SerializeField] private GameObject playerDeathPoof = null;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
+
 	[SerializeField] Animator animPlayer;
 
 	//[SerializeField] PlayerHealthBar healthBar;
@@ -48,10 +51,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public Material materialHit = null;
 
 	//Temporary, remove when implementing real death screen
-	[SerializeField] Transform deathScreenTest;
-	private bool isDying = false;
+	//[SerializeField] Transform deathScreenTest;
+	//private bool isDying = false;
 
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
+	public GameObject AttackAnimation { get => attackAnimation; set => attackAnimation = value; }
+
 	[SerializeField] private bool isAttackPositionLocked = false;
 
 	//[SerializeField] private int maxHealthPoints = 500;
@@ -63,6 +68,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
 	public TrailRenderer Trail { get => trail; set => trail = value; }
+	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
 	[Header("Abilities")]
 	#region ability fields
@@ -96,6 +102,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float BufferCounterDash { get => bufferCounterDash; set => bufferCounterDash = value; }
 	public bool IsAttackPositionLocked { get => isAttackPositionLocked; set => isAttackPositionLocked = value; }
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
+
 	#endregion
 
 
@@ -114,7 +121,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.SetAttacks();
 		trail.emitting = false;
 
-		materialDefault = Sprite.material;
+		materialDefault = playerSprite.material;
 
 		selfSlowCounter = selfSlowTime;
 
@@ -199,12 +206,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 			MouseLook();
 
-			Sprite.flipX = lookDir.x > 0 ? true : false;
-			AttackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
+			playerSprite.flipX = lookDir.x > 0 ? true : false;
+			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
-
-		Sprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
-
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing)
@@ -229,11 +233,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void CastSelfSlow()
 	{
+		//Slow player while using ranged attack
 		if (selfSlowCounter < selfSlowTime)
 		{
 			selfSlowCounter += Time.deltaTime;
 			selfSlowMultiplier = 0.4f;
 		}
+		//Speed-up player while melee attacking
+		else if (isAttackPositionLocked)
+		{
+			selfSlowMultiplier = 2f;
+		} 
 		else
 		{
 			selfSlowMultiplier = 1f;
@@ -242,10 +252,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MouseLook()
 	{
-		if (!animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
-		{
-			isAttackPositionLocked = false;
-		}
+		//if (!animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
+		//{
+		//	isAttackPositionLocked = false;
+		//}
 
 		if (!isAttackPositionLocked)
 		{
@@ -278,7 +288,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentDash.BaseStats = dash;
 		abilityController.CurrentDash.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		abilityController.Dashing(currentDash);
-		StartCoroutine( PlayerIFrames(dashIFrames) );
+		StartCoroutine(PlayerIFrames(dashIFrames));
 	}
 
 	void AbilityOneAttack()
@@ -359,16 +369,32 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(int damage)
 	{
-		if( !invulnerable )
+		if (!invulnerable)
 		{
-			AkSoundEngine.PostEvent( "plr_dmg_npc", this.gameObject );
-			StartCoroutine( playerFlashColor() );
+			AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
+			StartCoroutine(playerFlashColor());
 			GameManager.Instance.PlayerHP.value -= damage;
 			//healthBar.SetHP(currentHealthPoints);
-			if( GameManager.Instance.PlayerHP.value <= 0 && !isDying ) Die(); //Dit later in GameManager regelen?
 			invulnerable = true;
-			StartCoroutine( PlayerIFrames(hitIFrames) );
+			StartCoroutine(PlayerIFrames(hitIFrames));
 		}
+	}
+
+	public void GameOverVFX(int vfx)
+	{
+		switch (vfx)
+		{
+			case 1:
+				GameObject deathSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.identity);
+				deathSpark.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+				deathSpark.GetComponent<SpriteRenderer>().color = Color.red;
+				break;
+			case 2:
+				Instantiate(playerDeathPoof, transform.position, Quaternion.identity);
+				break;
+
+		}
+
 	}
 
 	public void TakeDamage(int damage, int damageType)
@@ -396,49 +422,43 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	}
 
-	void Die()
-	{
-		isDying = true;
-		StartCoroutine(DeathSequence());
-		Debug.Log("I HAVE DIED OH NO");
-	}
+	//void Die()
+	//{
+	//	isDying = true;
+	//	//StartCoroutine(DeathSequence());
+	//	Debug.Log("I HAVE DIED OH NO");
+	//}
 
-	void Respawn()
-	{
-		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
-		GameManager.Instance.PlayerHP.ResetValue();
-	}
+	//IEnumerator DeathSequence()
+	//{
+	//	Time.timeScale = 0f;    //Hitstop
+	//	yield return new WaitForSecondsRealtime(1f);
+	//	Sprite.gameObject.SetActive(false);
+	//	Time.timeScale = 1f;
+	//	yield return new WaitForSecondsRealtime(1.5f);
 
-	IEnumerator DeathSequence()
-	{
-		Time.timeScale = 0f;    //Hitstop
-		yield return new WaitForSecondsRealtime(1f);
-		Sprite.gameObject.SetActive(false);
-		Time.timeScale = 1f;
-		yield return new WaitForSecondsRealtime(1.5f);
+	//	//Deathscreen
+	//	GameManager.Instance.UiManager.DisableAllUI();
+	//	GameManager.Instance.UiManager.SetUIActive(4, true);
+	//	yield return new WaitForSecondsRealtime(3f);
 
-		//Deathscreen
-		GameManager.Instance.UiManager.DisableAllUI();
-		GameManager.Instance.UiManager.SetUIActive(4, true);
-		yield return new WaitForSecondsRealtime(3f);
-
-		Respawn();
-		GameManager.Instance.UiManager.DisableAllUI();
-		GameManager.Instance.UiManager.SetUIActive(0, true);
-		isDying = false;
-		yield return null;
-	}
+	//	Respawn();
+	//	GameManager.Instance.UiManager.DisableAllUI();
+	//	GameManager.Instance.UiManager.SetUIActive(0, true);
+	//	isDying = false;
+	//	yield return null;
+	//}
 
 	IEnumerator playerFlashColor()
 	{
-		Sprite.material = materialHit;
+		playerSprite.material = materialHit;
 		yield return new WaitForSeconds(0.09f);
-		Sprite.material = materialDefault;
+		playerSprite.material = materialDefault;
 	}
 
 	IEnumerator PlayerIFrames(int iFrameAmount)
 	{
-		for( int i = 0; i < iFrameAmount; i++ )
+		for (int i = 0; i < iFrameAmount; i++)
 		{
 			yield return new WaitForEndOfFrame();
 		}

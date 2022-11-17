@@ -4,72 +4,72 @@ using UnityEngine;
 
 public class AbilityController : MonoBehaviour
 {
-    private static AbilityController abilityControllerInstance;
-    private PlayerControler player;
-    private Rigidbody2D rb2d;
-    private Vector3 mousePos;
-    private Vector2 lookDir;
-    private Transform castFromPoint;
-    [SerializeField] private bool isAttacking;
-    private float angle;
-    private IAbility currentMeleeAttack;
-    private IAbility currentRangedAttack;
-    private IAbility currentDash;
-    private IAbility currentAbility1;
-    private IAbility currentAbility2;
-    private IAbility currentAbility3;
-    public static AbilityController AbilityControllerInstance{ get => abilityControllerInstance; set => abilityControllerInstance = value; }
-    public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
-    public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
-    public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
-    public IAbility CurrentDash { get => currentDash; set => currentDash = value; }
-    public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
-    public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
-    public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
-    public PlayerControler Player { get => player; set => player = value; }
+	private static AbilityController abilityControllerInstance;
+	private PlayerControler player;
+	private Rigidbody2D rb2d;
+	private Vector3 mousePos;
+	private Vector2 lookDir;
+	private Transform castFromPoint;
+	[SerializeField] private bool isAttacking;
+	private float angle;
+	private IAbility currentMeleeAttack;
+	private IAbility currentRangedAttack;
+	private IAbility currentDash;
+	private IAbility currentAbility1;
+	private IAbility currentAbility2;
+	private IAbility currentAbility3;
+	public static AbilityController AbilityControllerInstance { get => abilityControllerInstance; set => abilityControllerInstance = value; }
+	public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
+	public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
+	public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
+	public IAbility CurrentDash { get => currentDash; set => currentDash = value; }
+	public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
+	public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
+	public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
+	public PlayerControler Player { get => player; set => player = value; }
 
 
 	private void Awake()
 	{
-        abilityControllerInstance = this;
+		abilityControllerInstance = this;
 	}
 	//gives all attacks/abilities cooldowns
 	public void SetAttacks()
 	{
-        currentMeleeAttack = new CoolDownDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats.CoolDown );
-        currentRangedAttack = new CoolDownDecorator( currentRangedAttack, currentRangedAttack.BaseStats.CoolDown );
-        currentDash = new CoolDownDecorator( currentDash, currentDash.BaseStats.CoolDown );
-    }
+		currentMeleeAttack = new CoolDownDecorator(currentMeleeAttack, currentMeleeAttack.BaseStats.CoolDown);
+		currentRangedAttack = new CoolDownDecorator(currentRangedAttack, currentRangedAttack.BaseStats.CoolDown);
+		currentDash = new CoolDownDecorator(currentDash, currentDash.BaseStats.CoolDown);
+	}
 
-    public void SetAbility()
-    {
-        if( currentAbility1 != null )
-        {
-            currentAbility1 = new CoolDownDecorator( currentAbility1, currentAbility1.BaseStats.CoolDown );
-        }
-        if( currentAbility2 != null )
-        {
-            currentAbility2 = new CoolDownDecorator( currentAbility2, currentAbility2.BaseStats.CoolDown );
-        }
-        if( currentAbility3 != null )
-        {
-            currentAbility3 = new CoolDownDecorator( currentAbility3, currentAbility3.BaseStats.CoolDown );
-        }
-    }
+	public void SetAbility()
+	{
+		if (currentAbility1 != null)
+		{
+			currentAbility1 = new CoolDownDecorator(currentAbility1, currentAbility1.BaseStats.CoolDown);
+		}
+		if (currentAbility2 != null)
+		{
+			currentAbility2 = new CoolDownDecorator(currentAbility2, currentAbility2.BaseStats.CoolDown);
+		}
+		if (currentAbility3 != null)
+		{
+			currentAbility3 = new CoolDownDecorator(currentAbility3, currentAbility3.BaseStats.CoolDown);
+		}
+	}
 
-    //makes it so the cooldowns actually update when getting upgrades
-    public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable cd)
-    {
-        if( currentMeleeAttack != null ) { currentMeleeAttack.CoolDown = melee.CoolDown; currentMeleeAttack.BurnDamage = melee.BurnDamage; }
-        if( currentRangedAttack != null ) { currentRangedAttack.CoolDown = ranged.CoolDown; }
-        if(currentDash != null) { currentDash.CoolDown = cd.CoolDown; }
-        if( currentAbility1 != null ) { currentAbility1.CoolDown = ab1.CoolDown; }
-        if( currentAbility2 != null ) { currentAbility2.CoolDown = ab2.CoolDown; }
-        if( currentAbility3 != null ) { currentAbility3.CoolDown = ab3.CoolDown; }
+	//makes it so the cooldowns actually update when getting upgrades
+	public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable cd)
+	{
+		if (currentMeleeAttack != null) { currentMeleeAttack.CoolDown = melee.CoolDown; currentMeleeAttack.BurnDamage = melee.BurnDamage; }
+		if (currentRangedAttack != null) { currentRangedAttack.CoolDown = ranged.CoolDown; }
+		if (currentDash != null) { currentDash.CoolDown = cd.CoolDown; }
+		if (currentAbility1 != null) { currentAbility1.CoolDown = ab1.CoolDown; }
+		if (currentAbility2 != null) { currentAbility2.CoolDown = ab2.CoolDown; }
+		if (currentAbility3 != null) { currentAbility3.CoolDown = ab3.CoolDown; }
 	}
 
 
-    //Shit show of switches for all the effects with decorators
+	//Shit show of switches for all the effects with decorators
 	public IAbility MeleeAttacked(IAbility melee)
     {
         if( !isAttacking )
@@ -109,16 +109,17 @@ public class AbilityController : MonoBehaviour
             currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             currentMeleeAttack.CallAbility( player );
 
-            //Camera shake
-            //CameraShake.Instance.ShakeCamera(4f, 0.1f);
+			//Camera shake
+			//CameraShake.Instance.ShakeCamera(4f, 0.1f);
 
-            //Reset buffer counter
-            player.BufferCounterMelee = 0f;
+			//Reset buffer counter
+			player.BufferCounterMelee = 0f;
 
-            //Melee sound
-            AkSoundEngine.PostEvent("plr_attck_melee", this.gameObject);
-        }
-        return currentMeleeAttack;
+			//Melee sound
+			//AkSoundEngine.PostEvent("plr_attck_melee", this.gameObject);
+
+		}
+		return currentMeleeAttack;
 	}
 
     public IAbility RangeAttacked(IAbility ranged)
@@ -162,14 +163,14 @@ public class AbilityController : MonoBehaviour
             //Camera shake
             //CameraShake.Instance.ShakeCamera(4f, 0.1f);
 
-            //Reset buffer counter
-            player.BufferCounterCast = 0f;
+			//Reset buffer counter
+			player.BufferCounterCast = 0f;
 
-            //Cast sound
-            AkSoundEngine.PostEvent("plr_attck_cast", this.gameObject);
+			//Cast sound
+			//AkSoundEngine.PostEvent("plr_attck_cast", this.gameObject);
 
-        }
-        return currentRangedAttack;
+		}
+		return currentRangedAttack;
 	}
 
     public IAbility Dashing(IAbility dash)
@@ -198,10 +199,10 @@ public class AbilityController : MonoBehaviour
         currentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentDash.CallAbility( player );
 
-        //Reset buffer counter
-        player.BufferCounterDash = 0f;
+		//Reset buffer counter
+		player.BufferCounterDash = 0f;
 
-        return currentDash;
+		return currentDash;
 	}
 
     public IAbility AbilityOneAttacked(IAbility ability1)
@@ -295,13 +296,13 @@ public class AbilityController : MonoBehaviour
 	}
 
 
-    //always get set player values when the player controller updates their rotation etc, must always be called on mouse movement
-    public void SetPlayerValues( Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle )
-    {
-        rb2d = _rb2d;
-        mousePos = _mousePos;
-        lookDir = _lookDir;
-        castFromPoint = _castFromPoint;
-        angle = _angle;
-    }
+	//always get set player values when the player controller updates their rotation etc, must always be called on mouse movement
+	public void SetPlayerValues(Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle)
+	{
+		rb2d = _rb2d;
+		mousePos = _mousePos;
+		lookDir = _lookDir;
+		castFromPoint = _castFromPoint;
+		angle = _angle;
+	}
 }
