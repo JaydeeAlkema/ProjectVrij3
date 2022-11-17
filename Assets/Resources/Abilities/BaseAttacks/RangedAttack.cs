@@ -27,7 +27,6 @@ public class RangedAttack : Ability
 		//TrailUpgrade = BaseStats.TrailUpgrade;
 		proj.BurnDamage = BurnDamage;
 		proj.TrailUpgrade = TrailUpgrade;
-		Debug.Log( "burn damage is: " + BurnDamage );
 		proj.TurnOnTrail();
 		proj.Damage = damage;
 		proj.LifeSpan = lifeSpan;

@@ -87,7 +87,7 @@ public class AbilityController : MonoBehaviour
                         case StatusEffectType.Burn:
                             IAbility burn = new BurningMeleeDecorator( currentMeleeAttack, currentMeleeAttack.BaseStats );
                             burn.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-                            burn.CallAbility(player);
+                            burn.AbilityBehavior();
                             Debug.Log( "should be burning" );
                             break;
                         case StatusEffectType.Stun:
