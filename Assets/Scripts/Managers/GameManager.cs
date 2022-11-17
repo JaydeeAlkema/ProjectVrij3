@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 		Hub,//1
 		Dungeon,//2
 		GameOver,//3
+		Menu,//4
 	}
 
 	[Header("Managers")]
@@ -106,7 +107,7 @@ public class GameManager : MonoBehaviour
 		StartCoroutine(SetupLevel());
 	}
 
-	private void ChangeGameState(GameState newGameState)
+	public void ChangeGameState(GameState newGameState)
 	{
 		currentGameState = newGameState;
 		switch (currentGameState)
@@ -117,6 +118,8 @@ public class GameManager : MonoBehaviour
 				StartCoroutine(GameOver());
 				break;
 			case GameState.Hub:
+				break;
+			case GameState.Menu:
 				break;
 		}
 	}
