@@ -50,7 +50,7 @@ public class FodderEnemy : EnemyBase
 			if (Target.gameObject != null && HasHitbox)
 			{
 				AttackPlayer(Target.gameObject);
-				HasHitbox = false;
+				//HasHitbox = false;
 			}
 		}
 		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
@@ -187,7 +187,7 @@ public class FodderEnemy : EnemyBase
 		enemySprite.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		enemyAnimator.Play("Fodder1Landing");
 		Rb2d.velocity = new Vector2(0, 0);
-		HasHitbox = false;
+		//HasHitbox = false;
 		Attacking = false;
 
 

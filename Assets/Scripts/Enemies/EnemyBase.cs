@@ -21,7 +21,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public Animator enemyAnimator;
 
-	[SerializeField] private bool hasHitbox = false;
+	[SerializeField] private bool hasHitbox = true;
 
 	[SerializeField] private LayerMask unwalkableDetection;
 
