@@ -55,6 +55,8 @@ public class AbilityDecorator : IAbility
 		//ability.CallAbility(Player);
 	}
 
+	public virtual void CallAbility( bool resetCooldown ){ }
+
 	public virtual void AbilityBehavior()
 	{
 		//ability.AbilityBehavior();
