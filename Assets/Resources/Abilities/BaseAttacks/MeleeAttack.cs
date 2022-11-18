@@ -16,6 +16,7 @@ public class MeleeAttack : Ability
 	private int comboCounter = 0;
 	private float comboTimer = 0f;
 	private IEnumerator comboTimerCoroutine;
+	private bool thirdHit = false;
 
 	public override void CallAbility(PlayerControler _player)
 	{
@@ -75,12 +76,14 @@ public class MeleeAttack : Ability
 
 		if (comboCounter < 2)
 		{
+			thirdHit = false;
 			comboCounter++;
 			Debug.Log("Combo: " + comboCounter);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialDefault;
 		}
 		else
 		{
+			thirdHit = true;
 			comboCounter = 0;
 			Debug.Log("Full combo!");
 			AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
@@ -93,7 +96,28 @@ public class MeleeAttack : Ability
 		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
 		{
 			player.IsAttackPositionLocked = true;
-			enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
+			
+
+			if (thirdHit)
+			{
+				int twirlDir;
+				if (player.AttackAnimation.GetComponent<SpriteRenderer>().flipX)
+				{
+					twirlDir = -1;
+				}
+				else
+				{
+					twirlDir = 1;
+				}
+				player.Pivot_AttackAnimation.transform.Rotate(0f, 0f, 40f * twirlDir);
+				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + player.Pivot_AttackAnimation.transform.up * distance, boxSize, player.Pivot_AttackAnimation.transform.rotation.z, layerMask);
+			}
+			else
+			{
+				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
+			}
+
+
 			foreach (Collider2D enemy in enemiesInBox)
 			{
 				if (!enemyList.Contains(enemy))
@@ -107,6 +131,7 @@ public class MeleeAttack : Ability
 
 			yield return new WaitForEndOfFrame();
 		}
+		thirdHit = false;
 		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
 		yield return null;

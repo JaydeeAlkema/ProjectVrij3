@@ -24,7 +24,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] private SpriteRenderer playerSprite;
-	[SerializeField] GameObject Pivot_AttackAnimation;
+	[SerializeField] GameObject pivot_AttackAnimation;
 	[SerializeField] GameObject attackAnimation;
 	[SerializeField] Animator animAttack;
 	[SerializeField] private TrailRenderer trail;
@@ -103,6 +103,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public bool IsAttackPositionLocked { get => isAttackPositionLocked; set => isAttackPositionLocked = value; }
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
 	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
+	public GameObject Pivot_AttackAnimation { get => pivot_AttackAnimation; set => pivot_AttackAnimation = value; }
 
 	#endregion
 
@@ -247,7 +248,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		//Speed-up player while melee attacking
 		else if (isAttackPositionLocked)
 		{
-			selfSlowMultiplier = 2f;
+			selfSlowMultiplier = 1.5f;
 		} 
 		else
 		{
@@ -268,7 +269,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			lookDir = mousePos - rb2d.transform.position;
 			angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
 			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-			Pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
+			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
 		}
 	}
 
