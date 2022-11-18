@@ -146,7 +146,7 @@ public class MeleeAttack : Ability
 
 	public IEnumerator ComboTimer()
 	{
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(0.7f);
 
 		comboCounter = 0;
 		Debug.Log("Combo timer ends, combo counter is: " + comboCounter);
