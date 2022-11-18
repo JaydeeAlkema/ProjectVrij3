@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private AK.Wwise.State SoundStateCrowded;
 	[SerializeField] private AK.Wwise.State CurrentSoundState;
 	[SerializeField] private AK.Wwise.Event startMusic;
+	[SerializeField] private int numberOfEnemiesAggrod = 0;
 
 	public enum GameState
 	{
@@ -75,9 +76,20 @@ public class GameManager : MonoBehaviour
 			uiManager.SetUIActive(3, isPaused);
 		}
 
-		if (Input.GetKeyDown(KeyCode.M))
+
+	}
+
+	public void EnemyAggroCount(bool isAggro)
+	{
+		numberOfEnemiesAggrod += isAggro ? 1 : -1;
+		if (numberOfEnemiesAggrod == 0)
 		{
 			CurrentSoundState = SoundStateCalm;
+			CurrentSoundState.SetValue();
+		}
+		else
+		{
+			CurrentSoundState = SoundStateCrowded;
 			CurrentSoundState.SetValue();
 		}
 	}
