@@ -150,6 +150,7 @@ public class GameManager : MonoBehaviour
 				ExpManager.ResetExp();
 				break;
 			case GameState.Menu:
+				startMusic.Stop(AudioManager.Instance.gameObject);
 				PlayerHP.ResetValue();
 				ExpManager.ResetExp();
 				break;

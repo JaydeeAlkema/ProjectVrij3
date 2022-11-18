@@ -213,7 +213,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			MouseLook();
 
 			playerSprite.flipX = lookDir.x > 0 ? true : false;
-			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
@@ -270,6 +269,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
 			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
+
+			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
 	}
 

@@ -86,12 +86,20 @@ public class MeleeAttack : Ability
 			thirdHit = false;
 			Debug.Log("Combo: " + comboCounter);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialDefault;
+
+			if (comboCounter == 2)
+			{
+				IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack1", "isAttacking2");
+				anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
+				anim.CallAbility(player);
+				AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
+			}
 		}
 		else
 		{
 			thirdHit = true;
 			Debug.Log("Full combo!");
-			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking");
+			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3");
 			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 			anim.CallAbility(player);
 			AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
@@ -104,6 +112,11 @@ public class MeleeAttack : Ability
 		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl"))
 		{
 			player.IsAttackPositionLocked = true;
+
+			if (comboCounter == 2)
+			{
+				player.AttackAnimation.GetComponent<SpriteRenderer>().flipX = LookDir.x > 0 ? false : true;
+			}
 
 			if (thirdHit)
 			{
