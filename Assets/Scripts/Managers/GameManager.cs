@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private AK.Wwise.State SoundStateCalm;
 	[SerializeField] private AK.Wwise.State SoundStateCrowded;
 	[SerializeField] private AK.Wwise.State CurrentSoundState;
+	[SerializeField] private AK.Wwise.Event startMusic;
 
 	public enum GameState
 	{
@@ -73,6 +74,12 @@ public class GameManager : MonoBehaviour
 			TogglePauseGame();
 			uiManager.SetUIActive(3, isPaused);
 		}
+
+		if (Input.GetKeyDown(KeyCode.M))
+		{
+			CurrentSoundState = SoundStateCalm;
+			CurrentSoundState.SetValue();
+		}
 	}
 
 	public void TogglePauseGame()
@@ -113,6 +120,9 @@ public class GameManager : MonoBehaviour
 		switch (currentGameState)
 		{
 			case GameState.Dungeon:
+				CurrentSoundState = SoundStateCrowded;
+				CurrentSoundState.SetValue();
+				AudioManager.Instance.PostEventGlobal(startMusic);
 				break;
 			case GameState.GameOver:
 				StartCoroutine(GameOver());

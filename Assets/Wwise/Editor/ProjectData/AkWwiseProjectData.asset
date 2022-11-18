@@ -214,7 +214,7 @@ MonoBehaviour:
     ParentPath: SoundBanks\Run SoundBanks
     guid: cc54a3aaec5de642abe7a77f9699c4bf
     GuidInternal: 
-    m_lastTime: -8585329993430850463
+    m_lastTime: -8585328374312095673
     List:
     - name: MainSoundbank
       guid: 99c33cca48068b439cf0e7d85d5fbcc5
@@ -244,6 +244,36 @@ MonoBehaviour:
     GuidInternal: 
     m_lastTime: -8585347445284281072
     List: []
+  - PhysicalPath: Events\Music.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Music
+      ObjectType: 12
+      guid: 70ac64c5211e0743a0bac059c5f6fdf1
+    ParentPath: Events\Music
+    guid: 70ac64c5211e0743a0bac059c5f6fdf1
+    GuidInternal: 
+    m_lastTime: -8585328377102777492
+    List:
+    - name: play_music
+      guid: bf3624a380f86f4c9684510e65e842f6
+      id: 2932040671
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Music
+        ObjectType: 12
+        guid: 70ac64c5211e0743a0bac059c5f6fdf1
+      - ElementName: play_music
+        ObjectType: 3
+        guid: bf3624a380f86f4c9684510e65e842f6
+      Path: Events\Music\play_music
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   - PhysicalPath: Events\NPC.wwu
     PathAndIcons:
     - ElementName: Events
@@ -718,7 +748,7 @@ MonoBehaviour:
     m_lastTime: -8585347445281295045
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 050000000a0000000b000000110000001200000013000000
+  ExpandedWaapiItemIds: 0500000006000000080000000a0000000b0000000e00000011000000120000001300000014000000180000001c000000
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0
