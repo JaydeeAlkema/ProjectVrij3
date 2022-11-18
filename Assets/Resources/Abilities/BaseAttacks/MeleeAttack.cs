@@ -74,18 +74,26 @@ public class MeleeAttack : Ability
 	{
 		ResetComboTimer();
 
-		if (comboCounter < 2)
+		if (comboCounter == 3)
+		{
+			comboCounter = 0;
+		}
+
+		comboCounter++;
+
+		if (comboCounter < 3)
 		{
 			thirdHit = false;
-			comboCounter++;
 			Debug.Log("Combo: " + comboCounter);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialDefault;
 		}
 		else
 		{
 			thirdHit = true;
-			comboCounter = 0;
 			Debug.Log("Full combo!");
+			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking");
+			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
+			anim.CallAbility(player);
 			AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialHit;
 		}
@@ -93,10 +101,9 @@ public class MeleeAttack : Ability
 		hitDetecting = true;
 		yield return new WaitForFixedUpdate();
 
-		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
+		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl"))
 		{
 			player.IsAttackPositionLocked = true;
-			
 
 			if (thirdHit)
 			{
@@ -109,7 +116,7 @@ public class MeleeAttack : Ability
 				{
 					twirlDir = 1;
 				}
-				player.Pivot_AttackAnimation.transform.Rotate(0f, 0f, 40f * twirlDir);
+				player.Pivot_AttackAnimation.transform.Rotate(0f, 0f, 20f * twirlDir);
 				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + player.Pivot_AttackAnimation.transform.up * distance, boxSize, player.Pivot_AttackAnimation.transform.rotation.z, layerMask);
 			}
 			else
