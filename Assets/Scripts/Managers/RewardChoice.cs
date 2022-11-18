@@ -105,7 +105,7 @@ public class RewardChoice : MonoBehaviour
 			// give AbilityScriptable
 			//player.Ability1 = abilityToGive;
 			//IAbility giveAbility = abilityToGive;
-			GameManager.Instance.TogglePauseGame();
+			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
 			player.Ability1 = abilityStats;
 			player.CurrentAbility1 = abilityToGive;
@@ -119,7 +119,7 @@ public class RewardChoice : MonoBehaviour
 		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
 		{
 			// give one of possible upgrades
-			GameManager.Instance.TogglePauseGame();
+			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
 			player.CurrentMeleeAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
 			player.CurrentMeleeAttack.Damage += upgradeToGive.DamageUpgrade;
@@ -179,7 +179,7 @@ public class RewardChoice : MonoBehaviour
 		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
 		{
 			// give one of possible upgrades
-			GameManager.Instance.TogglePauseGame();
+			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
 			player.CurrentRangedAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
 			player.CurrentRangedAttack.Damage += upgradeToGive.DamageUpgrade;

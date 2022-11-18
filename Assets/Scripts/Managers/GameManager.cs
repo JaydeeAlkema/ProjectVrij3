@@ -99,6 +99,12 @@ public class GameManager : MonoBehaviour
 		isPaused = !isPaused;
 		Time.timeScale = isPaused ? 0f : 1f;
 	}
+	
+	public void SetPauseState(bool pause)
+	{
+		isPaused = pause;
+		Time.timeScale = isPaused ? 0f : 1f;
+	}
 
 	public void FetchDungeonReferences()
 	{
