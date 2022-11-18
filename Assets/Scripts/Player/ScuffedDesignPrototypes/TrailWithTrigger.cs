@@ -11,7 +11,7 @@ public class TrailWithTrigger : MonoBehaviour
 	private int burnDamage;
 	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
 
-	void Awake()
+	void Start()
 	{
 		fireTrail = this.GetComponent<TrailRenderer>();
 
@@ -19,10 +19,8 @@ public class TrailWithTrigger : MonoBehaviour
 		trailCollider = colliderGameObject.GetComponent<EdgeCollider2D>();
 		trailCollider.isTrigger = true;
 		trailCollider.edgeRadius = 0.25f;
-		//trailCollider.gameObject.AddComponent<OnTriggerStatusEffectApply>();
-		trailCollider.gameObject.GetComponent<OnTriggerStatusEffectApply>().statusEffectType = StatusEffectType.Burn;
-		Debug.Log( "trail burn damage is: " + burnDamage );
-		trailCollider.gameObject.GetComponent<OnTriggerStatusEffectApply>().SetBurnValue( burnDamage );
+		colliderGameObject.GetComponent<OnTriggerStatusEffectApply>().statusEffectType = StatusEffectType.Burn;
+		colliderGameObject.GetComponent<OnTriggerStatusEffectApply>().SetBurnValue( burnDamage );
 	}
 
 	void Update()
@@ -44,10 +42,5 @@ public class TrailWithTrigger : MonoBehaviour
 	{
 		if (trailCollider == null) return;
 		Destroy(trailCollider.gameObject);
-	}
-
-	public void SetBurnValue(int _burnDamage)
-	{
-		BurnDamage = _burnDamage;
 	}
 }
