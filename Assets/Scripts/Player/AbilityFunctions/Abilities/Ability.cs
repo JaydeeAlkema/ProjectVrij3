@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability : MonoBehaviour ,IAbility
+public abstract class Ability : MonoBehaviour, IAbility
 {
 	protected float coolDown;
 	protected int damage;
