@@ -107,8 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 400
-  damageBase: 0
-  damage: 50
+  damageBase: 50
+  damage: 0
   speed: 6
   aggroRange: 16
   attackRange: 9
@@ -128,7 +128,7 @@ MonoBehaviour:
   windUpTime: 0.75
   dashSpeed: 0
   dashDistance: 9
-  endLag: 0.5
+  endLag: 1.2
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   destinationSetter: {fileID: 5571211868668841190}
@@ -145,7 +145,6 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  damage: 50
   player: {fileID: 0}
   enemyProjectile: {fileID: 3210017399674347035, guid: c5bae90e6d78c5e4e996ff7465ae43d8, type: 3}
   runToObject: {fileID: 0}
@@ -167,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 879e96c61b1b8fe479323bd81bd0f753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 3
   rb2d: {fileID: 4442677197823009441}
   enemyScript: {fileID: 3652696254627324177}
   tooCloseRange: 2

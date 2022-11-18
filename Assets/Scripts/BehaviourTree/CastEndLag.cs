@@ -28,11 +28,17 @@ public class CastEndLag : BTNode
 				ClearData("target");
 				ClearData("dashDir");
 				ClearData("dashDestination");
+				ClearData("doneCasting");
+				ClearData("hitWall");
 				state = BTNodeState.FAILURE;
 				return state;
 			}
 			else
 			{
+				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("BobEndlag"))
+				{
+					enemyScript.enemyAnimator.Play("BobEndlag");
+				}
 				enemyScript.StopMovingToTarget();
 				counter += Time.deltaTime;
 			}

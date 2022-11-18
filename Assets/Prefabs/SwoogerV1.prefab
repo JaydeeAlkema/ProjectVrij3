@@ -107,8 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 700
-  damageBase: 0
-  damage: 100
+  damageBase: 100
+  damage: 0
   speed: 9
   aggroRange: 16
   attackRange: 6
@@ -165,9 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e3c7a845be0e14ea838ae5375f0e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 2
   rb2d: {fileID: 4442677197823009441}
   enemyScript: {fileID: 5236588915324034231}
-  isSwooger: 1
 --- !u!114 &8561825498785388798
 MonoBehaviour:
   m_ObjectHideFlags: 0

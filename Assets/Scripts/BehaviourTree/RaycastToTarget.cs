@@ -28,14 +28,16 @@ public class RaycastToTarget : BTNode
 
 		object d1 = GetData("dashDestination");
 		object d2 = GetData("dashDir");
+		object d3 = GetData("hitWall");
 		//object d3 = GetData("hitWallPoint");
 
-		if(d1 == null || d2 == null)
+		if(d1 == null || d2 == null || d3 == null)
 		{
 			if (hit.point != Vector2.zero)
 			{
 				//Store for caster-type enemies
-				parent.parent.parent.SetData("hitWallPoint", hit.point);
+				//parent.parent.parent.SetData("hitWallPoint", hit.point);
+				parent.parent.parent.SetData("hitWall", true);
 
 				//Proceed
 				Debug.DrawRay(this.transform.position, dashDir * enemyScript.DashDistance, Color.red, 1f);
@@ -46,6 +48,8 @@ public class RaycastToTarget : BTNode
 			}
 			else
 			{
+				//Store for caster-type enemies
+				parent.parent.parent.SetData("hitWall", false);
 				ClearData("hitWallPoint");
 
 				Debug.DrawRay(this.transform.position, dashDir * enemyScript.DashDistance, Color.red, 1f);

@@ -8,14 +8,14 @@ public class FodderDashAttack : BTNode
 {
 	private Rigidbody2D rb2d;
 	private EnemyBase enemyScript;
-	private bool isSwooger;
+	private int enemyType;
 
-	public FodderDashAttack(EnemyBase enemyScript, Rigidbody2D rb2d, bool isSwooger)
+	public FodderDashAttack(EnemyBase enemyScript, Rigidbody2D rb2d, int enemyType)
 	{
 		name = "FodderDashAttack";
 		this.enemyScript = enemyScript;
 		this.rb2d = rb2d;
-		this.isSwooger = isSwooger;
+		this.enemyType = enemyType;
 	}
 
 	public override BTNodeState Evaluate()
@@ -28,7 +28,7 @@ public class FodderDashAttack : BTNode
 
 		if (Vector2.Distance(enemyScript.transform.position, dashDestination) >= 0.1f)
 		{
-			if (isSwooger)
+			if (enemyType == 2)
 			{
 				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerAttack"))
 				{
@@ -40,7 +40,7 @@ public class FodderDashAttack : BTNode
 					enemyScript.HasHitbox = true;
 				}
 			}
-			else
+			else if(enemyType == 1)
 			{
 				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Attack"))
 				{

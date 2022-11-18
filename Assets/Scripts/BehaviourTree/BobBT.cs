@@ -6,9 +6,11 @@ using BehaviourTree;
 
 public class BobBT : BTTree
 {
+	[SerializeField] private int enemyType = 3;
 	public Rigidbody2D rb2d;
 	public EnemyBase enemyScript;
 	public float tooCloseRange = 3f;
+	
 
 	protected override BTNode SetupTree()
 	{
@@ -40,7 +42,7 @@ public class BobBT : BTTree
 				new CheckPlayerAggro(rb2d, enemyScript),
 				new TaskMoveToPlayer(rb2d, enemyScript),
 			}),
-			new TaskIdle(rb2d, enemyScript),
+			new TaskIdle(rb2d, enemyScript, enemyType),
 		});
 
 		return root;

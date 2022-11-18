@@ -8,13 +8,13 @@ public class FodderLanding : BTNode
 
 	private EnemyBase enemyScript;
 	private float counter;
-	private bool isSwooger;
+	private int enemyType;
 
-	public FodderLanding(EnemyBase enemyScript, bool isSwooger)
+	public FodderLanding(EnemyBase enemyScript, int enemyType)
 	{
 		name = "FodderLanding";
 		this.enemyScript = enemyScript;
-		this.isSwooger = isSwooger;
+		this.enemyType = enemyType;
 		counter = 0f;
 	}
 
@@ -35,14 +35,14 @@ public class FodderLanding : BTNode
 			}
 			else
 			{
-				if (isSwooger)
+				if (enemyType == 2)
 				{
 					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerLanding"))
 					{
 						enemyScript.enemyAnimator.Play("SwoogerLanding");
 					}
 				}
-				else
+				else if (enemyType == 1)
 				{
 					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Landing"))
 					{

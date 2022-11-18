@@ -9,15 +9,15 @@ public class FodderWindup : BTNode
 	private float counter;
 	private Rigidbody2D rb2d;
 	private EnemyBase enemyScript;
-	private bool isSwooger;
+	private int enemyType;
 
-	public FodderWindup(EnemyBase enemyScript, Rigidbody2D rb2d, bool isSwooger)
+	public FodderWindup(EnemyBase enemyScript, Rigidbody2D rb2d, int enemyType)
 	{
 		name = "FodderWindup";
 		this.enemyScript = enemyScript;
 		this.rb2d = rb2d;
 		counter = 0f;
-		this.isSwooger = isSwooger;
+		this.enemyType = enemyType;
 	}
 
 	public override BTNodeState Evaluate()
@@ -44,14 +44,14 @@ public class FodderWindup : BTNode
 			}
 			else
 			{
-				if (isSwooger)
+				if (enemyType == 2)
 				{
 					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerWindup"))
 					{
 						enemyScript.enemyAnimator.Play("SwoogerWindup");
 					}
 				}
-				else
+				else if(enemyType == 1)
 				{
 					if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Windup"))
 					{
