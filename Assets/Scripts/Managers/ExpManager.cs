@@ -38,4 +38,10 @@ public class ExpManager : MonoBehaviour
 			playerExp.value = 0;
 		}
 	}
+
+	public void ResetExp()
+	{
+		playerExp.ResetValue();
+		playerPoints.ResetValue();
+	}
 }

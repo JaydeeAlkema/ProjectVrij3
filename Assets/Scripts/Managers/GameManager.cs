@@ -118,8 +118,12 @@ public class GameManager : MonoBehaviour
 				StartCoroutine(GameOver());
 				break;
 			case GameState.Hub:
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
 				break;
 			case GameState.Menu:
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
 				break;
 		}
 	}
@@ -173,7 +177,10 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(3f);
 
 		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+
 		PlayerHP.ResetValue();
+		ExpManager.ResetExp();
+
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(0, true);
 		ChangeGameState(GameState.Hub);
