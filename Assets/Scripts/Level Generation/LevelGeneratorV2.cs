@@ -557,6 +557,9 @@ public class LevelGeneratorV2 : MonoBehaviour
 					boxCollider2D = pathTileTransform.AddComponent<BoxCollider2D>();
 					boxCollider2D.size = Vector2.one;
 				}
+
+				spriteRenderer.sortingLayerName = "Wall";
+
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTileTransform.position.x), Mathf.RoundToInt(pathTileTransform.position.y));
 
 				Vector2Int topTileCoord = new Vector2Int(pathTileCoord.x, pathTileCoord.y + 1);
@@ -643,7 +646,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathTileTransform.gameObject.layer = LayerMask.NameToLayer("Walkable");
 					pathTileTransform.name = "Floor Tile";
 					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
-					spriteRenderer.sortingOrder -= 10;
+					spriteRenderer.sortingLayerName = "Floor";
 					Destroy(boxCollider2D);
 				}
 
@@ -653,15 +656,12 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					pathTileTransform.name = "Top Wall";
 					spriteRenderer.sprite = topWallSprites[Random.Range(0, topWallSprites.Count)];
-					spriteRenderer.sortingOrder -= 2;
 				}
 				// Bottom Wall
 				else if (!bottomTile && leftTile && topTile && rightTile)
 				{
 					pathTileTransform.name = "Bottom Wall";
 					spriteRenderer.sprite = bottomWallSprites[Random.Range(0, bottomWallSprites.Count)];
-					//boxCollider2D.offset = new Vector2(0, -0.25f);
-					//boxCollider2D.size = new Vector2(1, 0.5f);
 				}
 				// Left Wall
 				else if (!leftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
@@ -683,8 +683,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathTileTransform.name = "Top Left Outer Corner";
 					spriteRenderer.sprite = topLeftOuterCornerSprites[Random.Range(0, topLeftOuterCornerSprites.Count)];
 					spriteRenderer.flipY = true;
-					//boxCollider2D.offset = new Vector2(0.25f, 0);
-					//boxCollider2D.size = new Vector2(0.5f, 1);
 				}
 				// Top Right Outer Corner
 				else if (!topTile && !topRightTile && !rightTile && bottomTile && bottomLeftTile && leftTile)
@@ -692,8 +690,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathTileTransform.name = "Top Right Outer Corner";
 					spriteRenderer.sprite = topRightOuterCornerSprites[Random.Range(0, topRightOuterCornerSprites.Count)];
 					spriteRenderer.flipY = true;
-					//boxCollider2D.offset = new Vector2(-0.25f, 0);
-					//boxCollider2D.size = new Vector2(0.5f, 1);
 				}
 				// Bottom Right Outer Corner
 				else if (!rightTile && !bottomRightTile && !bottomTile && leftTile && topLeftTile && topTile)
@@ -730,8 +726,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathTileTransform.name = "Bottom Right Inner Corner";
 					spriteRenderer.sprite = bottomRightInnerCornerSprites[Random.Range(0, bottomRightInnerCornerSprites.Count)];
 					spriteRenderer.flipX = true;
-					//boxCollider2D.offset = new Vector2(0, -0.25f);
-					//boxCollider2D.size = new Vector2(1, 0.5f);
 				}
 				// Bottom Left Inner Corner
 				else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
@@ -739,8 +733,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 					pathTileTransform.name = "Bottom Left Inner Corner";
 					spriteRenderer.sprite = bottomLeftInnerCornerSprites[Random.Range(0, bottomLeftInnerCornerSprites.Count)];
 					spriteRenderer.flipX = true;
-					//boxCollider2D.offset = new Vector2(0, -0.25f);
-					//boxCollider2D.size = new Vector2(1, 0.5f);
 				}
 				#endregion
 			}

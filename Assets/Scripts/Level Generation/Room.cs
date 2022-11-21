@@ -30,15 +30,6 @@ public class Room : MonoBehaviour
 	{
 		yield return StartCoroutine(FetchCollideableTiles());
 		yield return StartCoroutine(FetchNonCollideableTiles());
-
-		foreach (KeyValuePair<Vector2Int, Transform> collideableTile in collideableTiles)
-		{
-			collideableTile.Value.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(collideableTile.Value.transform.position.y) + 1;
-		}
-		foreach (KeyValuePair<Vector2Int, Transform> nonCollideableTile in noncollideableTiles)
-		{
-			nonCollideableTile.Value.GetComponent<SpriteRenderer>().sortingOrder = Mathf.CeilToInt(nonCollideableTile.Value.transform.position.y) - 10;
-		}
 	}
 
 	private IEnumerator FetchCollideableTiles()
