@@ -157,14 +157,15 @@ public class RewardChoice : MonoBehaviour
 				break;
 			case StatusEffectType.Burn:
 				player.CurrentMeleeAttack.BurnDamage *= 2;
-				player.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
+				AbilityController.AbilityControllerInstance.CurrentMeleeAttack.BurnDamage *= 2;
+				//player.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
 				Debug.Log( "Upgraded burn" );
 				break;
 			case StatusEffectType.Stun:
 				break;
 			case StatusEffectType.Slow:
 				player.AbilityController.CurrentMeleeAttack.SlowAmount = ( player.CurrentMeleeAttack.SlowAmount / 2 );
-				player.AbilityController.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
+				//player.AbilityController.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
 				Debug.Log( "Upgraded slow" );
 				break;
 			case StatusEffectType.Marked:
@@ -218,7 +219,7 @@ public class RewardChoice : MonoBehaviour
 				break;
 			case StatusEffectType.Burn:
 				player.AbilityController.CurrentRangedAttack.BurnDamage *= 2;
-				player.AbilityController.CurrentRangedAttack.BaseStats.UpdateStatusEffects();
+				//player.AbilityController.CurrentRangedAttack.BaseStats.UpdateStatusEffects();
 				Debug.Log( "Upgraded burn" );
 				Debug.Log( "burn damage is now: " + player.AbilityController.CurrentRangedAttack.BurnDamage );
 				break;
@@ -226,7 +227,7 @@ public class RewardChoice : MonoBehaviour
 				break;
 			case StatusEffectType.Slow:
 				player.AbilityController.CurrentRangedAttack.SlowAmount = ( player.CurrentRangedAttack.SlowAmount / 2 );
-				player.AbilityController.CurrentRangedAttack.BaseStats.UpdateStatusEffects();
+				//player.AbilityController.CurrentRangedAttack.BaseStats.UpdateStatusEffects();
 				Debug.Log( "Upgraded slow" );
 				break;
 			case StatusEffectType.Marked:

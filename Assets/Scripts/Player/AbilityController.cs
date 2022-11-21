@@ -67,7 +67,7 @@ public class AbilityController : MonoBehaviour
 	public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable cd)
 	{
 		if (currentMeleeAttack != null) { currentMeleeAttack.CoolDown = melee.CoolDown; currentMeleeAttack.BurnDamage = melee.BurnDamage; }
-		if (currentRangedAttack != null) { currentRangedAttack.CoolDown = ranged.CoolDown; }
+		if (currentRangedAttack != null) { currentRangedAttack.CoolDown = ranged.CoolDown; currentRangedAttack.BurnDamage = ranged.BurnDamage; }
 		if (currentDash != null) { currentDash.CoolDown = cd.CoolDown; }
 		if (currentAbility1 != null) { currentAbility1.CoolDown = ab1.CoolDown; }
 		if (currentAbility2 != null) { currentAbility2.CoolDown = ab2.CoolDown; }

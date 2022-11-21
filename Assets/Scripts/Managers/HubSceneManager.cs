@@ -7,6 +7,7 @@ public class HubSceneManager : MonoBehaviour
 {
     public static HubSceneManager sceneManagerInstance { get; private set; }
 	private string loadScene;
+	private string lastScene;
 	private PlayerControler playerValues;
 
 	private void Awake()
@@ -30,6 +31,7 @@ public class HubSceneManager : MonoBehaviour
 			GameManager.Instance.ScriptablePlayer.Player = GameManager.Instance.PlayerInstance.GetComponent<PlayerControler>();
 			playerValues = GameManager.Instance.ScriptablePlayer.Player;
 		}
+		lastScene = currentScene;
 		SceneManager.UnloadSceneAsync( currentScene );
 		SceneManager.LoadSceneAsync( sceneToLoad, LoadSceneMode.Additive ).completed += HubSceneManager_completed;
 		//SceneManager.LoadSceneAsync( "Scene Manager" );
@@ -39,7 +41,7 @@ public class HubSceneManager : MonoBehaviour
 	private void HubSceneManager_completed( AsyncOperation obj )
 	{
 		SceneManager.SetActiveScene( SceneManager.GetSceneByName( loadScene ) );
-		if( loadScene != "Hub Prototype" ) { HoldPlayerOnSceneLoad(); }
+		if( loadScene != "Hub Prototype" && lastScene != "Hub Prototype") { HoldPlayerOnSceneLoad(); }
 	}
 
 	public void StartFirstScenes()

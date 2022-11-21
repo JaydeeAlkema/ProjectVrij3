@@ -152,7 +152,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentMeleeAttack = currentMeleeAttack;
 		abilityController.CurrentRangedAttack = currentRangedAttack;
 		abilityController.CurrentDash = currentDash;
-		abilityController.SetAttacks();
+		//abilityController.SetAttacks();
 	}
 
 	public void initAbilities()
