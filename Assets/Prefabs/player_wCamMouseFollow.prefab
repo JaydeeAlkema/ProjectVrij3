@@ -1025,8 +1025,8 @@ MonoBehaviour:
   vel: 0
   isDashing: 0
   invulnerable: 0
-  hitIFrames: 30
-  dashIFrames: 1
+  hitInvulTime: 0.5
+  dashInvulTime: 0.06
   lookDir: {x: 0, y: 0}
   castFromPoint: {fileID: 3607252476989244952}
   boxSize: {x: 4, y: 6}
@@ -1040,6 +1040,7 @@ MonoBehaviour:
   playerDeathSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
   playerDeathPoof: {fileID: 6120905142384714952, guid: 7f48faa6ddcfbd848adbc4009d1e75eb, type: 3}
   animPlayer: {fileID: 2846144575864148852}
+  outOfCombatTimer: 3
   bufferTimeMelee: 0.3
   bufferTimeCast: 0.3
   bufferTimeDash: 0.65

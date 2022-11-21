@@ -13,8 +13,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private int vertical = 0;
 	[SerializeField] private bool isDashing = false;
 	[SerializeField] private bool invulnerable = false;
-	[SerializeField] private int hitIFrames = 1;
-	[SerializeField] private int dashIFrames = 1;
+	[SerializeField] private float hitInvulTime = 1;
+	[SerializeField] private float dashInvulTime = 1;
 	//[SerializeField] private bool canMove = true;
 	//[SerializeField]
 	//private Camera cam;
@@ -300,7 +300,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentDash.BaseStats = dash;
 		abilityController.CurrentDash.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		abilityController.Dashing(currentDash);
-		StartCoroutine(PlayerIFrames(dashIFrames));
+		StartCoroutine(PlayerIFrames(dashInvulTime));
 	}
 
 	void AbilityOneAttack()
@@ -392,7 +392,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			//healthBar.SetHP(currentHealthPoints);
 			invulnerable = true;
 			outOfCombatCounter = 0f;
-			StartCoroutine(PlayerIFrames(hitIFrames));
+			StartCoroutine(PlayerIFrames(hitInvulTime));
 		}
 	}
 
@@ -492,13 +492,19 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		playerSprite.material = materialDefault;
 	}
 
-	IEnumerator PlayerIFrames(int iFrameAmount)
+	IEnumerator PlayerIFrames(float invulTime)
 	{
-		for (int i = 0; i < iFrameAmount; i++)
-		{
-			yield return new WaitForEndOfFrame();
-		}
+		yield return new WaitForSeconds(invulTime);
 		invulnerable = false;
 		yield return new WaitForEndOfFrame();
 	}
+	//IEnumerator PlayerIFrames(int iFrameAmount)
+	//{
+	//	for (int i = 0; i < iFrameAmount; i++)
+	//	{
+	//		yield return new WaitForEndOfFrame();
+	//	}
+	//	invulnerable = false;
+	//	yield return new WaitForEndOfFrame();
+	//}
 }
