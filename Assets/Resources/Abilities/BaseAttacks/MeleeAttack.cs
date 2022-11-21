@@ -102,7 +102,7 @@ public class MeleeAttack : Ability
 			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3");
 			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 			anim.CallAbility(player);
-			AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
+			//AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialHit;
 		}
 
