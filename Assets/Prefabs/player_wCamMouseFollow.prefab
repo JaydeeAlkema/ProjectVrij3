@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7143805035472647704}
   - component: {fileID: 2846144575864148852}
   - component: {fileID: 3607252478168810823}
-  - component: {fileID: 2573989293339601903}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -73,9 +72,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: 1307041607
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f8aaee9670b866444bb003660f935981, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -209,53 +208,6 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &2573989293339601903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 851697940821381925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc8d47f8ee31e404199829b659edc2aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sortingMode: 1
-  roundingMode: 1
-  positionReference: 0
-  sortingOrderOffset: 0
---- !u!1 &1201699904914888300
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6710806362032611279}
-  m_Layer: 0
-  m_Name: AbilityHolder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6710806362032611279
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201699904914888300}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -13.285714}
-  m_LocalScale: {x: 1.4285713, y: 1.4285713, z: 1.4285713}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8334970476083683795}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1261354564871183732
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +365,7 @@ MonoBehaviour:
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 1fa0190e00000000ef81cc1347dfe74ddf576d57cb5dc0dfbd7817d3
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -1057,21 +1009,22 @@ MonoBehaviour:
   vel: 0
   isDashing: 0
   invulnerable: 0
-  hitIFrames: 30
-  dashIFrames: 1
+  hitInvulTime: 0.5
+  dashInvulTime: 0.06
   lookDir: {x: 0, y: 0}
   castFromPoint: {fileID: 3607252476989244952}
   boxSize: {x: 4, y: 6}
   circleSize: 3
   rb2d: {fileID: 8334970476083683798}
   playerSprite: {fileID: 7143805035472647704}
-  Pivot_AttackAnimation: {fileID: 3778431377053427336}
+  pivot_AttackAnimation: {fileID: 3778431377053427336}
   attackAnimation: {fileID: 1261354564871183732}
   animAttack: {fileID: 547846125462354599}
   trail: {fileID: 3607252478168810823}
   playerDeathSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
   playerDeathPoof: {fileID: 6120905142384714952, guid: 7f48faa6ddcfbd848adbc4009d1e75eb, type: 3}
   animPlayer: {fileID: 2846144575864148852}
+  outOfCombatTimer: 3
   bufferTimeMelee: 0.3
   bufferTimeCast: 0.3
   bufferTimeDash: 0.65
@@ -1120,11 +1073,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayer
-      value: 0
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayerID
-      value: 0
+      value: 1307041607
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_RootOrder
@@ -1178,27 +1135,6 @@ PrefabInstance:
     - {fileID: 981170046537779607, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
---- !u!1 &5738139063377834822 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7734227032878875456, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
-  m_PrefabInstance: {fileID: 2662904538676441094}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3931017711238706843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5738139063377834822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc8d47f8ee31e404199829b659edc2aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sortingMode: 2
-  roundingMode: 1
-  positionReference: 0
-  sortingOrderOffset: -1
 --- !u!4 &6928733671148014491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}

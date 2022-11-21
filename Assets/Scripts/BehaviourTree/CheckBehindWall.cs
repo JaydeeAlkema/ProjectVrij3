@@ -14,15 +14,20 @@ public class CheckBehindWall : BTNode
 
 	public override BTNodeState Evaluate()
 	{
-		object hitWallPoint = GetData("hitWallPoint");
-		if (hitWallPoint == null)
+		//object hitWallPoint = GetData("hitWallPoint");
+		object wallcheck = GetData("hitWall");
+		if (wallcheck == null)
 		{
-			state = BTNodeState.SUCCESS;
+			state = BTNodeState.FAILURE;
 			return state;
 		}
-		if (hitWallPoint != null || (Vector2)hitWallPoint != Vector2.zero)
+
+		bool hitWall = (bool)GetData("hitWall");
+
+		if (hitWall)
 		{
-			ClearData("hitWallPoint");
+			//ClearData("hitWallPoint");
+			ClearData("hitWall");
 			state = BTNodeState.FAILURE;
 			return state;
 		}

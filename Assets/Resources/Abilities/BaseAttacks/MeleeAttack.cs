@@ -16,6 +16,7 @@ public class MeleeAttack : Ability
 	private int comboCounter = 0;
 	private float comboTimer = 0f;
 	private IEnumerator comboTimerCoroutine;
+	private bool thirdHit = false;
 
 	public override void CallAbility(PlayerControler _player)
 	{
@@ -73,27 +74,70 @@ public class MeleeAttack : Ability
 	{
 		ResetComboTimer();
 
-		if (comboCounter < 2)
+		if (comboCounter == 3)
 		{
-			comboCounter++;
+			comboCounter = 0;
+		}
+
+		comboCounter++;
+
+		if (comboCounter < 3)
+		{
+			thirdHit = false;
 			Debug.Log("Combo: " + comboCounter);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialDefault;
+
+			if (comboCounter == 2)
+			{
+				IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack1", "isAttacking2");
+				anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
+				anim.CallAbility(player);
+				AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
+			}
 		}
 		else
 		{
-			comboCounter = 0;
+			thirdHit = true;
 			Debug.Log("Full combo!");
-			AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
+			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3");
+			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
+			anim.CallAbility(player);
+			//AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialHit;
 		}
 
 		hitDetecting = true;
 		yield return new WaitForFixedUpdate();
 
-		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
+		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl"))
 		{
 			player.IsAttackPositionLocked = true;
-			enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
+
+			if (comboCounter == 2)
+			{
+				player.AttackAnimation.GetComponent<SpriteRenderer>().flipX = LookDir.x > 0 ? false : true;
+			}
+
+			if (thirdHit)
+			{
+				int twirlDir;
+				if (player.AttackAnimation.GetComponent<SpriteRenderer>().flipX)
+				{
+					twirlDir = -1;
+				}
+				else
+				{
+					twirlDir = 1;
+				}
+				player.Pivot_AttackAnimation.transform.Rotate(0f, 0f, 20f * twirlDir);
+				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + player.Pivot_AttackAnimation.transform.up * distance, boxSize, player.Pivot_AttackAnimation.transform.rotation.z, layerMask);
+			}
+			else
+			{
+				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
+			}
+
+
 			foreach (Collider2D enemy in enemiesInBox)
 			{
 				if (!enemyList.Contains(enemy))
@@ -107,6 +151,7 @@ public class MeleeAttack : Ability
 
 			yield return new WaitForEndOfFrame();
 		}
+		thirdHit = false;
 		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
 		yield return null;
@@ -114,7 +159,7 @@ public class MeleeAttack : Ability
 
 	public IEnumerator ComboTimer()
 	{
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(0.7f);
 
 		comboCounter = 0;
 		Debug.Log("Combo timer ends, combo counter is: " + comboCounter);

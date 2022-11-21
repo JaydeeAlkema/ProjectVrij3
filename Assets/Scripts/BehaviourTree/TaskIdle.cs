@@ -15,19 +15,43 @@ public class TaskIdle : BTNode
 	private float moveTime = 1f;
 	private float waitCounter = 0f;
 	private float moveCounter = 0f;
+	private int enemyType; //1 = Fodder, 2 = Swooger, 3 = Bob
 	private bool waiting = false;
 	private bool moving = false;
 	public Vector2 moveDir;
 
-	public TaskIdle(Rigidbody2D getRb2d, EnemyBase getEnemyScript)
+	public TaskIdle(Rigidbody2D getRb2d, EnemyBase getEnemyScript, int enemyType)
 	{
 		rb2d = getRb2d;
 		enemyScript = getEnemyScript;
 		speed = enemyScript.Speed;
+		this.enemyType = enemyType;
 	}
 
 	public override BTNodeState Evaluate()
 	{
+		switch (enemyType)
+		{
+			case 1:
+				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fodder1Idle"))
+				{
+					enemyScript.enemyAnimator.Play("Fodder1Idle");
+				}
+				break;
+			case 2:
+				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerIdle"))
+				{
+					enemyScript.enemyAnimator.Play("SwoogerIdle");
+				}
+				break;
+			case 3:
+				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("BobIdle"))
+				{
+					enemyScript.enemyAnimator.Play("BobIdle");
+				}
+				break;
+		}
+
 		if (waiting)
 		{
 			rb2d.velocity = new Vector2(0, 0);

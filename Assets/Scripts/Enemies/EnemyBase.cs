@@ -34,7 +34,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] public Material materialHit = null;
 
 	private bool isStunned = false;
-	private bool isAggro = false;
+	[SerializeField] private bool isAggro = false;
 
 	private Transform target = null;
 
@@ -149,7 +149,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Debug.Log("i took " + damage + " damage without type");
 		DamagePopup(damage);
 		healthPoints -= damage;
-		isAggro = true;
+		if (!isAggro)
+		{
+			isAggro = true;
+			GameManager.Instance.EnemyAggroCount(true);
+		}
+
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
@@ -186,7 +191,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
-		isAggro = true;
+		if (!isAggro)
+		{
+			isAggro = true;
+			GameManager.Instance.EnemyAggroCount(true);
+		}
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
@@ -260,6 +269,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		GameManager.Instance.ExpManager.AddExp(expAmount);
 		StopAllCoroutines();
 		Time.timeScale = 1f;
+		GameManager.Instance.EnemyAggroCount(false);
 		Destroy(this.gameObject);
 	}
 

@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 100
-  damageBase: 30
+  damageBase: 15
   damage: 0
   speed: 7
   aggroRange: 16
@@ -114,6 +114,7 @@ MonoBehaviour:
   endLag: 0.7
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
+  isAggro: 0
   destinationSetter: {fileID: 5571211868668841190}
   aiPath: {fileID: 1453729541019105252}
   beingCrowdControlled: 0
@@ -144,9 +145,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e3c7a845be0e14ea838ae5375f0e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 1
   rb2d: {fileID: 4442677197823009441}
   enemyScript: {fileID: 1409221283}
-  isSwooger: 0
 --- !u!114 &8561825498785388798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,9 +303,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingLayerID: 1307041607
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 573d72d5a4212164db9102288253ff75, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -350,11 +351,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayer
-      value: 0
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayerID
-      value: 0
+      value: 1307041607
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_RootOrder
@@ -412,30 +417,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shadow
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 981170046537779607, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
---- !u!1 &4857136849014636605 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7734227032878875456, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
-  m_PrefabInstance: {fileID: 2899608669614392189}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7139037857766043986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4857136849014636605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc8d47f8ee31e404199829b659edc2aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sortingMode: 1
-  roundingMode: 1
-  positionReference: 0
-  sortingOrderOffset: 0
 --- !u!4 &7849279065374013664 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}

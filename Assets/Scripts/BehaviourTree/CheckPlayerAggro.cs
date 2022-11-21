@@ -33,6 +33,11 @@ public class CheckPlayerAggro : BTNode
 			{
 				parent.parent.SetData("target", playerCollider.transform);
 				enemyScript.Target = playerCollider.transform;
+				if (!enemyScript.IsAggro)
+				{
+					enemyScript.IsAggro = true;
+					GameManager.Instance.EnemyAggroCount(true);
+				}
 			}
 
 			state = BTNodeState.FAILURE;

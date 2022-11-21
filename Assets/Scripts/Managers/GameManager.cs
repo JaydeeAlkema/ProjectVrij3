@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private AK.Wwise.State SoundStateCalm;
 	[SerializeField] private AK.Wwise.State SoundStateCrowded;
 	[SerializeField] private AK.Wwise.State CurrentSoundState;
+	[SerializeField] private AK.Wwise.Event startMusic;
+	[SerializeField] private int numberOfEnemiesAggrod = 0;
 
 	public enum GameState
 	{
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
 	public ScriptableInt PlayerHP { get => playerHP; set => playerHP = value; }
 	public ScriptableFloat PlayerSpeed { get => playerSpeed; set => playerSpeed = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
+	public int NumberOfEnemiesAggrod { get => numberOfEnemiesAggrod; set => numberOfEnemiesAggrod = value; }
 
 	#region Unity Callbacks
 	private void Awake()
@@ -73,11 +76,34 @@ public class GameManager : MonoBehaviour
 			TogglePauseGame();
 			uiManager.SetUIActive(3, isPaused);
 		}
+
+
+	}
+
+	public void EnemyAggroCount(bool isAggro)
+	{
+		numberOfEnemiesAggrod += isAggro ? 1 : -1;
+		if (numberOfEnemiesAggrod == 0)
+		{
+			CurrentSoundState = SoundStateCalm;
+			CurrentSoundState.SetValue();
+		}
+		else
+		{
+			CurrentSoundState = SoundStateCrowded;
+			CurrentSoundState.SetValue();
+		}
 	}
 
 	public void TogglePauseGame()
 	{
 		isPaused = !isPaused;
+		Time.timeScale = isPaused ? 0f : 1f;
+	}
+	
+	public void SetPauseState(bool pause)
+	{
+		isPaused = pause;
 		Time.timeScale = isPaused ? 0f : 1f;
 	}
 
@@ -113,13 +139,21 @@ public class GameManager : MonoBehaviour
 		switch (currentGameState)
 		{
 			case GameState.Dungeon:
+				CurrentSoundState = SoundStateCrowded;
+				CurrentSoundState.SetValue();
+				AudioManager.Instance.PostEventGlobal(startMusic);
 				break;
 			case GameState.GameOver:
 				StartCoroutine(GameOver());
 				break;
 			case GameState.Hub:
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
 				break;
 			case GameState.Menu:
+				startMusic.Stop(AudioManager.Instance.gameObject);
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
 				break;
 		}
 	}
@@ -173,7 +207,10 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(3f);
 
 		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+
 		PlayerHP.ResetValue();
+		ExpManager.ResetExp();
+
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(0, true);
 		ChangeGameState(GameState.Hub);

@@ -6,9 +6,9 @@ using BehaviourTree;
 
 public class FodderBT : BTTree
 {
+	[SerializeField] private int enemyType;
 	public Rigidbody2D rb2d;
 	public EnemyBase enemyScript;
-	public bool isSwooger = false;
 
 	protected override BTNode SetupTree()
 	{
@@ -29,9 +29,9 @@ public class FodderBT : BTTree
 				new Sequence(new List<BTNode>
 				{
 					new RaycastToTarget(enemyScript),
-					new FodderWindup(enemyScript, rb2d, isSwooger),
-					new FodderDashAttack(enemyScript, rb2d, isSwooger),
-					new FodderLanding(enemyScript, isSwooger),
+					new FodderWindup(enemyScript, rb2d, enemyType),
+					new FodderDashAttack(enemyScript, rb2d, enemyType),
+					new FodderLanding(enemyScript, enemyType),
 					//new TaskDashAttack(rb2d, enemyScript),
 				})
 			}),
@@ -40,7 +40,7 @@ public class FodderBT : BTTree
 				new CheckPlayerAggro(rb2d, enemyScript),
 				new TaskMoveToPlayer(rb2d, enemyScript),
 			}),
-			new TaskIdle(rb2d, enemyScript),
+			new TaskIdle(rb2d, enemyScript, enemyType),
 		});
 
 		return root;
