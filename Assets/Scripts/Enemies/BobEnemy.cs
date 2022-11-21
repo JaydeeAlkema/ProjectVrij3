@@ -12,7 +12,6 @@ public class BobEnemy : EnemyBase
 	//Enemy
 	public LayerMask playerLayerMask;
 
-	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 	[SerializeField] private GameObject enemyProjectile;
 	private float baseSpeed;

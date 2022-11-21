@@ -9,7 +9,7 @@ public class Dash : Ability
 
 	public override void CallAbility( PlayerControler _player )
 	{
-		Player = FindObjectOfType<PlayerControler>();
+		Player = Object.FindObjectOfType<PlayerControler>();
 		Player.IsDashing = true;
 		Player.Trail.emitting = true;
 		if( init )

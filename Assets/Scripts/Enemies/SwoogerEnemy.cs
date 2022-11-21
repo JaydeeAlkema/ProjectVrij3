@@ -12,7 +12,6 @@ public class SwoogerEnemy : EnemyBase
 	//Enemy
 	public LayerMask playerLayerMask;
 
-	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
