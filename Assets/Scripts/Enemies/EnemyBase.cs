@@ -191,8 +191,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
-		isAggro = true;
-		GameManager.Instance.EnemyAggroCount(true);
+		if (!isAggro)
+		{
+			isAggro = true;
+			GameManager.Instance.EnemyAggroCount(true);
+		}
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();

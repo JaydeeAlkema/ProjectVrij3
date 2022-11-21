@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 	public ScriptableInt PlayerHP { get => playerHP; set => playerHP = value; }
 	public ScriptableFloat PlayerSpeed { get => playerSpeed; set => playerSpeed = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
+	public int NumberOfEnemiesAggrod { get => numberOfEnemiesAggrod; set => numberOfEnemiesAggrod = value; }
 
 	#region Unity Callbacks
 	private void Awake()
