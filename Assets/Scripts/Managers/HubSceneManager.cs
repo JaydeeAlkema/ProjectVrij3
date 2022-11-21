@@ -26,8 +26,10 @@ public class HubSceneManager : MonoBehaviour
 	public void ChangeScene(string sceneToLoad, string currentScene)
 	{
 		loadScene = sceneToLoad;
-		if(GameManager.Instance.currentGameState == GameManager.GameState.Dungeon && GameManager.Instance.PlayerInstance != null)
+		if((sceneToLoad != "Hub Prototype" || sceneToLoad != "MainMenu") && GameManager.Instance.PlayerInstance != null)
 		{
+			if(GameManager.Instance.ScriptablePlayer != null) { GameManager.Instance.ScriptablePlayer = null; }
+			GameManager.Instance.ScriptablePlayer = ( ScriptablePlayer )ScriptableObject.CreateInstance( "ScriptablePlayer" );
 			GameManager.Instance.ScriptablePlayer.Player = GameManager.Instance.PlayerInstance.GetComponent<PlayerControler>();
 			playerValues = GameManager.Instance.ScriptablePlayer.Player;
 		}
@@ -54,6 +56,7 @@ public class HubSceneManager : MonoBehaviour
 	{
 		PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
+		player.AbilityController = playerValues.AbilityController;
 		player.CurrentMeleeAttack = playerValues.CurrentMeleeAttack;
 		player.MeleeAttackScr = playerValues.MeleeAttackScr;
 		player.CurrentRangedAttack = playerValues.CurrentRangedAttack;
