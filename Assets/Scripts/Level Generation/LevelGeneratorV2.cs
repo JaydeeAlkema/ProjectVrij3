@@ -43,6 +43,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private Transform roomsParent = default;
 	[SerializeField] private Transform pathwaysParent = default;
 	[SerializeField] private Transform decorationsParent = default;
+	[SerializeField] private Material defaultSpriteMaterial = default;
 	[Space(10)]
 
 	[Header("Debugging")]
@@ -559,6 +560,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				}
 
 				spriteRenderer.sortingLayerName = "Wall";
+				spriteRenderer.material = defaultSpriteMaterial;
 
 				Vector2Int pathTileCoord = new Vector2Int(Mathf.RoundToInt(pathTileTransform.position.x), Mathf.RoundToInt(pathTileTransform.position.y));
 
