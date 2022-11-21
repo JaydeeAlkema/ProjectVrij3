@@ -38,6 +38,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private float selfSlowTime = 0.35f;
 	private float selfSlowCounter = 0f;
 	private float selfSlowMultiplier = 1f;
+	private bool inCombat = false;
+	private float outOfCombatCounter = 0f;
+	[SerializeField] private float outOfCombatTimer = 3f;
 
 	private float bufferCounterMelee = 0f;
 	[SerializeField] private float bufferTimeMelee = 0.2f;
@@ -123,7 +126,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentMeleeAttack = currentMeleeAttack;
 		abilityController.CurrentRangedAttack = currentRangedAttack;
 		abilityController.CurrentDash = currentDash;
-		Debug.Log( currentMeleeAttack.BurnDamage );
+		Debug.Log(currentMeleeAttack.BurnDamage);
 		abilityController.SetAttacks();
 		trail.emitting = false;
 
@@ -224,7 +227,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
 		}
 		CastSelfSlow();
-
+		OutOfCombatSpeed();
 	}
 	void OnDrawGizmos()
 	{
@@ -248,7 +251,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		else if (isAttackPositionLocked)
 		{
 			selfSlowMultiplier = 1.5f;
-		} 
+		}
 		else
 		{
 			selfSlowMultiplier = 1f;
@@ -277,6 +280,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MeleeAttack()
 	{
+		outOfCombatCounter = 0f;
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
 		abilityController.CurrentMeleeAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		abilityController.MeleeAttacked(currentMeleeAttack);
@@ -284,6 +288,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void RangedAttack()
 	{
+		outOfCombatCounter = 0f;
 		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
 		abilityController.CurrentRangedAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		abilityController.RangeAttacked(currentRangedAttack);
@@ -300,6 +305,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void AbilityOneAttack()
 	{
+		outOfCombatCounter = 0f;
 		//ability1.Ability.SetPlayerValues(ability1);
 		//ability1.Ability.AbilityBehavior();
 		Debug.Log(CurrentAbility1);
@@ -310,12 +316,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void AbilityTwoAttack()
 	{
+		outOfCombatCounter = 0f;
 		//ability2.Ability.SetPlayerValues(ability2);
 		//ability2.Ability.AbilityBehavior();
 	}
 
 	void AbilityThreeAttack()
 	{
+		outOfCombatCounter = 0f;
 		//ability3.Ability.SetPlayerValues(ability3);
 		//ability3.Ability.AbilityBehavior();
 	}
@@ -383,6 +391,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			GameManager.Instance.PlayerHP.value -= damage;
 			//healthBar.SetHP(currentHealthPoints);
 			invulnerable = true;
+			outOfCombatCounter = 0f;
 			StartCoroutine(PlayerIFrames(hitIFrames));
 		}
 	}
@@ -402,6 +411,26 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		}
 
+	}
+
+	public void OutOfCombatSpeed()
+	{
+		if(outOfCombatCounter < outOfCombatTimer)
+		{
+			outOfCombatCounter += Time.deltaTime;
+			inCombat = true;
+			Debug.Log("In combat, no boost");
+		}
+		else
+		{
+			inCombat = false;
+		}
+
+		if (!inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1)
+		{
+			selfSlowMultiplier = 2f;
+			Debug.Log("Out of combat boost granted");
+		}
 	}
 
 	public void TakeDamage(int damage, int damageType)
