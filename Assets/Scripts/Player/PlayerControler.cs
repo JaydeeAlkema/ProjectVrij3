@@ -75,7 +75,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	[Header( "Abilities" )]
 	#region ability fields
-	[SerializeField] private GameObject abilityHolder;
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
 	[SerializeField] private AbilityScriptable dash;
@@ -89,7 +88,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public AbilityScriptable Ability2 { get => ability2; set => ability2 = value; }
 	public AbilityScriptable Ability3 { get => ability3; set => ability3 = value; }
 
-	private IAbility currentMeleeAttack;
+	private IAbility currentMeleeAttack = new MeleeAttack();
 	private IAbility currentRangedAttack = new RangedAttack();
 	private IAbility currentDash = new Dash();
 	private IAbility currentAbility1;
@@ -115,8 +114,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	// Start is called before the first frame update
 	void Start()
 	{
-		abilityHolder.AddComponent<MeleeAttack>();
-		currentMeleeAttack = abilityHolder.GetComponent<MeleeAttack>();
 		abilityController = AbilityController.AbilityControllerInstance;
 		rb2d = GetComponent<Rigidbody2D>();
 		abilityController.Player = this;

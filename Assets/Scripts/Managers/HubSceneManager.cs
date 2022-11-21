@@ -59,6 +59,7 @@ public class HubSceneManager : MonoBehaviour
 		player.AbilityController = playerValues.AbilityController;
 		player.CurrentMeleeAttack = playerValues.CurrentMeleeAttack;
 		player.MeleeAttackScr = playerValues.MeleeAttackScr;
+		player.CurrentMeleeAttack.Damage = playerValues.CurrentMeleeAttack.Damage;
 		player.CurrentRangedAttack = playerValues.CurrentRangedAttack;
 		player.RangedAttackScr = playerValues.RangedAttackScr;
 		player.CurrentDash = playerValues.CurrentDash;
