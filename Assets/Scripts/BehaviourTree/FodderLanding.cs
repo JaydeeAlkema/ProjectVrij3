@@ -32,6 +32,7 @@ public class FodderLanding : BTNode
 				//("target");
 				ClearData("dashDestination");
 				ClearData("dashDir");
+				ClearData("hitWall");
 			}
 			else
 			{
