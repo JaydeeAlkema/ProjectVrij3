@@ -26,7 +26,8 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 		enemiesInArea = Physics2D.OverlapCircleAll(transform.position, radius * 6, layerMask);
 		foreach (Collider2D enemy in enemiesInArea)
 		{
-			enemy.GetComponent<IDamageable>()?.TakeDamage(damage, 1);
+			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
+			enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal, 1);
 			castedFrom.OnHitApplyStatusEffects(enemy.gameObject.GetComponent<IDamageable>());
 		}
 	}
