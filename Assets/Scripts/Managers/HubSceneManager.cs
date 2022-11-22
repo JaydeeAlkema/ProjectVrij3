@@ -7,6 +7,7 @@ public class HubSceneManager : MonoBehaviour
 {
     public static HubSceneManager sceneManagerInstance { get; private set; }
 	private string loadScene;
+	private string lastScene;
 	private PlayerControler playerValues;
 
 	private void Awake()
@@ -25,11 +26,14 @@ public class HubSceneManager : MonoBehaviour
 	public void ChangeScene(string sceneToLoad, string currentScene)
 	{
 		loadScene = sceneToLoad;
-		if(GameManager.Instance.currentGameState == GameManager.GameState.Dungeon && GameManager.Instance.PlayerInstance != null)
+		if((sceneToLoad != "Hub Prototype" || sceneToLoad != "MainMenu") && GameManager.Instance.PlayerInstance != null)
 		{
+			if(GameManager.Instance.ScriptablePlayer != null) { GameManager.Instance.ScriptablePlayer = null; }
+			GameManager.Instance.ScriptablePlayer = ( ScriptablePlayer )ScriptableObject.CreateInstance( "ScriptablePlayer" );
 			GameManager.Instance.ScriptablePlayer.Player = GameManager.Instance.PlayerInstance.GetComponent<PlayerControler>();
 			playerValues = GameManager.Instance.ScriptablePlayer.Player;
 		}
+		lastScene = currentScene;
 		SceneManager.UnloadSceneAsync( currentScene );
 		SceneManager.LoadSceneAsync( sceneToLoad, LoadSceneMode.Additive ).completed += HubSceneManager_completed;
 		//SceneManager.LoadSceneAsync( "Scene Manager" );
@@ -39,7 +43,7 @@ public class HubSceneManager : MonoBehaviour
 	private void HubSceneManager_completed( AsyncOperation obj )
 	{
 		SceneManager.SetActiveScene( SceneManager.GetSceneByName( loadScene ) );
-		if( loadScene != "Hub Prototype" ) { HoldPlayerOnSceneLoad(); }
+		if( loadScene != "Hub Prototype" && lastScene != "Hub Prototype") { HoldPlayerOnSceneLoad(); }
 	}
 
 	public void StartFirstScenes()
@@ -52,8 +56,10 @@ public class HubSceneManager : MonoBehaviour
 	{
 		PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
+		player.AbilityController = playerValues.AbilityController;
 		player.CurrentMeleeAttack = playerValues.CurrentMeleeAttack;
 		player.MeleeAttackScr = playerValues.MeleeAttackScr;
+		player.CurrentMeleeAttack.Damage = playerValues.CurrentMeleeAttack.Damage;
 		player.CurrentRangedAttack = playerValues.CurrentRangedAttack;
 		player.RangedAttackScr = playerValues.RangedAttackScr;
 		player.CurrentDash = playerValues.CurrentDash;

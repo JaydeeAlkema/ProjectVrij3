@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 		}
 
 		QualitySettings.vSyncCount = 1;
-		scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance("ScriptablePlayer");
+		//scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance("ScriptablePlayer");
 
 		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
 	}
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
 
 			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
-		scriptablePlayer.Player = playerInstance.GetComponent<PlayerControler>();
+		//scriptablePlayer.Player = playerInstance.GetComponent<PlayerControler>();
 		StartCoroutine(SetupLevel());
 	}
 
