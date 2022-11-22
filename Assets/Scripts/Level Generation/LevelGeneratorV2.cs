@@ -335,7 +335,18 @@ public class LevelGeneratorV2 : MonoBehaviour
 		}
 
 		// Setup Astar Graph
-		Vector2Int middleChunkCoordinates = new Vector2Int(chunks[chunks.Count - 1].Coordinates.x / 2, chunks[chunks.Count - 1].Coordinates.y / 2);
+		List<Transform> occupiedChunks = new List<Transform>();
+		foreach (Chunk chunk in chunks)
+		{
+			if (chunk.Occupied)
+			{
+				occupiedChunks.Add(chunk.transform);
+			}
+		}
+		Bounds occupiedChunksBounds = GetBoundsFromTransforms(occupiedChunks);
+		Vector3 centerOfOccupiedChunks = occupiedChunksBounds.center;
+		Vector2Int sizeOfOccupiedChunks = new Vector2Int(Mathf.RoundToInt(occupiedChunksBounds.size.x), Mathf.RoundToInt(occupiedChunksBounds.size.y));
+		Vector2Int middleChunkCoordinates = new Vector2Int(Mathf.RoundToInt(centerOfOccupiedChunks.x), Mathf.RoundToInt(centerOfOccupiedChunks.y));
 		astarData = AstarPath.active.data;
 
 		GameObject SeekerGO = new GameObject("Seeker");
@@ -344,7 +355,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		foreach (GridGraph gridGraph in astarData.graphs)
 		{
 			gridGraph.center = new Vector3(middleChunkCoordinates.x, middleChunkCoordinates.y, 0);
-			gridGraph.SetDimensions(SLGS.chunkSize * SLGS.chunkGridSize.x, SLGS.chunkSize * SLGS.chunkGridSize.y, gridGraph.nodeSize);
+			gridGraph.SetDimensions(sizeOfOccupiedChunks.x + SLGS.chunkSize, sizeOfOccupiedChunks.y + SLGS.chunkSize, gridGraph.nodeSize);
 			AstarPath.active.Scan(gridGraph);
 		}
 
@@ -966,6 +977,21 @@ public class LevelGeneratorV2 : MonoBehaviour
 			}
 		}
 		return null;
+	}
+
+	/// <summary>
+	/// Gets the Bounds of all transforms in the list.
+	/// </summary>
+	/// <param name="transforms"> List of transforms to get Bounds from. </param>
+	/// <returns> Bounds. </returns>
+	public Bounds GetBoundsFromTransforms(List<Transform> transforms)
+	{
+		Bounds bound = new Bounds(transforms[0].position, Vector3.zero);
+		for (int i = 1; i < transforms.Count; i++)
+		{
+			bound.Encapsulate(transforms[i].position);
+		}
+		return bound;
 	}
 	#endregion
 
