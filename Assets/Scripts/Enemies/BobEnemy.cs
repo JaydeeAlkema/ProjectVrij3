@@ -58,7 +58,8 @@ public class BobEnemy : EnemyBase
 
 	void AttackPlayer(GameObject playerObject)
 	{
-		playerObject.GetComponent<PlayerControler>()?.TakeDamage(damage);
+		int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
+		playerObject.GetComponent<PlayerControler>()?.TakeDamage(damageToDeal);
 	}
 
 	public override void MoveToTarget(Transform target)

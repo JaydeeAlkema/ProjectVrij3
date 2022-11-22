@@ -65,7 +65,8 @@ public class ShootEnemyProjectile : BTNode
 				Vector2 projectileDirection = (target.position - enemyScript.transform.position).normalized;
 				float angle = Mathf.Atan2(projectileDirection.y, projectileDirection.x) * Mathf.Rad2Deg - 90;
 				GameObject castedProjectile = Object.Instantiate(bobScript.EnemyProjectile, enemyScript.transform.position, Quaternion.Euler(0f, 0f, angle));
-				castedProjectile.GetComponent<EnemyProjectile>().Damage = enemyScript.Damage;
+				int damageToDeal = (int)(enemyScript.Damage * Random.Range(0.8f, 1.2f));
+				castedProjectile.GetComponent<EnemyProjectile>().Damage = damageToDeal;
 				projectileCounter++;
 				attackCounter = 0f;
 
