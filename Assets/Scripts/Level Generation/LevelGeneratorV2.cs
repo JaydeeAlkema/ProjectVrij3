@@ -42,7 +42,6 @@ public class LevelGeneratorV2 : MonoBehaviour
 	[SerializeField] private Transform chunksParent = default;
 	[SerializeField] private Transform roomsParent = default;
 	[SerializeField] private Transform pathwaysParent = default;
-	[SerializeField] private Transform decorationsParent = default;
 	[SerializeField] private Material defaultSpriteMaterial = default;
 	[Space(10)]
 
@@ -54,6 +53,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 
 	[Header("Spawnable Prefabs")]
 	[SerializeField] private GameObject bossFightPortal = default;
+	[SerializeField] private GameObject levelUpStatue = default;
 
 	List<GameObject> pathwayParents = new List<GameObject>();
 
@@ -859,51 +859,53 @@ public class LevelGeneratorV2 : MonoBehaviour
 		executionTime.Start();
 
 		// Spawn a portal in the boss room.
-		Vector3 finalRoom = rooms[rooms.Count - 1].transform.position;
-		Vector2Int portalSpawnPoint = new Vector2Int(Mathf.RoundToInt(finalRoom.x), Mathf.RoundToInt(finalRoom.y));
-		GameObject portalGO = Instantiate(bossFightPortal, new Vector2(portalSpawnPoint.x, portalSpawnPoint.y), Quaternion.identity, decorationsParent);
+		Room finalRoom = rooms[rooms.Count - 1];
+		Vector2Int portalSpawnPoint = new Vector2Int(Mathf.RoundToInt(finalRoom.transform.position.x), Mathf.RoundToInt(finalRoom.transform.position.y));
+		GameObject portalGO = Instantiate(bossFightPortal, new Vector2(portalSpawnPoint.x, portalSpawnPoint.y), Quaternion.identity, finalRoom.PropsParent);
 		Portal portal = portalGO.GetComponent<Portal>();
 		portal.SceneToLoadName = "Boss Testing";
 		portal.CurrentSceneName = "Jaydee Testing Scene";
 
-		// Spawn decorations throught the level
-		foreach (Room room in rooms)
+		// Spawn props throughout the level
+		for (int roomIndex = 0; roomIndex < rooms.Count; roomIndex++)
 		{
+			Room room = rooms[roomIndex];
 			if (room.RoomType == RoomType.Boss) break;
 
-			// Spawn Wall Decorations
+			// Spawn Wall props
 			foreach (KeyValuePair<Vector2Int, Transform> collideableTile in room.CollideableTiles)
 			{
 				int randDecorationSpawnChance = Random.Range(0, 100);
 				if (randDecorationSpawnChance < SLGS.decorationSpawnChance)
 				{
 					Transform collideableTileTransform = collideableTile.Value;
+					Vector3 randPos = new Vector3(Mathf.RoundToInt(collideableTileTransform.position.x), Mathf.RoundToInt(collideableTileTransform.position.y), 0);
 
-					// Top wall decorations
+					// Top wall props
 					if (collideableTileTransform.name.ToLower().Contains("top") && !collideableTileTransform.name.ToLower().Contains("corner"))
 					{
 						int randDecorationIndex = Random.Range(0, SLGS.topWallDecorations.Count);
-						GameObject decorationGO = Instantiate(SLGS.topWallDecorations[randDecorationIndex].prefab, new Vector3(Mathf.RoundToInt(collideableTileTransform.position.x), Mathf.RoundToInt(collideableTileTransform.position.y), 0), Quaternion.identity, decorationsParent);
+						GameObject decorationGO = Instantiate(SLGS.topWallDecorations[randDecorationIndex].prefab, randPos, Quaternion.identity, room.PropsParent);
 						decorations.Add(decorationGO);
 					}
-					// Left wall decorations
+					// Left wall props
 					else if (collideableTileTransform.name.ToLower().Contains("left") && !collideableTileTransform.name.ToLower().Contains("corner"))
 					{
 						int randDecorationIndex = Random.Range(0, SLGS.leftWallDecorations.Count);
-						GameObject decorationGO = Instantiate(SLGS.leftWallDecorations[randDecorationIndex].prefab, new Vector3(Mathf.RoundToInt(collideableTileTransform.position.x + 1), Mathf.RoundToInt(collideableTileTransform.position.y), 0), Quaternion.identity, decorationsParent);
+						GameObject decorationGO = Instantiate(SLGS.leftWallDecorations[randDecorationIndex].prefab, new Vector3(randPos.x + 1, randPos.y, randPos.z), Quaternion.identity, room.PropsParent);
 						decorations.Add(decorationGO);
 					}
-					// Right wall decorations
+					// Right wall props
 					else if (collideableTileTransform.name.ToLower().Contains("right") && !collideableTileTransform.name.ToLower().Contains("corner"))
 					{
 						int randDecorationIndex = Random.Range(0, SLGS.rightWallDecorations.Count);
-						GameObject decorationGO = Instantiate(SLGS.rightWallDecorations[randDecorationIndex].prefab, new Vector3(Mathf.RoundToInt(collideableTileTransform.position.x - 1), Mathf.RoundToInt(collideableTileTransform.position.y), 0), Quaternion.identity, decorationsParent);
+						GameObject decorationGO = Instantiate(SLGS.rightWallDecorations[randDecorationIndex].prefab, new Vector3(randPos.x - 1, randPos.y, randPos.z), Quaternion.identity, room.PropsParent);
 						decorations.Add(decorationGO);
 					}
 				}
 			}
 
-			// Spawn Floor Decorations
+			// Spawn Floor props
 			foreach (KeyValuePair<Vector2Int, Transform> noncollideableTile in room.NoncollideableTiles)
 			{
 				int randDecorationSpawnChance = Random.Range(0, 100);
@@ -912,14 +914,23 @@ public class LevelGeneratorV2 : MonoBehaviour
 				if (randDecorationSpawnChance < SLGS.decorationSpawnChance)
 				{
 					int randDecorationIndex = Random.Range(0, SLGS.floorDecorations.Count);
-					GameObject decorationGO = Instantiate(SLGS.floorDecorations[randDecorationIndex].prefab);
-					decorationGO.transform.position = new Vector3(Mathf.RoundToInt(nonCollideableTileTransform.position.x), Mathf.RoundToInt(nonCollideableTileTransform.position.y), 0);
-					decorationGO.transform.parent = decorationsParent;
+					Vector3 randPos = new Vector3(Mathf.RoundToInt(nonCollideableTileTransform.position.x), Mathf.RoundToInt(nonCollideableTileTransform.position.y), 0);
+					GameObject decorationGO = Instantiate(SLGS.floorDecorations[randDecorationIndex].prefab, randPos, Quaternion.identity, room.PropsParent);
 
 					decorations.Add(decorationGO);
 				}
 			}
 		}
+
+		// Spawn Levelup Statue
+		// Spawn the Levelup statue only in the last half of the rooms.
+		int levelUpStatueRoomIndex = Random.Range(rooms.Count / 2, rooms.Count);
+		Room roomWithLevelupStatue = rooms[levelUpStatueRoomIndex];
+		int levelUpStatueSpawnPointIndex = Random.Range(0, roomWithLevelupStatue.StatuePoints.Count);
+		Transform levelUpStatueSpawnPointTransform = roomWithLevelupStatue.StatuePoints[levelUpStatueSpawnPointIndex].transform;
+		Vector2Int levelUpStatueCoordinates = new Vector2Int(Mathf.RoundToInt(levelUpStatueSpawnPointTransform.position.x), Mathf.RoundToInt(levelUpStatueSpawnPointTransform.position.y));
+		GameObject levelupStatueGO = Instantiate(levelUpStatue, new Vector3(levelUpStatueCoordinates.x, levelUpStatueCoordinates.y, 0), Quaternion.identity, roomWithLevelupStatue.PropsParent);
+		decorations.Add(levelupStatueGO);
 
 		// A final scan.
 		AstarPath.active.Scan();

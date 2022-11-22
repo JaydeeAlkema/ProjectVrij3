@@ -14,6 +14,7 @@ public class Room : MonoBehaviour
 	[SerializeField] private Transform floorsParent = null;
 	[SerializeField] private Transform propsParent = null;
 	[SerializeField] private List<GameObject> pathwayOpenings = new List<GameObject>();
+	[SerializeField] private List<GameObject> statuePoints = new List<GameObject>();
 	[Space]
 	[SerializeField, ReadOnly] private List<Room> connectedRooms = new List<Room>();
 	[SerializeField, ReadOnly] private Dictionary<Vector2Int, Transform> collideableTiles = new Dictionary<Vector2Int, Transform>();
@@ -21,7 +22,9 @@ public class Room : MonoBehaviour
 
 	public RoomType RoomType { get => roomType; set => roomType = value; }
 	public Vector2Int RoomSize { get => roomSize; set => roomSize = value; }
+	public Transform PropsParent { get => propsParent; set => propsParent = value; }
 	public List<GameObject> PathwayOpenings { get => pathwayOpenings; set => pathwayOpenings = value; }
+	public List<GameObject> StatuePoints { get => statuePoints; set => statuePoints = value; }
 	public List<Room> ConnectedRooms { get => connectedRooms; set => connectedRooms = value; }
 	public Dictionary<Vector2Int, Transform> CollideableTiles { get => collideableTiles; set => collideableTiles = value; }
 	public Dictionary<Vector2Int, Transform> NoncollideableTiles { get => noncollideableTiles; set => noncollideableTiles = value; }

@@ -213,12 +213,12 @@ MonoBehaviour:
   chunksParent: {fileID: 10108052}
   roomsParent: {fileID: 1345135754}
   pathwaysParent: {fileID: 1618383058}
-  decorationsParent: {fileID: 651540613}
   defaultSpriteMaterial: {fileID: 2100000, guid: c75dcee266e4a654d96fd7f804fcc6ba, type: 2}
   showGizmos: 0
   diagnosticTimes: []
   totalGenerationTimeInMilliseconds: 0
   bossFightPortal: {fileID: 7033657127096513241, guid: 35d4ecfc122a8b6428c3102f1d2565eb, type: 3}
+  levelUpStatue: {fileID: 1038451240231863062, guid: b55da232d2716e04d8f31473bc19baa2, type: 3}
 --- !u!1 &210837384
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 1fa0190e00000000ef81cc1347dfe74ddf576d57cb5dc0dfbd7817d3
+  m_ApplyToSortingLayers: 1fa0190e00000000ef81cc13df576d5747dfe74dcb5dc0dfbd7817d36f307172
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -462,7 +462,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1260570830}
-  - component: {fileID: 1260570829}
   m_Layer: 0
   m_Name: WwiseGlobal
   m_TagString: Untagged
@@ -470,31 +469,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1260570829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1260570828}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cb68acdfc65cb64ea8c373ec7e16a37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitializationSettings: {fileID: 11400000, guid: 7dba14c27228b1b40b922deb8397e58a, type: 2}
-  basePath: 
-  language: 
-  defaultPoolSize: 0
-  lowerPoolSize: 0
-  streamingPoolSize: 0
-  memoryCutoffThreshold: 0
-  monitorPoolSize: 0
-  monitorQueuePoolSize: 0
-  callbackManagerBufferSize: 0
-  spatialAudioPoolSize: 0
-  maxSoundPropagationDepth: 0
-  engineLogging: 0
 --- !u!4 &1260570830
 Transform:
   m_ObjectHideFlags: 0
