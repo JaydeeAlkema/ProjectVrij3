@@ -389,7 +389,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 			GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 			onHitSpark.GetComponent<SpriteRenderer>().color = new Color32(149, 43, 84, 255);
-			//HitSlow(0.5f);
+			StartCoroutine(HitSlow(0.12f));
 			StartCoroutine(playerFlashColor());
 			GameManager.Instance.PlayerHP.value -= damage;
 			//healthBar.SetHP(currentHealthPoints);
@@ -488,13 +488,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//	yield return null;
 	//}
 
-	//public IEnumerator HitSlow(float duration)
-	//{
-	//	Time.timeScale = 0f;
-	//	yield return new WaitForSecondsRealtime(duration);
-	//	Time.timeScale = 1f;
-	//	yield return null;
-	//}
+	public IEnumerator HitSlow(float duration)
+	{
+		Time.timeScale = 0.2f;
+		yield return new WaitForSecondsRealtime(duration);
+		Time.timeScale = 1f;
+		yield return null;
+	}
 
 	IEnumerator playerFlashColor()
 	{

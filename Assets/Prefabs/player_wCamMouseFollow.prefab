@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 1439059109725620276}
   - component: {fileID: 9219687647365436207}
   - component: {fileID: 547846125462354599}
+  - component: {fileID: 3538882915153843095}
   m_Layer: 0
   m_Name: AttackAnimation
   m_TagString: Untagged
@@ -313,6 +314,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3538882915153843095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261354564871183732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5749474d63266a46984d9c0a3b7987e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitDetection: 0
 --- !u!1 &3006998711336092398
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,7 +934,6 @@ Transform:
   - {fileID: 3607252477266376401}
   - {fileID: 6928733671148014491}
   - {fileID: 1741127886621407131}
-  - {fileID: 6710806362032611279}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1031,7 +1044,6 @@ MonoBehaviour:
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   isAttackPositionLocked: 0
-  abilityHolder: {fileID: 1201699904914888300}
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
   dash: {fileID: 11400000, guid: d0aa0c52c1c565d47a2076fec02e7279, type: 2}

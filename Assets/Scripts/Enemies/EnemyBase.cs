@@ -187,7 +187,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		StartCoroutine(HitStop(0.03f));
+		Time.timeScale = 1f;
+		StartCoroutine(HitStop(0.05f));
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
@@ -306,7 +307,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public IEnumerator HitStop(float duration)
 	{
-		Time.timeScale = 0f;
+		Time.timeScale = 0.2f;
 		yield return new WaitForSecondsRealtime(duration);
 		Time.timeScale = 1f;
 		yield return null;
