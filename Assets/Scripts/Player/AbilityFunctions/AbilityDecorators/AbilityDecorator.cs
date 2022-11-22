@@ -43,6 +43,9 @@ public class AbilityDecorator : IAbility
 	public float SlowAmount { get; set; }
 	public float SlowDuration { get; set; }
 	public CoroutineCaller caller { get; set; }
+	public int MarkType { get; set; }
+	public StatusEffectType statusEffectType { get; set; }
+	public List<IStatusEffect> statusEffects { get; set; }
 
 	public AbilityDecorator(IAbility _ability)
 	{
@@ -85,7 +88,7 @@ public class AbilityDecorator : IAbility
 
 	public void OnHitApplyStatusEffects( IDamageable damageable )
 	{
-		foreach( IStatusEffect statusEffect in BaseStats.statusEffects )
+		foreach( IStatusEffect statusEffect in statusEffects )
 		{
 			if( statusEffect == null ) return;
 			damageable.ApplyStatusEffect( statusEffect );

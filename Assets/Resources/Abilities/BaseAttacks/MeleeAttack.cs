@@ -20,9 +20,9 @@ public class MeleeAttack : Ability
 
 	public override void CallAbility(PlayerControler _player)
 	{
-		player = _player;
 		if (init)
 		{
+			player = _player;
 			SetAbilityStats();
 			init = false;
 		}
@@ -57,6 +57,7 @@ public class MeleeAttack : Ability
 		coolDown = BaseStats.CoolDown;
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
+		statusEffects = new List<IStatusEffect>();
 	}
 
 	public void ResetComboTimer()
