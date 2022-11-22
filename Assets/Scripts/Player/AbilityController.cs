@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AbilityController : MonoBehaviour
 {
-	private static AbilityController abilityControllerInstance;
 	private PlayerControler player;
 	private Rigidbody2D rb2d;
 	private Vector3 mousePos;
@@ -18,7 +17,7 @@ public class AbilityController : MonoBehaviour
 	private IAbility currentAbility1;
 	private IAbility currentAbility2;
 	private IAbility currentAbility3;
-	public static AbilityController AbilityControllerInstance { get => abilityControllerInstance; set => abilityControllerInstance = value; }
+	public static AbilityController AbilityControllerInstance { get; set; }
 	public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
 	public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
 	public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
@@ -30,9 +29,16 @@ public class AbilityController : MonoBehaviour
 
 
 	private void Awake()
-	{
-		abilityControllerInstance = this;
-	}
+	{		
+        if( AbilityControllerInstance != null && AbilityControllerInstance != this )
+        {
+            Destroy( this );
+        }
+        else
+        {
+            AbilityControllerInstance = this;
+        }
+    }
 	//gives all attacks/abilities cooldowns
 	public void SetAttacks()
 	{
@@ -61,7 +67,7 @@ public class AbilityController : MonoBehaviour
 	public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable cd)
 	{
 		if (currentMeleeAttack != null) { currentMeleeAttack.CoolDown = melee.CoolDown; currentMeleeAttack.BurnDamage = melee.BurnDamage; }
-		if (currentRangedAttack != null) { currentRangedAttack.CoolDown = ranged.CoolDown; }
+		if (currentRangedAttack != null) { currentRangedAttack.CoolDown = ranged.CoolDown; currentRangedAttack.BurnDamage = ranged.BurnDamage; }
 		if (currentDash != null) { currentDash.CoolDown = cd.CoolDown; }
 		if (currentAbility1 != null) { currentAbility1.CoolDown = ab1.CoolDown; }
 		if (currentAbility2 != null) { currentAbility2.CoolDown = ab2.CoolDown; }

@@ -73,7 +73,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public TrailRenderer Trail { get => trail; set => trail = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
-	[Header("Abilities")]
+	[Header( "Abilities" )]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -156,7 +156,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentMeleeAttack = currentMeleeAttack;
 		abilityController.CurrentRangedAttack = currentRangedAttack;
 		abilityController.CurrentDash = currentDash;
-		abilityController.SetAttacks();
+		//abilityController.SetAttacks();
 	}
 
 	public void initAbilities()

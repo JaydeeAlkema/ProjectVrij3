@@ -108,7 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPoints: 700
   damageBase: 100
-  damage: 0
+  damage: 100
   speed: 9
   aggroRange: 16
   attackRange: 6
@@ -140,13 +140,12 @@ MonoBehaviour:
   avoidEnemyLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  rewardInstance: {fileID: 8803674279633105925, guid: 48918328d3cd4fe49aa2f9889ad5481c, type: 3}
+  rewardInstance: {fileID: 8803674279633105925, guid: a69b8c1b3b19c3f4ab3e779ca7779963, type: 3}
   ability: {fileID: -1495277099781758936, guid: 8ee501e1a148c0b4c83363788b6d7b9b, type: 3}
   abilityStats: {fileID: 11400000, guid: eb01a3aa93a60b94d981ae4869eb58ac, type: 2}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  damage: 100
   player: {fileID: 0}
   hitDetectionRadius: 2
   hurtbox: {fileID: 0}
