@@ -12,7 +12,7 @@ public class BlackHoleFunctionality : MonoBehaviour
 
 	private void Start()
 	{
-		Destroy( transform.parent.gameObject, GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length );
+		
 	}
 
 	public void BlackHole()
@@ -25,6 +25,11 @@ public class BlackHoleFunctionality : MonoBehaviour
 			Vector3 newPoint = transform.position;
 			enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
 		}
+	}
+
+	public void DestroyAtEndOfAnimation()
+	{
+		Destroy(transform.parent.gameObject);
 	}
 
 	public void OnDrawGizmosSelected()
