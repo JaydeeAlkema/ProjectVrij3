@@ -6,6 +6,7 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 {
 	public Transform buttonPrompt;
 	public Transform ChooseUI;
+	[SerializeField] private Transform chooseAbilityButton;
 	public bool canInteract = false;
 
 	private void Awake()
@@ -49,6 +50,7 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 	{
 		buttonPrompt.gameObject.SetActive( false );
 		ChooseUI.gameObject.SetActive( false );
+		chooseAbilityButton.gameObject.SetActive( false );
 		GameManager.Instance.TogglePauseGame();
 	}
 }
