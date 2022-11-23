@@ -19,7 +19,7 @@ public class ScriptableLevelGenerationSettings : ScriptableObject
 	[Foldout("Decorations")] public List<Decoration> leftWallDecorations = new List<Decoration>();
 	[Foldout("Decorations")] public List<Decoration> rightWallDecorations = new List<Decoration>();
 
-	[Foldout("Environmental Sprites")] public List<Sprite> floorSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<Sprite> floorSprites = new WeightedRandomList<Sprite>();
 	[Foldout("Environmental Sprites")] public List<Sprite> topWallSprites = new List<Sprite>();
 	[Foldout("Environmental Sprites")] public List<Sprite> bottomWallSprites = new List<Sprite>();
 	[Foldout("Environmental Sprites")] public List<Sprite> leftWallSprites = new List<Sprite>();
