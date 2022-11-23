@@ -20,11 +20,11 @@ MonoBehaviour:
   critChance: 0
   distance: 0
   boxSize: {x: 0, y: 0}
-  circleSize: 4
+  circleSize: 12
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  castObject: {fileID: 0}
+  castObject: {fileID: 787374310261489178, guid: 82cc312952caeb34297cbb6d592b6c4c, type: 3}
   lifeSpan: 10
   force: 30
   burnObject: {fileID: 0}
@@ -36,5 +36,9 @@ MonoBehaviour:
   burnDamage: 1
   slowAmount: 0
   slowDuration: 0
+  abilitySound1:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
   statusEffectType: 0
   markType: 0
