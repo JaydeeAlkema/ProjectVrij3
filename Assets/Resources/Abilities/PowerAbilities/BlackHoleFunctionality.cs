@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BlackHoleFunctionality : MonoBehaviour
 {
-	private float circleRadius;
+	[SerializeField] private float circleRadius;
 	private LayerMask layerMask;
 
 	public float CircleRadius { get => circleRadius; set => circleRadius = value; }
@@ -12,10 +12,7 @@ public class BlackHoleFunctionality : MonoBehaviour
 
 	private void Start()
 	{
-		//Destroy( transform.parent.gameObject, GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length );
-		Destroy( transform.parent.gameObject, 5f );
-		BlackHole();
-		//animation event
+		Destroy( transform.parent.gameObject, GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length );
 	}
 
 	public void BlackHole()
@@ -28,5 +25,11 @@ public class BlackHoleFunctionality : MonoBehaviour
 			Vector3 newPoint = transform.position;
 			enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
 		}
+	}
+
+	public void OnDrawGizmosSelected()
+	{
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(transform.position, circleRadius);
 	}
 }
