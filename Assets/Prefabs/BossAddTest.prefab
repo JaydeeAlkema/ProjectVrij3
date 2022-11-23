@@ -140,6 +140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 75
+  damageBase: 25
+  damage: 25
   speed: 6
   aggroRange: 0
   attackRange: 0
@@ -162,6 +164,7 @@ MonoBehaviour:
   endLag: 0.8
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
+  isAggro: 0
   destinationSetter: {fileID: -8632110837534704342}
   aiPath: {fileID: 8433939072189531419}
   beingCrowdControlled: 0

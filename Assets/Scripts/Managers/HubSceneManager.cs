@@ -57,23 +57,30 @@ public class HubSceneManager : MonoBehaviour
 		PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
 		player.AbilityController = playerValues.AbilityController;
+		player.AbilityController.Player = player;
 		player.CurrentMeleeAttack = playerValues.CurrentMeleeAttack;
+		player.CurrentMeleeAttack.Player = player;
 		player.MeleeAttackScr = playerValues.MeleeAttackScr;
 		player.CurrentMeleeAttack.Damage = playerValues.CurrentMeleeAttack.Damage;
 		player.CurrentRangedAttack = playerValues.CurrentRangedAttack;
+		player.CurrentRangedAttack.Player = player;
 		player.RangedAttackScr = playerValues.RangedAttackScr;
 		player.CurrentDash = playerValues.CurrentDash;
+		player.CurrentDash.Player = player; 
 		player.Dash = playerValues.Dash;
 		player.CurrentAbility1 = playerValues.CurrentAbility1;
+		player.CurrentAbility1.Player = player; 
 		player.Ability1 = playerValues.Ability1;
 		player.CurrentAbility2 = playerValues.CurrentAbility2;
+		player.CurrentAbility2.Player = player;
 		player.Ability2 = playerValues.Ability2;
 		player.CurrentAbility3 = playerValues.CurrentAbility3;
+		player.CurrentAbility3.Player = player;
 		player.Ability3 = playerValues.Ability3;
 		player.ReloadAttacks();
 		player.initAbilities();
 		Debug.Log( player.CurrentMeleeAttack.AbilityUpgrades.Count );
 		Debug.Log( player.CurrentRangedAttack.AbilityUpgrades.Count );
-		GameManager.Instance.PlayerInstance = null;
+		//GameManager.Instance.PlayerInstance = null;
 	}
 }

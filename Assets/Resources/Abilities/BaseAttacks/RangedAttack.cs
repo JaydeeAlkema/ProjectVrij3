@@ -26,6 +26,7 @@ public class RangedAttack : Ability
 		Projectile proj = CastedObject.GetComponent<Projectile>();
 		//TrailUpgrade = BaseStats.TrailUpgrade;
 		proj.BurnDamage = BurnDamage;
+		Debug.Log( "the burn damage i give is: " + BurnDamage + ", but the burn damage proj has is: " + proj.BurnDamage );
 		proj.TrailUpgrade = TrailUpgrade;
 		proj.TurnOnTrail();
 		proj.Damage = damage;
