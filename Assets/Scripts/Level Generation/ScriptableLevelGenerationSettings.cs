@@ -14,24 +14,25 @@ public class ScriptableLevelGenerationSettings : ScriptableObject
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> genericRooms = new List<ScriptableRoom>();
 	[Foldout("Base Level Generation")] public List<ScriptableRoom> bossRooms = new List<ScriptableRoom>();
 
-	[Foldout("Decorations")] public List<Decoration> floorDecorations = new List<Decoration>();
-	[Foldout("Decorations")] public List<Decoration> topWallDecorations = new List<Decoration>();
-	[Foldout("Decorations")] public List<Decoration> leftWallDecorations = new List<Decoration>();
-	[Foldout("Decorations")] public List<Decoration> rightWallDecorations = new List<Decoration>();
+	[Foldout("Decorations")] public WeightedRandomList<GameObject> floorDecorationPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Decorations")] public WeightedRandomList<GameObject> topWallDecorationPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Decorations")] public WeightedRandomList<GameObject> leftWallDecorationPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Decorations")] public WeightedRandomList<GameObject> rightWallDecorationPrefabs = new WeightedRandomList<GameObject>();
 
-	[Foldout("Environmental Sprites")] public WeightedRandomList<Sprite> floorSprites = new WeightedRandomList<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> topWallSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> bottomWallSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> leftWallSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> rightWallSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> topLeftOuterCornerSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> topRightOuterCornerSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> bottomLeftOuterCornerSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> bottomRightOuterCornerSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> topLeftInnerCornerSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> topRightInnerCornerSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> bottomLeftInnerCornerSprites = new List<Sprite>();
-	[Foldout("Environmental Sprites")] public List<Sprite> bottomRightInnerCornerSprites = new List<Sprite>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> floorPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> topWallPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> middleWallPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> bottomWallPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> leftWallPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> rightWallPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> topLeftOuterCornerPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> topRightOuterCornerPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> bottomLeftOuterCornerPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> bottomRightOuterCornerPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> topLeftInnerCornerPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> topRightInnerCornerPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> bottomLeftInnerCornerPrefabs = new WeightedRandomList<GameObject>();
+	[Foldout("Environmental Sprites")] public WeightedRandomList<GameObject> bottomRightInnerCornerPrefabs = new WeightedRandomList<GameObject>();
 
 	[Foldout("Enemy Generation")] public EnemyGroup EnemyFodderGroup = new EnemyGroup();
 	[Foldout("Enemy Generation")] public EnemyGroup EnemyRewardGroup = new EnemyGroup();
@@ -57,11 +58,4 @@ public struct EnemyGroup
 	public WeightedRandomList<GameObject> enemyPrefabs;
 	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemySpawnMode", EnemySpawnMode.Grouped)] public Vector2Int groupCountPerRoom;
 	[AllowNesting, MinMaxSlider(0, 10), ShowIf("enemySpawnMode", EnemySpawnMode.Grouped)] public Vector2Int enemyCountPerGroup;
-}
-
-[System.Serializable]
-public struct Decoration
-{
-	public GameObject prefab;
-	public int spawnChance;
 }
