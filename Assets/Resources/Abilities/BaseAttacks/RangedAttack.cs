@@ -11,9 +11,9 @@ public class RangedAttack : Ability
 
 	public override void CallAbility(PlayerControler _player)
 	{
-		player = _player;
 		if (init)
 		{
+			player = _player;
 			SetAbilityStats();
 			init = false;
 		}
@@ -26,6 +26,7 @@ public class RangedAttack : Ability
 		Projectile proj = CastedObject.GetComponent<Projectile>();
 		//TrailUpgrade = BaseStats.TrailUpgrade;
 		proj.BurnDamage = BurnDamage;
+		Debug.Log( "the burn damage i give is: " + BurnDamage + ", but the burn damage proj has is: " + proj.BurnDamage );
 		proj.TrailUpgrade = TrailUpgrade;
 		proj.TurnOnTrail();
 		proj.Damage = damage;
@@ -44,5 +45,6 @@ public class RangedAttack : Ability
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
 		BurnDamage = BaseStats.BurnDamage;
+		statusEffects = new List<IStatusEffect>();
 	}
 }
