@@ -69,7 +69,7 @@ public class HubSceneManager : MonoBehaviour
 		player.CurrentDash.Player = player; 
 		player.Dash = playerValues.Dash;
 		player.CurrentAbility1 = playerValues.CurrentAbility1;
-		player.CurrentAbility1.Player = player; 
+		player.CurrentAbility1.Player = player;
 		player.Ability1 = playerValues.Ability1;
 		player.CurrentAbility2 = playerValues.CurrentAbility2;
 		player.CurrentAbility2.Player = player;
