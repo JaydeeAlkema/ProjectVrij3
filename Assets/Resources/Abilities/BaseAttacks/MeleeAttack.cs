@@ -132,11 +132,17 @@ public class MeleeAttack : Ability
 					twirlDir = 1;
 				}
 				player.Pivot_AttackAnimation.transform.Rotate(0f, 0f, 20f * twirlDir);
-				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + player.Pivot_AttackAnimation.transform.up * distance, boxSize, player.Pivot_AttackAnimation.transform.rotation.z, layerMask);
+				if (player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
+				{
+					enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + player.Pivot_AttackAnimation.transform.up * distance, boxSize, player.Pivot_AttackAnimation.transform.rotation.z, layerMask);
+				}
 			}
 			else
 			{
-				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
+				if (player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
+				{
+					enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
+				}
 			}
 
 
