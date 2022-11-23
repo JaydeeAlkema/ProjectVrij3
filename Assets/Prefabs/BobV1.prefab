@@ -120,6 +120,7 @@ MonoBehaviour:
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
   vfxHitSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
+  reward: 2
   enemyAnimator: {fileID: 6017575560788466592}
   hasHitbox: 1
   unwalkableDetection:
@@ -141,7 +142,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   rewardInstance: {fileID: 8803674279633105925, guid: 48918328d3cd4fe49aa2f9889ad5481c, type: 3}
-  ability: {fileID: 8343107881400796979, guid: 9436b5187f34b024f9cccd87267ac3a9, type: 3}
   abilityStats: {fileID: 11400000, guid: d4693b831cceff940a9d00f8d8836837, type: 2}
   playerLayerMask:
     serializedVersion: 2

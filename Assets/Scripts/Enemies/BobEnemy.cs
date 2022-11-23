@@ -96,10 +96,11 @@ public class BobEnemy : EnemyBase
 		StopAllCoroutines();
 		Time.timeScale = 1f;
 
-		GameObject reward = Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
-		reward.GetComponent<RewardChoice>().AbilityStats = abilityStats;
-		reward.GetComponent<RewardChoice>().AbilityToGive = ability;
-		Debug.Log(reward.GetComponent<RewardChoice>().AbilityToGive);
+		GameObject rewardObject = Instantiate(rewardInstance, this.transform.position, Quaternion.identity);
+		rewardObject.GetComponent<RewardChoice>().AbilityStats = abilityStats;
+		rewardObject.GetComponent<RewardChoice>().AbilityToGive = ability;
+		rewardObject.GetComponent<RewardChoice>().Reward = reward;
+		Debug.Log(rewardObject.GetComponent<RewardChoice>().AbilityToGive);
 		Destroy(this.gameObject);
 	}
 
