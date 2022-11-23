@@ -29,6 +29,7 @@ public class FodderBT : BTTree
 				new Sequence(new List<BTNode>
 				{
 					new RaycastToTarget(enemyScript),
+					new CheckBehindWall(),
 					new FodderWindup(enemyScript, rb2d, enemyType),
 					new FodderDashAttack(enemyScript, rb2d, enemyType),
 					new FodderLanding(enemyScript, enemyType),

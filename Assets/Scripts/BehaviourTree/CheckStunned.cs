@@ -21,6 +21,7 @@ public class CheckStunned : BTNode
 			ClearData("dashDir");
 			ClearData("target");
 			ClearData("ready");
+			ClearData("hitWall");
 			state = BTNodeState.SUCCESS;
 			return state;
 		}

@@ -41,7 +41,8 @@ public class MeleeAttack : Ability
 		if (enemyList != null)
 		{
 			//Debug.Log("Starting enemy damaging");
-			enemy.GetComponent<IDamageable>()?.TakeDamage(damage + (20 * comboCounter), 0);
+			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
+			enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal + (20 * comboCounter), 0);
 			OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
 			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
 

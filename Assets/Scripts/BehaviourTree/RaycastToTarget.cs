@@ -8,6 +8,7 @@ public class RaycastToTarget : BTNode
 {
 	private EnemyBase enemyScript;
 	private Transform transform;
+	private float dashDistance;
 
 	public RaycastToTarget(EnemyBase enemyScript)
 	{
@@ -22,16 +23,24 @@ public class RaycastToTarget : BTNode
 
 		Vector2 dashDir = (target.position - transform.position).normalized;
 
+		if (enemyScript is FodderEnemy)
+		{
+			dashDistance = enemyScript.DashDistance * Random.Range(0.6f, 1.4f);
+		}
+		else
+		{
+			dashDistance = enemyScript.DashDistance;
+		}
 
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, dashDir, enemyScript.DashDistance, enemyScript.UnwalkableDetection);
-		Vector2 maxDistanceTarget = (Vector2)transform.position + dashDir * enemyScript.DashDistance;
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, dashDir, dashDistance, enemyScript.UnwalkableDetection);
+		Vector2 maxDistanceTarget = (Vector2)transform.position + dashDir * dashDistance;
 
 		object d1 = GetData("dashDestination");
 		object d2 = GetData("dashDir");
 		object d3 = GetData("hitWall");
 		//object d3 = GetData("hitWallPoint");
 
-		if(d1 == null || d2 == null || d3 == null)
+		if (d1 == null || d2 == null || d3 == null)
 		{
 			if (hit.point != Vector2.zero)
 			{
