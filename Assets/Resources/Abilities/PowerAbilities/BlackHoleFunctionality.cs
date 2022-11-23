@@ -12,7 +12,8 @@ public class BlackHoleFunctionality : MonoBehaviour
 
 	private void Start()
 	{
-		Destroy( this.gameObject, 0.1f );
+		//Destroy( transform.parent.gameObject, GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length );
+		Destroy( transform.parent.gameObject, 5f );
 		BlackHole();
 		//animation event
 	}
