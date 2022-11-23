@@ -107,8 +107,20 @@ public class RewardChoice : MonoBehaviour
 			//IAbility giveAbility = abilityToGive;
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
-			player.Ability1 = abilityStats;
-			player.CurrentAbility1 = abilityToGive;
+			//player.CurrentAbility1 = abilityToGive;
+			switch( abilityToGive)
+			{
+				case BlackHoleAbility:
+					player.CurrentAbility1 = new BlackHoleAbility();
+					player.Ability1 = abilityStats;
+					break;
+				case LineUpAbility:
+					player.CurrentAbility1 = new LineUpAbility();
+					player.Ability1 = abilityStats;
+					break;
+				default:
+					break;
+			}
 			player.initAbilities();
 			Destroy( this.gameObject );
 		}
