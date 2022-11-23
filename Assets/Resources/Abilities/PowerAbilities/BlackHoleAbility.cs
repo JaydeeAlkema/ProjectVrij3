@@ -18,7 +18,7 @@ public class BlackHoleAbility : Ability
 
 	public override void AbilityBehavior()
 	{
-		GameObject blackHoleObject = Instantiate( blackHole, new Vector3(MousePos.x, MousePos.y, 0f), Quaternion.identity );
+		GameObject blackHoleObject = Object.Instantiate( blackHole, new Vector3(MousePos.x, MousePos.y, 0f), Quaternion.identity );
 		BlackHoleFunctionality bH = blackHoleObject.GetComponentInChildren<BlackHoleFunctionality>();
 		bH.CircleRadius = circleSize;
 		bH.LayerMask = layerMask;

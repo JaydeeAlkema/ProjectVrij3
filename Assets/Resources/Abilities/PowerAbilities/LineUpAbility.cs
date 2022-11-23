@@ -18,7 +18,7 @@ public class LineUpAbility : Ability
 	
 	public override void AbilityBehavior()
 	{
-		GameObject lineUp = Instantiate( lineUpObject, MousePos, CastFromPoint.rotation);
+		GameObject lineUp = Object.Instantiate( lineUpObject, MousePos, CastFromPoint.rotation);
 		LineUpFunctionality lU = lineUp.GetComponent<LineUpFunctionality>();
 		lU.BoxSize = boxSize;
 		lU.LookDir = LookDir;
