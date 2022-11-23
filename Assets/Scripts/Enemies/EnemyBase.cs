@@ -18,6 +18,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
 	[SerializeField] private GameObject vfxHitSpark = null;
+	[SerializeField] protected AbilityReward reward;
 
 	public Animator enemyAnimator;
 

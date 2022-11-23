@@ -8,6 +8,7 @@ public class RewardChoice : MonoBehaviour
 {
 	[SerializeField] private IAbility abilityToGive;
 	[SerializeField] private AbilityScriptable abilityStats;
+	[SerializeField] private AbilityReward reward;
 	[SerializeField] private int rewardID;
 	[SerializeField] private UpgradeScriptable upgradeToGive;
 	[SerializeField] private AbilityScriptable meleeAttack;
@@ -29,6 +30,7 @@ public class RewardChoice : MonoBehaviour
 	private UpgradeScriptable[] tier3Upgrades;
 	private PlayerControler player;
 	public int RewardID { get => rewardID; set => rewardID = value; }
+	public AbilityReward Reward { get => reward; set => reward = value; }
 	public IAbility AbilityToGive { get => abilityToGive; set => abilityToGive = value; }
 	public AbilityScriptable AbilityStats { get => abilityStats; set => abilityStats = value; }
 	public UpgradeScriptable UpgradeToGive { get => upgradeToGive; set => upgradeToGive = value; }
@@ -108,14 +110,14 @@ public class RewardChoice : MonoBehaviour
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
 			//player.CurrentAbility1 = abilityToGive;
-			switch( abilityToGive)
+			switch(reward)
 			{
-				case BlackHoleAbility:
-					player.CurrentAbility1 = new BlackHoleAbility();
+				case AbilityReward.LineUp:
+					player.CurrentAbility1 = new LineUpAbility();
 					player.Ability1 = abilityStats;
 					break;
-				case LineUpAbility:
-					player.CurrentAbility1 = new LineUpAbility();
+				case AbilityReward.BlackHole:
+					player.CurrentAbility1 = new BlackHoleAbility();
 					player.Ability1 = abilityStats;
 					break;
 				default:
@@ -248,4 +250,11 @@ public class RewardChoice : MonoBehaviour
 				break;
 		}
 	}
+}
+
+public enum AbilityReward
+{
+	none = 0,
+	LineUp = 1 << 0,
+	BlackHole = 1 << 1,
 }
