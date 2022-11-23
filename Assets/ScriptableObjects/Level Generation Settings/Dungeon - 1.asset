@@ -15,12 +15,11 @@ MonoBehaviour:
   chunkSize: 45
   maxRooms: 8
   pathDepth: 2
-  decorationSpawnChance: 5
+  decorationSpawnChance: 2
   chunkGridSize: {x: 5, y: 5}
   spawnRooms:
-  - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
+  - {fileID: 11400000, guid: 24cdcc7d440975742896b2ee3db3cae1, type: 2}
   genericRooms:
-  - {fileID: 11400000, guid: 7a817faa2cb9ccb46a7295ad502c0bfa, type: 2}
   - {fileID: 11400000, guid: 14383afd7cabf874b95581c1b59291b5, type: 2}
   - {fileID: 11400000, guid: 65d75481ec620bc489af6a3a97b82fc8, type: 2}
   - {fileID: 11400000, guid: 3579932cb5c260343b7f1cf0125e6335, type: 2}
@@ -29,37 +28,28 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 24cdcc7d440975742896b2ee3db3cae1, type: 2}
   floorDecorations:
   - prefab: {fileID: 5302086374462805747, guid: fde85dfd2deae2a4b949119e18619b6f, type: 3}
-    spawnChance: 0
+    spawnChance: 2
   - prefab: {fileID: 5302086374462805747, guid: a11e6fdf8216c6a4299a8376e0afa509, type: 3}
-    spawnChance: 0
+    spawnChance: 10
+  - prefab: {fileID: 5302086374462805747, guid: 87cfae5b708ff5544bc99013d88768ff, type: 3}
+    spawnChance: 2
   - prefab: {fileID: 5302086374462805747, guid: 9b6b9b6488d213c479839e03a45438b0, type: 3}
-    spawnChance: 0
-  - prefab: {fileID: 5302086374462805747, guid: dff909bc7f3cb314d91a05a93958ea07, type: 3}
-    spawnChance: 0
+    spawnChance: 10
   topWallDecorations:
   - prefab: {fileID: 2218761167129531356, guid: 4a8a1549c93bd264b8b6b060251ae6db, type: 3}
-    spawnChance: 0
-  - prefab: {fileID: 2218761167129531356, guid: 0fb597080695756478a8bee7b89c4941, type: 3}
-    spawnChance: 0
-  leftWallDecorations:
-  - prefab: {fileID: 2218761167129531356, guid: e49f06ed68f119041a01702ca32fbcf6, type: 3}
-    spawnChance: 0
-  rightWallDecorations:
-  - prefab: {fileID: 2218761167129531356, guid: 2110b0f5fe64ae14883a225983c22699, type: 3}
-    spawnChance: 0
+    spawnChance: 1
+  - prefab: {fileID: 2218761167129531356, guid: 2f8d0f67fb90cff4baebe7ed7e920248, type: 3}
+    spawnChance: 1
+  leftWallDecorations: []
+  rightWallDecorations: []
   floorSprites:
-  - {fileID: -1994589904, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -146117464, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -1984020428, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 1010394929, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -434650341, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -467640460, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 2084124841, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -727964843, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 1320179203, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 157804456, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -1692008770, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -379608226, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+    list:
+    - item: {fileID: 21300168, guid: f9e5cf7fcf8ec492db9ac7b1ce4d5e1c, type: 3}
+      weight: 15
+    - item: {fileID: 21300166, guid: f9e5cf7fcf8ec492db9ac7b1ce4d5e1c, type: 3}
+      weight: 1
+    - item: {fileID: 21300176, guid: f9e5cf7fcf8ec492db9ac7b1ce4d5e1c, type: 3}
+      weight: 1
   topWallSprites:
   - {fileID: 1515833362, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
   - {fileID: 1029127999, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
