@@ -81,12 +81,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private AbilityScriptable ability1;
 	[SerializeField] private AbilityScriptable ability2;
 	[SerializeField] private AbilityScriptable ability3;
+	[SerializeField] private AbilityScriptable ability4;
 	public AbilityScriptable MeleeAttackScr { get => meleeAttack; set => meleeAttack = value; }
 	public AbilityScriptable RangedAttackScr { get => rangedAttack; set => rangedAttack = value; }
 	public AbilityScriptable Dash { get => dash; set => dash = value; }
 	public AbilityScriptable Ability1 { get => ability1; set => ability1 = value; }
 	public AbilityScriptable Ability2 { get => ability2; set => ability2 = value; }
 	public AbilityScriptable Ability3 { get => ability3; set => ability3 = value; }
+	public AbilityScriptable Ability4 { get => ability4; set => ability4 = value; }
 
 	private IAbility currentMeleeAttack = new MeleeAttack();
 	private IAbility currentRangedAttack = new RangedAttack();
@@ -94,12 +96,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private IAbility currentAbility1;
 	private IAbility currentAbility2;
 	private IAbility currentAbility3;
+	private IAbility currentAbility4;
 	public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
 	public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
 	public IAbility CurrentDash { get => currentDash; set => currentDash = value; }
 	public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
 	public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
 	public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
+	public IAbility CurrentAbility4 { get => currentAbility4; set => currentAbility4 = value; }
 	public float BufferCounterMelee { get => bufferCounterMelee; set => bufferCounterMelee = value; }
 	public float BufferCounterCast { get => bufferCounterCast; set => bufferCounterCast = value; }
 	public float BufferCounterDash { get => bufferCounterDash; set => bufferCounterDash = value; }
@@ -161,9 +165,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void initAbilities()
 	{
-		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; abilityController.SetAbility(); }
-		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; abilityController.SetAbility(); }
-		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; abilityController.SetAbility(); }
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1;  }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2;  }
+		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3;  }
+		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4;  }
+		abilityController.SetAbility();
 	}
 
 	// Update is called once per frame
@@ -201,6 +207,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
 			if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
 			if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
+			if( Input.GetKeyDown( KeyCode.T ) ) AbilityFourAttack();
 
 			//Dash input
 			if (Input.GetKeyDown(KeyCode.Space))
@@ -319,6 +326,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		outOfCombatCounter = 0f;
 		//ability2.Ability.SetPlayerValues(ability2);
 		//ability2.Ability.AbilityBehavior();
+		Debug.Log( CurrentAbility2 );
+		abilityController.CurrentAbility2.BaseStats = ability2;
+		abilityController.CurrentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.AbilityTwoAttacked( currentAbility2 );
 	}
 
 	void AbilityThreeAttack()
@@ -326,6 +337,21 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		outOfCombatCounter = 0f;
 		//ability3.Ability.SetPlayerValues(ability3);
 		//ability3.Ability.AbilityBehavior();
+		Debug.Log( CurrentAbility3 );
+		abilityController.CurrentAbility3.BaseStats = ability3;
+		abilityController.CurrentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.AbilityThreeAttacked( currentAbility3 );
+	}
+
+	void AbilityFourAttack()
+	{
+		outOfCombatCounter = 0f;
+		//ability3.Ability.SetPlayerValues(ability3);
+		//ability3.Ability.AbilityBehavior();
+		Debug.Log( currentAbility4 );
+		abilityController.CurrentAbility4.BaseStats = ability4;
+		abilityController.CurrentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.AbilityFourAttacked( currentAbility4 );
 	}
 
 	void CheckAbilityUpdate()
@@ -362,6 +388,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (ability2 != null)
 		{
+			ability2.UpdateStatusEffects();
+			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 			//ability2.Rb2d = rb2d;
 			//ability2.CastFromPoint = castFromPoint;
 			//ability2.MousePos = mousePos;
@@ -372,6 +400,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (ability3 != null)
 		{
+			ability3.UpdateStatusEffects();
+			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
 			//ability3.Rb2d = rb2d;
 			//ability3.CastFromPoint = castFromPoint;
 			//ability3.MousePos = mousePos;
@@ -379,7 +409,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			//ability3.Angle = angle;
 			//ability3.Ability.SetScriptable(  );
 		}
-		abilityController.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3, dash);
+
+		if(ability4 != null)
+		{
+			ability4.UpdateStatusEffects();
+			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		}
+		abilityController.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3, ability4, dash);
 	}
 
 	public void TakeDamage(int damage)
