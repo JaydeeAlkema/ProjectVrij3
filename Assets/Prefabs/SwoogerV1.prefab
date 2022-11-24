@@ -120,6 +120,7 @@ MonoBehaviour:
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
   vfxHitSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
+  reward: 1
   enemyAnimator: {fileID: 6017575560788466592}
   hasHitbox: 1
   unwalkableDetection:
@@ -141,7 +142,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   rewardInstance: {fileID: 8803674279633105925, guid: a69b8c1b3b19c3f4ab3e779ca7779963, type: 3}
-  ability: {fileID: -1495277099781758936, guid: 8ee501e1a148c0b4c83363788b6d7b9b, type: 3}
   abilityStats: {fileID: 11400000, guid: eb01a3aa93a60b94d981ae4869eb58ac, type: 2}
   playerLayerMask:
     serializedVersion: 2
@@ -323,8 +323,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1307041607
-  m_SortingLayer: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a615828873ddaf748b25d9b10dc1cf86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -336,7 +336,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &6017575560788466592
 Animator:
   serializedVersion: 4
@@ -371,11 +371,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayer
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayerID
-      value: 1307041607
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_RootOrder

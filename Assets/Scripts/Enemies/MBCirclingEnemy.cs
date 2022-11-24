@@ -6,9 +6,7 @@ public class MBCirclingEnemy : EnemyBase
 {
 	private int playerLayer = 1 << 8;
 
-	[SerializeField] private int damage;
 	[SerializeField] private GameObject player;
-	[SerializeField] private bool hasHitbox = true;
 	private float checkMaxHP;
 
 	public Vector3 center;
@@ -70,10 +68,10 @@ public class MBCirclingEnemy : EnemyBase
 	void HitBox()
 	{
 		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, this.GetComponent<CircleCollider2D>().radius, playerLayer);
-		if (playerBody != null && hasHitbox)
+		if (playerBody != null && HasHitbox)
 		{
 			AttackPlayer(playerBody.gameObject);
-			hasHitbox = false;
+			HasHitbox = false;
 			aggro = false;
 		}
 	}
@@ -87,7 +85,7 @@ public class MBCirclingEnemy : EnemyBase
 	IEnumerator AttackTimer()
 	{
 		yield return new WaitForSeconds(0.5f);
-		hasHitbox = true;
+		HasHitbox = true;
 		yield return null;
 	}
 

@@ -6,9 +6,12 @@ using TMPro;
 
 public class RewardChoice : MonoBehaviour
 {
+	[SerializeField] private GameObject choicePopUp;
+	[SerializeField] private GameObject abilityButtonPopUp;
 	[SerializeField] private IAbility abilityToGive;
 	[SerializeField] private AbilityScriptable abilityStats;
-	[SerializeField] private int rewardID;
+	[SerializeField] private AbilityReward reward;
+	[SerializeField] private int abilityButton;
 	[SerializeField] private UpgradeScriptable upgradeToGive;
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -28,7 +31,8 @@ public class RewardChoice : MonoBehaviour
 	private UpgradeScriptable[] tier2Upgrades;
 	private UpgradeScriptable[] tier3Upgrades;
 	private PlayerControler player;
-	public int RewardID { get => rewardID; set => rewardID = value; }
+	public int AbilityButton { get => abilityButton; set => abilityButton = value; }
+	public AbilityReward Reward { get => reward; set => reward = value; }
 	public IAbility AbilityToGive { get => abilityToGive; set => abilityToGive = value; }
 	public AbilityScriptable AbilityStats { get => abilityStats; set => abilityStats = value; }
 	public UpgradeScriptable UpgradeToGive { get => upgradeToGive; set => upgradeToGive = value; }
@@ -92,8 +96,8 @@ public class RewardChoice : MonoBehaviour
 
 		meleeUpgradeImg.sprite = upgradeToGive.UpgradeImage;
 		rangedUpgradeImg.sprite = upgradeToGive.UpgradeImage;
-		abilityImg.sprite = abilityToGive.BaseStats.AbilityImage;
-		AbilityTitle.text = "" + abilityToGive.GetType().Name;
+		//abilityImg.sprite = abilityToGive.BaseStats.AbilityImage;
+		//AbilityTitle.text = "" + abilityToGive.GetType().Name;
 		MeleeTitle.text = upgradeToGive.name + " Melee";
 		RangedTitle.text = upgradeToGive.name + " Ranged";
 	}
@@ -105,12 +109,118 @@ public class RewardChoice : MonoBehaviour
 			// give AbilityScriptable
 			//player.Ability1 = abilityToGive;
 			//IAbility giveAbility = abilityToGive;
-			GameManager.Instance.SetPauseState(false);
-			GameManager.Instance.ExpManager.PlayerPoints -= 1;
-			player.Ability1 = abilityStats;
-			player.CurrentAbility1 = abilityToGive;
-			player.initAbilities();
-			Destroy( this.gameObject );
+			
+			//player.CurrentAbility1 = abilityToGive;
+			switch(reward)
+			{
+				case AbilityReward.LineUp:
+					if( player.CurrentAbility1 == null || abilityButton == 1)
+					{
+						player.CurrentAbility1 = new LineUpAbility();
+						player.Ability1 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else if (player.CurrentAbility2 == null || abilityButton == 2 )
+					{
+						player.CurrentAbility2 = new LineUpAbility();
+						player.Ability2 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else if( player.CurrentAbility3 == null || abilityButton == 3 )
+					{
+						player.CurrentAbility3 = new LineUpAbility();
+						player.Ability3 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else if( player.CurrentAbility4 == null || abilityButton == 4 )
+					{
+						player.CurrentAbility4 = new LineUpAbility();
+						player.Ability4 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else
+					{
+						//choose what ability to override
+						abilityButtonPopUp.SetActive( true );
+						choicePopUp.SetActive( false );
+					}
+					break;
+				case AbilityReward.BlackHole:
+					if( player.CurrentAbility1 == null || abilityButton == 1 )
+					{
+						player.CurrentAbility1 = new BlackHoleAbility();
+						player.Ability1 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else if( player.CurrentAbility2 == null || abilityButton == 2 )
+					{
+						player.CurrentAbility2 = new BlackHoleAbility();
+						player.Ability2 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else if( player.CurrentAbility3 == null || abilityButton == 3 )
+					{
+						player.CurrentAbility3 = new BlackHoleAbility();
+						player.Ability3 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else if( player.CurrentAbility4 == null || abilityButton == 4 )
+					{
+						player.CurrentAbility4 = new BlackHoleAbility();
+						player.Ability4 = abilityStats;
+						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						abilityButton = 0;
+						GameManager.Instance.SetPauseState( false );
+						player.initAbilities();
+						Destroy( this.gameObject );
+						break;
+					}
+					else
+					{
+						//choose what ability to override
+						abilityButtonPopUp.SetActive( true );
+						choicePopUp.SetActive( false );
+					}
+					break;
+				default:
+					break;
+			}
+
 		}
 	}
 
@@ -236,4 +346,11 @@ public class RewardChoice : MonoBehaviour
 				break;
 		}
 	}
+}
+
+public enum AbilityReward
+{
+	none = 0,
+	LineUp = 1 << 0,
+	BlackHole = 1 << 1,
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability : MonoBehaviour, IAbility
+public abstract class Ability : IAbility
 {
 	protected float coolDown;
 	protected int damage;
@@ -41,6 +41,9 @@ public abstract class Ability : MonoBehaviour, IAbility
 	public float SlowAmount { get; set; }
 	public float SlowDuration { get; set; }
 	public CoroutineCaller caller { get; set; }
+	public int MarkType { get; set; }
+	public StatusEffectType statusEffectType { get; set; }
+	public List<IStatusEffect> statusEffects { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void CallAbility( bool resetCooldown ) { }
@@ -67,7 +70,7 @@ public abstract class Ability : MonoBehaviour, IAbility
 
 	public void OnHitApplyStatusEffects( IDamageable damageable )
 	{
-		foreach( IStatusEffect statusEffect in BaseStats.statusEffects )
+		foreach( IStatusEffect statusEffect in statusEffects )
 		{
 			if( statusEffect == null ) return;
 			damageable.ApplyStatusEffect( statusEffect );

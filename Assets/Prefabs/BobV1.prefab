@@ -120,6 +120,7 @@ MonoBehaviour:
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
   vfxHitSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
+  reward: 2
   enemyAnimator: {fileID: 6017575560788466592}
   hasHitbox: 1
   unwalkableDetection:
@@ -141,7 +142,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   rewardInstance: {fileID: 8803674279633105925, guid: 48918328d3cd4fe49aa2f9889ad5481c, type: 3}
-  ability: {fileID: 8343107881400796979, guid: 9436b5187f34b024f9cccd87267ac3a9, type: 3}
   abilityStats: {fileID: 11400000, guid: d4693b831cceff940a9d00f8d8836837, type: 2}
   playerLayerMask:
     serializedVersion: 2
@@ -281,7 +281,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8879844763961028847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -2.21, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -326,8 +326,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1307041607
-  m_SortingLayer: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8dc1304dad355604c85b0c3e5787bf00, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -339,7 +339,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &6017575560788466592
 Animator:
   serializedVersion: 4
@@ -374,15 +374,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayer
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4052465560318271807, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_SortingLayerID
-      value: 1307041607
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4959385688153095069, guid: 10f5f4a132ddd6545869b94728a73127, type: 3}
       propertyPath: m_RootOrder

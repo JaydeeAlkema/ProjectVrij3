@@ -18,6 +18,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
 	[SerializeField] private GameObject vfxHitSpark = null;
+	[SerializeField] protected AbilityReward reward;
 
 	public Animator enemyAnimator;
 
@@ -98,7 +99,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			enemySprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
 		}
 
-		foreach (IStatusEffect statusEffect in statusEffects.ToArray())
+		foreach (IStatusEffect statusEffect in statusEffects)
 		{
 			IDamageable damageable = GetComponent<IDamageable>();
 			if (statusEffect != null)

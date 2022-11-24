@@ -5,6 +5,8 @@ using UnityEngine;
 public class LineUpAbility : Ability
 {
 	private bool init = true;
+	private GameObject lineUpObject;
+	private Transform player;
 	public override void CallAbility(PlayerControler _playerControler)
 	{
 		if( init )
@@ -12,24 +14,18 @@ public class LineUpAbility : Ability
 			SetAbilityStats();
 			init = false;
 		}
+		player = _playerControler.transform;
 		AbilityBehavior();
 	}
 	
 	public override void AbilityBehavior()
 	{
-		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll( Rb2d.transform.position + CastFromPoint.transform.up * 3, boxSize, Angle, layerMask );
-		Debug.Log( "Enemies: " + enemiesInBox.Length );
-
-		foreach( Collider2D enemy in enemiesInBox )
-		{
-			Vector3 abNormal = LookDir.normalized;
-			Vector3 enemyVec = enemy.transform.position - Rb2d.transform.position;
-
-			float dotP = Vector2.Dot( enemyVec, abNormal );
-
-			Vector3 newPoint = Rb2d.transform.position + ( abNormal * dotP );
-			enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
-		}
+		GameObject lineUp = Object.Instantiate( lineUpObject, player.position, CastFromPoint.rotation * Quaternion.Euler(0, 0, -90));
+		LineUpFunctionality lU = lineUp.GetComponentInChildren<LineUpFunctionality>();
+		lU.BoxSize = boxSize;
+		lU.LookDir = LookDir;
+		lU.Angle = Angle;
+		lU.LayerMask = layerMask;
 	}
 
 	public void SetAbilityStats()
@@ -39,5 +35,6 @@ public class LineUpAbility : Ability
 		damage = BaseStats.Damage;
 		distance = BaseStats.Distance;
 		coolDown = BaseStats.CoolDown;
+		lineUpObject = baseStats.CastObject;
 	}
 }

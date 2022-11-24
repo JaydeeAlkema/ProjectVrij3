@@ -87,14 +87,14 @@ public class Room : MonoBehaviour
 		yield return null;
 	}
 
-	public void RandomizeFloorTileSprites(List<Sprite> sprites)
+	public void RandomizeFloorTileSprites(WeightedRandomList<Sprite> sprites)
 	{
 		foreach (KeyValuePair<Vector2Int, Transform> floorTile in noncollideableTiles)
 		{
 			SpriteRenderer spriteRenderer = floorTile.Value.GetComponent<SpriteRenderer>();
 			if (spriteRenderer)
 			{
-				spriteRenderer.sprite = sprites[Random.Range(0, sprites.Count)];
+				spriteRenderer.sprite = sprites.GetRandom();
 			}
 		}
 	}
