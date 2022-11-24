@@ -690,17 +690,17 @@ public class LevelGeneratorV2 : MonoBehaviour
 					Instantiate(topLeftInnerCornerPrefabs.GetRandom(), pathTilePos, Quaternion.identity, pathParent);
 				}
 				// Top Right Inner Corner
-				else if (leftTile && topLeftTile && topTile && !rightTile && !bottomRightTile && !bottomTile)
+				else if (bottomTile && bottomLeftTile && leftTile && !topTile && !topRightTile && !rightTile)
 				{
 					Instantiate(topRightInnerCornerPrefabs.GetRandom(), pathTilePos, Quaternion.identity, pathParent);
 				}
 				// Bottom Right Inner Corner
-				else if (!bottomRightTile && bottomTile && bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile)
+				else if (leftTile && topLeftTile && topTile && !rightTile && !bottomRightTile && !bottomTile)
 				{
 					Instantiate(bottomRightInnerCornerPrefabs.GetRandom(), pathTilePos, Quaternion.identity, pathParent);
 				}
 				// Bottom Left Inner Corner
-				else if (!bottomLeftTile && leftTile && topLeftTile && topTile && topRightTile && rightTile && bottomRightTile && bottomTile)
+				else if (topTile && topRightTile && rightTile && !bottomTile && !bottomLeftTile && !leftTile)
 				{
 					Instantiate(bottomLeftInnerCornerPrefabs.GetRandom(), pathTilePos, Quaternion.identity, pathParent);
 				}
