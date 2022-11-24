@@ -146,15 +146,18 @@ public class MeleeAttack : Ability
 				}
 			}
 
-
-			foreach (Collider2D enemy in enemiesInBox)
+			if(enemiesInBox != null)
 			{
-				if (!enemyList.Contains(enemy))
+				foreach (Collider2D enemy in enemiesInBox)
 				{
-					enemyList.Add(enemy);
-					DamageDetectedEnemies(enemy);
+					if (!enemyList.Contains(enemy))
+					{
+						enemyList.Add(enemy);
+						DamageDetectedEnemies(enemy);
+					}
 				}
 			}
+
 			//Debug.Log("Detecting Enemies");
 			//Debug.Log("Enemies: " + enemyList.Count);
 

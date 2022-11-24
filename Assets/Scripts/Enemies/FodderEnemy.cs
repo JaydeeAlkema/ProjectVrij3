@@ -121,7 +121,10 @@ public class FodderEnemy : EnemyBase
 		{
 			IsStunned = true;
 			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
-			//StartCoroutine(HitStop());
+			if (Time.timeScale == 1f)
+			{
+				StartCoroutine(HitStop(0.1f));
+			}
 		}
 
 		if (damageType == 1)
@@ -129,8 +132,6 @@ public class FodderEnemy : EnemyBase
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		Time.timeScale = 1f;
-		StartCoroutine(HitStop(0.05f));
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		HealthPoints -= damage;

@@ -180,7 +180,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (damageType == 0)
 		{
 			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
-			//StartCoroutine(HitStop());
+			if (Time.timeScale == 1f)
+			{
+				StartCoroutine(HitStop(0.1f));
+			}
 		}
 
 		if (damageType == 1)
@@ -188,8 +191,6 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		Time.timeScale = 1f;
-		StartCoroutine(HitStop(0.05f));
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
