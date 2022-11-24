@@ -8,6 +8,8 @@ public interface IAbility
 	AbilityScriptable BaseStats { get; set; }
 	PlayerControler Player { get; set; }
 	AbilityController Controller { get; set; }
+	public IAbility ability { get; set; }
+	public bool Init { get; set; }
 	public Rigidbody2D Rb2d { get; set; }
 	public Vector3 MousePos { get; set; }
 	public Vector2 LookDir { get; set; }

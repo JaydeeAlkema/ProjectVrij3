@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LineUpAbility : Ability
 {
-	private bool init = true;
 	private GameObject lineUpObject;
 	public override void CallAbility(PlayerControler _playerControler)
 	{

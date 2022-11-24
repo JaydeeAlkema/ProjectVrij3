@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AbilityDecorator : IAbility
 {
-	private IAbility ability;
+	public IAbility ability { get; set; }
 	protected float coolDown;
 	protected int damage;
 	protected EdgeCollider2D shape;
@@ -19,6 +19,7 @@ public class AbilityDecorator : IAbility
 	protected float force = 30f;
 	protected AbilityScriptable baseStats;
 	protected float critChance;
+	protected bool init = true;
 	protected Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	public AbilityScriptable BaseStats { get => baseStats; set => baseStats = value; }
@@ -46,6 +47,7 @@ public class AbilityDecorator : IAbility
 	public int MarkType { get; set; }
 	public StatusEffectType statusEffectType { get; set; }
 	public List<IStatusEffect> statusEffects { get; set; }
+	public bool Init { get => init; set => init = value; }
 
 	public AbilityDecorator(IAbility _ability)
 	{

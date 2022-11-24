@@ -8,7 +8,7 @@ public class BurningMeleeDecorator : AbilityDecorator
 	public IAbility Ability => ability;
 
 	private GameObject burnObject;
-	private float distance;
+	//private float distance;
 	public BurningMeleeDecorator( IAbility _ability, AbilityScriptable _baseStats ) : base( _ability ) 
 	{
 		ability = _ability;

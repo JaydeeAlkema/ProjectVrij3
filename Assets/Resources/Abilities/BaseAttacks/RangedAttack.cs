@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class RangedAttack : Ability
 {
-	private bool init = true;
 	private AK.Wwise.Event abilitySound;
 	private PlayerControler player;
 	System.Timers.Timer attackTimer = new System.Timers.Timer();
 
-	public override void CallAbility(PlayerControler _player)
+	public override void CallAbility( PlayerControler _player )
 	{
-		if (init)
+		if( init )
 		{
-			player = _player;
 			SetAbilityStats();
 			init = false;
 		}
+		player = _player;
 		AbilityBehavior();
 	}
 	public override void AbilityBehavior()
 	{
-		AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
-		CastedObject = Object.Instantiate(castObject, CastFromPoint.transform.position + (Vector3)LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform);
+		AudioManager.Instance.PostEventLocal( abilitySound, player.gameObject );
+		CastedObject = Object.Instantiate( castObject, CastFromPoint.transform.position + ( Vector3 )LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform );
 		Projectile proj = CastedObject.GetComponent<Projectile>();
 		//TrailUpgrade = BaseStats.TrailUpgrade;
 		proj.BurnDamage = BurnDamage;
@@ -33,7 +32,7 @@ public class RangedAttack : Ability
 		proj.LifeSpan = lifeSpan;
 		proj.Force = force;
 		proj.CastedFrom = this;
-		CastedObject.transform.SetParent(null);
+		CastedObject.transform.SetParent( null );
 	}
 
 	void SetAbilityStats()

@@ -267,11 +267,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MouseLook()
 	{
-		//if (!animAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack"))
-		//{
-		//	isAttackPositionLocked = false;
-		//}
-
 		if (!isAttackPositionLocked)
 		{
 			mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -299,7 +294,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
 		abilityController.CurrentRangedAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		abilityController.RangeAttacked(currentRangedAttack);
-		//animPlayer.SetTrigger("isAttacking");
 	}
 
 	void DashAbility()
@@ -312,46 +306,50 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void AbilityOneAttack()
 	{
-		outOfCombatCounter = 0f;
-		//ability1.Ability.SetPlayerValues(ability1);
-		//ability1.Ability.AbilityBehavior();
-		Debug.Log(CurrentAbility1);
-		abilityController.CurrentAbility1.BaseStats = ability1;
-		abilityController.CurrentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-		abilityController.AbilityOneAttacked(currentAbility1);
+		if( currentAbility1 != null )
+		{
+			outOfCombatCounter = 0f;
+			Debug.Log( CurrentAbility1 );
+			abilityController.CurrentAbility1.BaseStats = ability1;
+			abilityController.CurrentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityOneAttacked( currentAbility1 );
+		}
 	}
 
 	void AbilityTwoAttack()
 	{
-		outOfCombatCounter = 0f;
-		//ability2.Ability.SetPlayerValues(ability2);
-		//ability2.Ability.AbilityBehavior();
-		Debug.Log( CurrentAbility2 );
-		abilityController.CurrentAbility2.BaseStats = ability2;
-		abilityController.CurrentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		abilityController.AbilityTwoAttacked( currentAbility2 );
+		if( currentAbility2 != null )
+		{
+			outOfCombatCounter = 0f;
+			Debug.Log( CurrentAbility2 );
+			abilityController.CurrentAbility2.BaseStats = ability2;
+			abilityController.CurrentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityTwoAttacked( currentAbility2 );
+		}
 	}
 
 	void AbilityThreeAttack()
 	{
-		outOfCombatCounter = 0f;
-		//ability3.Ability.SetPlayerValues(ability3);
-		//ability3.Ability.AbilityBehavior();
-		Debug.Log( CurrentAbility3 );
-		abilityController.CurrentAbility3.BaseStats = ability3;
-		abilityController.CurrentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		abilityController.AbilityThreeAttacked( currentAbility3 );
+		if( currentAbility3 != null )
+		{
+			outOfCombatCounter = 0f;
+			Debug.Log( CurrentAbility3 );
+			abilityController.CurrentAbility3.BaseStats = ability3;
+			abilityController.CurrentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityThreeAttacked( currentAbility3 );
+		}
 	}
 
 	void AbilityFourAttack()
 	{
-		outOfCombatCounter = 0f;
-		//ability3.Ability.SetPlayerValues(ability3);
-		//ability3.Ability.AbilityBehavior();
-		Debug.Log( currentAbility4 );
-		abilityController.CurrentAbility4.BaseStats = ability4;
-		abilityController.CurrentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		abilityController.AbilityFourAttacked( currentAbility4 );
+		if( currentAbility4 != null )
+		{
+			outOfCombatCounter = 0f;
+			Debug.Log( currentAbility4 );
+			abilityController.CurrentAbility4.BaseStats = ability4;
+			abilityController.CurrentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityFourAttacked( currentAbility4 );
+		}
 	}
 
 	void CheckAbilityUpdate()
@@ -378,36 +376,18 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			ability1.UpdateStatusEffects();
 			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-			//ability1.Rb2d = rb2d;
-			//ability1.CastFromPoint = castFromPoint;
-			//ability1.MousePos = mousePos;
-			//ability1.LookDir = lookDir;
-			//ability1.Angle = angle;
-			//ability1.Ability.SetScriptable();
 		}
 
 		if (ability2 != null)
 		{
 			ability2.UpdateStatusEffects();
 			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			//ability2.Rb2d = rb2d;
-			//ability2.CastFromPoint = castFromPoint;
-			//ability2.MousePos = mousePos;
-			//ability2.LookDir = lookDir;
-			//ability2.Angle = angle;
-			//ability2.Ability.SetScriptable();
 		}
 
 		if (ability3 != null)
 		{
 			ability3.UpdateStatusEffects();
 			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			//ability3.Rb2d = rb2d;
-			//ability3.CastFromPoint = castFromPoint;
-			//ability3.MousePos = mousePos;
-			//ability3.LookDir = lookDir;
-			//ability3.Angle = angle;
-			//ability3.Ability.SetScriptable(  );
 		}
 
 		if(ability4 != null)

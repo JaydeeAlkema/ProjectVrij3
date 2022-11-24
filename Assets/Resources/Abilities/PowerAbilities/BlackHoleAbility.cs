@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BlackHoleAbility : Ability
 {
-	private bool init = true;
 	private GameObject blackHole;
 	public override void CallAbility( PlayerControler _playerControler )
 	{
