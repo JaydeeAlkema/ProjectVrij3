@@ -94,8 +94,8 @@ public class RewardChoice : MonoBehaviour
 			}
 		}
 
-		meleeUpgradeImg.sprite = upgradeToGive.UpgradeImage;
-		rangedUpgradeImg.sprite = upgradeToGive.UpgradeImage;
+		meleeUpgradeImg.sprite = upgradeToGive.UpgradeImageMelee;
+		rangedUpgradeImg.sprite = upgradeToGive.UpgradeImageRanged;
 		if (abilityToGive.BaseStats.AbilityIcon != null)
 		{
 			abilityImg.sprite = abilityToGive.BaseStats.AbilityIcon;
