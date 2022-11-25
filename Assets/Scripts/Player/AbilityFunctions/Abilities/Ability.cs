@@ -47,6 +47,7 @@ public abstract class Ability : IAbility
 	public List<IStatusEffect> statusEffects { get; set; }
 	public bool Init { get => init; set => init = value; }
 	public IAbility ability { get; set; }
+	public bool CooledDown { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void CallAbility( bool resetCooldown ) { }

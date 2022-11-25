@@ -9,7 +9,7 @@ public class MarkDecorator : AbilityDecorator
 		if(_ability.ability != null)
 		{
 			_ability.ability.statusEffects.Add( new StatusEffect_Marked(_ability.MarkType) );
-			_ability.statusEffects.Add( new StatusEffect_Marked( _ability.MarkType ) );
+			//_ability.statusEffects.Add( new StatusEffect_Marked( _ability.MarkType ) );
 		}
 		//_ability.CallAbility(Player);
 	}

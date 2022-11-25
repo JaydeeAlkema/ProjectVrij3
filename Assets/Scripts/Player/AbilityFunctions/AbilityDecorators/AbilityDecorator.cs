@@ -48,6 +48,7 @@ public class AbilityDecorator : IAbility
 	public StatusEffectType statusEffectType { get; set; }
 	public List<IStatusEffect> statusEffects { get; set; }
 	public bool Init { get => init; set => init = value; }
+	public bool CooledDown { get; set; }
 
 	public AbilityDecorator(IAbility _ability)
 	{

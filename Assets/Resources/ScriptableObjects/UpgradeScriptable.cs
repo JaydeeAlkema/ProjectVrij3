@@ -17,17 +17,6 @@ public class UpgradeScriptable : ScriptableObject
 	[SerializeField] private float critChanceUpgrade;
 	public float CritChanceUpgrade { get => critChanceUpgrade; set => critChanceUpgrade = value; }
 
-	[SerializeField] private EffectType effect;
-	public EffectType Effect { get => effect; set => effect = value; }
-
 	[SerializeField, EnumFlags] private StatusEffectType statusEffect;
 	public StatusEffectType StatusEffect { get => statusEffect; set => statusEffect = value; }
-}
-
-public enum EffectType
-{
-	Null,
-	FireArea,
-	SlowHit,
-	MarkHit
 }
