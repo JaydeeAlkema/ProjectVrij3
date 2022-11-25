@@ -700,7 +700,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &554459496
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1016,7 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!224 &653950320 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4609828262046059342, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
+  m_CorrespondingSourceObject: {fileID: 41104312275968159, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
   m_PrefabInstance: {fileID: 653950317}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &786431209
@@ -1694,7 +1694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1063234351
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1908,6 +1908,22 @@ PrefabInstance:
 --- !u!224 &1125658405 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7012731322201991398, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
+  m_PrefabInstance: {fileID: 1125658404}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1125658406 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 287277086657258668, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
+  m_PrefabInstance: {fileID: 1125658404}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &1125658407 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 41104312275968159, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
   m_PrefabInstance: {fileID: 1125658404}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1191826612
@@ -2232,7 +2248,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1266266372
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2360,6 +2376,22 @@ PrefabInstance:
 --- !u!224 &1341125532 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7012731322201991398, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
+  m_PrefabInstance: {fileID: 1341125531}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1341125533 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 287277086657258668, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
+  m_PrefabInstance: {fileID: 1341125531}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &1341125534 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 41104312275968159, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
   m_PrefabInstance: {fileID: 1341125531}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1389322777 stripped
@@ -2906,7 +2938,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1787528487
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3356,7 +3388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1923676934
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3566,12 +3598,12 @@ MonoBehaviour:
     cooldownClock: {fileID: 653950319}
     onCooldown: 0
     cooldown: 0
-  - abilityIcon: {fileID: 0}
-    cooldownClock: {fileID: 0}
+  - abilityIcon: {fileID: 1341125534}
+    cooldownClock: {fileID: 1341125533}
     onCooldown: 0
     cooldown: 0
-  - abilityIcon: {fileID: 0}
-    cooldownClock: {fileID: 0}
+  - abilityIcon: {fileID: 1125658407}
+    cooldownClock: {fileID: 1125658406}
     onCooldown: 0
     cooldown: 0
 --- !u!4 &2020171077
@@ -4124,7 +4156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!224 &5558382899175781267 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4609828262046059342, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
+  m_CorrespondingSourceObject: {fileID: 41104312275968159, guid: a1ad76a9456e0e94889e3c5f38cca6ef, type: 3}
   m_PrefabInstance: {fileID: 5558382899175781264}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8778169464152561669

@@ -115,6 +115,9 @@ public class UIManager : MonoBehaviour
 	public void SetAbilityUIValues(int i, Sprite icon)
 	{
 		abilityUIElements[i].abilityIcon.GetComponent<Image>().sprite = icon;
+		Color iconColor = abilityUIElements[i].abilityIcon.GetComponent<Image>().color;
+		iconColor.a = 1f;
+		abilityUIElements[i].abilityIcon.GetComponent<Image>().color = iconColor;
 	}
 
 	public void CooldownCountDown(IAbility ability, int abilityInBar)

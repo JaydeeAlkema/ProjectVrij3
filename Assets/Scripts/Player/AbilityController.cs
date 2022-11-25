@@ -275,6 +275,7 @@ public class AbilityController : MonoBehaviour
             currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle);
             return currentAbility2;
         }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility2, 1);
         currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility2.CallAbility( player );
         return currentAbility2;
@@ -305,6 +306,7 @@ public class AbilityController : MonoBehaviour
             currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             return currentAbility3;
         }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility3, 2);
         currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility3.CallAbility( player );
         return currentAbility3;
@@ -335,6 +337,7 @@ public class AbilityController : MonoBehaviour
             currentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             return currentAbility4;
         }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility4, 3);
         currentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility4.CallAbility( player );
         return currentAbility4;
