@@ -52,51 +52,54 @@ public class RewardChoice : MonoBehaviour
 		//	}
 		//}
 		//load tier 1 upgrades
-		int maxRangeT1 = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades/Tier1" ).Length;
+		int maxRangeT1 = Resources.LoadAll<UpgradeScriptable>("ScriptableObjects/Upgrades/Tier1").Length;
 		tier1Upgrades = new UpgradeScriptable[maxRangeT1];
-		tier1Upgrades = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades/Tier1" );
-		Debug.Log( "tier 1 upgrades loaded: " + tier1Upgrades.Length );
+		tier1Upgrades = Resources.LoadAll<UpgradeScriptable>("ScriptableObjects/Upgrades/Tier1");
+		Debug.Log("tier 1 upgrades loaded: " + tier1Upgrades.Length);
 		//load tier 2 upgrades
-		int maxRangeT2 = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades/Tier2" ).Length;
+		int maxRangeT2 = Resources.LoadAll<UpgradeScriptable>("ScriptableObjects/Upgrades/Tier2").Length;
 		tier2Upgrades = new UpgradeScriptable[maxRangeT2];
-		tier2Upgrades = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades/Tier2" );
-		Debug.Log( "tier 2 upgrades loaded: " + tier2Upgrades.Length );
+		tier2Upgrades = Resources.LoadAll<UpgradeScriptable>("ScriptableObjects/Upgrades/Tier2");
+		Debug.Log("tier 2 upgrades loaded: " + tier2Upgrades.Length);
 		//load tier 3 upgrades
-		int maxRangeT3 = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades/Tier3" ).Length;
+		int maxRangeT3 = Resources.LoadAll<UpgradeScriptable>("ScriptableObjects/Upgrades/Tier3").Length;
 		tier3Upgrades = new UpgradeScriptable[maxRangeT3];
-		tier3Upgrades = Resources.LoadAll<UpgradeScriptable>( "ScriptableObjects/Upgrades/Tier3" );
-		Debug.Log( "tier 3 upgrades loaded: " + tier3Upgrades.Length );
+		tier3Upgrades = Resources.LoadAll<UpgradeScriptable>("ScriptableObjects/Upgrades/Tier3");
+		Debug.Log("tier 3 upgrades loaded: " + tier3Upgrades.Length);
 
 		//Rolling for upgrade all folders must contain atleast 1 upgrade
-		roll = Random.Range( 1, 1000001 );
-		if( roll >= t3Chance )
+		roll = Random.Range(1, 1000001);
+		if (roll >= t3Chance)
 		{
-			if( tier3Upgrades.Length > 0 )
+			if (tier3Upgrades.Length > 0)
 			{
-				upgradeToGive = tier3Upgrades[Random.Range( 0, tier3Upgrades.Length )];
-				Debug.Log( upgradeToGive.name );
+				upgradeToGive = tier3Upgrades[Random.Range(0, tier3Upgrades.Length)];
+				Debug.Log(upgradeToGive.name);
 			}
 		}
-		else if( roll >= t2Chance && roll < t3Chance )
+		else if (roll >= t2Chance && roll < t3Chance)
 		{
-			if( tier2Upgrades.Length > 0 )
+			if (tier2Upgrades.Length > 0)
 			{
-				upgradeToGive = tier2Upgrades[Random.Range( 0, tier2Upgrades.Length )];
-				Debug.Log( upgradeToGive.name );
+				upgradeToGive = tier2Upgrades[Random.Range(0, tier2Upgrades.Length)];
+				Debug.Log(upgradeToGive.name);
 			}
 		}
 		else
 		{
-			if( tier1Upgrades.Length > 0 )
+			if (tier1Upgrades.Length > 0)
 			{
-				upgradeToGive = tier1Upgrades[Random.Range( 0, tier1Upgrades.Length )];
-				Debug.Log( upgradeToGive.name );
+				upgradeToGive = tier1Upgrades[Random.Range(0, tier1Upgrades.Length)];
+				Debug.Log(upgradeToGive.name);
 			}
 		}
 
 		meleeUpgradeImg.sprite = upgradeToGive.UpgradeImage;
 		rangedUpgradeImg.sprite = upgradeToGive.UpgradeImage;
-		//abilityImg.sprite = abilityToGive.BaseStats.AbilityImage;
+		if (abilityToGive.BaseStats.AbilityIcon != null)
+		{
+			abilityImg.sprite = abilityToGive.BaseStats.AbilityIcon;
+		}
 		//AbilityTitle.text = "" + abilityToGive.GetType().Name;
 		MeleeTitle.text = upgradeToGive.name + " Melee";
 		RangedTitle.text = upgradeToGive.name + " Ranged";
@@ -104,117 +107,125 @@ public class RewardChoice : MonoBehaviour
 
 	public void ChooseAbility()
 	{
-		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
+		if (GameManager.Instance.ExpManager.PlayerPoints >= 1)
 		{
 			// give AbilityScriptable
 			//player.Ability1 = abilityToGive;
 			//IAbility giveAbility = abilityToGive;
-			
+
 			//player.CurrentAbility1 = abilityToGive;
-			switch(reward)
+			switch (reward)
 			{
 				case AbilityReward.LineUp:
-					if( player.CurrentAbility1 == null || abilityButton == 1)
+					if (player.CurrentAbility1 == null || abilityButton == 1)
 					{
 						player.CurrentAbility1 = new LineUpAbility();
 						player.Ability1 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(0, player.Ability1.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
-					else if (player.CurrentAbility2 == null || abilityButton == 2 )
+					else if (player.CurrentAbility2 == null || abilityButton == 2)
 					{
 						player.CurrentAbility2 = new LineUpAbility();
 						player.Ability2 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(1, player.Ability2.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
-					else if( player.CurrentAbility3 == null || abilityButton == 3 )
+					else if (player.CurrentAbility3 == null || abilityButton == 3)
 					{
 						player.CurrentAbility3 = new LineUpAbility();
 						player.Ability3 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(2, player.Ability3.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
-					else if( player.CurrentAbility4 == null || abilityButton == 4 )
+					else if (player.CurrentAbility4 == null || abilityButton == 4)
 					{
 						player.CurrentAbility4 = new LineUpAbility();
 						player.Ability4 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(3, player.Ability4.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
 					else
 					{
 						//choose what ability to override
-						abilityButtonPopUp.SetActive( true );
-						choicePopUp.SetActive( false );
+						abilityButtonPopUp.SetActive(true);
+						choicePopUp.SetActive(false);
 					}
 					break;
 				case AbilityReward.BlackHole:
-					if( player.CurrentAbility1 == null || abilityButton == 1 )
+					if (player.CurrentAbility1 == null || abilityButton == 1)
 					{
 						player.CurrentAbility1 = new BlackHoleAbility();
 						player.Ability1 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(0, player.Ability1.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
-					else if( player.CurrentAbility2 == null || abilityButton == 2 )
+					else if (player.CurrentAbility2 == null || abilityButton == 2)
 					{
 						player.CurrentAbility2 = new BlackHoleAbility();
 						player.Ability2 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(1, player.Ability2.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
-					else if( player.CurrentAbility3 == null || abilityButton == 3 )
+					else if (player.CurrentAbility3 == null || abilityButton == 3)
 					{
 						player.CurrentAbility3 = new BlackHoleAbility();
 						player.Ability3 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(2, player.Ability3.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
-					else if( player.CurrentAbility4 == null || abilityButton == 4 )
+					else if (player.CurrentAbility4 == null || abilityButton == 4)
 					{
 						player.CurrentAbility4 = new BlackHoleAbility();
 						player.Ability4 = abilityStats;
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
 						abilityButton = 0;
-						GameManager.Instance.SetPauseState( false );
+						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
-						Destroy( this.gameObject );
+						GameManager.Instance.UiManager.SetAbilityUIValues(3, player.Ability4.AbilityIcon);
+						Destroy(this.gameObject);
 						break;
 					}
 					else
 					{
 						//choose what ability to override
-						abilityButtonPopUp.SetActive( true );
-						choicePopUp.SetActive( false );
+						abilityButtonPopUp.SetActive(true);
+						choicePopUp.SetActive(false);
 					}
 					break;
 				default:
@@ -226,42 +237,42 @@ public class RewardChoice : MonoBehaviour
 
 	public void ChooseMeleeUpgrade()
 	{
-		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
+		if (GameManager.Instance.ExpManager.PlayerPoints >= 1)
 		{
 			// give one of possible upgrades
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
 			player.CurrentMeleeAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
 			player.CurrentMeleeAttack.Damage += upgradeToGive.DamageUpgrade;
-			player.CurrentMeleeAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
+			player.CurrentMeleeAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
 			player.CurrentMeleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
 			//check for existing upgrades to rank up
-			foreach( KeyValuePair<StatusEffectType, bool> pair in player.CurrentMeleeAttack.AbilityUpgrades )
+			foreach (KeyValuePair<StatusEffectType, bool> pair in player.CurrentMeleeAttack.AbilityUpgrades)
 			{
-				if( pair.Key == upgradeToGive.StatusEffect )
+				if (pair.Key == upgradeToGive.StatusEffect)
 				{
-					if( player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+					if (player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey(upgradeToGive.StatusEffect))
 					{
-						UpgradeMelee( upgradeToGive.StatusEffect );
-						Debug.Log( "upgraded melee" );
+						UpgradeMelee(upgradeToGive.StatusEffect);
+						Debug.Log("upgraded melee");
 					}
 				}
 			}
-			if( !player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+			if (!player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey(upgradeToGive.StatusEffect))
 			{
-				player.CurrentMeleeAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
-				Debug.Log( "added " + upgradeToGive.name + " to player as melee" );
+				player.CurrentMeleeAttack.AbilityUpgrades.Add(upgradeToGive.StatusEffect, true);
+				Debug.Log("added " + upgradeToGive.name + " to player as melee");
 			}
 			//Dev UI text, remove later
-			GameManager.Instance.UiManager.AddDevText( 0, upgradeToGive.name );
+			GameManager.Instance.UiManager.AddDevText(0, upgradeToGive.name);
 
-			Destroy( this.gameObject );
+			Destroy(this.gameObject);
 		}
 	}
 
-	public void UpgradeMelee( StatusEffectType status )
+	public void UpgradeMelee(StatusEffectType status)
 	{
-		switch( status )
+		switch (status)
 		{
 			case StatusEffectType.none:
 				break;
@@ -269,14 +280,14 @@ public class RewardChoice : MonoBehaviour
 				player.CurrentMeleeAttack.BurnDamage *= 2;
 				AbilityController.AbilityControllerInstance.CurrentMeleeAttack.BurnDamage *= 2;
 				//player.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
-				Debug.Log( "Upgraded burn" );
+				Debug.Log("Upgraded burn");
 				break;
 			case StatusEffectType.Stun:
 				break;
 			case StatusEffectType.Slow:
-				player.AbilityController.CurrentMeleeAttack.SlowAmount = ( player.CurrentMeleeAttack.SlowAmount / 2 );
+				player.AbilityController.CurrentMeleeAttack.SlowAmount = (player.CurrentMeleeAttack.SlowAmount / 2);
 				//player.AbilityController.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
-				Debug.Log( "Upgraded slow" );
+				Debug.Log("Upgraded slow");
 				break;
 			case StatusEffectType.Marked:
 				break;
@@ -287,43 +298,43 @@ public class RewardChoice : MonoBehaviour
 
 	public void ChooseRangedUpgrade()
 	{
-		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
+		if (GameManager.Instance.ExpManager.PlayerPoints >= 1)
 		{
 			// give one of possible upgrades
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
 			player.CurrentRangedAttack.CoolDown += upgradeToGive.AttackSpeedUpgrade;
 			player.CurrentRangedAttack.Damage += upgradeToGive.DamageUpgrade;
-			player.CurrentRangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
+			player.CurrentRangedAttack.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
 			player.CurrentRangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
 			//check for existing upgrades to rank up
-			foreach( KeyValuePair<StatusEffectType, bool> pair in player.CurrentRangedAttack.AbilityUpgrades )
+			foreach (KeyValuePair<StatusEffectType, bool> pair in player.CurrentRangedAttack.AbilityUpgrades)
 			{
-				if( pair.Key == upgradeToGive.StatusEffect )
+				if (pair.Key == upgradeToGive.StatusEffect)
 				{
-					if( player.CurrentRangedAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+					if (player.CurrentRangedAttack.AbilityUpgrades.ContainsKey(upgradeToGive.StatusEffect))
 					{
-						UpgradeRanged( upgradeToGive.StatusEffect );
-						Debug.Log( "upgraded ranged" );
+						UpgradeRanged(upgradeToGive.StatusEffect);
+						Debug.Log("upgraded ranged");
 					}
 				}
 			}
-			if( !player.CurrentRangedAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
+			if (!player.CurrentRangedAttack.AbilityUpgrades.ContainsKey(upgradeToGive.StatusEffect))
 			{
-				player.CurrentRangedAttack.AbilityUpgrades.Add( upgradeToGive.StatusEffect, true );
-				Debug.Log( "added " + upgradeToGive.name + " to player as ranged" );
+				player.CurrentRangedAttack.AbilityUpgrades.Add(upgradeToGive.StatusEffect, true);
+				Debug.Log("added " + upgradeToGive.name + " to player as ranged");
 			}
 
 			//Dev UI text, remove later
-			GameManager.Instance.UiManager.AddDevText( 1, upgradeToGive.name );
+			GameManager.Instance.UiManager.AddDevText(1, upgradeToGive.name);
 
-			Destroy( this.gameObject );
+			Destroy(this.gameObject);
 		}
 	}
 
-	public void UpgradeRanged( StatusEffectType status )
+	public void UpgradeRanged(StatusEffectType status)
 	{
-		switch( status )
+		switch (status)
 		{
 			case StatusEffectType.none:
 				break;
@@ -332,15 +343,15 @@ public class RewardChoice : MonoBehaviour
 				player.CurrentRangedAttack.BurnDamage *= 2;
 				//player.RangedAttackScr.BurnDamage *= 2;
 				player.AbilityController.CurrentRangedAttack.UpdateStatusEffects();
-				Debug.Log( "Upgraded burn" );
-				Debug.Log( "burn damage is now: " + player.AbilityController.CurrentRangedAttack.BurnDamage );
+				Debug.Log("Upgraded burn");
+				Debug.Log("burn damage is now: " + player.AbilityController.CurrentRangedAttack.BurnDamage);
 				break;
 			case StatusEffectType.Stun:
 				break;
 			case StatusEffectType.Slow:
-				player.AbilityController.CurrentRangedAttack.SlowAmount = ( player.CurrentRangedAttack.SlowAmount / 2 );
+				player.AbilityController.CurrentRangedAttack.SlowAmount = (player.CurrentRangedAttack.SlowAmount / 2);
 				//player.AbilityController.CurrentRangedAttack.BaseStats.UpdateStatusEffects();
-				Debug.Log( "Upgraded slow" );
+				Debug.Log("Upgraded slow");
 				break;
 			case StatusEffectType.Marked:
 				break;

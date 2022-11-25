@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
 	[Serializable]
 	private class abilityUI
 	{
-		public Sprite abilityIcon;
+		public Transform abilityIcon;
 		public Image cooldownClock;
 		public bool onCooldown;
 		public float cooldown;
@@ -112,9 +112,9 @@ public class UIManager : MonoBehaviour
 		uiStates[5].GetComponentInChildren<TMP_InputField>().text = string.Empty;
 	}
 
-	public void SetAbilityUIValues(int i, Sprite icon, float cooldown)
+	public void SetAbilityUIValues(int i, Sprite icon)
 	{
-		abilityUIElements[i].abilityIcon = icon;
+		abilityUIElements[i].abilityIcon.GetComponent<Image>().sprite = icon;
 	}
 
 	public void CooldownCountDown(IAbility ability, int abilityInBar)
