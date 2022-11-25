@@ -176,6 +176,7 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
+		uiManager.ResetAbilityUIValues();
 		uiManager.SetUIActive(1, true);
 	}
 

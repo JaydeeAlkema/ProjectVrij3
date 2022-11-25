@@ -1506,7 +1506,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8803674279633105922}
+      - m_Target: {fileID: 1139734283201466162}
         m_TargetAssemblyTypeName: RewardInteraction_ConceptB, Assembly-CSharp
         m_MethodName: CloseRewardScreen
         m_Mode: 1
@@ -1798,9 +1798,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8803674279633105923}
   - component: {fileID: 8803674279633105924}
-  - component: {fileID: 8803674279633105922}
   - component: {fileID: 8803674279633105921}
   - component: {fileID: 6919738255088462517}
+  - component: {fileID: 1139734283201466162}
   m_Layer: 0
   m_Name: RewardTest_w_newPopup
   m_TagString: Untagged
@@ -1878,22 +1878,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8803674279633105922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8803674279633105925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd3afa2c4f7572b469de3c85cf9a628b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttonPrompt: {fileID: 8803674281471760201}
-  ChooseUI: {fileID: 7126338858132407233}
-  chooseAbilityButton: {fileID: 3297404553919493219}
-  canInteract: 0
 --- !u!61 &8803674279633105921
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1950,6 +1934,22 @@ MonoBehaviour:
   t1Chance: 1
   t2Chance: 1000001
   t3Chance: 1000001
+--- !u!114 &1139734283201466162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8803674279633105925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3afa2c4f7572b469de3c85cf9a628b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonPrompt: {fileID: 8803674281471760201}
+  ChooseUI: {fileID: 7126338858132407233}
+  chooseAbilityButton: {fileID: 3297404553919493219}
+  canInteract: 0
 --- !u!1 &8803674279807195312
 GameObject:
   m_ObjectHideFlags: 0
@@ -2457,10 +2457,6 @@ PrefabInstance:
       value: ChooseMeleeUpgrade
       objectReference: {fileID: 0}
     - target: {fileID: 2697031336314060075, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 8803674279633105922}
-    - target: {fileID: 2697031336314060075, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: CloseRewardScreen
       objectReference: {fileID: 0}
@@ -2591,6 +2587,18 @@ PrefabInstance:
     - target: {fileID: 4633766004276183530, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163322300018965099, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1139734283201466162}
+    - target: {fileID: 8163322300018965099, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseRewardScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163322300018965099, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RewardInteraction_ConceptB, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

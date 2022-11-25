@@ -96,11 +96,8 @@ public class RewardChoice : MonoBehaviour
 
 		meleeUpgradeImg.sprite = upgradeToGive.UpgradeImageMelee;
 		rangedUpgradeImg.sprite = upgradeToGive.UpgradeImageRanged;
-		if (abilityToGive.BaseStats.AbilityIcon != null)
-		{
-			abilityImg.sprite = abilityToGive.BaseStats.AbilityIcon;
-		}
-		//AbilityTitle.text = "" + abilityToGive.GetType().Name;
+		abilityImg.sprite = abilityToGive.BaseStats.AbilityIcon;
+		AbilityTitle.text = "" + abilityToGive.GetType().Name;
 		MeleeTitle.text = upgradeToGive.name + " Melee";
 		RangedTitle.text = upgradeToGive.name + " Ranged";
 	}
