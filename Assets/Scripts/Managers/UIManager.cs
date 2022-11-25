@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -24,6 +26,17 @@ public class UIManager : MonoBehaviour
 	// 0 = Melee Upgrades
 	// 1 = Cast Upgrades
 
+	[Serializable]
+	private class abilityUI
+	{
+		public Sprite abilityIcon;
+		public Image cooldownClock;
+		public bool onCooldown;
+		public float cooldown;
+	}
+
+	[SerializeField] private abilityUI[] abilityUIElements;
+
 	void Update()
 	{
 		SetHP(GameManager.Instance.PlayerHP.value);
@@ -45,6 +58,7 @@ public class UIManager : MonoBehaviour
 				SetUIActive(5, true);
 			}
 		}
+		HandleCooldowns();
 	}
 
 	public void SetupDungeonUI()
@@ -96,5 +110,41 @@ public class UIManager : MonoBehaviour
 	public void ResetCheatMenu()
 	{
 		uiStates[5].GetComponentInChildren<TMP_InputField>().text = string.Empty;
+	}
+
+	public void SetAbilityUIValues(int i, Sprite icon, float cooldown)
+	{
+		abilityUIElements[i].abilityIcon = icon;
+	}
+
+	public void CooldownCountDown(IAbility ability, int abilityInBar)
+	{
+		abilityUIElements[abilityInBar].cooldown = ability.CoolDown;
+
+		if (!ability.CooledDown && !abilityUIElements[abilityInBar].onCooldown)
+		{
+			abilityUIElements[abilityInBar].cooldownClock.fillAmount = 1;
+			abilityUIElements[abilityInBar].onCooldown = true;
+		}
+	}
+
+	public void HandleCooldowns()
+	{
+		foreach (abilityUI abilityUI in abilityUIElements)
+		{
+			if (abilityUI.onCooldown && abilityUI.cooldownClock != null)
+			{
+				if (abilityUI.cooldownClock.fillAmount > 0)
+				{
+					abilityUI.cooldownClock.fillAmount -= 1 / (abilityUI.cooldown/1000) * Time.deltaTime;
+				}
+				else
+				{
+					abilityUI.cooldownClock.fillAmount = 0;
+					abilityUI.onCooldown = false;
+				}
+			}
+
+		}
 	}
 }

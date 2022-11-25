@@ -244,6 +244,7 @@ public class AbilityController : MonoBehaviour
             //currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             //return currentAbility1;
         }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility1, 0);
         currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility1.CallAbility( player );
         return currentAbility1;
