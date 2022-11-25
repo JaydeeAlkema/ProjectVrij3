@@ -18,6 +18,7 @@ public abstract class Ability : IAbility
 	protected float force = 30f;
 	protected AbilityScriptable baseStats;
 	protected float critChance;
+	protected bool init = true;
 	protected Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 	public AbilityScriptable BaseStats { get => baseStats; set => baseStats = value; }
 	public PlayerControler Player { get; set; }
@@ -44,6 +45,9 @@ public abstract class Ability : IAbility
 	public int MarkType { get; set; }
 	public StatusEffectType statusEffectType { get; set; }
 	public List<IStatusEffect> statusEffects { get; set; }
+	public bool Init { get => init; set => init = value; }
+	public IAbility ability { get; set; }
+	public bool CooledDown { get; set; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void CallAbility( bool resetCooldown ) { }

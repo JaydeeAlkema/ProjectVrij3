@@ -7,8 +7,25 @@ using NaughtyAttributes;
 [CreateAssetMenu( fileName = "Ability", menuName = "ScriptableObjects/Ability" )]
 public class AbilityScriptable : ScriptableObject
 {
-	[SerializeField] private Sprite abilityImage;
-	[SerializeField] private Ability ability;
+	#region basestats
+	[SerializeField] private float baseCooldown = 0.001f;
+	[SerializeField] private int baseDamage = 0;
+	[SerializeField] private int basePierce = 1;
+	[SerializeField] private float baseCritChance = 0f;
+	[SerializeField] private float baseDistance = 0f;
+	[SerializeField] private float baseLifeSpan = 10f;
+	[SerializeField] private float baseForce = 30f;
+	[SerializeField] private Vector2 baseBoxSize = new Vector2( 4, 6 );
+	[SerializeField] private float baseCircleSize = 0f;
+	[SerializeField] private float baseDashSpeed = 100f;
+	[SerializeField] private float baseDashDuration = 0.2f;
+	[SerializeField] private float baseAttackTime = 200f;
+	[SerializeField] private bool baseTrailUpgrade = false;
+	[SerializeField] private int baseBurnDamage = 1;
+	[SerializeField] private float baseSlowAmount = 0.5f;
+	[SerializeField] private float baseSlowDuration = 4f;
+	#endregion
+
 	[SerializeField] private float coolDown = 0.001f;
 	[SerializeField] private int damage = 0;
 	[SerializeField] private int pierce = 1;
@@ -21,7 +38,6 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float lifeSpan = 10f;
 	[SerializeField] private float force = 30f;
 	[SerializeField] private GameObject burnObject;
-	[SerializeField] private EffectType[] effects = new EffectType[3];
 	[SerializeField] private bool trailUpgrade;
 	[SerializeField] private float dashSpeed = 100f;
 	[SerializeField] private float dashDuration = 0.2f;
@@ -35,7 +51,6 @@ public class AbilityScriptable : ScriptableObject
 
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
-	public Sprite AbilityImage { get => abilityImage; set => abilityImage = value; }
 	public float CoolDown { get => coolDown; set => coolDown = value; }
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
@@ -51,8 +66,6 @@ public class AbilityScriptable : ScriptableObject
 	public float DashSpeed { get => dashSpeed; set => dashSpeed = value; }
 	public float DashDuration { get => dashDuration; set => dashDuration = value; }
 	public float AttackTime { get => attackTime; set => attackTime = value; }
-	public Ability Ability { get => ability; set => ability =  value ; }
-	public EffectType[] Effects { get => effects; set => effects = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
@@ -86,5 +99,15 @@ public class AbilityScriptable : ScriptableObject
 			default:
 				break;
 		}
+	}
+
+	public void SetBaseStats()
+	{
+		
+	}
+
+	public void SetHoldStats(AbilityScriptable stats)
+	{
+		
 	}
 }

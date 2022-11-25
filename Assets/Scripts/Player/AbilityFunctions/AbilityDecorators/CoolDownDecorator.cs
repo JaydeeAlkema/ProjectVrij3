@@ -31,6 +31,7 @@ public class CoolDownDecorator : AbilityDecorator
 		if( cooledDown )
 		{
 			cooledDown = false;
+			ability.CooledDown = false;
 			Debug.Log( "I got cooled" );
 			ability.BaseStats = baseStats;
 			ability.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle, TrailUpgrade);
@@ -53,6 +54,7 @@ public class CoolDownDecorator : AbilityDecorator
 	private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
 	{
 		cooledDown = true;
+		ability.CooledDown = true;
 		AbilityController.AbilityControllerInstance.IsAttacking = false;
 		coolDownTimer.Enabled = false;
 	}
