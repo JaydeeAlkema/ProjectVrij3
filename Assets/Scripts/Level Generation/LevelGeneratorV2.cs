@@ -505,7 +505,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 		Stopwatch executionTime = new Stopwatch();
 		executionTime.Start();
 
-		List<Sprite> floorSprites = SLGS.floorSprites;
+		WeightedRandomList<Sprite> floorSprites = SLGS.floorSprites;
 		List<Sprite> topWallSprites = SLGS.topWallSprites;
 		List<Sprite> bottomWallSprites = SLGS.bottomWallSprites;
 		List<Sprite> leftWallSprites = SLGS.leftWallSprites;
@@ -658,7 +658,7 @@ public class LevelGeneratorV2 : MonoBehaviour
 				{
 					pathTileTransform.gameObject.layer = LayerMask.NameToLayer("Walkable");
 					pathTileTransform.name = "Floor Tile";
-					spriteRenderer.sprite = floorSprites[Random.Range(0, floorSprites.Count)];
+					spriteRenderer.sprite = floorSprites.GetRandom();
 					//spriteRenderer.sortingLayerName = "Floor";
 					Destroy(boxCollider2D);
 				}

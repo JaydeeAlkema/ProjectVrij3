@@ -25,7 +25,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float baseSlowAmount = 0.5f;
 	[SerializeField] private float baseSlowDuration = 4f;
 	#endregion
-
+	[SerializeField] private Sprite abilityIcon;
 	[SerializeField] private float coolDown = 0.001f;
 	[SerializeField] private int damage = 0;
 	[SerializeField] private int pierce = 1;
@@ -75,6 +75,7 @@ public class AbilityScriptable : ScriptableObject
 
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public AK.Wwise.Event AbilitySound1 { get => abilitySound1; set => abilitySound1 = value; }
+	public Sprite AbilityIcon { get => abilityIcon; set => abilityIcon = value; }
 
 	public int markType;
 
