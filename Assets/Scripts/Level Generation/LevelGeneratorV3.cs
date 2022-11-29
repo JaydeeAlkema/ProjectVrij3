@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,6 +16,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[Space]
 	[SerializeField] private float debugTime = 0.5f;
 
+	private Dictionary<ConnectionPoint, Vector2> connectionPointsInScene = new Dictionary<ConnectionPoint, Vector2>();
+
 	private void Awake()
 	{
 		if (seed == 0) seed = Random.Range(0, int.MaxValue);
@@ -26,7 +27,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 	private void Start()
 	{
 		Generate();
-		//StartCoroutine(Generate_Coroutine());
 	}
 
 	private void Generate()
@@ -38,6 +38,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 		{
 			// Store all current connection points in the scene in a simple list for later use.
 			List<ConnectionPoint> levelConnectionPoints = GetConnectionPoints(mapPiecesInScene);
+			foreach (ConnectionPoint connectionPoint in levelConnectionPoints)
+			{
+				Vector3 connectionPointPosition = connectionPoint.transform.position;
+				connectionPointsInScene.TryAdd(connectionPoint, new Vector2(connectionPointPosition.x, connectionPointPosition.y));
+			}
 
 			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
 			GameObject newMapPieceGO = null;
@@ -117,92 +122,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		stopwatch.Stop();
 		Debug.Log($"Level Generation took: {stopwatch.ElapsedMilliseconds}");
-	}
-
-	private IEnumerator Generate_Coroutine()
-	{
-		for (int i = 0; i < mapPieceLimit; i++)
-		{
-			yield return new WaitForSeconds(debugTime);
-			// Store all current connection points in the scene in a simple list for later use.
-			List<ConnectionPoint> levelConnectionPoints = GetConnectionPoints(mapPiecesInScene);
-
-			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
-			GameObject newMapPieceGO = null;
-			if (i == 0)
-			{
-				newMapPieceGO = Instantiate(spawnMapPiece);
-			}
-			else
-			{
-				newMapPieceGO = Instantiate(mapPieces.GetRandom());
-			}
-
-			// Get all connection points from the new map piece.
-			List<ConnectionPoint> NewMapPieceConnectionPoints = GetConnectionPoints(newMapPieceGO);
-			ConnectionPoint newMapPieceConnectionPointNorth = NewMapPieceConnectionPoints.Find(x => x.Direction == ConnectionPointDirection.North);
-			ConnectionPoint newMapPieceConnectionPointEast = NewMapPieceConnectionPoints.Find(x => x.Direction == ConnectionPointDirection.East);
-			ConnectionPoint newMapPieceConnectionPointSouth = NewMapPieceConnectionPoints.Find(x => x.Direction == ConnectionPointDirection.South);
-			ConnectionPoint newMapPieceConnectionPointWest = NewMapPieceConnectionPoints.Find(x => x.Direction == ConnectionPointDirection.West);
-
-			// Loop through all the map pieces in the scene. The first map piece that is found that has an unoccupied connection point will be set as reference.
-			// If the set reference to the existing map piece does not connect with the new map piece, we continue the loop until we find two map pieces that fit together.
-			Vector2 newMapPiecePos = new Vector2();
-			bool connected = false;
-			if (!connected)
-			{
-				foreach (GameObject mapPieceInScene in mapPiecesInScene)
-				{
-					yield return new WaitForSeconds(debugTime);
-					List<ConnectionPoint> mapPieceInSceneConnectionPoints = GetConnectionPoints(mapPieceInScene);
-
-					foreach (ConnectionPoint mapPieceInSceneConnectionPoint in mapPieceInSceneConnectionPoints)
-					{
-						if (mapPieceInSceneConnectionPoint.Occupied == false && !connected)
-						{
-							GameObject mapPieceInSceneGO = mapPieceInScene;
-
-							// Connect North to South
-							if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y + 21);
-								newMapPieceConnectionPointSouth.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
-							// Connect East to West
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x + 21, mapPieceInSceneGO.transform.position.y);
-								newMapPieceConnectionPointWest.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
-							// Connect South to North
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y - 21);
-								newMapPieceConnectionPointNorth.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
-							// Connect West to East
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x - 21, mapPieceInSceneGO.transform.position.y);
-								newMapPieceConnectionPointEast.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
-						}
-					}
-				}
-			}
-
-			newMapPieceGO.transform.position = newMapPiecePos;
-			newMapPieceGO.transform.parent = mapPiecesParent;
-			mapPiecesInScene.Add(newMapPieceGO);
-		}
 	}
 
 	#region Helper Functions
