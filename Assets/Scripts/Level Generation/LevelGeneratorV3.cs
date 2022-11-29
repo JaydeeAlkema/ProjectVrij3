@@ -34,16 +34,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
 
+		List<ConnectionPoint> levelConnectionPointsInScene = new List<ConnectionPoint>();
 		for (int i = 0; i < mapPieceLimit; i++)
 		{
-			// Store all current connection points in the scene in a simple list for later use.
-			List<ConnectionPoint> levelConnectionPoints = GetConnectionPoints(mapPiecesInScene);
-			foreach (ConnectionPoint connectionPoint in levelConnectionPoints)
-			{
-				Vector3 connectionPointPosition = connectionPoint.transform.position;
-				connectionPointsInScene.TryAdd(connectionPoint, new Vector2(connectionPointPosition.x, connectionPointPosition.y));
-			}
-
 			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
 			GameObject newMapPieceGO = null;
 			if (i == 0)
@@ -61,6 +54,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 			ConnectionPoint newMapPieceConnectionPointEast = NewMapPieceConnectionPoints.Find(x => x.Direction == ConnectionPointDirection.East);
 			ConnectionPoint newMapPieceConnectionPointSouth = NewMapPieceConnectionPoints.Find(x => x.Direction == ConnectionPointDirection.South);
 			ConnectionPoint newMapPieceConnectionPointWest = NewMapPieceConnectionPoints.Find(x => x.Direction == ConnectionPointDirection.West);
+
+			// Store all current connection points in the scene in a simple list for later use.
+			levelConnectionPointsInScene.AddRange(NewMapPieceConnectionPoints);
+			foreach (ConnectionPoint connectionPoint in levelConnectionPointsInScene)
+			{
+				Vector3 connectionPointPosition = connectionPoint.transform.position;
+				connectionPointsInScene.TryAdd(connectionPoint, new Vector2(connectionPointPosition.x, connectionPointPosition.y));
+			}
 
 			// Loop through all the map pieces in the scene. The first map piece that is found that has an unoccupied connection point will be set as reference.
 			// If the set reference to the existing map piece does not connect with the new map piece, we continue the loop until we find two map pieces that fit together.
