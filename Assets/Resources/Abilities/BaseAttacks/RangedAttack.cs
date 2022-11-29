@@ -12,9 +12,9 @@ public class RangedAttack : Ability
 	{
 		if( init )
 		{
-			SetAbilityStats();
 			init = false;
 		}
+		SetAbilityStats();
 		player = _player;
 		AbilityBehavior();
 	}

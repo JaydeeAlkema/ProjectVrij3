@@ -22,9 +22,9 @@ public class MeleeAttack : Ability
 	{
 		if( init )
 		{
-			SetAbilityStats();
 			init = false;
 		}
+		SetAbilityStats();
 		player = _player;
 		AbilityBehavior();
 	}
@@ -42,8 +42,11 @@ public class MeleeAttack : Ability
 		{
 			//Debug.Log("Starting enemy damaging");
 			int damageToDeal = ( int )( damage * Random.Range( 0.8f, 1.2f ) );
-			enemy.GetComponent<IDamageable>()?.TakeDamage( damageToDeal + ( 20 * comboCounter ), 0 );
-			OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>() );
+			if( enemy != null )
+			{
+				enemy.GetComponent<IDamageable>()?.TakeDamage( damageToDeal + ( 20 * comboCounter ), 0 );
+				OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>() );
+			}
 			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
 
 		}

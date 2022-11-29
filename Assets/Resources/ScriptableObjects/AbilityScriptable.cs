@@ -24,6 +24,8 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private int baseBurnDamage = 1;
 	[SerializeField] private float baseSlowAmount = 0.5f;
 	[SerializeField] private float baseSlowDuration = 4f;
+	[SerializeField] private List<IStatusEffect> baseStatusEffects = new List<IStatusEffect>();
+	[SerializeField] private StatusEffectType baseStatusEffectType;
 	#endregion
 	[SerializeField] private Sprite abilityIcon;
 	[SerializeField] private float coolDown = 0.001f;
@@ -67,7 +69,7 @@ public class AbilityScriptable : ScriptableObject
 	public float DashDuration { get => dashDuration; set => dashDuration = value; }
 	public float AttackTime { get => attackTime; set => attackTime = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
-	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
+	public List<IStatusEffect> statusEffects ;
 
 	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
 	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
@@ -120,6 +122,8 @@ public class AbilityScriptable : ScriptableObject
 		burnDamage = baseBurnDamage;
 		slowAmount = baseSlowAmount;
 		slowDuration = baseSlowDuration;
+		statusEffects = baseStatusEffects;
+		statusEffectType = baseStatusEffectType;
 	}
 
 	public void SetHoldStats(AbilityScriptable stats)
@@ -140,5 +144,7 @@ public class AbilityScriptable : ScriptableObject
 		burnDamage = stats.burnDamage;
 		slowAmount = stats.slowAmount;
 		slowDuration = stats.slowDuration;
+		statusEffects = stats.statusEffects;
+		statusEffectType = stats.statusEffectType;
 	}
 }

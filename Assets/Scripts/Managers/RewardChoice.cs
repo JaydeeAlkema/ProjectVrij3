@@ -348,7 +348,7 @@ public class RewardChoice : MonoBehaviour
 				break;
 			case StatusEffectType.Burn:
 				player.RangedAttackScr.BurnDamage *= 2;
-				player.AbilityController.CurrentRangedAttack.UpdateStatusEffects();
+				player.RangedAttackScr.UpdateStatusEffects();
 				Debug.Log("Upgraded burn");
 				Debug.Log("burn damage is now: " + player.AbilityController.CurrentRangedAttack.BurnDamage);
 				break;
@@ -356,7 +356,7 @@ public class RewardChoice : MonoBehaviour
 				break;
 			case StatusEffectType.Slow:
 				player.RangedAttackScr.SlowAmount = (player.RangedAttackScr.SlowAmount / 2);
-				//player.AbilityController.CurrentRangedAttack.BaseStats.UpdateStatusEffects();
+				player.RangedAttackScr.UpdateStatusEffects();
 				Debug.Log("Upgraded slow");
 				break;
 			case StatusEffectType.Marked:

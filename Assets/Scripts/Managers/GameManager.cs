@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private ScriptablePlayer scriptablePlayer = null;
 
 	public GameState currentGameState;
+	public GameState lastGameState;
 
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }

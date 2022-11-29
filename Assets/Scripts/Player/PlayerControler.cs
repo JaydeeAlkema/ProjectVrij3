@@ -155,6 +155,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	}
 
+	public void OnStart()
+	{
+		
+	}
+
 	public void ReloadAttacks()
 	{
 		currentMeleeAttack.BaseStats = meleeAttack;

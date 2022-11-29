@@ -44,6 +44,7 @@ public class HubSceneManager : MonoBehaviour
 	{
 		SceneManager.SetActiveScene( SceneManager.GetSceneByName( loadScene ) );
 		if( loadScene != "Hub Prototype" && lastScene != "Hub Prototype") { HoldPlayerOnSceneLoad(); }
+		Debug.Log( "hold player stats" );
 	}
 
 	public void StartFirstScenes()
@@ -99,7 +100,7 @@ public class HubSceneManager : MonoBehaviour
 			player.Ability4.SetHoldStats(playerValues.Ability4);
 			player.CurrentAbility4.Init = playerValues.CurrentAbility4.Init;
 		}
-		player.ReloadAttacks();
+		//player.ReloadAttacks();
 		player.initAbilities();
 		Debug.Log( player.CurrentMeleeAttack.AbilityUpgrades.Count );
 		Debug.Log( player.CurrentRangedAttack.AbilityUpgrades.Count );
