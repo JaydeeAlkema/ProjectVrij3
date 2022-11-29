@@ -122,8 +122,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		rb2d = GetComponent<Rigidbody2D>();
 		abilityController.Player = this;
 		currentMeleeAttack.BaseStats = meleeAttack;
+		currentMeleeAttack.BaseStats.SetBaseStats();
 		currentRangedAttack.BaseStats = rangedAttack;
+		currentRangedAttack.BaseStats.SetBaseStats();
 		currentDash.BaseStats = dash;
+		currentDash.BaseStats.SetBaseStats();
 		currentMeleeAttack.SetStartValues();
 		currentRangedAttack.SetStartValues();
 		currentDash.SetStartValues();

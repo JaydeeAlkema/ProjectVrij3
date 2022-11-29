@@ -104,11 +104,41 @@ public class AbilityScriptable : ScriptableObject
 
 	public void SetBaseStats()
 	{
-		
+		coolDown = baseCooldown;
+		damage = baseDamage;
+		pierce = basePierce;
+		critChance = baseCritChance;
+		distance = baseDistance;
+		lifeSpan = baseLifeSpan;
+		force = baseForce;
+		boxSize = baseBoxSize;
+		circleSize = baseCircleSize;
+		dashSpeed = baseDashSpeed;
+		dashDuration = baseDashDuration;
+		attackTime = baseAttackTime;
+		trailUpgrade = baseTrailUpgrade;
+		burnDamage = baseBurnDamage;
+		slowAmount = baseSlowAmount;
+		slowDuration = baseSlowDuration;
 	}
 
 	public void SetHoldStats(AbilityScriptable stats)
 	{
-		
+		coolDown = stats.coolDown;
+		damage = stats.damage;
+		pierce = stats.pierce;
+		critChance = stats.critChance;
+		distance = stats.distance;
+		lifeSpan = stats.lifeSpan;
+		force = stats.force;
+		boxSize = stats.boxSize;
+		circleSize = stats.circleSize;
+		dashSpeed = stats.dashSpeed;
+		dashDuration = stats.dashDuration;
+		attackTime = stats.attackTime;
+		trailUpgrade = stats.trailUpgrade;
+		burnDamage = stats.burnDamage;
+		slowAmount = stats.slowAmount;
+		slowDuration = stats.slowDuration;
 	}
 }
