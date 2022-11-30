@@ -26,66 +26,82 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d2a3f44e1fc78ca47823b94227a85f48, type: 2}
   bossRooms:
   - {fileID: 11400000, guid: 24cdcc7d440975742896b2ee3db3cae1, type: 2}
-  floorDecorations:
-  - prefab: {fileID: 5302086374462805747, guid: fde85dfd2deae2a4b949119e18619b6f, type: 3}
-    spawnChance: 2
-  - prefab: {fileID: 5302086374462805747, guid: a11e6fdf8216c6a4299a8376e0afa509, type: 3}
-    spawnChance: 10
-  - prefab: {fileID: 5302086374462805747, guid: 87cfae5b708ff5544bc99013d88768ff, type: 3}
-    spawnChance: 2
-  - prefab: {fileID: 5302086374462805747, guid: 9b6b9b6488d213c479839e03a45438b0, type: 3}
-    spawnChance: 10
-  topWallDecorations:
-  - prefab: {fileID: 2218761167129531356, guid: 4a8a1549c93bd264b8b6b060251ae6db, type: 3}
-    spawnChance: 1
-  - prefab: {fileID: 2218761167129531356, guid: 2f8d0f67fb90cff4baebe7ed7e920248, type: 3}
-    spawnChance: 1
-  leftWallDecorations: []
-  rightWallDecorations: []
-  floorSprites:
+  floorDecorationPrefabs:
     list:
-    - item: {fileID: 21300168, guid: f9e5cf7fcf8ec492db9ac7b1ce4d5e1c, type: 3}
-      weight: 15
-    - item: {fileID: 21300166, guid: f9e5cf7fcf8ec492db9ac7b1ce4d5e1c, type: 3}
+    - item: {fileID: 5302086374462805747, guid: 9b6b9b6488d213c479839e03a45438b0, type: 3}
+      weight: 10
+    - item: {fileID: 5302086374462805747, guid: fde85dfd2deae2a4b949119e18619b6f, type: 3}
       weight: 1
-    - item: {fileID: 21300176, guid: f9e5cf7fcf8ec492db9ac7b1ce4d5e1c, type: 3}
+    - item: {fileID: 5302086374462805747, guid: 87cfae5b708ff5544bc99013d88768ff, type: 3}
       weight: 1
-  topWallSprites:
-  - {fileID: 1515833362, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 1029127999, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 684171043, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 1691871387, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  bottomWallSprites:
-  - {fileID: -1869997835, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 340844279, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -1974086491, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -2022398927, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  leftWallSprites:
-  - {fileID: 1172881229, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 985038510, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 57958679, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -202535545, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  rightWallSprites:
-  - {fileID: -1355762240, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: -1617129924, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 1397102630, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  - {fileID: 341539676, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  topLeftOuterCornerSprites:
-  - {fileID: 1172881229, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  topRightOuterCornerSprites:
-  - {fileID: -1355762240, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  bottomLeftOuterCornerSprites:
-  - {fileID: 1295239396, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  bottomRightOuterCornerSprites:
-  - {fileID: -1067463408, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  topLeftInnerCornerSprites:
-  - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  topRightInnerCornerSprites:
-  - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  bottomLeftInnerCornerSprites:
-  - {fileID: 699263333, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
-  bottomRightInnerCornerSprites:
-  - {fileID: 2040022257, guid: d32ac433f7b65f4498a1782010b69aab, type: 3}
+    - item: {fileID: 5302086374462805747, guid: a11e6fdf8216c6a4299a8376e0afa509, type: 3}
+      weight: 3
+  topWallDecorationPrefabs:
+    list:
+    - item: {fileID: 2218761167129531356, guid: 4a8a1549c93bd264b8b6b060251ae6db, type: 3}
+      weight: 10
+    - item: {fileID: 2218761167129531356, guid: 2f8d0f67fb90cff4baebe7ed7e920248, type: 3}
+      weight: 5
+  leftWallDecorationPrefabs:
+    list: []
+  rightWallDecorationPrefabs:
+    list: []
+  floorPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 6e841e75c94f242439afac85ff564e15, type: 3}
+      weight: 0
+  topWallPrefabs:
+    list:
+    - item: {fileID: 3752869213868315957, guid: 4bc2167f9ce18d64784af0098e7228d0, type: 3}
+      weight: 0
+  middleWallPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: b50d19f457ab3e34b8c341cc4d941c8c, type: 3}
+      weight: 0
+  bottomWallPrefabs:
+    list:
+    - item: {fileID: 3752869213868315957, guid: b9d3e9348bdd39a4281c0b5bda69580f, type: 3}
+      weight: 0
+  leftWallPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 43d8014122e8fa7428634f03eb4f73f8, type: 3}
+      weight: 0
+  rightWallPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 9ab4bb179c4f7844885d04553ebca6bf, type: 3}
+      weight: 0
+  topLeftOuterCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 18aadc5a3a9dbca4183456c5d24a5cec, type: 3}
+      weight: 0
+  topRightOuterCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: f67aa8079bb893547acbf945503c987c, type: 3}
+      weight: 0
+  bottomLeftOuterCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 4e23b7ccb88ca43488d81cce85da0910, type: 3}
+      weight: 0
+  bottomRightOuterCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 39c872533a0755e44b3f07af80988e37, type: 3}
+      weight: 0
+  topLeftInnerCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: f1ebd3fd7d67edd48a67f5ec8b766fce, type: 3}
+      weight: 0
+  topRightInnerCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: f67aa8079bb893547acbf945503c987c, type: 3}
+      weight: 0
+  bottomLeftInnerCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 69ac83de82634a048a9352f7d21876c8, type: 3}
+      weight: 0
+  bottomRightInnerCornerPrefabs:
+    list:
+    - item: {fileID: 5046868511188704842, guid: 08d8c5d0e7a1e3346862c58f0fa76796, type: 3}
+      weight: 0
   EnemyFodderGroup:
     enemyType: 1
     enemySpawnMode: 1

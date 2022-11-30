@@ -1,5 +1,6 @@
 /// https://github.com/vectorbread/random-drops/blob/main/Assets/Scripts/WeightedRandomList.cs
 
+using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class WeightedRandomList<T>
 	[System.Serializable]
 	public struct Pair
 	{
-		public T item;
+		[ShowAssetPreview] public T item;
 		public float weight;
 
 		public Pair(T item, float weight)
