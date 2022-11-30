@@ -27,8 +27,9 @@ public class BTBoss1 : BTTree
 					}),
 					new Sequence(new List<BTNode> //If we don't have minions, spawn minions.
 					{
-						new BossWaitWithAnimation(0, bossScript, 1f, "MiniBoss1Channeling"),
+						new BossWaitWithAnimation(0, bossScript, 1f, "MiniBoss1Charging"),
 						new BossSpawnMinions(1, bossScript),
+						new BossWaitWithAnimation(2, bossScript, 1f, "MiniBoss1Charging"),
 						new BossClearAttackSequence(new List<string>{"currentAttackStep"})
 					})
 				})

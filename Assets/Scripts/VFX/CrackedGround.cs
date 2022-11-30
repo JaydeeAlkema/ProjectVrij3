@@ -18,7 +18,7 @@ public class CrackedGround : MonoBehaviour
 
 	public void EruptionHitbox()
 	{
-		Collider2D playerInArea = Physics2D.OverlapCircle(transform.position, transform.localScale.x * 0.5f, layerMask);
+		Collider2D playerInArea = Physics2D.OverlapCircle(transform.position, transform.localScale.x * 0.5f, layerMask); //Add boss layer later maybe to damage orb? Test!
 		if (playerInArea != null)
 		{
 			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
