@@ -59,7 +59,8 @@ public class MiniBoss1 : BossBase
 
 	public void DoShockWave()
 	{
-		Instantiate(shockwaveVFXPrefab, transform.position, Quaternion.identity);
+		GameObject shockwave = Instantiate(shockwaveVFXPrefab, transform.position, Quaternion.identity);
+		shockwave.GetComponent<ShockwaveVFX>().Damage = damage;
 	}
 
 }

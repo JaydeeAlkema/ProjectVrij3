@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ShockwaveVFX : MonoBehaviour
 {
-
+	[SerializeField] private int damage;
+	[SerializeField] private Vector3 maxRadius;
 	private GameObject shockwave = null;
 	private GameObject shockwaveIndicator = null;
 	public Material setMaterial = null;
-	[SerializeField] private Vector3 maxRadius;
+
+	public int Damage { get => damage; set => damage = value; }
 
 	private void Start()
 	{
@@ -30,6 +32,8 @@ public class ShockwaveVFX : MonoBehaviour
 		drawnCircle.GetComponent<LineRenderer>().endColor = Color.red;
 		drawnCircle.AddComponent<LineRendererCollision>();
 		drawnCircle.GetComponent<EdgeCollider2D>().isTrigger = true;
+		drawnCircle.AddComponent<ShockwaveCollision>();
+		drawnCircle.GetComponent<ShockwaveCollision>().Damage = damage;
 		drawnCircle.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 		shockwave = drawnCircle;
 

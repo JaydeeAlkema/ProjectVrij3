@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ShockwaveCollision : MonoBehaviour
 {
-	protected int damage;
+	[SerializeField] private int damage;
+
+	public int Damage { get => damage; set => damage = value; }
 
 	public void OnTriggerEnter2D(Collider2D collision)
 	{
