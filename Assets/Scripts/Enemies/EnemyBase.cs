@@ -80,7 +80,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			materialDefault = enemySprite.material;
 		}
-		LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
+
+		if (LevelManager.LevelManagerInstance != null)
+		{
+			LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
+		}
 	}
 
 	public void Awake()
@@ -94,7 +98,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void Update()
 	{
-		if(enemySprite != null)
+		if (enemySprite != null)
 		{
 			enemySprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
 		}
@@ -115,7 +119,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 		if (healthPoints <= 0) { Die(); }
 
-		
+
 		else
 		{
 			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
@@ -277,23 +281,23 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	}
 
 
-	public void OnLeveled(int level , float dificultyModifier)
+	public void OnLeveled(int level, float dificultyModifier)
 	{
-		expAmount = Mathf.RoundToInt( expAmountBase * Mathf.Pow( dificultyModifier, level ) );
-		damage = Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) );
+		expAmount = Mathf.RoundToInt(expAmountBase * Mathf.Pow(dificultyModifier, level));
+		damage = Mathf.RoundToInt(damageBase * Mathf.Pow(dificultyModifier, level));
 	}
 
 	public void beingDisplaced()
 	{
 		StopMovingToTarget();
-		if(Vector2.Distance(transform.position, pullPoint) > 0.5f)
+		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
-			Debug.Log( "actually gonna pull" );
+			Debug.Log("actually gonna pull");
 			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
 		}
 		else
 		{
-			Debug.Log( "already at pullpoint: " + pullPoint + ", my position is: " + transform.position );
+			Debug.Log("already at pullpoint: " + pullPoint + ", my position is: " + transform.position);
 			beingCrowdControlled = false;
 			this.pullPoint = Vector2.zero;
 			Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, true);

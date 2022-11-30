@@ -23,7 +23,7 @@ public class BTBoss1 : BTTree
 					{
 						new BossCheckMobs(bossScript),
 						new BossWaitWithAnimation(1, bossScript, 2f, "MiniBoss1Idle"), //Add walking later
-						new BossClearAttackSequence(new List<string>{"currentAttackStep", "currentAttackType" })
+						new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
 					}),
 					new Sequence(new List<BTNode> //If we don't have minions, spawn minions.
 					{
@@ -38,12 +38,14 @@ public class BTBoss1 : BTTree
 				new Sequence(new List<BTNode> //Smash attack sequence
 				{
 					new BossWaitWithAnimation(0, bossScript, 1f, "MiniBoss1Charging"),
-					//Leap up. S. 1
-					//Wait a bit. R/S. 2
-					//Down. S. 3
+					new BossWaitWithAnimation(1, bossScript, 0.1f, "MiniBoss1LeapUp"), // Replace with BossPlayAnimationUntilCompletion when animations are implemented
+					//new BossPlayAnimationUntilCompletion(1, bossScript, "MiniBoss1LeapUp"),
+					new BossWaitWithAnimation(2, bossScript, 0.75f, "MiniBoss1WaitToFallDown"),
+					new BossWaitWithAnimation(3, bossScript, 0.1f, "MiniBoss1FallDown"), // Replace with BossPlayAnimationUntilCompletion when animations are implemented
+					//new BossPlayAnimationUntilCompletion(3, bossScript, "MiniBoss1FallDown"),
 					//Do smash/shockwave. Remove current attack, apply lag, return success. 4
-					new BossWaitWithAnimation(5, bossScript, 3f, "MiniBoss1Endlag"),
-					new BossClearAttackSequence(new List<string>{"currentAttackStep", "currentAttackType" })
+					new BossWaitWithAnimation(4, bossScript, 3f, "MiniBoss1Endlag"),
+					new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
 				})
 			}),
 			new Sequence(new List<BTNode> //Idle and roll new attack

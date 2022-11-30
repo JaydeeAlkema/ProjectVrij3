@@ -16,6 +16,7 @@ public class BossClearAttackSequence : BTNode
 	{
 		foreach(string dataToClear in listOfDataToClear)
 		{
+			Debug.Log("Now clear data: " + dataToClear);
 			ClearData(dataToClear);
 		}
 

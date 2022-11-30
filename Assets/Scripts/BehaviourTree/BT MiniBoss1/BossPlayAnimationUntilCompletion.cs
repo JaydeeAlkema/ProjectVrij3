@@ -4,18 +4,15 @@ using UnityEngine;
 
 using BehaviourTree;
 
-public class BossWaitWithAnimation : BTNode
+public class BossPlayAnimationUntilCompletion : BTNode
 {
 	private BossBase bossScript;
-	private float waitDuration;
-	private float timer = 0f;
 	private string animationName;
 	private int attackStep;
 
-	public BossWaitWithAnimation(int attackStep, BossBase bossScript, float duration, string animationToPlay)
+	public BossPlayAnimationUntilCompletion(int attackStep, BossBase bossScript, string animationToPlay)
 	{
 		this.bossScript = bossScript;
-		waitDuration = duration;
 		animationName = animationToPlay;
 		this.attackStep = attackStep;
 	}
@@ -37,16 +34,6 @@ public class BossWaitWithAnimation : BTNode
 
 		if (currentAttackStep != attackStep)
 		{
-			Debug.Log("PASS. Our step: " + attackStep + ", current step: " + currentAttackStep);
-			state = BTNodeState.SUCCESS;
-			return state;
-		}
-		Debug.Log("PROCEED. Our step: " + attackStep + ", current step: " + currentAttackStep);
-		if (timer >= waitDuration)
-		{
-			timer = 0f;
-			parent.SetData("currentAttackStep", currentAttackStep + 1);
-			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + currentAttackStep);
 			state = BTNodeState.SUCCESS;
 			return state;
 		}
@@ -56,11 +43,15 @@ public class BossWaitWithAnimation : BTNode
 			bossScript.enemyAnimator.Play(animationName);
 		}
 
-		timer += Time.deltaTime;
-		Debug.Log("Waiting with animation: " + animationName + " for " + waitDuration + " seconds.");
+		if (bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+		{
+			Debug.Log("Done animating: " + animationName);
+			parent.SetData("currentAttackStep", currentAttackStep + 1);
+			state = BTNodeState.SUCCESS;
+			return state;
+		}
+
 		state = BTNodeState.RUNNING;
 		return state;
 	}
-
-
 }

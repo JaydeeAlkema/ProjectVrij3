@@ -19,15 +19,25 @@ public class BossSpawnMinions : BTNode
 	public override BTNodeState Evaluate()
 	{
 		//Pass if current attack step is no longer this attack step
-		int currentAttackStep = (int)GetData("currentAttackstep");
+
+		object c = GetData("currentAttackStep");
+
+		if (c == null)
+		{
+			parent.parent.SetData("currentAttackStep", 0);
+			state = BTNodeState.FAILURE;
+			return state;
+		}
+
+		int currentAttackStep = (int)GetData("currentAttackStep");
 
 		if (currentAttackStep != attackStep)
 		{
 			state = BTNodeState.SUCCESS;
 			return state;
 		}
-
 		bossScript.SpawnMobs();
+		Debug.Log("Spawned minions.");
 		parent.SetData("currentAttackStep", currentAttackStep + 1);
 
 		state = BTNodeState.SUCCESS;
