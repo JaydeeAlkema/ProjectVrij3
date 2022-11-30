@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,20 +18,22 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField] private float debugTime = 0.5f;
 
 	private Dictionary<ConnectionPoint, Vector2> connectionPointsInScene = new Dictionary<ConnectionPoint, Vector2>();
-
-	private void Awake()
-	{
-		if (seed == 0) seed = Random.Range(0, int.MaxValue);
-		Random.InitState(seed);
-	}
+	private Vector2 overlapSize = new Vector2(20, 20);
 
 	private void Start()
 	{
 		Generate();
 	}
 
+	[Button]
 	private void Generate()
 	{
+#if UNITY_EDITOR
+		CleanUp();
+#endif
+		if (seed == 0) seed = Random.Range(0, int.MaxValue);
+		Random.InitState(seed);
+
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
 
@@ -67,53 +70,60 @@ public class LevelGeneratorV3 : MonoBehaviour
 			// If the set reference to the existing map piece does not connect with the new map piece, we continue the loop until we find two map pieces that fit together.
 			Vector2 newMapPiecePos = new Vector2();
 			bool connected = false;
-			if (!connected)
+			foreach (GameObject mapPieceInScene in mapPiecesInScene)
 			{
-				foreach (GameObject mapPieceInScene in mapPiecesInScene)
+				List<ConnectionPoint> mapPieceInSceneConnectionPoints = GetConnectionPoints(mapPieceInScene);
+
+				foreach (ConnectionPoint mapPieceInSceneConnectionPoint in mapPieceInSceneConnectionPoints)
 				{
-					List<ConnectionPoint> mapPieceInSceneConnectionPoints = GetConnectionPoints(mapPieceInScene);
-
-					foreach (ConnectionPoint mapPieceInSceneConnectionPoint in mapPieceInSceneConnectionPoints)
+					if (mapPieceInSceneConnectionPoint.Occupied == false && !connected)
 					{
-						if (mapPieceInSceneConnectionPoint.Occupied == false && !connected)
-						{
-							GameObject mapPieceInSceneGO = mapPieceInScene;
+						GameObject mapPieceInSceneGO = mapPieceInScene;
 
-							// Connect North to South
-							if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y + 21);
-								newMapPieceConnectionPointSouth.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
-							// Connect East to West
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x + 21, mapPieceInSceneGO.transform.position.y);
-								newMapPieceConnectionPointWest.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
-							// Connect South to North
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y - 21);
-								newMapPieceConnectionPointNorth.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
-							// Connect West to East
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x - 21, mapPieceInSceneGO.transform.position.y);
-								newMapPieceConnectionPointEast.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								connected = true;
-							}
+						// Connect North to South
+						if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
+						{
+							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y + 21);
+							if (Overlap(newMapPiecePos, overlapSize)) continue;
+
+							newMapPieceConnectionPointSouth.Occupied = true;
+							mapPieceInSceneConnectionPoint.Occupied = true;
+							connected = true;
+						}
+						// Connect East to West
+						else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
+						{
+							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x + 21, mapPieceInSceneGO.transform.position.y);
+							if (Overlap(newMapPiecePos, overlapSize)) continue;
+
+							newMapPieceConnectionPointWest.Occupied = true;
+							mapPieceInSceneConnectionPoint.Occupied = true;
+							connected = true;
+						}
+						// Connect South to North
+						else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
+						{
+							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y - 21);
+							if (Overlap(newMapPiecePos, overlapSize)) continue;
+
+							newMapPieceConnectionPointNorth.Occupied = true;
+							mapPieceInSceneConnectionPoint.Occupied = true;
+							connected = true;
+						}
+						// Connect West to East
+						else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
+						{
+							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x - 21, mapPieceInSceneGO.transform.position.y);
+							if (Overlap(newMapPiecePos, overlapSize)) continue;
+
+							newMapPieceConnectionPointEast.Occupied = true;
+							mapPieceInSceneConnectionPoint.Occupied = true;
+							connected = true;
 						}
 					}
+
 				}
+
 			}
 
 			newMapPieceGO.transform.position = newMapPiecePos;
@@ -126,6 +136,35 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 
 	#region Helper Functions
+	[Button]
+	private void CleanUp()
+	{
+		foreach (GameObject mapPieceGO in mapPiecesInScene.ToList())
+		{
+			DestroyImmediate(mapPieceGO);
+		}
+		mapPiecesInScene.Clear();
+		connectionPointsInScene.Clear();
+	}
+	private bool Overlap(Vector2 centerPoint, Vector2 size)
+	{
+		Bounds bounds = new Bounds();
+		bounds.center = centerPoint;
+		bounds.size = size;
+
+		foreach (GameObject mapPiece in mapPiecesInScene)
+		{
+			Bounds mapPieceBounds = new Bounds();
+			mapPieceBounds.center = mapPiece.transform.position;
+			mapPieceBounds.size = size;
+
+			if (bounds.Intersects(mapPieceBounds))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	private List<ConnectionPoint> GetConnectionPoints(GameObject gameObject)
 	{
 		ConnectionPoint[] connectionPoints = gameObject.GetComponentsInChildren<ConnectionPoint>();
