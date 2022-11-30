@@ -16,7 +16,7 @@ public class BossCheckMobs : BTNode
 
 	public override BTNodeState Evaluate()
 	{
-		if (bossScript.mobs != null)
+		if (bossScript.mobs.Count > 0)
 		{
 			Debug.Log("We have minions, proceed.");
 			state = BTNodeState.SUCCESS;

@@ -39,7 +39,7 @@ public class BossSpawnMinions : BTNode
 		bossScript.SpawnMobs();
 		Debug.Log("Spawned minions.");
 		parent.SetData("currentAttackStep", currentAttackStep + 1);
-
+		Debug.Log("DONE. Our step: " + attackStep + ", current step: " + (currentAttackStep + 1));
 		state = BTNodeState.SUCCESS;
 		return state;
 	}

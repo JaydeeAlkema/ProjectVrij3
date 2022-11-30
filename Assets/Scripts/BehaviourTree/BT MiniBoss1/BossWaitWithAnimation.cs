@@ -46,7 +46,7 @@ public class BossWaitWithAnimation : BTNode
 		{
 			timer = 0f;
 			parent.SetData("currentAttackStep", currentAttackStep + 1);
-			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + currentAttackStep);
+			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + (currentAttackStep + 1));
 			state = BTNodeState.SUCCESS;
 			return state;
 		}

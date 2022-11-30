@@ -22,13 +22,14 @@ public class BTBoss1 : BTTree
 					new Sequence(new List<BTNode> //If we have minions, walk around.
 					{
 						new BossCheckMobs(bossScript),
-						new BossWaitWithAnimation(1, bossScript, 2f, "MiniBoss1Idle"), //Add walking later
+						new BossWaitWithAnimation(0, bossScript, 2f, "MiniBoss1Idle"), //Add walking later
 						new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
 					}),
 					new Sequence(new List<BTNode> //If we don't have minions, spawn minions.
 					{
-						new BossWaitWithAnimation(1, bossScript, 1f, "MiniBoss1Charging"),
-						new BossSpawnMinions(2, bossScript),
+						new BossWaitWithAnimation(0, bossScript, 1f, "MiniBoss1Charging"),
+						new BossSpawnMinions(1, bossScript),
+						new BossClearAttackSequence(new List<string>{"currentAttackStep"})
 					})
 				})
 			}),
