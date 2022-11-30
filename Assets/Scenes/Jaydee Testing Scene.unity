@@ -862,7 +862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 123
-  mapPieceLimit: 20
+  mapPieceLimit: 21
   mapPiecesParent: {fileID: 1218772882}
   spawnMapPiece: {fileID: 6298534505889208130, guid: 92772b46e93c0d544994b90fd9847071, type: 3}
   mapPieces:
@@ -881,6 +881,8 @@ MonoBehaviour:
       weight: 15
   mapPiecesInScene: []
   debugTime: 0.5
+  debugOverlaps: 0
+  debugConnections: 1
 --- !u!1 &2038423496
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,20 +2,24 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class LevelGeneratorV3 : MonoBehaviour
 {
-	[SerializeField] private int seed = 0;
-	[SerializeField] private int mapPieceLimit = 100;
-	[SerializeField] private Transform mapPiecesParent = default;
-	[SerializeField] private GameObject spawnMapPiece = default;
-	[SerializeField] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
-	[Space]
-	[SerializeField] private List<GameObject> mapPiecesInScene = new List<GameObject>();
-	[Space]
-	[SerializeField] private float debugTime = 0.5f;
+	[SerializeField, BoxGroup("Main Settings")] private int seed = 0;
+	[SerializeField, BoxGroup("Main Settings")] private int mapPieceLimit = 100;
+
+	[SerializeField, BoxGroup("Map Piece References")] private Transform mapPiecesParent = default;
+	[SerializeField, BoxGroup("Map Piece References")] private GameObject spawnMapPiece = default;
+	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
+
+	[SerializeField, BoxGroup("Runtime Variables")] private List<GameObject> mapPiecesInScene = new List<GameObject>();
+
+	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
+	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
+	[SerializeField, BoxGroup("Debug Variables")] private bool debugConnections = false;
 
 	private Dictionary<ConnectionPoint, Vector2> connectionPointsInScene = new Dictionary<ConnectionPoint, Vector2>();
 	private Vector2 overlapSize = new Vector2(20, 20);
@@ -83,6 +87,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 						// Connect North to South
 						if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
 						{
+							if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}");
 							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y + 21);
 							if (Overlap(newMapPiecePos, overlapSize)) continue;
 
@@ -93,6 +98,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 						// Connect East to West
 						else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
 						{
+							if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}");
 							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x + 21, mapPieceInSceneGO.transform.position.y);
 							if (Overlap(newMapPiecePos, overlapSize)) continue;
 
@@ -103,6 +109,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 						// Connect South to North
 						else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
 						{
+							if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}");
 							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y - 21);
 							if (Overlap(newMapPiecePos, overlapSize)) continue;
 
@@ -113,6 +120,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 						// Connect West to East
 						else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
 						{
+							if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}");
 							newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x - 21, mapPieceInSceneGO.transform.position.y);
 							if (Overlap(newMapPiecePos, overlapSize)) continue;
 
@@ -121,18 +129,28 @@ public class LevelGeneratorV3 : MonoBehaviour
 							connected = true;
 						}
 					}
-
 				}
-
 			}
 
-			newMapPieceGO.transform.position = newMapPiecePos;
-			newMapPieceGO.transform.parent = mapPiecesParent;
-			mapPiecesInScene.Add(newMapPieceGO);
+			if (!connected && i > 0)
+			{
+				if (debugConnections) Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
+				if (Application.isEditor)
+					DestroyImmediate(newMapPieceGO);
+				else
+					Destroy(newMapPieceGO);
+			}
+			else
+			{
+				newMapPieceGO.transform.position = newMapPiecePos;
+				newMapPieceGO.transform.parent = mapPiecesParent;
+				mapPiecesInScene.Add(newMapPieceGO);
+			}
+			Debug.Log(newMapPieceGO);
 		}
 
 		stopwatch.Stop();
-		Debug.Log($"Level Generation took: {stopwatch.ElapsedMilliseconds}");
+		Debug.Log($"<color=lime>Level Generation took: {stopwatch.ElapsedMilliseconds}ms</color>");
 	}
 
 	#region Helper Functions
@@ -145,6 +163,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 		}
 		mapPiecesInScene.Clear();
 		connectionPointsInScene.Clear();
+		ClearLog();
+	}
+	public void ClearLog()
+	{
+		var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+		var type = assembly.GetType("UnityEditor.LogEntries");
+		var method = type.GetMethod("Clear");
+		method.Invoke(new object(), null);
 	}
 	private bool Overlap(Vector2 centerPoint, Vector2 size)
 	{
@@ -160,6 +186,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 			if (bounds.Intersects(mapPieceBounds))
 			{
+				if (debugOverlaps) Debug.Log($"Overlap found with {mapPiece.name} at position {mapPiece.transform.position}", mapPiece);
 				return true;
 			}
 		}
