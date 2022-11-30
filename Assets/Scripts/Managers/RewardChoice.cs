@@ -350,7 +350,7 @@ public class RewardChoice : MonoBehaviour
 				player.RangedAttackScr.BurnDamage *= 2;
 				player.RangedAttackScr.UpdateStatusEffects();
 				Debug.Log("Upgraded burn");
-				Debug.Log("burn damage is now: " + player.AbilityController.CurrentRangedAttack.BurnDamage);
+				Debug.Log("burn damage is now: " + player.PlayerAbilityController.CurrentRangedAttack.BurnDamage);
 				break;
 			case StatusEffectType.Stun:
 				break;

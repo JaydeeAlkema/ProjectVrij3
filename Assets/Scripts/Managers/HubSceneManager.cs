@@ -57,8 +57,8 @@ public class HubSceneManager : MonoBehaviour
 	{
 		PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
-		player.AbilityController = playerValues.AbilityController;
-		player.AbilityController.Player = player;
+		player.PlayerAbilityController = playerValues.PlayerAbilityController;
+		player.PlayerAbilityController.Player = player;
 		player.CurrentMeleeAttack = playerValues.CurrentMeleeAttack;
 		player.CurrentMeleeAttack.Player = player;
 		player.CurrentMeleeAttack.Init = playerValues.CurrentMeleeAttack.Init;

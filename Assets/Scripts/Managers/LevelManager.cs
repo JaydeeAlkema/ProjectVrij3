@@ -36,11 +36,8 @@ public class LevelManager : MonoBehaviour
     {
         currentLevel++;
         pointToLevel = Mathf.RoundToInt( pointToLevelBase * Mathf.Pow( levelCostModifier, currentLevel ) );
-        if( OnLevelIncrease != null )
-        {
-            OnLevelIncrease( currentLevel, dificultyModifier );
-        }
-    }
+		OnLevelIncrease?.Invoke( currentLevel, dificultyModifier );
+	}
 
     public delegate void LevelHasIncreased(int level, float dificulty);
 

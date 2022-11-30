@@ -24,7 +24,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private int baseBurnDamage = 1;
 	[SerializeField] private float baseSlowAmount = 0.5f;
 	[SerializeField] private float baseSlowDuration = 4f;
-	[SerializeField] private List<IStatusEffect> baseStatusEffects = new List<IStatusEffect>();
+	//[SerializeField] private List<IStatusEffect> baseStatusEffects = new List<IStatusEffect>();
 	[SerializeField] private StatusEffectType baseStatusEffectType;
 	#endregion
 	[SerializeField] private Sprite abilityIcon;
@@ -69,7 +69,7 @@ public class AbilityScriptable : ScriptableObject
 	public float DashDuration { get => dashDuration; set => dashDuration = value; }
 	public float AttackTime { get => attackTime; set => attackTime = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
-	public List<IStatusEffect> statusEffects ;
+	public List<IStatusEffect> statusEffects;
 
 	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
 	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
@@ -83,24 +83,27 @@ public class AbilityScriptable : ScriptableObject
 
 	public void UpdateStatusEffects()
 	{
-		statusEffects.Clear();
-		switch( statusEffectType )
+		if( statusEffects != null )
 		{
-			case StatusEffectType.none:
-				break;
-			case StatusEffectType.Burn:
-				statusEffects.Add( new StatusEffect_Burning(burnDamage) );
-				break;
-			case StatusEffectType.Stun:
-				break;
-			case StatusEffectType.Slow:
-				statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
-				break;
-			case StatusEffectType.Marked:
-				statusEffects.Add(new StatusEffect_Marked(markType));
-				break;
-			default:
-				break;
+			statusEffects.Clear();
+			switch( statusEffectType )
+			{
+				case StatusEffectType.none:
+					break;
+				case StatusEffectType.Burn:
+					statusEffects.Add( new StatusEffect_Burning( burnDamage ) );
+					break;
+				case StatusEffectType.Stun:
+					break;
+				case StatusEffectType.Slow:
+					statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
+					break;
+				case StatusEffectType.Marked:
+					statusEffects.Add( new StatusEffect_Marked( markType ) );
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -122,7 +125,7 @@ public class AbilityScriptable : ScriptableObject
 		burnDamage = baseBurnDamage;
 		slowAmount = baseSlowAmount;
 		slowDuration = baseSlowDuration;
-		statusEffects = baseStatusEffects;
+		statusEffects = new List<IStatusEffect>();
 		statusEffectType = baseStatusEffectType;
 	}
 
