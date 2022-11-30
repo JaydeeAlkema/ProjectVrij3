@@ -94,7 +94,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect North to South
 							if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}");
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y + 21);
 								if (Overlap(newMapPiecePos, overlapSize)) continue;
 
@@ -105,7 +105,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect East to West
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}");
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x + 21, mapPieceInSceneGO.transform.position.y);
 								if (Overlap(newMapPiecePos, overlapSize)) continue;
 
@@ -116,7 +116,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect South to North
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}");
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y - 21);
 								if (Overlap(newMapPiecePos, overlapSize)) continue;
 
