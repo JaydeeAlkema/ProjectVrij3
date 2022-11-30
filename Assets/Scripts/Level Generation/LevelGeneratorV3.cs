@@ -23,6 +23,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugConnections = false;
+	[SerializeField, BoxGroup("Debug Variables")] private int goodGenerationTime;
+	[SerializeField, BoxGroup("Debug Variables")] private int okGenerationTime;
+	[SerializeField, BoxGroup("Debug Variables")] private int passibleGenerationTime;
+	[SerializeField, BoxGroup("Debug Variables")] private int badGenerationTime;
+	[SerializeField, BoxGroup("Debug Variables")] private int TerribleGenerationTime;
 
 	private Dictionary<ConnectionPoint, Vector2> connectionPointsInScene = new Dictionary<ConnectionPoint, Vector2>();
 	private Vector2 overlapSize = new Vector2(20, 20);
@@ -160,7 +165,16 @@ public class LevelGeneratorV3 : MonoBehaviour
 		RemoveDisconnectedMapPieces();
 
 		stopwatch.Stop();
-		Debug.Log($"<color=lime>Level Generation took: {stopwatch.ElapsedMilliseconds}ms</color>");
+		long generationTime = stopwatch.ElapsedMilliseconds;
+		string colorString = "";
+
+		if (generationTime < goodGenerationTime) colorString = "lime";
+		else if (generationTime > goodGenerationTime && generationTime < passibleGenerationTime) colorString = "yellow";
+		else if (generationTime > passibleGenerationTime && generationTime < okGenerationTime) colorString = "orange";
+		else if (generationTime > okGenerationTime && generationTime < badGenerationTime) colorString = "brown";
+		else if (generationTime > TerribleGenerationTime) colorString = "red";
+
+		Debug.Log($"<color={colorString}>Level Generation took: {generationTime}ms</color>");
 	}
 
 	#region Helper Functions
