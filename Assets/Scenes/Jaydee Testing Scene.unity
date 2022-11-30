@@ -862,7 +862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 123
-  mapPieceLimit: 27
+  mapPieceLimit: 42
   mapPiecesParent: {fileID: 1218772882}
   spawnMapPiece: {fileID: 6298534505889208130, guid: 92772b46e93c0d544994b90fd9847071, type: 3}
   mapPieces:
@@ -870,6 +870,8 @@ MonoBehaviour:
     - item: {fileID: 6298534505889208130, guid: 92772b46e93c0d544994b90fd9847071, type: 3}
       weight: 10
     - item: {fileID: 6298534505889208130, guid: 3741fe1836d7a8f488a0507608be3dfc, type: 3}
+      weight: 15
+    - item: {fileID: 6298534505889208130, guid: d484131287a4d6d44aaedcb9b56d37ce, type: 3}
       weight: 15
     - item: {fileID: 6298534505889208130, guid: 9f5115f096dd36344a4c019075c9d83a, type: 3}
       weight: 15

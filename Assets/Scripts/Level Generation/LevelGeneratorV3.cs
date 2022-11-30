@@ -132,11 +132,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 				if (!connected && i > 1 && i < mapPieceLimit)
 				{
 					if (debugConnections) Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
+					if (Application.isEditor)
+						DestroyImmediate(newMapPieceGO);
+					else
+						Destroy(newMapPieceGO);
 					newMapPieceGO = Instantiate(mapPieces.GetRandom());
-					//if (Application.isEditor)
-					//	DestroyImmediate(newMapPieceGO);
-					//else
-					//	Destroy(newMapPieceGO);
 				}
 				else
 				{
