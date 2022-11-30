@@ -12,6 +12,8 @@ public class MiniBoss1 : BossBase
 	public Vector2[] innerSpawnPoints;
 	public Vector2[] outerSpawnPoints;
 
+	[SerializeField] private GameObject shockwaveVFXPrefab;
+
 	[SerializeField] private GameObject rewardInstance;
 
 	private void Update()
@@ -25,6 +27,7 @@ public class MiniBoss1 : BossBase
 		{
 			GameObject spawnedMob = Instantiate(mobPrefab, spawnPoint + (Vector2)transform.position, Quaternion.identity);
 			MBCirclingEnemy spawnedScript = spawnedMob.GetComponent<MBCirclingEnemy>();
+			spawnedScript.enabled = true;
 			spawnedScript.center = transform.position;
 			spawnedScript.orbitRadius = innerRadius;
 			spawnedScript.rotationSpeed = innerOrbitRotationSpeed;
@@ -35,6 +38,7 @@ public class MiniBoss1 : BossBase
 		{
 			GameObject spawnedMob = Instantiate(mobPrefab, spawnPoint + (Vector2)transform.position, Quaternion.identity);
 			MBCirclingEnemy spawnedScript = spawnedMob.GetComponent<MBCirclingEnemy>();
+			spawnedScript.enabled = true;
 			spawnedScript.center = transform.position;
 			spawnedScript.orbitRadius = outerRadius;
 			spawnedScript.rotationSpeed = outerOrbitRotationSpeed;
@@ -51,6 +55,11 @@ public class MiniBoss1 : BossBase
 				mobs.Remove(mob);
 			}
 		}
+	}
+
+	public void DoShockWave()
+	{
+		Instantiate(shockwaveVFXPrefab, transform.position, Quaternion.identity);
 	}
 
 }
