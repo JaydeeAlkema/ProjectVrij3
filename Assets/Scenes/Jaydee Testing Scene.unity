@@ -453,6 +453,37 @@ Transform:
   m_Father: {fileID: 1726747652}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &715891627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 715891628}
+  m_Layer: 0
+  m_Name: Disconnected Map Pieces
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &715891628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715891627}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1726747652}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1218772881
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,7 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1218772882}
   m_Layer: 0
-  m_Name: Map Pieces
+  m_Name: Connected Map Pieces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -814,6 +845,7 @@ Transform:
   - {fileID: 1618383058}
   - {fileID: 651540613}
   - {fileID: 1218772882}
+  - {fileID: 715891628}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -861,9 +893,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa8fc2217d13f24882d9693fbc43d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 123
-  mapPieceLimit: 42
-  mapPiecesParent: {fileID: 1218772882}
+  seed: 112240335
+  generateRandomSeed: 1
+  mapPieceLimit: 30
+  mapPiecePlacementTryLimit: 1
+  connectedMapPiecesParent: {fileID: 1218772882}
+  disconnectedMapPiecesParent: {fileID: 715891628}
   spawnMapPiece: {fileID: 6298534505889208130, guid: 92772b46e93c0d544994b90fd9847071, type: 3}
   mapPieces:
     list:
@@ -881,6 +916,10 @@ MonoBehaviour:
       weight: 15
     - item: {fileID: 6298534505889208130, guid: 2db89d7b4ad849a4cae7e7472cf25409, type: 3}
       weight: 15
+    - item: {fileID: 6298534505889208130, guid: 4318681c5fee8b248a557d16ed68c235, type: 3}
+      weight: 7
+    - item: {fileID: 6298534505889208130, guid: ceb8ee9bcb2d1894e9310062446a221c, type: 3}
+      weight: 7
   mapPiecesInScene: []
   debugTime: 0.5
   debugOverlaps: 0

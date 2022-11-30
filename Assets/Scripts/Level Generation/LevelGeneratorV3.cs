@@ -9,9 +9,12 @@ using Debug = UnityEngine.Debug;
 public class LevelGeneratorV3 : MonoBehaviour
 {
 	[SerializeField, BoxGroup("Main Settings")] private int seed = 0;
+	[SerializeField, BoxGroup("Main Settings")] private bool generateRandomSeed = false;
 	[SerializeField, BoxGroup("Main Settings")] private int mapPieceLimit = 100;
+	[SerializeField, BoxGroup("Main Settings")] private int mapPiecePlacementTryLimit = 2;
 
-	[SerializeField, BoxGroup("Map Piece References")] private Transform mapPiecesParent = default;
+	[SerializeField, BoxGroup("Map Piece References")] private Transform connectedMapPiecesParent = default;
+	[SerializeField, BoxGroup("Map Piece References")] private Transform disconnectedMapPiecesParent = default;
 	[SerializeField, BoxGroup("Map Piece References")] private GameObject spawnMapPiece = default;
 	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
 
@@ -35,7 +38,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 #if UNITY_EDITOR
 		CleanUp();
 #endif
-		if (seed == 0) seed = Random.Range(0, int.MaxValue);
+		if (generateRandomSeed) seed = Random.Range(0, int.MaxValue);
 		Random.InitState(seed);
 
 		Stopwatch stopwatch = new Stopwatch();
@@ -46,8 +49,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 		{
 			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
 			GameObject newMapPieceGO = Instantiate(mapPieces.GetRandom());
+			newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 
-			while (newMapPieceGO != null)
+			int retryLimit = mapPiecePlacementTryLimit;
+			while (newMapPieceGO != null && retryLimit > 0)
 			{
 				// Get all connection points from the new map piece.
 				List<ConnectionPoint> NewMapPieceConnectionPoints = GetConnectionPoints(newMapPieceGO);
@@ -132,21 +137,27 @@ public class LevelGeneratorV3 : MonoBehaviour
 				if (!connected && i > 1 && i < mapPieceLimit)
 				{
 					if (debugConnections) Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
+
 					if (Application.isEditor)
 						DestroyImmediate(newMapPieceGO);
 					else
 						Destroy(newMapPieceGO);
+
 					newMapPieceGO = Instantiate(mapPieces.GetRandom());
+					newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
+					retryLimit--;
 				}
 				else
 				{
 					newMapPieceGO.transform.position = newMapPiecePos;
-					newMapPieceGO.transform.parent = mapPiecesParent;
+					newMapPieceGO.transform.parent = connectedMapPiecesParent;
 					mapPiecesInScene.Add(newMapPieceGO);
 					newMapPieceGO = null;
 				}
 			}
 		}
+
+		RemoveDisconnectedMapPieces();
 
 		stopwatch.Stop();
 		Debug.Log($"<color=lime>Level Generation took: {stopwatch.ElapsedMilliseconds}ms</color>");
@@ -163,6 +174,20 @@ public class LevelGeneratorV3 : MonoBehaviour
 		mapPiecesInScene.Clear();
 		connectionPointsInScene.Clear();
 		ClearLog();
+		RemoveDisconnectedMapPieces();
+	}
+	private void RemoveDisconnectedMapPieces()
+	{
+		foreach (Transform disconnectedMapPieceTransform in disconnectedMapPiecesParent.GetComponentsInChildren<Transform>())
+		{
+			if (disconnectedMapPieceTransform != disconnectedMapPiecesParent && disconnectedMapPieceTransform != null)
+			{
+				if (Application.isEditor)
+					DestroyImmediate(disconnectedMapPieceTransform.gameObject);
+				else
+					Destroy(disconnectedMapPieceTransform.gameObject);
+			}
+		}
 	}
 	public void ClearLog()
 	{
