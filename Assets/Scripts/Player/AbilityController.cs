@@ -17,7 +17,8 @@ public class AbilityController : MonoBehaviour
 	private IAbility currentAbility1;
 	private IAbility currentAbility2;
 	private IAbility currentAbility3;
-	public static AbilityController AbilityControllerInstance { get; set; }
+    private IAbility currentAbility4;
+    public static AbilityController AbilityControllerInstance { get; set; }
 	public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
 	public IAbility CurrentMeleeAttack { get => currentMeleeAttack; set => currentMeleeAttack = value; }
 	public IAbility CurrentRangedAttack { get => currentRangedAttack; set => currentRangedAttack = value; }
@@ -25,7 +26,8 @@ public class AbilityController : MonoBehaviour
 	public IAbility CurrentAbility1 { get => currentAbility1; set => currentAbility1 = value; }
 	public IAbility CurrentAbility2 { get => currentAbility2; set => currentAbility2 = value; }
 	public IAbility CurrentAbility3 { get => currentAbility3; set => currentAbility3 = value; }
-	public PlayerControler Player { get => player; set => player = value; }
+    public IAbility CurrentAbility4 { get => currentAbility4; set => currentAbility4 = value; }
+    public PlayerControler Player { get => player; set => player = value; }
 
 
 	private void Awake()
@@ -49,22 +51,27 @@ public class AbilityController : MonoBehaviour
 
 	public void SetAbility()
 	{
-		if (currentAbility1 != null)
+		if (currentAbility1 != null && currentAbility1.GetType() != typeof(CoolDownDecorator))
 		{
 			currentAbility1 = new CoolDownDecorator(currentAbility1, currentAbility1.BaseStats.CoolDown);
 		}
-		if (currentAbility2 != null)
+		if (currentAbility2 != null && currentAbility2.GetType() != typeof( CoolDownDecorator ) )
 		{
 			currentAbility2 = new CoolDownDecorator(currentAbility2, currentAbility2.BaseStats.CoolDown);
 		}
-		if (currentAbility3 != null)
-		{
+		if (currentAbility3 != null && currentAbility3.GetType() != typeof( CoolDownDecorator ))
+
+        {
 			currentAbility3 = new CoolDownDecorator(currentAbility3, currentAbility3.BaseStats.CoolDown);
 		}
-	}
+        if( currentAbility4 != null && currentAbility4.GetType() != typeof( CoolDownDecorator ) )
+        {
+            currentAbility4 = new CoolDownDecorator( currentAbility4, currentAbility4.BaseStats.CoolDown );
+        }
+    }
 
 	//makes it so the cooldowns actually update when getting upgrades
-	public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable cd)
+	public void UpdateCoolDown(AbilityScriptable melee, AbilityScriptable ranged, AbilityScriptable ab1, AbilityScriptable ab2, AbilityScriptable ab3, AbilityScriptable ab4, AbilityScriptable cd)
 	{
 		if (currentMeleeAttack != null) { currentMeleeAttack.CoolDown = melee.CoolDown; currentMeleeAttack.BurnDamage = melee.BurnDamage; }
 		if (currentRangedAttack != null) { currentRangedAttack.CoolDown = ranged.CoolDown; currentRangedAttack.BurnDamage = ranged.BurnDamage; }
@@ -72,7 +79,8 @@ public class AbilityController : MonoBehaviour
 		if (currentAbility1 != null) { currentAbility1.CoolDown = ab1.CoolDown; }
 		if (currentAbility2 != null) { currentAbility2.CoolDown = ab2.CoolDown; }
 		if (currentAbility3 != null) { currentAbility3.CoolDown = ab3.CoolDown; }
-	}
+        if( currentAbility4 != null ) { currentAbility4.CoolDown = ab4.CoolDown; }
+    }
 
 
 	//Shit show of switches for all the effects with decorators
@@ -236,6 +244,7 @@ public class AbilityController : MonoBehaviour
             //currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             //return currentAbility1;
         }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility1, 0);
         currentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility1.CallAbility( player );
         return currentAbility1;
@@ -266,6 +275,7 @@ public class AbilityController : MonoBehaviour
             currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle);
             return currentAbility2;
         }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility2, 1);
         currentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility2.CallAbility( player );
         return currentAbility2;
@@ -296,14 +306,45 @@ public class AbilityController : MonoBehaviour
             currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             return currentAbility3;
         }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility3, 2);
         currentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
         currentAbility3.CallAbility( player );
         return currentAbility3;
 	}
 
+    public IAbility AbilityFourAttacked( IAbility ability4 )
+    {
+        foreach( KeyValuePair<StatusEffectType, bool> effect in ability4.AbilityUpgrades )
+        {
+            if( effect.Value )
+            {
+                switch( effect.Key )
+                {
+                    case StatusEffectType.none:
+                        break;
+                    case StatusEffectType.Burn:
+                        break;
+                    case StatusEffectType.Stun:
+                        break;
+                    case StatusEffectType.Slow:
+                        break;
+                    case StatusEffectType.Marked:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            currentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+            return currentAbility4;
+        }
+        GameManager.Instance.UiManager.CooldownCountDown(currentAbility4, 3);
+        currentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+        currentAbility4.CallAbility( player );
+        return currentAbility4;
+    }
 
-	//always get set player values when the player controller updates their rotation etc, must always be called on mouse movement
-	public void SetPlayerValues(Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle)
+    //always get set player values when the player controller updates their rotation etc, must always be called on mouse movement
+    public void SetPlayerValues(Rigidbody2D _rb2d, Vector3 _mousePos, Vector2 _lookDir, Transform _castFromPoint, float _angle)
 	{
 		rb2d = _rb2d;
 		mousePos = _mousePos;

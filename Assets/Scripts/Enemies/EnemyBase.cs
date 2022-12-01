@@ -17,7 +17,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private GameObject deathPoof;
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
-	[SerializeField] private GameObject vfxHitSpark = null;
+	[SerializeField] protected GameObject vfxHitSpark = null;
+	[SerializeField] protected AbilityReward reward;
 
 	public Animator enemyAnimator;
 
@@ -79,7 +80,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			materialDefault = enemySprite.material;
 		}
-		LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
+
+		if (LevelManager.LevelManagerInstance != null)
+		{
+			LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
+		}
 	}
 
 	public void Awake()
@@ -93,12 +98,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void Update()
 	{
-		if(enemySprite != null)
+		if (enemySprite != null)
 		{
 			enemySprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
 		}
 
-		foreach (IStatusEffect statusEffect in statusEffects.ToArray())
+		foreach (IStatusEffect statusEffect in statusEffects)
 		{
 			IDamageable damageable = GetComponent<IDamageable>();
 			if (statusEffect != null)
@@ -114,7 +119,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 		if (healthPoints <= 0) { Die(); }
 
-		
+
 		else
 		{
 			//GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
@@ -123,7 +128,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	}
 	private void OnDestroy()
 	{
-		LevelManager.LevelManagerInstance.OnLevelIncrease -= OnLeveled;
+		if (LevelManager.LevelManagerInstance != null)
+		{
+			LevelManager.LevelManagerInstance.OnLevelIncrease -= OnLeveled;
+		}
 	}
 
 	private void SetValueToBase()
@@ -179,7 +187,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (damageType == 0)
 		{
 			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
-			//StartCoroutine(HitStop());
+			if (Time.timeScale == 1f)
+			{
+				StartCoroutine(HitStop(0.1f));
+			}
 		}
 
 		if (damageType == 1)
@@ -187,21 +198,22 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		StartCoroutine(HitStop(0.03f));
 		Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
 		if (!isAggro)
 		{
 			isAggro = true;
-			GameManager.Instance.EnemyAggroCount(true);
+			if (GameManager.Instance != null)
+			{
+				GameManager.Instance.EnemyAggroCount(true);
+			}
 		}
-		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
 	}
 
-	public void OnHitVFX()
+	public virtual void OnHitVFX()
 	{
 		Instantiate(vfxHitSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
@@ -266,31 +278,34 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public virtual void Die()
 	{
 		GameObject poof = Instantiate(deathPoof, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
-		GameManager.Instance.ExpManager.AddExp(expAmount);
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.ExpManager.AddExp(expAmount);
+			GameManager.Instance.EnemyAggroCount(false);
+		}
 		StopAllCoroutines();
 		Time.timeScale = 1f;
-		GameManager.Instance.EnemyAggroCount(false);
 		Destroy(this.gameObject);
 	}
 
 
-	public void OnLeveled(int level , float dificultyModifier)
+	public void OnLeveled(int level, float dificultyModifier)
 	{
-		expAmount = Mathf.RoundToInt( expAmountBase * Mathf.Pow( dificultyModifier, level ) );
-		damage = Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) );
+		expAmount = Mathf.RoundToInt(expAmountBase * Mathf.Pow(dificultyModifier, level));
+		damage = Mathf.RoundToInt(damageBase * Mathf.Pow(dificultyModifier, level));
 	}
 
 	public void beingDisplaced()
 	{
 		StopMovingToTarget();
-		if(Vector2.Distance(transform.position, pullPoint) > 0.5f)
+		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
-			Debug.Log( "actually gonna pull" );
+			Debug.Log("actually gonna pull");
 			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
 		}
 		else
 		{
-			Debug.Log( "already at pullpoint: " + pullPoint + ", my position is: " + transform.position );
+			Debug.Log("already at pullpoint: " + pullPoint + ", my position is: " + transform.position);
 			beingCrowdControlled = false;
 			this.pullPoint = Vector2.zero;
 			Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, true);
@@ -306,7 +321,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public IEnumerator HitStop(float duration)
 	{
-		Time.timeScale = 0f;
+		Time.timeScale = 0.2f;
 		yield return new WaitForSecondsRealtime(duration);
 		Time.timeScale = 1f;
 		yield return null;

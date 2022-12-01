@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MeleeAttack : Ability
 {
-	private bool init = true;
+
 	public bool burnAreaUpgrade = false;
 	public GameObject burningGround;
 	System.Timers.Timer attackTimer = new System.Timers.Timer();
@@ -20,20 +20,22 @@ public class MeleeAttack : Ability
 
 	public override void CallAbility(PlayerControler _player)
 	{
-		player = _player;
 		if (init)
 		{
 			SetAbilityStats();
 			init = false;
 		}
+		player = _player;
 		AbilityBehavior();
 	}
 	public override void AbilityBehavior()
 	{
-		AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
+		if (AudioManager.Instance != null)
+		{
+			AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
+		}
 		//player.IsAttackPositionLocked = true;
 		caller.CallCoroutine(TestCoroutine());
-
 	}
 
 	public void DamageDetectedEnemies(Collider2D enemy)
@@ -41,11 +43,15 @@ public class MeleeAttack : Ability
 		if (enemyList != null)
 		{
 			//Debug.Log("Starting enemy damaging");
+			if(enemy == null)
+			{
+				enemyList.Remove(enemy);
+				return;
+			}
 			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
 			enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal + (20 * comboCounter), 0);
 			OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
 			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
-
 		}
 	}
 
@@ -58,6 +64,7 @@ public class MeleeAttack : Ability
 		coolDown = BaseStats.CoolDown;
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
+		statusEffects = new List<IStatusEffect>();
 	}
 
 	public void ResetComboTimer()
@@ -110,6 +117,7 @@ public class MeleeAttack : Ability
 		hitDetecting = true;
 		yield return new WaitForFixedUpdate();
 
+		//while ((player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl")) && player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
 		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl"))
 		{
 			player.IsAttackPositionLocked = true;
@@ -131,22 +139,31 @@ public class MeleeAttack : Ability
 					twirlDir = 1;
 				}
 				player.Pivot_AttackAnimation.transform.Rotate(0f, 0f, 20f * twirlDir);
-				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + player.Pivot_AttackAnimation.transform.up * distance, boxSize, player.Pivot_AttackAnimation.transform.rotation.z, layerMask);
+				if (player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
+				{
+					enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + player.Pivot_AttackAnimation.transform.up * distance, boxSize, player.Pivot_AttackAnimation.transform.rotation.z, layerMask);
+				}
 			}
 			else
 			{
-				enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
-			}
-
-
-			foreach (Collider2D enemy in enemiesInBox)
-			{
-				if (!enemyList.Contains(enemy))
+				if (player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
 				{
-					enemyList.Add(enemy);
-					DamageDetectedEnemies(enemy);
+					enemiesInBox = Physics2D.OverlapBoxAll(Rb2d.transform.position + CastFromPoint.transform.up * distance, boxSize, Angle, layerMask);
 				}
 			}
+
+			if (enemiesInBox != null)
+			{
+				foreach (Collider2D enemy in enemiesInBox)
+				{
+					if (!enemyList.Contains(enemy))
+					{
+						enemyList.Add(enemy);
+						DamageDetectedEnemies(enemy);
+					}
+				}
+			}
+
 			//Debug.Log("Detecting Enemies");
 			//Debug.Log("Enemies: " + enemyList.Count);
 

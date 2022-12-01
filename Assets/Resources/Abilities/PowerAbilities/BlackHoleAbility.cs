@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BlackHoleAbility : Ability
 {
-	private bool init = true;
+	private GameObject blackHole;
 	public override void CallAbility( PlayerControler _playerControler )
 	{
 		if( init )
@@ -17,17 +17,10 @@ public class BlackHoleAbility : Ability
 
 	public override void AbilityBehavior()
 	{
-		Vector2 circlePos = Rb2d.transform.position + CastFromPoint.transform.up * 5;
-		Collider2D[] enemiesInCircle = Physics2D.OverlapCircleAll( circlePos, circleSize, layerMask );
-		Debug.Log( "Enemies: " + enemiesInCircle.Length );
-
-		foreach( Collider2D enemy in enemiesInCircle )
-		{
-			Vector3 newPoint = circlePos;
-			enemy.GetComponent<ICrowdControllable>()?.Pull( newPoint );
-		}
-
-		enemiesInCircle = null;
+		GameObject blackHoleObject = Object.Instantiate( blackHole, new Vector3(MousePos.x, MousePos.y, 0f), Quaternion.identity );
+		BlackHoleFunctionality bH = blackHoleObject.GetComponentInChildren<BlackHoleFunctionality>();
+		bH.CircleRadius = circleSize;
+		bH.LayerMask = layerMask;
 	}
 
 	public void SetAbilityStats()
@@ -37,5 +30,6 @@ public class BlackHoleAbility : Ability
 		damage = BaseStats.Damage;
 		distance = BaseStats.Distance;
 		coolDown = BaseStats.CoolDown;
+		blackHole = BaseStats.CastObject;
 	}
 }
