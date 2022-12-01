@@ -18,7 +18,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Map Piece References")] private GameObject spawnMapPiece = default;
 	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
 
-	[SerializeField, BoxGroup("Runtime Variables")] private List<GameObject> mapPiecesInScene = new List<GameObject>();
+	[SerializeField, BoxGroup("Runtime Variables"), ReadOnly] private List<GameObject> mapPiecesInScene = new List<GameObject>();
 
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
