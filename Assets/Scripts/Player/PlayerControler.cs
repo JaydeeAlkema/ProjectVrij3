@@ -400,15 +400,29 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(int damage)
 	{
-		if (!invulnerable && (GameManager.Instance.currentGameState == GameManager.GameState.Dungeon || GameManager.Instance == null))
+		if (GameManager.Instance != null)
+		{
+			if (!invulnerable && GameManager.Instance.currentGameState == GameManager.GameState.Dungeon)
+			{
+				AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
+				GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+				onHitSpark.GetComponent<SpriteRenderer>().color = new Color32(149, 43, 84, 255);
+				StartCoroutine(HitSlow(0.12f));
+				StartCoroutine(playerFlashColor());
+				GameManager.Instance.PlayerHP.value -= damage;
+				//healthBar.SetHP(currentHealthPoints);
+				invulnerable = true;
+				outOfCombatCounter = 0f;
+				StartCoroutine(PlayerIFrames(hitInvulTime));
+			}
+		}
+		else //If in testing scene, damage visuals without changing HP
 		{
 			AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 			GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 			onHitSpark.GetComponent<SpriteRenderer>().color = new Color32(149, 43, 84, 255);
 			StartCoroutine(HitSlow(0.12f));
 			StartCoroutine(playerFlashColor());
-			GameManager.Instance.PlayerHP.value -= damage;
-			//healthBar.SetHP(currentHealthPoints);
 			invulnerable = true;
 			outOfCombatCounter = 0f;
 			StartCoroutine(PlayerIFrames(hitInvulTime));
