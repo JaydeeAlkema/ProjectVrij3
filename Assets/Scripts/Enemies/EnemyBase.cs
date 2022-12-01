@@ -128,7 +128,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	}
 	private void OnDestroy()
 	{
-		LevelManager.LevelManagerInstance.OnLevelIncrease -= OnLeveled;
+		if (LevelManager.LevelManagerInstance != null)
+		{
+			LevelManager.LevelManagerInstance.OnLevelIncrease -= OnLeveled;
+		}
 	}
 
 	private void SetValueToBase()

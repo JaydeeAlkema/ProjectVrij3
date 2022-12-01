@@ -73,7 +73,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public TrailRenderer Trail { get => trail; set => trail = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
-	[Header( "Abilities" )]
+	[Header("Abilities")]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -165,10 +165,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void initAbilities()
 	{
-		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1;  }
-		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2;  }
-		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3;  }
-		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4;  }
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
+		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
+		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; }
 		abilityController.SetAbility();
 	}
 
@@ -207,7 +207,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
 			if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
 			if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
-			if( Input.GetKeyDown( KeyCode.T ) ) AbilityFourAttack();
+			if (Input.GetKeyDown(KeyCode.T)) AbilityFourAttack();
 
 			//Dash input
 			if (Input.GetKeyDown(KeyCode.Space))
@@ -306,49 +306,49 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void AbilityOneAttack()
 	{
-		if( currentAbility1 != null )
+		if (currentAbility1 != null)
 		{
 			outOfCombatCounter = 0f;
-			Debug.Log( CurrentAbility1 );
+			Debug.Log(CurrentAbility1);
 			abilityController.CurrentAbility1.BaseStats = ability1;
-			abilityController.CurrentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityOneAttacked( currentAbility1 );
+			abilityController.CurrentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityOneAttacked(currentAbility1);
 		}
 	}
 
 	void AbilityTwoAttack()
 	{
-		if( currentAbility2 != null )
+		if (currentAbility2 != null)
 		{
 			outOfCombatCounter = 0f;
-			Debug.Log( CurrentAbility2 );
+			Debug.Log(CurrentAbility2);
 			abilityController.CurrentAbility2.BaseStats = ability2;
-			abilityController.CurrentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityTwoAttacked( currentAbility2 );
+			abilityController.CurrentAbility2.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityTwoAttacked(currentAbility2);
 		}
 	}
 
 	void AbilityThreeAttack()
 	{
-		if( currentAbility3 != null )
+		if (currentAbility3 != null)
 		{
 			outOfCombatCounter = 0f;
-			Debug.Log( CurrentAbility3 );
+			Debug.Log(CurrentAbility3);
 			abilityController.CurrentAbility3.BaseStats = ability3;
-			abilityController.CurrentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityThreeAttacked( currentAbility3 );
+			abilityController.CurrentAbility3.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityThreeAttacked(currentAbility3);
 		}
 	}
 
 	void AbilityFourAttack()
 	{
-		if( currentAbility4 != null )
+		if (currentAbility4 != null)
 		{
 			outOfCombatCounter = 0f;
-			Debug.Log( currentAbility4 );
+			Debug.Log(currentAbility4);
 			abilityController.CurrentAbility4.BaseStats = ability4;
-			abilityController.CurrentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityFourAttacked( currentAbility4 );
+			abilityController.CurrentAbility4.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityFourAttacked(currentAbility4);
 		}
 	}
 
@@ -381,19 +381,19 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if (ability2 != null)
 		{
 			ability2.UpdateStatusEffects();
-			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
 		if (ability3 != null)
 		{
 			ability3.UpdateStatusEffects();
-			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 
-		if(ability4 != null)
+		if (ability4 != null)
 		{
 			ability4.UpdateStatusEffects();
-			abilityController.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		}
 		abilityController.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3, ability4, dash);
 	}
@@ -434,7 +434,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void OutOfCombatSpeed()
 	{
-		if(outOfCombatCounter < outOfCombatTimer)
+		if (outOfCombatCounter < outOfCombatTimer)
 		{
 			outOfCombatCounter += Time.deltaTime;
 			inCombat = true;
@@ -445,10 +445,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			inCombat = false;
 		}
 
-		if (!inCombat && (GameManager.Instance.ExpManager.PlayerPoints >= 1 || GameManager.Instance ==  null))
+		if (GameManager.Instance != null)
 		{
-			selfSlowMultiplier = 2f;
-			Debug.Log("Out of combat boost granted");
+			if (!inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1)
+			{
+				selfSlowMultiplier = 2f;
+				Debug.Log("Out of combat boost granted");
+			}
 		}
 	}
 
