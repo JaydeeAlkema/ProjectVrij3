@@ -43,6 +43,11 @@ public class MeleeAttack : Ability
 		if (enemyList != null)
 		{
 			//Debug.Log("Starting enemy damaging");
+			if(enemy == null)
+			{
+				enemyList.Remove(enemy);
+				return;
+			}
 			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
 			enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal + (20 * comboCounter), 0);
 			OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());

@@ -17,7 +17,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private GameObject deathPoof;
 	[SerializeField] public Transform damageNumberText;
 	[SerializeField] public SpriteRenderer enemySprite = null;
-	[SerializeField] private GameObject vfxHitSpark = null;
+	[SerializeField] protected GameObject vfxHitSpark = null;
 	[SerializeField] protected AbilityReward reward;
 
 	public Animator enemyAnimator;
@@ -213,7 +213,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (healthPoints <= 0) Die();
 	}
 
-	public void OnHitVFX()
+	public virtual void OnHitVFX()
 	{
 		Instantiate(vfxHitSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
@@ -278,10 +278,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public virtual void Die()
 	{
 		GameObject poof = Instantiate(deathPoof, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
-		GameManager.Instance.ExpManager.AddExp(expAmount);
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.ExpManager.AddExp(expAmount);
+			GameManager.Instance.EnemyAggroCount(false);
+		}
 		StopAllCoroutines();
 		Time.timeScale = 1f;
-		GameManager.Instance.EnemyAggroCount(false);
 		Destroy(this.gameObject);
 	}
 

@@ -6,11 +6,14 @@ public class ShockwaveVFX : MonoBehaviour
 {
 	[SerializeField] private int damage;
 	[SerializeField] private Vector3 maxRadius;
+	[SerializeField] private float expansionSpeed;
 	private GameObject shockwave = null;
 	private GameObject shockwaveIndicator = null;
 	public Material setMaterial = null;
 
 	public int Damage { get => damage; set => damage = value; }
+	public float ExpansionSpeed { get => expansionSpeed; set => expansionSpeed = value; }
+	public Vector3 MaxRadius { get => maxRadius; set => maxRadius = value; }
 
 	private void Start()
 	{
@@ -19,7 +22,7 @@ public class ShockwaveVFX : MonoBehaviour
 
 	private void Update()
 	{
-		ExpandShockwave(maxRadius, 4f);
+		ExpandShockwave(maxRadius, expansionSpeed);
 	}
 
 	void DrawShockwave()

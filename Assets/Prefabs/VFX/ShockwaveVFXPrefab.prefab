@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2530599393635534752
 MonoBehaviour:
@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01385c9da42be2e4896b6ebacfba5a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
+  maxRadius: {x: 10, y: 10, z: 10}
   setMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
-  maxRadius: {x: 5, y: 5, z: 5}

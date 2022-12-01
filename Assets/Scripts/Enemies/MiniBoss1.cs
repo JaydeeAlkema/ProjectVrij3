@@ -10,6 +10,9 @@ public class MiniBoss1 : BossBase
 	[SerializeField] private float innerOrbitRotationSpeed;
 	[SerializeField] private float outerRadius;
 	[SerializeField] private float outerOrbitRotationSpeed;
+	[SerializeField] private BoxCollider2D bodyBlock;
+	[SerializeField] private float shockwaveMaxRadius;
+	[SerializeField] private float shockwaveExpansionSpeed;
 	public Vector2[] innerSpawnPoints;
 	public Vector2[] outerSpawnPoints;
 
@@ -68,10 +71,27 @@ public class MiniBoss1 : BossBase
 		}
 	}
 
+	public override void LookAtTarget()
+	{
+		base.LookAtTarget();
+		float flippedValue;
+		flippedValue = enemySprite.flipX ? -1f : 1f;
+		GetComponent<BoxCollider2D>().offset = new Vector2(Mathf.Abs(GetComponent<BoxCollider2D>().offset.x) * flippedValue, GetComponent<BoxCollider2D>().offset.y);
+		bodyBlock.offset = new Vector2(Mathf.Abs(bodyBlock.offset.x) * -flippedValue, bodyBlock.offset.y);
+	}
+
 	public void DoShockWave()
 	{
-		GameObject shockwave = Instantiate(shockwaveVFXPrefab, transform.position, Quaternion.identity);
-		shockwave.GetComponent<ShockwaveVFX>().Damage = damage;
+		GameObject shockwave = Instantiate(shockwaveVFXPrefab, transform.position - new Vector3(0f, 3f, 0f), Quaternion.identity);
+		ShockwaveVFX shockwaveScript = shockwave.GetComponent<ShockwaveVFX>();
+		shockwaveScript.Damage = damage;
+		shockwaveScript.MaxRadius = new Vector3(shockwaveMaxRadius, shockwaveMaxRadius, shockwaveMaxRadius);
+		shockwaveScript.ExpansionSpeed = shockwaveExpansionSpeed;
+	}
+
+	public override void OnHitVFX()
+	{
+		Instantiate(vfxHitSpark, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
 
 	public IEnumerator LaunchMobs()
