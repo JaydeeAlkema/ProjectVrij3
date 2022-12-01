@@ -44,6 +44,6 @@ public class RangedAttack : Ability
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
 		BurnDamage = BaseStats.BurnDamage;
-		statusEffects = new List<IStatusEffect>();
+		statusEffects = BaseStats.statusEffects;
 	}
 }

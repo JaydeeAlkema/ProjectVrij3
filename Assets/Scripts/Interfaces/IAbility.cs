@@ -77,6 +77,7 @@ public interface IAbility
 		SlowAmount = BaseStats.SlowAmount;
 		SlowDuration = BaseStats.SlowDuration;
 		statusEffects = BaseStats.statusEffects;
+		statusEffects = new List<IStatusEffect>();
 		statusEffectType = BaseStats.statusEffectType;
 	}
 }

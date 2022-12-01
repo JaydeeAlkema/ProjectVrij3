@@ -19,7 +19,7 @@ public class StatusEffect_Slow : IStatusEffect
 	{
 		if (counter >= slowDuration)
 		{
-			damageable.GetSlowed(1);
+			damageable.GetSlowed(5);
 			damageable.RemoveStatusEffect(this);
 		}
 		else

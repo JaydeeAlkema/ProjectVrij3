@@ -61,7 +61,7 @@ public class MeleeAttack : Ability
 		coolDown = BaseStats.CoolDown;
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
-		statusEffects = new List<IStatusEffect>();
+		statusEffects = BaseStats.statusEffects;
 	}
 
 	public void ResetComboTimer()
