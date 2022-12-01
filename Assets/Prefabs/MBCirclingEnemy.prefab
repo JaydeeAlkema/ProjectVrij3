@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8433939072189531419}
   - component: {fileID: -8632110837534704342}
   m_Layer: 6
-  m_Name: BossAddTest
+  m_Name: MBCirclingEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,7 +121,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   healthPoints: 75
   damageBase: 25
   damage: 25
-  speed: 6
+  speed: 8
   aggroRange: 0
   attackRange: 0
   expAmount: 0
@@ -153,6 +153,7 @@ MonoBehaviour:
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 0}
   vfxHitSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
+  reward: 0
   enemyAnimator: {fileID: 0}
   hasHitbox: 1
   unwalkableDetection:
@@ -172,10 +173,11 @@ MonoBehaviour:
   castTarget: 0
   avoidEnemyLayerMask:
     serializedVersion: 2
-    m_Bits: 0
-  damage: 25
+    m_Bits: 64
+  crackedGround: {fileID: 3586400302612292111, guid: 20a1e604c30d5f042be8dd972a3f2b14, type: 3}
   player: {fileID: 0}
-  hasHitbox: 1
+  boss: {fileID: 0}
+  explosionRadius: 0
   center: {x: 0, y: 0, z: 0}
   orbitRadius: 2.5
   radiusSpeed: 2

@@ -8,6 +8,7 @@ public class BTBoss1 : BTTree
 {
 	[SerializeField] private int enemyType = 4;
 	[SerializeField] private int amountOfAttacks = 2;
+	[SerializeField] private Transform[] waypoints;
 	public BossBase bossScript;
 
 	protected override BTNode SetupTree()
@@ -16,13 +17,16 @@ public class BTBoss1 : BTTree
 		{
 			new Sequence(new List<BTNode> //Attack sequence 1: Minion attack
 			{
-				new BossCheckCurrentAttack(1), //Check if Minion attack
+				new BossCheckCurrentAttack(1, bossScript), //Check if Minion attack
 				new Selector(new List<BTNode> //Behaviour depends on whether or not we have minions
 				{
 					new Sequence(new List<BTNode> //If we have minions, walk around.
 					{
 						new BossCheckMobs(bossScript),
-						new BossWaitWithAnimation(0, bossScript, 5f, "MiniBoss1Walking"),
+						new BossWalkAround(0, bossScript, 8f, "MiniBoss1Walking", waypoints),
+						new BossLaunchMobs(1, bossScript),
+						new BossWaitWithAnimation(2, bossScript, 4f, "MiniBoss1Charging"),
+						new BossWaitWithAnimation(3, bossScript, 2f, "MiniBoss1Endlag"),
 						new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
 					}),
 					new Sequence(new List<BTNode> //If we don't have minions, spawn minions.
@@ -36,7 +40,7 @@ public class BTBoss1 : BTTree
 			}),
 			new Sequence(new List<BTNode> //Attack sequence 2: Smash attack
 			{
-				new BossCheckCurrentAttack(2), //Check if Smash attack
+				new BossCheckCurrentAttack(2, bossScript), //Check if Smash attack
 				new Sequence(new List<BTNode> //Smash attack sequence
 				{
 					new BossWaitWithAnimation(0, bossScript, 1f, "MiniBoss1Windup"),
@@ -52,7 +56,7 @@ public class BTBoss1 : BTTree
 			}),
 			new Sequence(new List<BTNode> //Idle and roll new attack
 			{
-				new BossWaitWithAnimation(0, bossScript, 1.5f, "MiniBoss1Idle"), //Add walk instead of idle later
+				new BossWalkAround(0, bossScript, 3f, "MiniBoss1Walking", waypoints),
 				new BossClearAttackSequence(new List<string>{"currentAttackStep"}),
 				new BossRollNewAttack(amountOfAttacks),
 			}),

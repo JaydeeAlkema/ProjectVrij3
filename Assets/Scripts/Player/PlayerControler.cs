@@ -179,7 +179,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		vel = rb2d.velocity.magnitude;
 
-		if (!GameManager.Instance.IsPaused)
+		if (GameManager.Instance == null || !GameManager.Instance.IsPaused)
 		{
 			//Melee input
 			if (Input.GetMouseButtonDown(0))
@@ -400,7 +400,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void TakeDamage(int damage)
 	{
-		if (!invulnerable && GameManager.Instance.currentGameState == GameManager.GameState.Dungeon)
+		if (!invulnerable && (GameManager.Instance.currentGameState == GameManager.GameState.Dungeon || GameManager.Instance == null))
 		{
 			AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 			GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
@@ -445,7 +445,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			inCombat = false;
 		}
 
-		if (!inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1)
+		if (!inCombat && (GameManager.Instance.ExpManager.PlayerPoints >= 1 || GameManager.Instance ==  null))
 		{
 			selfSlowMultiplier = 2f;
 			Debug.Log("Out of combat boost granted");

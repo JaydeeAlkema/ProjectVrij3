@@ -35,6 +35,7 @@ public class ShockwaveVFX : MonoBehaviour
 		drawnCircle.AddComponent<ShockwaveCollision>();
 		drawnCircle.GetComponent<ShockwaveCollision>().Damage = damage;
 		drawnCircle.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+		drawnCircle.transform.position = transform.position;
 		shockwave = drawnCircle;
 
 		//Draw indicator
@@ -43,6 +44,7 @@ public class ShockwaveVFX : MonoBehaviour
 		drawnCircle2.GetComponent<LineRenderer>().material = setMaterial;
 		drawnCircle2.GetComponent<LineRenderer>().startColor = Color.white;
 		drawnCircle2.GetComponent<LineRenderer>().endColor = Color.white;
+		drawnCircle2.transform.position = transform.position;
 		shockwaveIndicator = drawnCircle2;
 	}
 

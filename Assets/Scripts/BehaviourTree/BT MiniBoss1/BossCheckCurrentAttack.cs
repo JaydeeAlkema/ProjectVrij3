@@ -6,10 +6,12 @@ using BehaviourTree;
 
 public class BossCheckCurrentAttack : BTNode
 {
+	private BossBase bossScript;
 	private int checkAttack;
 
-	public BossCheckCurrentAttack(int checkForAttackNumber)
+	public BossCheckCurrentAttack(int checkForAttackNumber, BossBase bossScript)
 	{
+		this.bossScript = bossScript;
 		checkAttack = checkForAttackNumber;
 	}
 

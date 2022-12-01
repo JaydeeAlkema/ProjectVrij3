@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MiniBoss1 : BossBase
 {
+	[SerializeField] private GameObject player = null;
 	[SerializeField] private GameObject mobPrefab;
 	[SerializeField] private float innerRadius;
 	[SerializeField] private float innerOrbitRotationSpeed;
@@ -16,9 +17,15 @@ public class MiniBoss1 : BossBase
 
 	[SerializeField] private GameObject rewardInstance;
 
+	private void Start()
+	{
+		player = FindObjectOfType<PlayerControler>()?.gameObject;
+	}
+
 	private void Update()
 	{
 		MobListUpdate();
+		LookAtTarget();
 	}
 
 	public override void SpawnMobs()
@@ -28,6 +35,7 @@ public class MiniBoss1 : BossBase
 			GameObject spawnedMob = Instantiate(mobPrefab, spawnPoint + (Vector2)transform.position, Quaternion.identity);
 			MBCirclingEnemy spawnedScript = spawnedMob.GetComponent<MBCirclingEnemy>();
 			spawnedScript.enabled = true;
+			spawnedScript.Boss = this.gameObject;
 			spawnedScript.center = transform.position;
 			spawnedScript.orbitRadius = innerRadius;
 			spawnedScript.rotationSpeed = innerOrbitRotationSpeed;
@@ -39,6 +47,7 @@ public class MiniBoss1 : BossBase
 			GameObject spawnedMob = Instantiate(mobPrefab, spawnPoint + (Vector2)transform.position, Quaternion.identity);
 			MBCirclingEnemy spawnedScript = spawnedMob.GetComponent<MBCirclingEnemy>();
 			spawnedScript.enabled = true;
+			spawnedScript.Boss = this.gameObject;
 			spawnedScript.center = transform.position;
 			spawnedScript.orbitRadius = outerRadius;
 			spawnedScript.rotationSpeed = outerOrbitRotationSpeed;
@@ -61,6 +70,25 @@ public class MiniBoss1 : BossBase
 	{
 		GameObject shockwave = Instantiate(shockwaveVFXPrefab, transform.position, Quaternion.identity);
 		shockwave.GetComponent<ShockwaveVFX>().Damage = damage;
+	}
+
+	public IEnumerator LaunchMobs()
+	{
+		GameObject[] mobsToFire = mobs.ToArray();
+		for (int i = 0; i < mobsToFire.Length; i++)
+		{
+			if (mobsToFire[i] != null)
+			{
+				MBCirclingEnemy mobScript = mobsToFire[i].GetComponent<MBCirclingEnemy>();
+				mobScript.aggro = true;
+				if (player != null)
+				{
+					mobScript.LaunchDestination = player.transform.position;
+				}
+				yield return new WaitForSeconds(0.2f);
+			}
+		}
+		yield return new WaitForEndOfFrame();
 	}
 
 }

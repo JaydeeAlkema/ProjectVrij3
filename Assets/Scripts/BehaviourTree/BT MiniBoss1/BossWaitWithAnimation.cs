@@ -41,7 +41,11 @@ public class BossWaitWithAnimation : BTNode
 			state = BTNodeState.SUCCESS;
 			return state;
 		}
+
 		Debug.Log("PROCEED. Our step: " + attackStep + ", current step: " + currentAttackStep);
+
+		//----
+
 		if (timer >= waitDuration)
 		{
 			timer = 0f;

@@ -5,9 +5,12 @@ using UnityEngine;
 public class MBCirclingEnemy : EnemyBase
 {
 	private int playerLayer = 1 << 8;
-
+	[SerializeField] private GameObject crackedGround;
 	[SerializeField] private GameObject player;
-	private float checkMaxHP;
+	[SerializeField] private GameObject boss;
+	[SerializeField] private float explosionRadius;
+	private Vector2 launchDestination;
+	//private float checkMaxHP;
 
 	public Vector3 center;
 	public float orbitRadius;
@@ -16,11 +19,14 @@ public class MBCirclingEnemy : EnemyBase
 	public bool agitated = false;
 	public bool aggro = false;
 
+	public GameObject Boss { get => boss; set => boss = value; }
+	public Vector2 LaunchDestination { get => launchDestination; set => launchDestination = value; }
+
 	void Awake()
 	{
-		checkMaxHP = HealthPoints;
+		//checkMaxHP = HealthPoints;
 		player = FindObjectOfType<PlayerControler>().gameObject;
-		transform.position = (transform.position - center).normalized * orbitRadius + center;
+		transform.position = (transform.position - boss.transform.position).normalized * orbitRadius + boss.transform.position;
 	}
 
 	void Update()
@@ -31,7 +37,7 @@ public class MBCirclingEnemy : EnemyBase
 		//MoveToPlayer();
 		if (aggro)
 		{
-			MoveToTarget(Target);
+			LaunchToPlayer();
 		}
 	}
 
@@ -59,8 +65,8 @@ public class MBCirclingEnemy : EnemyBase
 	{
 		if (!aggro)
 		{
-			transform.RotateAround(center, Vector3.forward, rotationSpeed * Time.deltaTime);
-			var desiredPosition = (transform.position - center).normalized * orbitRadius + center;
+			transform.RotateAround(boss.transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
+			var desiredPosition = (transform.position - boss.transform.position).normalized * orbitRadius + boss.transform.position;
 			transform.position = Vector3.MoveTowards(transform.position, desiredPosition, radiusSpeed * Time.deltaTime);
 		}
 	}
@@ -71,34 +77,39 @@ public class MBCirclingEnemy : EnemyBase
 		if (playerBody != null && HasHitbox)
 		{
 			AttackPlayer(playerBody.gameObject);
-			HasHitbox = false;
-			aggro = false;
 		}
 	}
 
 	void AttackPlayer(GameObject playerObject)
 	{
 		playerObject.GetComponent<PlayerControler>().TakeDamage(damage);
-		StartCoroutine(AttackTimer());
 	}
 
-	IEnumerator AttackTimer()
+	void LaunchToPlayer()
 	{
-		yield return new WaitForSeconds(0.5f);
-		HasHitbox = true;
-		yield return null;
-	}
-
-	void MoveToPlayer()
-	{
-		if (aggro)
+		transform.position = Vector2.MoveTowards(transform.position, launchDestination, Speed * Time.deltaTime);
+		if (Vector2.Distance(transform.position, launchDestination) < 0.5f)
 		{
-			//Vector3 targetDir = player.transform.position - this.Rb2d.transform.position;
-			//Rb2d.velocity = targetDir.normalized * Speed * Time.deltaTime;
-
-			transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Speed*Time.deltaTime);
-
+			Die();
 		}
+	}
+
+	public override void Die()
+	{
+		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, explosionRadius, playerLayer);
+		if (playerBody != null)
+		{
+			AttackPlayer(playerBody.gameObject);
+		}
+		GameObject decal = Instantiate(crackedGround, transform.position, Quaternion.identity);
+		decal.transform.localScale = Vector3.one * explosionRadius;
+		StopAllCoroutines();
+		Time.timeScale = 1f;
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.EnemyAggroCount(false);
+		}
+		Destroy(this.gameObject);
 	}
 
 }
