@@ -19,6 +19,7 @@ public class MiniBoss1 : BossBase
 
 	private void Start()
 	{
+		base.Start();
 		player = FindObjectOfType<PlayerControler>()?.gameObject;
 	}
 
@@ -57,7 +58,8 @@ public class MiniBoss1 : BossBase
 
 	public void MobListUpdate()
 	{
-		foreach (GameObject mob in mobs)
+		GameObject[] checkMobs = mobs.ToArray();
+		foreach (GameObject mob in checkMobs)
 		{
 			if (mob == null)
 			{

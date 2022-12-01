@@ -22,9 +22,10 @@ public class MBCirclingEnemy : EnemyBase
 	public GameObject Boss { get => boss; set => boss = value; }
 	public Vector2 LaunchDestination { get => launchDestination; set => launchDestination = value; }
 
-	void Awake()
+
+	private void Start()
 	{
-		//checkMaxHP = HealthPoints;
+		base.Start();
 		player = FindObjectOfType<PlayerControler>().gameObject;
 		transform.position = (transform.position - boss.transform.position).normalized * orbitRadius + boss.transform.position;
 	}
@@ -34,32 +35,30 @@ public class MBCirclingEnemy : EnemyBase
 		base.Update();
 		HitBox();
 		CircleAroundBoss();
-		//MoveToPlayer();
 		if (aggro)
 		{
 			LaunchToPlayer();
 		}
 	}
 
-	public override void TakeDamage(int damage, int damageType)
-	{
-		if (damageType == 0 && meleeTarget)
-		{
-			HealthPoints -= damage;
-			meleeTarget = false;
-		}
-		if (damageType == 1 && castTarget)
-		{
-			HealthPoints -= damage;
-			castTarget = false;
-		}
-		DamagePopup(damage);
-		HealthPoints -= damage;
-		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-		StartCoroutine(FlashColor());
-		agitated = true;
-		if (HealthPoints <= 0) Die();
-	}
+	//public override void TakeDamage(int damage, int damageType)
+	//{
+	//	if (damageType == 0 && meleeTarget)
+	//	{
+	//		HealthPoints -= damage;
+	//		meleeTarget = false;
+	//	}
+	//	if (damageType == 1 && castTarget)
+	//	{
+	//		HealthPoints -= damage;
+	//		castTarget = false;
+	//	}
+	//	DamagePopup(damage);
+	//	HealthPoints -= damage;
+	//	enemySprite.color = Color.white;
+	//	StartCoroutine(FlashColor());
+	//	if (HealthPoints <= 0) Die();
+	//}
 
 	void CircleAroundBoss()
 	{
@@ -68,6 +67,7 @@ public class MBCirclingEnemy : EnemyBase
 			transform.RotateAround(boss.transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
 			var desiredPosition = (transform.position - boss.transform.position).normalized * orbitRadius + boss.transform.position;
 			transform.position = Vector3.MoveTowards(transform.position, desiredPosition, radiusSpeed * Time.deltaTime);
+			transform.rotation = Quaternion.identity;
 		}
 	}
 

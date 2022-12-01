@@ -204,9 +204,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (!isAggro)
 		{
 			isAggro = true;
-			GameManager.Instance.EnemyAggroCount(true);
+			if (GameManager.Instance != null)
+			{
+				GameManager.Instance.EnemyAggroCount(true);
+			}
 		}
-		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());
 		if (healthPoints <= 0) Die();
 	}
