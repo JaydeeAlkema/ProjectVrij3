@@ -24,6 +24,9 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private int baseBurnDamage = 1;
 	[SerializeField] private float baseSlowAmount = 0.5f;
 	[SerializeField] private float baseSlowDuration = 4f;
+	[SerializeField] private float baseMarkHits = 1;
+	//[SerializeField] private List<IStatusEffect> baseStatusEffects = new List<IStatusEffect>();
+	[SerializeField] private StatusEffectType baseStatusEffectType;
 	#endregion
 	[SerializeField] private Sprite abilityIcon;
 	[SerializeField] private float coolDown = 0.001f;
@@ -42,6 +45,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float dashSpeed = 100f;
 	[SerializeField] private float dashDuration = 0.2f;
 	[SerializeField] private float attackTime = 200f;
+	[SerializeField] private float markHits = 1;
 
 	[SerializeField] private int burnDamage = 1;
 	[SerializeField] private float slowAmount = 0.5f;
@@ -67,11 +71,12 @@ public class AbilityScriptable : ScriptableObject
 	public float DashDuration { get => dashDuration; set => dashDuration = value; }
 	public float AttackTime { get => attackTime; set => attackTime = value; }
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
-	public List<IStatusEffect> statusEffects = new List<IStatusEffect>();
+	public List<IStatusEffect> statusEffects;
 
 	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
 	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
 	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
+	public float MarkHits { get => markHits; set => markHits = value; }
 
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public AK.Wwise.Event AbilitySound1 { get => abilitySound1; set => abilitySound1 = value; }
@@ -81,34 +86,73 @@ public class AbilityScriptable : ScriptableObject
 
 	public void UpdateStatusEffects()
 	{
-		statusEffects.Clear();
-		switch( statusEffectType )
+		if( statusEffects != null )
 		{
-			case StatusEffectType.none:
-				break;
-			case StatusEffectType.Burn:
-				statusEffects.Add( new StatusEffect_Burning(burnDamage) );
-				break;
-			case StatusEffectType.Stun:
-				break;
-			case StatusEffectType.Slow:
-				statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
-				break;
-			case StatusEffectType.Marked:
-				statusEffects.Add(new StatusEffect_Marked(markType));
-				break;
-			default:
-				break;
+			statusEffects.Clear();
+			switch( statusEffectType )
+			{
+				case StatusEffectType.none:
+					break;
+				case StatusEffectType.Burn:
+					statusEffects.Add( new StatusEffect_Burning( burnDamage ) );
+					break;
+				case StatusEffectType.Stun:
+					break;
+				case StatusEffectType.Slow:
+					statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
+					break;
+				case StatusEffectType.Marked:
+					statusEffects.Add( new StatusEffect_Marked( markType, markHits ) );
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
 	public void SetBaseStats()
 	{
-		
+		coolDown = baseCooldown;
+		damage = baseDamage;
+		pierce = basePierce;
+		critChance = baseCritChance;
+		distance = baseDistance;
+		lifeSpan = baseLifeSpan;
+		force = baseForce;
+		boxSize = baseBoxSize;
+		circleSize = baseCircleSize;
+		dashSpeed = baseDashSpeed;
+		dashDuration = baseDashDuration;
+		attackTime = baseAttackTime;
+		trailUpgrade = baseTrailUpgrade;
+		burnDamage = baseBurnDamage;
+		slowAmount = baseSlowAmount;
+		slowDuration = baseSlowDuration;
+		markHits = baseMarkHits;
+		statusEffects = new List<IStatusEffect>();
+		statusEffectType = baseStatusEffectType;
 	}
 
 	public void SetHoldStats(AbilityScriptable stats)
 	{
-		
+		coolDown = stats.coolDown;
+		damage = stats.damage;
+		pierce = stats.pierce;
+		critChance = stats.critChance;
+		distance = stats.distance;
+		lifeSpan = stats.lifeSpan;
+		force = stats.force;
+		boxSize = stats.boxSize;
+		circleSize = stats.circleSize;
+		dashSpeed = stats.dashSpeed;
+		dashDuration = stats.dashDuration;
+		attackTime = stats.attackTime;
+		trailUpgrade = stats.trailUpgrade;
+		burnDamage = stats.burnDamage;
+		slowAmount = stats.slowAmount;
+		slowDuration = stats.slowDuration;
+		markHits = stats.markHits;
+		statusEffects = stats.statusEffects;
+		statusEffectType = stats.statusEffectType;
 	}
 }

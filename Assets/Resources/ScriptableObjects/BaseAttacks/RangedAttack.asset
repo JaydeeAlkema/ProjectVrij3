@@ -12,8 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
   m_Name: RangedAttack
   m_EditorClassIdentifier: 
-  abilityImage: {fileID: 0}
-  ability: {fileID: 0}
+  baseCooldown: 400
+  baseDamage: 25
+  basePierce: 1
+  baseCritChance: 0
+  baseDistance: 0
+  baseLifeSpan: 0.4
+  baseForce: 25
+  baseBoxSize: {x: 4, y: 6}
+  baseCircleSize: 0
+  baseDashSpeed: 100
+  baseDashDuration: 0.2
+  baseAttackTime: 200
+  baseTrailUpgrade: 0
+  baseBurnDamage: 1
+  baseSlowAmount: 0.5
+  baseSlowDuration: 4
+  baseMarkHits: 1
+  baseStatusEffectType: 0
+  abilityIcon: {fileID: 0}
   coolDown: 400
   damage: 25
   pierce: 1
@@ -28,11 +45,11 @@ MonoBehaviour:
   lifeSpan: 0.4
   force: 25
   burnObject: {fileID: 0}
-  effects: 000000000000000000000000
   trailUpgrade: 0
   dashSpeed: 100
   dashDuration: 0.2
   attackTime: 200
+  markHits: 1
   burnDamage: 1
   slowAmount: 0.5
   slowDuration: 4

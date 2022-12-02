@@ -22,9 +22,9 @@ public class MeleeAttack : Ability
 	{
 		if (init)
 		{
-			SetAbilityStats();
 			init = false;
 		}
+		SetAbilityStats();
 		player = _player;
 		AbilityBehavior();
 	}
@@ -48,9 +48,12 @@ public class MeleeAttack : Ability
 				enemyList.Remove(enemy);
 				return;
 			}
-			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
-			enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal + (20 * comboCounter), 0);
-			OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
+			int damageToDeal = ( int )( damage * Random.Range( 0.8f, 1.2f ) );
+			if( enemy != null )
+			{
+				enemy.GetComponent<IDamageable>()?.TakeDamage( damageToDeal + ( 20 * comboCounter ), 0 );
+				OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>() );
+			}
 			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
 		}
 	}
@@ -64,7 +67,7 @@ public class MeleeAttack : Ability
 		coolDown = BaseStats.CoolDown;
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
-		statusEffects = new List<IStatusEffect>();
+		statusEffects = BaseStats.statusEffects;
 	}
 
 	public void ResetComboTimer()

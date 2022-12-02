@@ -66,7 +66,7 @@ public class Projectile : MonoBehaviour
 		GameObject aoe = Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 		aoe.GetComponent<PlayerProjectileExplosionDamage>().CastedFrom = castedFrom;
 		aoe.GetComponent<PlayerProjectileExplosionDamage>().Damage = damage;
-		//aoe.GetComponent<PlayerProjectileExplosionDamage>().Radius = aoeRadius;
+		aoe.GetComponent<PlayerProjectileExplosionDamage>().Radius = castedFrom.BaseStats.CircleSize;
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)

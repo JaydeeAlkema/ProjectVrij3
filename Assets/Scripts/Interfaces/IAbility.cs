@@ -58,7 +58,7 @@ public interface IAbility
 
 	virtual void OnHitApplyStatusEffects( IDamageable damageable )
 	{
-		foreach( IStatusEffect statusEffect in statusEffects )
+		foreach( IStatusEffect statusEffect in BaseStats.statusEffects )
 		{
 			if( statusEffect == null ) return;
 			damageable.ApplyStatusEffect( statusEffect );
@@ -77,29 +77,7 @@ public interface IAbility
 		SlowAmount = BaseStats.SlowAmount;
 		SlowDuration = BaseStats.SlowDuration;
 		statusEffects = BaseStats.statusEffects;
+		statusEffects = new List<IStatusEffect>();
 		statusEffectType = BaseStats.statusEffectType;
-	}
-
-	public void UpdateStatusEffects()
-	{
-		statusEffects.Clear();
-		switch( statusEffectType )
-		{
-			case StatusEffectType.none:
-				break;
-			case StatusEffectType.Burn:
-				statusEffects.Add( new StatusEffect_Burning( BurnDamage ) );
-				break;
-			case StatusEffectType.Stun:
-				break;
-			case StatusEffectType.Slow:
-				statusEffects.Add( new StatusEffect_Slow( SlowAmount, SlowDuration ) );
-				break;
-			case StatusEffectType.Marked:
-				statusEffects.Add( new StatusEffect_Marked( MarkType ) );
-				break;
-			default:
-				break;
-		}
 	}
 }

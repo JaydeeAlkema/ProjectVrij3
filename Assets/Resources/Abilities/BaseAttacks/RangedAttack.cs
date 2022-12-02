@@ -12,9 +12,9 @@ public class RangedAttack : Ability
 	{
 		if (init)
 		{
-			SetAbilityStats();
 			init = false;
 		}
+		SetAbilityStats();
 		player = _player;
 		AbilityBehavior();
 	}
@@ -47,6 +47,6 @@ public class RangedAttack : Ability
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
 		BurnDamage = BaseStats.BurnDamage;
-		statusEffects = new List<IStatusEffect>();
+		statusEffects = BaseStats.statusEffects;
 	}
 }

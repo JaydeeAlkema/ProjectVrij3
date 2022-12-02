@@ -6,10 +6,12 @@ public class StatusEffect_Marked : IStatusEffect
 {
 
 	public int markType;    //0 = MeleeTarget, 1 = CastTarget
+	private float markHits;
 
-	public StatusEffect_Marked(int getMarkType)
+	public StatusEffect_Marked(int getMarkType, float getMarkHits)
 	{
 		markType = getMarkType;
+		markHits = getMarkHits;
 	}
 
 
@@ -28,13 +30,13 @@ public class StatusEffect_Marked : IStatusEffect
 
 	public void meleeMark(IDamageable damageable)
 	{
-		damageable.GetMarked(0);
+		damageable.GetMarked(0, markHits);
 		damageable.RemoveStatusEffect(this);
 	}
 
 	public void castMark(IDamageable damageable)
 	{
-		damageable.GetMarked(1);
+		damageable.GetMarked(1, markHits);
 		damageable.RemoveStatusEffect(this);
 	}
 }
