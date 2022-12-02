@@ -19,11 +19,11 @@ public class BossCheckMobs : BTNode
 		if (bossScript.mobs.Count > 0)
 		{
 			Debug.Log("We have minions, proceed.");
-			state = BTNodeState.SUCCESS;
+			state = BTNodeState.FAILURE;
 			return state;
 		}
 		Debug.Log("We DO NOT have minions, going to spawn them.");
-		state = BTNodeState.FAILURE;
+		state = BTNodeState.SUCCESS;
 		return state;
 	}
 

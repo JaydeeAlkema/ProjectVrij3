@@ -18,24 +18,19 @@ public class BTBoss1 : BTTree
 			new Sequence(new List<BTNode> //Attack sequence 1: Minion attack
 			{
 				new BossCheckCurrentAttack(1, bossScript), //Check if Minion attack
-				new Selector(new List<BTNode> //Behaviour depends on whether or not we have minions
+				new Sequence(new List<BTNode> //Minion attack
 				{
-					new Sequence(new List<BTNode> //If we have minions, walk around.
-					{
-						new BossCheckMobs(bossScript),
-						new BossWalkAround(0, bossScript, 8f, "MiniBoss1Walking", waypoints),
-						new BossLaunchMobs(1, bossScript),
-						new BossWaitWithAnimation(2, bossScript, 4f, "MiniBoss1Charging"),
-						new BossWaitWithAnimation(3, bossScript, 2f, "MiniBoss1Endlag"),
-						new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
-					}),
-					new Sequence(new List<BTNode> //If we don't have minions, spawn minions.
-					{
-						new BossWaitWithAnimation(0, bossScript, 1f, "MiniBoss1Charging"),
-						new BossSpawnMinions(1, bossScript),
-						new BossWaitWithAnimation(2, bossScript, 1f, "MiniBoss1Charging"),
-						new BossClearAttackSequence(new List<string>{"currentAttackStep"})
-					})
+					new BossPlayAnimationUntilCompletion(0, bossScript, "MiniBoss1StartCharging"),
+					new BossWaitWithAnimation(1, bossScript, 1f, "MiniBoss1Charging"),
+					new BossSpawnMinions(2, bossScript),
+					new BossWaitWithAnimation(3, bossScript, 1f, "MiniBoss1Charging"),
+					new BossWalkAround(4, bossScript, 8f, "MiniBoss1Walking", waypoints),
+					new BossLaunchMobs(5, bossScript),
+					new BossPlayAnimationUntilCompletion(6, bossScript, "MiniBoss1StartCharging"),
+					new BossWaitWithAnimation(7, bossScript, 4f, "MiniBoss1Charging"),
+					new BossPlayAnimationUntilCompletion(8, bossScript, "MiniBoss1StartEndlag"),
+					new BossWaitWithAnimation(9, bossScript, 2f, "MiniBoss1Endlag"),
+					new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
 				})
 			}),
 			new Sequence(new List<BTNode> //Attack sequence 2: Smash attack
@@ -49,8 +44,9 @@ public class BTBoss1 : BTTree
 					new BossWaitWithAnimation(2, bossScript, 0.75f, "MiniBoss1WaitToFallDown"),
 					new BossWaitWithAnimation(3, bossScript, 0.1f, "MiniBoss1FallDown"), // Replace with BossPlayAnimationUntilCompletion when animations are implemented
 					//new BossPlayAnimationUntilCompletion(3, bossScript, "MiniBoss1FallDown"),
-					new BossStompAttack(4, (MiniBoss1)bossScript),
-					new BossWaitWithAnimation(5, bossScript, 3f, "MiniBoss1Endlag"),
+					new BossStompAttack(4, (MiniBoss1)bossScript), //Make sure the shockwave object has been spawned BEFORE this!
+					new BossPlayAnimationUntilCompletion(5, bossScript, "MiniBoss1StartEndlag"),
+					new BossWaitWithAnimation(6, bossScript, 3f, "MiniBoss1Endlag"),
 					new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
 				})
 			}),

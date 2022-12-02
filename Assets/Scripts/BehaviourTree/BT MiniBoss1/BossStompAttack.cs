@@ -37,7 +37,7 @@ public class BossStompAttack : BTNode
 			return state;
 		}
 
-		bossScript.DoShockWave();
+		bossScript.ShockWave();
 		state = BTNodeState.SUCCESS;
 		return state;
 	}

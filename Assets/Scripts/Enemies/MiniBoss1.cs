@@ -15,6 +15,7 @@ public class MiniBoss1 : BossBase
 	[SerializeField] private float shockwaveExpansionSpeed;
 	public Vector2[] innerSpawnPoints;
 	public Vector2[] outerSpawnPoints;
+	public GameObject spawnedShockwaveObject = null;
 
 	[SerializeField] private GameObject shockwaveVFXPrefab;
 
@@ -83,13 +84,21 @@ public class MiniBoss1 : BossBase
 		bodyBlock.offset = new Vector2(Mathf.Abs(bodyBlock.offset.x) * -flippedValue, bodyBlock.offset.y);
 	}
 
-	public void DoShockWave()
+	public void SpawnShockWaveObject()
 	{
-		GameObject shockwave = Instantiate(shockwaveVFXPrefab, transform.position - new Vector3(0f, 3f, 0f), Quaternion.identity);
-		ShockwaveVFX shockwaveScript = shockwave.GetComponent<ShockwaveVFX>();
+		spawnedShockwaveObject = Instantiate(shockwaveVFXPrefab, transform.position - new Vector3(0f, 3f, 0f), Quaternion.identity);
+		ShockwaveVFX shockwaveScript = spawnedShockwaveObject.GetComponent<ShockwaveVFX>();
 		shockwaveScript.Damage = damage;
 		shockwaveScript.MaxRadius = new Vector3(shockwaveMaxRadius, shockwaveMaxRadius, shockwaveMaxRadius);
 		shockwaveScript.ExpansionSpeed = shockwaveExpansionSpeed;
+	}
+
+	public void ShockWave()
+	{
+		if (spawnedShockwaveObject != null)
+		{
+			spawnedShockwaveObject.GetComponent<ShockwaveVFX>().DrawShockwave();
+		}
 	}
 
 	public override void OnHitVFX()
