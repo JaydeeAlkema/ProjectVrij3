@@ -55,6 +55,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
 
+		// Generate the level. This is a dirty generation, meaning it has lots of dead-ends, incorrect connections, etc. We clean those up later.
 		List<ConnectionPoint> levelConnectionPointsInScene = new List<ConnectionPoint>();
 		for (int i = 0; i < mapPieceLimit; i++)
 		{
@@ -181,6 +182,36 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		RemoveDisconnectedMapPieces();
 
+		// Loop through all the map pieces in the scene and set their neighbours
+		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+		{
+			GameObject mapPieceGO = mapPieceInScene.Key;
+			Vector2 mapPiecePos = mapPieceInScene.Value;
+
+			if (!mapPieceGO.TryGetComponent<MapPiece>(out var mapPiece)) continue;
+			mapPiece.GetConnectionPointsFromChildren();
+
+			Vector2 topNeighbourPos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
+			Vector2 rightNeighbourPos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
+			Vector2 bottomNeighbourPos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
+			Vector2 leftNeighbourPos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
+
+			GameObject topNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == topNeighbourPos).Key;
+			GameObject rightNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == rightNeighbourPos).Key;
+			GameObject bottomNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == bottomNeighbourPos).Key;
+			GameObject leftNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == leftNeighbourPos).Key;
+
+			bool hasTopNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
+			bool hasRightNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
+			bool hasBottomNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
+			bool hasLeftNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
+
+			if (hasTopNeighbour && topNeighbourGO != null) mapPiece.AddNeighbour(topNeighbourGO);
+			if (hasRightNeighbour && rightNeighbourGO != null) mapPiece.AddNeighbour(rightNeighbourGO);
+			if (hasBottomNeighbour && bottomNeighbourGO != null) mapPiece.AddNeighbour(bottomNeighbourGO);
+			if (hasLeftNeighbour && leftNeighbourGO != null) mapPiece.AddNeighbour(leftNeighbourGO);
+		}
+
 		stopwatch.Stop();
 		long generationTime = stopwatch.ElapsedMilliseconds;
 		string colorString = "";
@@ -201,9 +232,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[Button]
 	private void CleanUp()
 	{
-		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene.ToList())
+		List<Transform> connectedMapPieces = connectedMapPiecesParent.GetComponentsInChildren<Transform>().ToList();
+		for (int i = connectedMapPieces.Count - 1; i >= 0; i--)
 		{
-			DestroyImmediate(mapPiece.Key);
+			Transform mapPieceTransform = connectedMapPieces[i];
+			if (mapPieceTransform != connectedMapPiecesParent)
+			{
+				DestroyImmediate(mapPieceTransform.gameObject);
+			}
 		}
 		mapPiecesInScene.Clear();
 		connectionPointsInScene.Clear();
@@ -216,10 +252,13 @@ public class LevelGeneratorV3 : MonoBehaviour
 		{
 			if (disconnectedMapPieceTransform != disconnectedMapPiecesParent && disconnectedMapPieceTransform != null)
 			{
+				GameObject disconnectedMapPieceGO = disconnectedMapPieceTransform.gameObject;
 				if (Application.isEditor)
-					DestroyImmediate(disconnectedMapPieceTransform.gameObject);
+					DestroyImmediate(disconnectedMapPieceGO);
 				else
-					Destroy(disconnectedMapPieceTransform.gameObject);
+					Destroy(disconnectedMapPieceGO);
+
+				mapPiecesInScene.Remove(disconnectedMapPieceGO);
 			}
 		}
 	}

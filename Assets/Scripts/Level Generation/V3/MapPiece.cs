@@ -3,19 +3,15 @@ using UnityEngine;
 
 public class MapPiece : MonoBehaviour
 {
+	[SerializeField] private Transform connectionPointsParent = null;
 	[SerializeField] private List<ConnectionPoint> connectionPoints = new List<ConnectionPoint>();
 	[SerializeField] private List<GameObject> neighbours = new List<GameObject>();
 
-	private void Awake()
+	public void GetConnectionPointsFromChildren()
 	{
-		GetConnectionPointsFromChildren();
-	}
-
-	private void GetConnectionPointsFromChildren()
-	{
-		foreach (Transform childTransform in transform.GetComponentsInChildren<Transform>())
+		foreach (Transform childTransform in connectionPointsParent.GetComponentsInChildren<Transform>())
 		{
-			ConnectionPoint connectionPoint = childTransform.GetComponentInChildren<ConnectionPoint>();
+			ConnectionPoint connectionPoint = childTransform.GetComponent<ConnectionPoint>();
 			if (connectionPoint != null)
 			{
 				connectionPoints.Add(connectionPoint);
