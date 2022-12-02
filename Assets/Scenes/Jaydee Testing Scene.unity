@@ -897,6 +897,7 @@ MonoBehaviour:
   generateRandomSeed: 0
   mapPieceLimit: 25
   mapPiecePlacementTryLimit: 5
+  mapPieceOffset: 21
   connectedMapPiecesParent: {fileID: 1218772882}
   disconnectedMapPiecesParent: {fileID: 715891628}
   spawnMapPiece: {fileID: 6298534505889208130, guid: 92772b46e93c0d544994b90fd9847071, type: 3}
@@ -924,10 +925,9 @@ MonoBehaviour:
       weight: 15
     - item: {fileID: 6298534505889208130, guid: 2db89d7b4ad849a4cae7e7472cf25409, type: 3}
       weight: 15
-  mapPiecesInScene: []
   debugTime: 0.5
   debugOverlaps: 0
-  debugConnections: 1
+  debugConnections: 0
   goodGenerationTime: 750
   okGenerationTime: 1500
   passibleGenerationTime: 2250

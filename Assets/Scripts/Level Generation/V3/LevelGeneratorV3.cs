@@ -14,12 +14,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Main Settings")] private int mapPieceLimit = 100;
 	[SerializeField, BoxGroup("Main Settings")] private int mapPiecePlacementTryLimit = 2;
 
+	[SerializeField, BoxGroup("Map Piece References")] private int mapPieceOffset = 21;
 	[SerializeField, BoxGroup("Map Piece References")] private Transform connectedMapPiecesParent = default;
 	[SerializeField, BoxGroup("Map Piece References")] private Transform disconnectedMapPiecesParent = default;
 	[SerializeField, BoxGroup("Map Piece References")] private GameObject spawnMapPiece = default;
 	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
-
-	[SerializeField, BoxGroup("Runtime Variables"), ReadOnly] private List<GameObject> mapPiecesInScene = new List<GameObject>();
 
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
@@ -30,6 +29,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Debug Variables")] private int badGenerationTime;
 	[SerializeField, BoxGroup("Debug Variables")] private int TerribleGenerationTime;
 
+	private Dictionary<GameObject, Vector2> mapPiecesInScene = new Dictionary<GameObject, Vector2>();
 	private Dictionary<ConnectionPoint, Vector2> connectionPointsInScene = new Dictionary<ConnectionPoint, Vector2>();
 	private Vector2 overlapSize = new Vector2(20, 20);
 
@@ -39,6 +39,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 
 	[Button]
+	public void GenerateInScene()
+	{
+		StartCoroutine(Generate());
+	}
+
 	public IEnumerator Generate()
 	{
 		if (Application.isEditor)
@@ -82,8 +87,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 				// If the set reference to the existing map piece does not connect with the new map piece, we continue the loop until we find two map pieces that fit together.
 				Vector2 newMapPiecePos = new Vector2();
 				bool connected = false;
-				foreach (GameObject mapPieceInScene in mapPiecesInScene)
+				foreach (KeyValuePair<GameObject, Vector2> keyValuePair in mapPiecesInScene)
 				{
+					GameObject mapPieceInScene = keyValuePair.Key;
 					List<ConnectionPoint> mapPieceInSceneConnectionPoints = GetConnectionPoints(mapPieceInScene);
 
 					foreach (ConnectionPoint mapPieceInSceneConnectionPoint in mapPieceInSceneConnectionPoints)
@@ -91,49 +97,59 @@ public class LevelGeneratorV3 : MonoBehaviour
 						if (mapPieceInSceneConnectionPoint.Occupied == false && !connected)
 						{
 							GameObject mapPieceInSceneGO = mapPieceInScene;
+							Vector2 mapPiecePos = keyValuePair.Value;
 
 							// Connect North to South
 							if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y + 21);
+								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
 								if (Overlap(newMapPiecePos, overlapSize)) continue;
+
 
 								newMapPieceConnectionPointSouth.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
+								newMapPieceConnectionPointSouth.ConnectedTo = mapPieceInSceneConnectionPoint;
+								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointSouth;
 								connected = true;
 							}
 							// Connect East to West
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x + 21, mapPieceInSceneGO.transform.position.y);
+								newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
 								if (Overlap(newMapPiecePos, overlapSize)) continue;
 
 								newMapPieceConnectionPointWest.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
+								newMapPieceConnectionPointWest.ConnectedTo = mapPieceInSceneConnectionPoint;
+								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointWest;
 								connected = true;
 							}
 							// Connect South to North
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x, mapPieceInSceneGO.transform.position.y - 21);
+								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
 								if (Overlap(newMapPiecePos, overlapSize)) continue;
 
 								newMapPieceConnectionPointNorth.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
+								newMapPieceConnectionPointNorth.ConnectedTo = mapPieceInSceneConnectionPoint;
+								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointNorth;
 								connected = true;
 							}
 							// Connect West to East
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-								newMapPiecePos = new Vector2(mapPieceInSceneGO.transform.position.x - 21, mapPieceInSceneGO.transform.position.y);
+								newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
 								if (Overlap(newMapPiecePos, overlapSize)) continue;
 
 								newMapPieceConnectionPointEast.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
+								newMapPieceConnectionPointEast.ConnectedTo = mapPieceInSceneConnectionPoint;
+								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointEast;
 								connected = true;
 							}
 						}
@@ -157,7 +173,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 				{
 					newMapPieceGO.transform.position = newMapPiecePos;
 					newMapPieceGO.transform.parent = connectedMapPiecesParent;
-					mapPiecesInScene.Add(newMapPieceGO);
+					mapPiecesInScene.Add(newMapPieceGO, newMapPiecePos);
 					newMapPieceGO = null;
 				}
 			}
@@ -176,6 +192,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		else if (generationTime > TerribleGenerationTime) colorString = "red";
 
 		Debug.Log($"<color={colorString}>Level Generation took: {generationTime}ms</color>");
+		if (debugConnections || debugOverlaps) Debug.Log($"<color=cyan>Enabling Debugging Logs adds extra time to the level generation within the Editor. Disable any extra debug logging within the Level Generator to get the actual level generation times</color>");
 
 		yield return null;
 	}
@@ -184,9 +201,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[Button]
 	private void CleanUp()
 	{
-		foreach (GameObject mapPieceGO in mapPiecesInScene.ToList())
+		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene.ToList())
 		{
-			DestroyImmediate(mapPieceGO);
+			DestroyImmediate(mapPiece.Key);
 		}
 		mapPiecesInScene.Clear();
 		connectionPointsInScene.Clear();
@@ -219,15 +236,16 @@ public class LevelGeneratorV3 : MonoBehaviour
 		bounds.center = centerPoint;
 		bounds.size = size;
 
-		foreach (GameObject mapPiece in mapPiecesInScene)
+		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
 		{
 			Bounds mapPieceBounds = new Bounds();
-			mapPieceBounds.center = mapPiece.transform.position;
+			mapPieceBounds.center = mapPiece.Value;
 			mapPieceBounds.size = size;
 
+			GameObject mapPieceGO = mapPiece.Key;
 			if (bounds.Intersects(mapPieceBounds))
 			{
-				if (debugOverlaps) Debug.Log($"Overlap found with {mapPiece.name} at position {mapPiece.transform.position}", mapPiece);
+				if (debugOverlaps) Debug.Log($"Overlap found with {mapPieceGO.name} at position {mapPieceGO.transform.position}", mapPieceGO);
 				return true;
 			}
 		}
