@@ -18,6 +18,10 @@ public class UpgradeScriptable : ScriptableObject
 	public float AttackSpeedUpgrade { get => attackSpeedUpgrade; set => attackSpeedUpgrade = value; }
 	[SerializeField] private float critChanceUpgrade;
 	public float CritChanceUpgrade { get => critChanceUpgrade; set => critChanceUpgrade = value; }
+	[SerializeField] private float circleSizeUpgrade;
+	public float CircleSizeUpgrade { get => circleSizeUpgrade; set => circleSizeUpgrade = value; }
+	[SerializeField] private float distanceUpgrade;
+	public float DistanceUpgrade { get => distanceUpgrade; set => distanceUpgrade = value; }
 
 	[SerializeField, EnumFlags] private StatusEffectType statusEffect;
 	public StatusEffectType StatusEffect { get => statusEffect; set => statusEffect = value; }

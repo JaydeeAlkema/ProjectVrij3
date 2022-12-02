@@ -24,7 +24,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private int baseBurnDamage = 1;
 	[SerializeField] private float baseSlowAmount = 0.5f;
 	[SerializeField] private float baseSlowDuration = 4f;
-	[SerializeField] private int baseMarkHits = 1;
+	[SerializeField] private float baseMarkHits = 1;
 	//[SerializeField] private List<IStatusEffect> baseStatusEffects = new List<IStatusEffect>();
 	[SerializeField] private StatusEffectType baseStatusEffectType;
 	#endregion
@@ -45,7 +45,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private float dashSpeed = 100f;
 	[SerializeField] private float dashDuration = 0.2f;
 	[SerializeField] private float attackTime = 200f;
-	[SerializeField] private int markHits = 1;
+	[SerializeField] private float markHits = 1;
 
 	[SerializeField] private int burnDamage = 1;
 	[SerializeField] private float slowAmount = 0.5f;
@@ -76,7 +76,7 @@ public class AbilityScriptable : ScriptableObject
 	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
 	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
 	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
-	public int MarkHits { get => markHits; set => markHits = value; }
+	public float MarkHits { get => markHits; set => markHits = value; }
 
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public AK.Wwise.Event AbilitySound1 { get => abilitySound1; set => abilitySound1 = value; }

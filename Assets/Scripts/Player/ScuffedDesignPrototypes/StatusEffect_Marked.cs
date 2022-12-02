@@ -6,9 +6,9 @@ public class StatusEffect_Marked : IStatusEffect
 {
 
 	public int markType;    //0 = MeleeTarget, 1 = CastTarget
-	private int markHits;
+	private float markHits;
 
-	public StatusEffect_Marked(int getMarkType, int getMarkHits)
+	public StatusEffect_Marked(int getMarkType, float getMarkHits)
 	{
 		markType = getMarkType;
 		markHits = getMarkHits;

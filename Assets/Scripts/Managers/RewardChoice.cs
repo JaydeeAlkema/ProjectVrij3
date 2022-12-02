@@ -6,6 +6,12 @@ using TMPro;
 
 public class RewardChoice : MonoBehaviour
 {
+	[Header("RankUp Values")]
+	[SerializeField] private int burnMultiplier = 2;
+	[SerializeField] private float slowMultiplier = 2;
+	[SerializeField] private float markMultiplier = 2;
+
+	[Header("Reward Settings")]
 	[SerializeField] private GameObject choicePopUp;
 	[SerializeField] private GameObject abilityButtonPopUp;
 	[SerializeField] private IAbility abilityToGive;
@@ -250,9 +256,10 @@ public class RewardChoice : MonoBehaviour
 			// give one of possible upgrades
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
-			player.MeleeAttackScr.CoolDown += upgradeToGive.AttackSpeedUpgrade;
+			player.MeleeAttackScr.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
 			player.MeleeAttackScr.Damage += upgradeToGive.DamageUpgrade;
 			player.MeleeAttackScr.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
+			player.MeleeAttackScr.Distance += upgradeToGive.DistanceUpgrade;
 			player.MeleeAttackScr.CritChance += upgradeToGive.CritChanceUpgrade;
 			//check for existing upgrades to rank up
 			foreach (KeyValuePair<StatusEffectType, bool> pair in player.CurrentMeleeAttack.AbilityUpgrades)
@@ -285,7 +292,7 @@ public class RewardChoice : MonoBehaviour
 			case StatusEffectType.none:
 				break;
 			case StatusEffectType.Burn:
-				player.MeleeAttackScr.BurnDamage *= 2;
+				player.MeleeAttackScr.BurnDamage *= burnMultiplier;
 				//AbilityController.AbilityControllerInstance.CurrentMeleeAttack.BurnDamage *= 2;
 				//player.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
 				Debug.Log("Upgraded burn");
@@ -293,12 +300,12 @@ public class RewardChoice : MonoBehaviour
 			case StatusEffectType.Stun:
 				break;
 			case StatusEffectType.Slow:
-				player.MeleeAttackScr.SlowAmount = (player.MeleeAttackScr.SlowAmount / 2);
+				player.MeleeAttackScr.SlowAmount = (player.MeleeAttackScr.SlowAmount / slowMultiplier);
 				//player.AbilityController.CurrentMeleeAttack.BaseStats.UpdateStatusEffects();
 				Debug.Log("Upgraded slow");
 				break;
 			case StatusEffectType.Marked:
-				player.MeleeAttackScr.MarkHits *= 2;
+				player.MeleeAttackScr.MarkHits *= markMultiplier;
 				break;
 			default:
 				break;
@@ -312,9 +319,10 @@ public class RewardChoice : MonoBehaviour
 			// give one of possible upgrades
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
-			player.RangedAttackScr.CoolDown += upgradeToGive.AttackSpeedUpgrade;
+			player.RangedAttackScr.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
 			player.RangedAttackScr.Damage += upgradeToGive.DamageUpgrade;
 			player.RangedAttackScr.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
+			player.RangedAttackScr.CircleSize += upgradeToGive.CircleSizeUpgrade;
 			player.RangedAttackScr.CritChance += upgradeToGive.CritChanceUpgrade;
 			//check for existing upgrades to rank up
 			foreach (KeyValuePair<StatusEffectType, bool> pair in player.CurrentRangedAttack.AbilityUpgrades)

@@ -106,16 +106,16 @@ public class FodderEnemy : EnemyBase
 		int damageToTake = damage;
 		if( damageType == 0 && meleeTarget )
 		{
-			HealthPoints -= damage * markHits;
+			HealthPoints -= ( ( int )( damage * markHits ) );
 			meleeTarget = false;
-			damageToTake *= markHits;
+			damageToTake = ( ( int )( damageToTake * markHits ) );
 			damageToTake += damage;
 		}
 		if( damageType == 1 && castTarget )
 		{
-			HealthPoints -= damage * markHits;
+			HealthPoints -= ( ( int )( damage * markHits ) );
 			castTarget = false;
-			damageToTake *= markHits;
+			damageToTake = ( ( int )( damageToTake * markHits ) );
 			damageToTake += damage;
 		}
 
