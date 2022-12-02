@@ -26,6 +26,17 @@ public class LevelManager : MonoBehaviour
         }
         LevelStarting();
     }
+
+	private void Start()
+	{
+        GameManager.Instance.OnGameStateChanged += NewSceneWithEnemies;
+    }
+
+	private void OnDestroy()
+	{
+        GameManager.Instance.OnGameStateChanged -= NewSceneWithEnemies;	
+	}
+
 	public void LevelStarting()
     {
         currentLevel = startLevel;
@@ -37,6 +48,19 @@ public class LevelManager : MonoBehaviour
         currentLevel++;
         pointToLevel = Mathf.RoundToInt( pointToLevelBase * Mathf.Pow( levelCostModifier, currentLevel ) );
 		OnLevelIncrease?.Invoke( currentLevel, dificultyModifier );
+	}
+
+    public void NewSceneWithEnemies(GameState gameState, GameState lastGameState)
+    {
+        if( gameState == GameState.Dungeon && gameState == lastGameState )
+        {
+            OnLevelIncrease?.Invoke( currentLevel, dificultyModifier );
+        }
+
+        if(gameState == GameState.Dungeon && lastGameState != gameState)
+        {
+            LevelStarting();
+		}
 	}
 
     public delegate void LevelHasIncreased(int level, float dificulty);

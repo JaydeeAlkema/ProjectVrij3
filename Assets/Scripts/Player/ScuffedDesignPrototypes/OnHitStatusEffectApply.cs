@@ -8,6 +8,7 @@ public class OnHitStatusEffectApply : MonoBehaviour
 	[SerializeField] private int burnDamage;
 	[SerializeField] private float slowAmount;
 	[SerializeField] private float slowDuration;
+	[SerializeField] private int markHits;
 
 	[SerializeField, EnumFlags] public StatusEffectType statusEffectType;
 
@@ -16,6 +17,7 @@ public class OnHitStatusEffectApply : MonoBehaviour
 	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
 	public float SlowAmount { get => slowAmount; set => slowAmount = value; }
 	public float SlowDuration { get => slowDuration; set => slowDuration = value; }
+	public int MarkHits { get => markHits; set => markHits = value; }
 	public int markType;    //0 = Melee, 1 = Cast
 
 	public void Start()
@@ -39,7 +41,7 @@ public class OnHitStatusEffectApply : MonoBehaviour
 				statusEffects.Add( new StatusEffect_Slow( slowAmount, slowDuration ) );
 				break;
 			case StatusEffectType.Marked:
-				statusEffects.Add( new StatusEffect_Marked( markType ) );
+				statusEffects.Add( new StatusEffect_Marked( markType, markHits ) );
 				break;
 			default:
 				break;

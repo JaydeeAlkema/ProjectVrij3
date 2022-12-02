@@ -497,7 +497,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	}
 
-	public void GetMarked( int markType )
+	public void GetMarked( int markType, int markHits )
 	{
 
 	}

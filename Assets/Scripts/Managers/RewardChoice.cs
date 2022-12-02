@@ -298,6 +298,7 @@ public class RewardChoice : MonoBehaviour
 				Debug.Log("Upgraded slow");
 				break;
 			case StatusEffectType.Marked:
+				player.MeleeAttackScr.MarkHits *= 2;
 				break;
 			default:
 				break;
@@ -360,6 +361,7 @@ public class RewardChoice : MonoBehaviour
 				Debug.Log("Upgraded slow");
 				break;
 			case StatusEffectType.Marked:
+				player.RangedAttackScr.MarkHits *= 2;
 				break;
 			default:
 				break;

@@ -12,6 +12,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] private float attackRange = 0;
 	[SerializeField] protected int expAmount = 0;
 	[SerializeField] private int expAmountBase;
+	[SerializeField] protected int markHits = 1;
 	[SerializeField] private bool attacking = false;
 	[SerializeField] private Rigidbody2D rb2d;
 	[SerializeField] private GameObject deathPoof;
@@ -166,15 +167,17 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		int damageToTake = damage;
 		if (damageType == 0 && meleeTarget)
 		{
-			healthPoints -= damage;
+			healthPoints -= damage * markHits;
 			meleeTarget = false;
-			damageToTake *= 2;
+			damageToTake *= markHits;
+			damageToTake += damage;
 		}
 		if (damageType == 1 && castTarget)
 		{
-			healthPoints -= damage;
+			healthPoints -= damage * markHits;
 			castTarget = false;
-			damageToTake *= 2;
+			damageToTake *=  markHits;
+			damageToTake += damage;
 		}
 
 		if (damageType == 0)
@@ -209,8 +212,9 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		Instantiate(vfxHitSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
 
-	public void GetMarked(int markType)
+	public void GetMarked(int markType, int getMarkHits )
 	{
+		markHits = getMarkHits;
 		switch (markType)
 		{
 			case 0:
@@ -277,7 +281,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	}
 
 
-	public void OnLeveled(int level , float dificultyModifier)
+	public virtual void OnLeveled(int level , float dificultyModifier)
 	{
 		expAmount = Mathf.RoundToInt( expAmountBase * Mathf.Pow( dificultyModifier, level ) );
 		damage = Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) );

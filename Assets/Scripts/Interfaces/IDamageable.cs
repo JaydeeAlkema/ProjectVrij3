@@ -10,7 +10,7 @@ public interface IDamageable
 
 	void GetSlowed(float slowAmount);
 
-	void GetMarked(int markType);
+	void GetMarked(int markType, int markHits);
 
 	void ApplyStatusEffect(IStatusEffect statusEffect);
 

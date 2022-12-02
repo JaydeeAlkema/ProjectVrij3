@@ -37,17 +37,22 @@ public class MBCirclingEnemy : EnemyBase
 
 	public override void TakeDamage(int damage, int damageType)
 	{
-		if (damageType == 0 && meleeTarget)
+		int damageToTake = damage;
+		if( damageType == 0 && meleeTarget )
 		{
-			HealthPoints -= damage;
+			HealthPoints -= damage * markHits;
 			meleeTarget = false;
+			damageToTake *= markHits;
+			damageToTake += damage;
 		}
-		if (damageType == 1 && castTarget)
+		if( damageType == 1 && castTarget )
 		{
-			HealthPoints -= damage;
+			HealthPoints -= damage * markHits;
 			castTarget = false;
+			damageToTake *= markHits;
+			damageToTake += damage;
 		}
-		DamagePopup(damage);
+		DamagePopup(damageToTake);
 		HealthPoints -= damage;
 		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());

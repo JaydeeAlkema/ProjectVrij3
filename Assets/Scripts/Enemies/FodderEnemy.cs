@@ -104,17 +104,19 @@ public class FodderEnemy : EnemyBase
 	public override void TakeDamage(int damage, int damageType)
 	{
 		int damageToTake = damage;
-		if (damageType == 0 && meleeTarget)
+		if( damageType == 0 && meleeTarget )
 		{
-			HealthPoints -= damage;
+			HealthPoints -= damage * markHits;
 			meleeTarget = false;
-			damageToTake *= 2;
+			damageToTake *= markHits;
+			damageToTake += damage;
 		}
-		if (damageType == 1 && castTarget)
+		if( damageType == 1 && castTarget )
 		{
-			HealthPoints -= damage;
+			HealthPoints -= damage * markHits;
 			castTarget = false;
-			damageToTake *= 2;
+			damageToTake *= markHits;
+			damageToTake += damage;
 		}
 
 		if (damageType == 0)
