@@ -3,7 +3,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,7 +26,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	[Header("Managers")]
-	[SerializeField] private LevelGeneratorV2 levelGenerator = null;
+	[SerializeField] private LevelGeneratorV3 levelGenerator = null;
 	[SerializeField] private HubSceneManager HubSceneManager = null;
 	[SerializeField] private ExpManager expManager = null;
 	[SerializeField] private UIManager uiManager = null;
@@ -100,7 +99,7 @@ public class GameManager : MonoBehaviour
 		isPaused = !isPaused;
 		Time.timeScale = isPaused ? 0f : 1f;
 	}
-	
+
 	public void SetPauseState(bool pause)
 	{
 		isPaused = pause;
@@ -109,10 +108,10 @@ public class GameManager : MonoBehaviour
 
 	public void FetchDungeonReferences()
 	{
-		if (FindObjectOfType<LevelGeneratorV2>() != null)
+		if (FindObjectOfType<LevelGeneratorV3>() != null)
 		{
 			// Use the awake method for fetching references.
-			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
+			levelGenerator = FindObjectOfType<LevelGeneratorV3>();
 			HubSceneManager = FindObjectOfType<HubSceneManager>();
 			expManager = FindObjectOfType<ExpManager>();
 			uiManager = FindObjectOfType<UIManager>();
@@ -129,7 +128,7 @@ public class GameManager : MonoBehaviour
 
 			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
-		//scriptablePlayer.Player = playerInstance.GetComponent<PlayerControler>();
+
 		StartCoroutine(SetupLevel());
 	}
 
@@ -167,10 +166,7 @@ public class GameManager : MonoBehaviour
 		//Show loading screen
 		uiManager.SetUIActive(2, true);
 
-		yield return StartCoroutine(levelGenerator.GenerateLevel());
-		GameObject startingRoom = levelGenerator.Rooms[0].gameObject;
-		Vector3 playerSpawnPos = new Vector3(startingRoom.transform.position.x, startingRoom.transform.position.y, 0);
-		playerInstance.transform.position = playerSpawnPos;
+		yield return StartCoroutine(levelGenerator.Generate());
 		playerInstance.SetActive(true);
 		ChangeGameState(GameState.Dungeon);
 
@@ -186,7 +182,7 @@ public class GameManager : MonoBehaviour
 		uiManager.DisableAllUI();
 		playerInstance.GetComponentInChildren<CameraToMouseFollow>().gameObject.transform.localPosition = Vector3.zero;
 		playerInstance.GetComponent<PlayerControler>().GameOverVFX(1);
-		Time.timeScale = 0f;	//Hitstop
+		Time.timeScale = 0f;    //Hitstop
 		yield return new WaitForSecondsRealtime(0.5f);
 
 		playerInstance.GetComponent<PlayerControler>().GameOverVFX(2);

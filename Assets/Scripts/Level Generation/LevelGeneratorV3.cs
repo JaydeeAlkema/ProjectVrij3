@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -34,15 +35,15 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 	private void Start()
 	{
-		Generate();
+		GameManager.Instance.FetchDungeonReferences();
 	}
 
 	[Button]
-	private void Generate()
+	public IEnumerator Generate()
 	{
-#if UNITY_EDITOR
-		CleanUp();
-#endif
+		if (Application.isEditor)
+			CleanUp();
+
 		if (generateRandomSeed) seed = Random.Range(0, int.MaxValue);
 		Random.InitState(seed);
 
@@ -175,6 +176,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 		else if (generationTime > TerribleGenerationTime) colorString = "red";
 
 		Debug.Log($"<color={colorString}>Level Generation took: {generationTime}ms</color>");
+
+		yield return null;
 	}
 
 	#region Helper Functions
