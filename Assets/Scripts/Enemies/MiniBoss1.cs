@@ -73,7 +73,10 @@ public class MiniBoss1 : BossBase
 
 	public override void LookAtTarget()
 	{
-		base.LookAtTarget();
+		if (DestinationSetter.target != null && enemySprite != null)
+		{
+			enemySprite.flipX = (DestinationSetter.GetComponent<Pathfinding.IAstarAI>().destination - transform.position).normalized.x > 0 ? true : false;
+		}
 		float flippedValue;
 		flippedValue = enemySprite.flipX ? -1f : 1f;
 		GetComponent<BoxCollider2D>().offset = new Vector2(Mathf.Abs(GetComponent<BoxCollider2D>().offset.x) * flippedValue, GetComponent<BoxCollider2D>().offset.y);

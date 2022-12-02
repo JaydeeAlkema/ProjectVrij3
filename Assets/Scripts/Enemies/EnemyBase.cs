@@ -1,3 +1,4 @@
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,6 +74,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	public LayerMask UnwalkableDetection { get => unwalkableDetection; private set => unwalkableDetection = value; }
 	public bool HasHitbox { get => hasHitbox; set => hasHitbox = value; }
 	public bool IsAggro { get => isAggro; set => isAggro = value; }
+	public AIDestinationSetter DestinationSetter { get => destinationSetter; set => destinationSetter = value; }
 
 	public void Start()
 	{
@@ -98,11 +100,6 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void Update()
 	{
-		if (enemySprite != null)
-		{
-			enemySprite.sortingOrder = Mathf.CeilToInt(transform.position.y) - 2;
-		}
-
 		foreach (IStatusEffect statusEffect in statusEffects)
 		{
 			IDamageable damageable = GetComponent<IDamageable>();
@@ -189,7 +186,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 			if (Time.timeScale == 1f)
 			{
-				StartCoroutine(HitStop(0.1f));
+				StartCoroutine(HitStop(0.02f));
 			}
 		}
 

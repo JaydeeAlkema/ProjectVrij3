@@ -6,6 +6,7 @@ using BehaviourTree;
 
 public class BossWalkAround : BTNode
 {
+	private Transform player;
 	private BossBase bossScript;
 	private Transform[] wayPoints;
 	private int attackStep;
@@ -48,6 +49,12 @@ public class BossWalkAround : BTNode
 
 		Debug.Log("PROCEED. Our step: " + attackStep + ", current step: " + currentAttackStep);
 
+		//-----
+
+		if (player == null)
+		{
+			player = GameObject.FindObjectOfType<PlayerControler>().transform;
+		}
 
 		if (timer >= walkDuration)
 		{
@@ -66,23 +73,24 @@ public class BossWalkAround : BTNode
 
 		if (bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target == null)
 		{
-			Debug.Log("Moving to waypoint: " + currentWayPoint);
-			bossScript.MoveToTarget(wayPoints[currentWayPoint]);
+			bossScript.MoveToTarget(player);
+			//Debug.Log("Moving to waypoint: " + currentWayPoint);
+			//bossScript.MoveToTarget(wayPoints[currentWayPoint]);
 		}
 
-		if (Vector2.Distance(bossScript.gameObject.transform.position, bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target.position) < 2f)
-		{
-			bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target = null;
-			bossScript.StopMovingToTarget();
-			currentWayPoint = Random.Range(0, wayPoints.Length);
-			//while (currentWayPoint == ignoreWaypoint)
-			//{
-			//	Debug.Log("Rolled into old waypoint, rerolling.");
-			//	currentWayPoint = Random.Range(0, wayPoints.Length);
-			//	break;
-			//}
-			Debug.Log("New waypoint: " + currentWayPoint);
-		}
+		//if (Vector2.Distance(bossScript.gameObject.transform.position, bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target.position) < 2f)
+		//{
+		//	bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target = null;
+		//	bossScript.StopMovingToTarget();
+		//	//currentWayPoint = Random.Range(0, wayPoints.Length);
+		//	//while (currentWayPoint == ignoreWaypoint)
+		//	//{
+		//	//	Debug.Log("Rolled into old waypoint, rerolling.");
+		//	//	currentWayPoint = Random.Range(0, wayPoints.Length);
+		//	//	break;
+		//	//}
+		//	//Debug.Log("New waypoint: " + currentWayPoint);
+		//}
 
 		timer += Time.deltaTime;
 		Debug.Log("Walking with animation: " + animationName + " for " + walkDuration + " seconds.");
