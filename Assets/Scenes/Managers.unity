@@ -547,6 +547,10 @@ MonoBehaviour:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 046e11e5a43a7374d8675fafa93f42c1, type: 2}
+  stopMusic:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 4bebe8cfe64bd804b98e8597649e9de2, type: 2}
   numberOfEnemiesAggrod: 0
   levelGenerator: {fileID: 0}
   HubSceneManager: {fileID: 0}
@@ -556,3 +560,4 @@ MonoBehaviour:
   playerInstance: {fileID: 0}
   scriptablePlayer: {fileID: 0}
   currentGameState: 0
+  lastGamestate: 0

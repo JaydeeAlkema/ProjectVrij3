@@ -38,11 +38,11 @@ MonoBehaviour:
     ParentPath: Master-Mixer Hierarchy\Default Work Unit
     guid: 413b28e4722d3d4bb1ac3cc93be7e5ff
     GuidInternal: 
-    m_lastTime: -8585347445283131650
+    m_lastTime: -8585316141335134457
     List:
-    - name: Ambient Master
+    - name: Ambience Master
       guid: b4666e1890e7c14abe858637144cc294
-      id: 746174771
+      id: 143634621
       PathAndIcons:
       - ElementName: Master-Mixer Hierarchy
         ObjectType: 5
@@ -53,13 +53,13 @@ MonoBehaviour:
       - ElementName: Master Audio Bus
         ObjectType: 2
         guid: d8a41415a61d2a41a17e75ca0c2149f3
-      - ElementName: Ambient Master
+      - ElementName: Ambience Master
         ObjectType: 2
         guid: b4666e1890e7c14abe858637144cc294
-      Path: Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Ambient Master
-    - name: CaveBig
+      Path: Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Ambience Master
+    - name: Big_Room
       guid: 9e8496e40e6c604c99f9a652b90838c1
-      id: 247451540
+      id: 4202071913
       PathAndIcons:
       - ElementName: Master-Mixer Hierarchy
         ObjectType: 5
@@ -73,10 +73,10 @@ MonoBehaviour:
       - ElementName: Reverbs
         ObjectType: 1
         guid: c6bf84300dfa6c44a193862f351f0df1
-      - ElementName: CaveBig
+      - ElementName: Big_Room
         ObjectType: 1
         guid: 9e8496e40e6c604c99f9a652b90838c1
-      Path: Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\CaveBig
+      Path: Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\Big_Room
     - name: Graveyard
       guid: bceaead4f776644e9ade6e762d77de38
       id: 992774748
@@ -214,7 +214,7 @@ MonoBehaviour:
     ParentPath: SoundBanks\Run SoundBanks
     guid: cc54a3aaec5de642abe7a77f9699c4bf
     GuidInternal: 
-    m_lastTime: -8585328374312095673
+    m_lastTime: -8585316141331696835
     List:
     - name: MainSoundbank
       guid: 99c33cca48068b439cf0e7d85d5fbcc5
@@ -244,6 +244,36 @@ MonoBehaviour:
     GuidInternal: 
     m_lastTime: -8585347445284281072
     List: []
+  - PhysicalPath: Events\Environment.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Environment
+      ObjectType: 12
+      guid: 8a6e9da85a4be247ad2781bdd8615894
+    ParentPath: Events\Environment
+    guid: 8a6e9da85a4be247ad2781bdd8615894
+    GuidInternal: 
+    m_lastTime: -8585316141332562052
+    List:
+    - name: env_torch_burning
+      guid: a9d886ada3f61042a6f7495cb491d650
+      id: 722571157
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Environment
+        ObjectType: 12
+        guid: 8a6e9da85a4be247ad2781bdd8615894
+      - ElementName: env_torch_burning
+        ObjectType: 3
+        guid: a9d886ada3f61042a6f7495cb491d650
+      Path: Events\Environment\env_torch_burning
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   - PhysicalPath: Events\Music.wwu
     PathAndIcons:
     - ElementName: Events
@@ -255,7 +285,7 @@ MonoBehaviour:
     ParentPath: Events\Music
     guid: 70ac64c5211e0743a0bac059c5f6fdf1
     GuidInternal: 
-    m_lastTime: -8585328377102777492
+    m_lastTime: -8585316141332428023
     List:
     - name: play_music
       guid: bf3624a380f86f4c9684510e65e842f6
@@ -274,6 +304,23 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: stop_music
+      guid: 31fc6f921276d046ba3ff245e5e31daf
+      id: 2837384057
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Music
+        ObjectType: 12
+        guid: 70ac64c5211e0743a0bac059c5f6fdf1
+      - ElementName: stop_music
+        ObjectType: 3
+        guid: 31fc6f921276d046ba3ff245e5e31daf
+      Path: Events\Music\stop_music
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   - PhysicalPath: Events\NPC.wwu
     PathAndIcons:
     - ElementName: Events
@@ -285,8 +332,25 @@ MonoBehaviour:
     ParentPath: Events\NPC
     guid: e4e67647559e7d4a83c9279d641b0dfd
     GuidInternal: 
-    m_lastTime: -8585347445284261122
+    m_lastTime: -8585316141332284717
     List:
+    - name: fdr_attck_jump
+      guid: 70b083d16f221c48830eb456cbc58b4b
+      id: 1242269928
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: NPC
+        ObjectType: 12
+        guid: e4e67647559e7d4a83c9279d641b0dfd
+      - ElementName: fdr_attck_jump
+        ObjectType: 3
+        guid: 70b083d16f221c48830eb456cbc58b4b
+      Path: Events\NPC\fdr_attck_jump
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: npc_dmg_cast
       guid: 3fac3a27ba39b3459e230f22eae37101
       id: 3509614367
@@ -335,7 +399,7 @@ MonoBehaviour:
     ParentPath: Events\Player\Player Actions
     guid: 94955df029b54d4f95809f93dfae9c56
     GuidInternal: 
-    m_lastTime: -8585347445284241170
+    m_lastTime: -8585316141332130503
     List:
     - name: plr_attck_cast
       guid: 5f05de29e0a9e348a44ab60b874044d6
@@ -748,7 +812,7 @@ MonoBehaviour:
     m_lastTime: -8585347445281295045
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 0500000006000000080000000a0000000b0000000d0000000e0000000f00000011000000120000001300000014000000180000001c000000
+  ExpandedWaapiItemIds: 050000000600000008000000090000000a0000000b0000000d0000000e0000000f00000011000000120000001300000014000000180000001c000000
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0

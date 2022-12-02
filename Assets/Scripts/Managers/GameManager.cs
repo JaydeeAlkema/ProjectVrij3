@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private AK.Wwise.State SoundStateCrowded;
 	[SerializeField] private AK.Wwise.State CurrentSoundState;
 	[SerializeField] private AK.Wwise.Event startMusic;
+	[SerializeField] private AK.Wwise.Event stopMusic;
+
 	[SerializeField] private int numberOfEnemiesAggrod = 0;
 
 
@@ -137,7 +139,10 @@ public class GameManager : MonoBehaviour
 				case GameState.Dungeon:
 					CurrentSoundState = SoundStateCrowded;
 					CurrentSoundState.SetValue();
+					AudioManager.Instance.PostEventGlobal(stopMusic);
+					Debug.Log("Stopping music.");
 					AudioManager.Instance.PostEventGlobal( startMusic );
+					Debug.Log("Starting music.");
 					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
 					break;
 				case GameState.GameOver:
@@ -145,12 +150,16 @@ public class GameManager : MonoBehaviour
 					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
 					break;
 				case GameState.Hub:
+					AudioManager.Instance.PostEventGlobal(stopMusic);
+					Debug.Log("Stopping music.");
 					PlayerHP.ResetValue();
 					ExpManager.ResetExp();
 					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
 					break;
 				case GameState.Menu:
-					startMusic.Stop( AudioManager.Instance.gameObject );
+					//startMusic.Stop( AudioManager.Instance.gameObject );
+					AudioManager.Instance.PostEventGlobal(stopMusic);
+					Debug.Log("Stopping music.");
 					PlayerHP.ResetValue();
 					ExpManager.ResetExp();
 					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
