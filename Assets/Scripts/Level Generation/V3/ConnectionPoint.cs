@@ -12,9 +12,11 @@ public class ConnectionPoint : MonoBehaviour
 {
 	[SerializeField] private ConnectionPointDirection direction = ConnectionPointDirection.North;
 	[SerializeField] private bool occupied = false;
+	[SerializeField] private ConnectionPoint connectedTo = null;
 
 	public ConnectionPointDirection Direction { get => direction; private set => direction = value; }
 	public bool Occupied { get => occupied; set => occupied = value; }
+	public ConnectionPoint ConnectedTo { get => connectedTo; set => connectedTo = value; }
 
 	private void OnDrawGizmos()
 	{
