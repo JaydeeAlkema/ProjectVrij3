@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MiniBoss1 : BossBase
 {
 	[SerializeField] private GameObject player = null;
+	[SerializeField] Transform healthBar;
+	[SerializeField] private int maxHealthPoints;
 	[SerializeField] private GameObject mobPrefab;
 	[SerializeField] private float innerRadius;
 	[SerializeField] private float innerOrbitRotationSpeed;
@@ -24,11 +27,18 @@ public class MiniBoss1 : BossBase
 	private void Start()
 	{
 		base.Start();
+		maxHealthPoints = HealthPoints;
+		if (healthBar != null)
+		{
+			healthBar.GetComponent<Slider>().maxValue = maxHealthPoints;
+			healthBar.GetComponent<Slider>().value = maxHealthPoints;
+		}
 		player = FindObjectOfType<PlayerControler>()?.gameObject;
 	}
 
 	private void Update()
 	{
+		healthBar.GetComponent<Slider>().value = HealthPoints;
 		MobListUpdate();
 		LookAtTarget();
 	}
