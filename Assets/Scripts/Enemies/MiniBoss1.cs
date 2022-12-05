@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MiniBoss1 : BossBase
 {
@@ -34,6 +35,7 @@ public class MiniBoss1 : BossBase
 			healthBar.GetComponent<Slider>().value = maxHealthPoints;
 		}
 		player = FindObjectOfType<PlayerControler>()?.gameObject;
+		GameManager.Instance.SetupNonDungeon("Boss Testing");
 	}
 
 	private void Update()

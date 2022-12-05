@@ -319,8 +319,8 @@ MonoBehaviour:
         guid: 31fc6f921276d046ba3ff245e5e31daf
       Path: Events\Music\stop_music
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
   - PhysicalPath: Events\NPC.wwu
     PathAndIcons:
     - ElementName: Events
@@ -349,8 +349,8 @@ MonoBehaviour:
         guid: 70b083d16f221c48830eb456cbc58b4b
       Path: Events\NPC\fdr_attck_jump
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0.614826
+      minDuration: 0.251148
     - name: npc_dmg_cast
       guid: 3fac3a27ba39b3459e230f22eae37101
       id: 3509614367
