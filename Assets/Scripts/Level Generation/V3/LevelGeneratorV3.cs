@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,17 +15,28 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Main Settings")] private int mapPieceLimit = 100;
 	[SerializeField, BoxGroup("Main Settings")] private int mapPiecePlacementTryLimit = 2;
 
-	[SerializeField, BoxGroup("Map Piece References")] private int mapPieceOffset = 21;
-	[SerializeField, BoxGroup("Map Piece References")] private Transform connectedMapPiecesParent = default;
-	[SerializeField, BoxGroup("Map Piece References")] private Transform disconnectedMapPiecesParent = default;
-	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> spawnMapPieces = new WeightedRandomList<GameObject>();
-	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
+	[SerializeField, BoxGroup("Map Piece Settings")] private int mapPieceOffset = 21;
+	[SerializeField, BoxGroup("Map Piece Settings")] private Transform connectedMapPiecesParent = default;
+	[SerializeField, BoxGroup("Map Piece Settings")] private Transform disconnectedMapPiecesParent = default;
+	[Space]
+	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> spawnMapPieces = new WeightedRandomList<GameObject>();
+	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
+
+	[SerializeField, BoxGroup("Enemy Settings")] private AstarPath astarData = null;
+	[SerializeField, BoxGroup("Enemy Settings")] private Transform enemyParentTransform = null;
+	[Space]
+	[SerializeField, BoxGroup("Enemy Settings")] private int playerSafeZoneRadii = 2;
+	[SerializeField, BoxGroup("Enemy Settings")] private int enemyCountPerMapPiece = 5;
+	[SerializeField, BoxGroup("Enemy Settings")] private WeightedRandomList<GameObject> enemyPrefabs = new WeightedRandomList<GameObject>();
+	[SerializeField, BoxGroup("Enemy Settings")] private int rewardEnemyCountPerLevel = 3;
+	[SerializeField, BoxGroup("Enemy Settings")] private WeightedRandomList<GameObject> rewardEnemyPrefabs = new WeightedRandomList<GameObject>();
 
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
 	[Space]
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugConnections = false;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugMapPiecesInSceneDictionary = false;
+	[SerializeField, BoxGroup("Debug Variables")] private bool debugMapPiecesOutsidePlayerSafeZone = false;
 	[Space]
 	[SerializeField, BoxGroup("Debug Variables")] private int goodGenerationTime;
 	[SerializeField, BoxGroup("Debug Variables")] private int okGenerationTime;
@@ -38,7 +50,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 	private void Start()
 	{
-		GameManager.Instance.FetchDungeonReferences();
+		if (GameManager.Instance) GameManager.Instance.FetchDungeonReferences();
 	}
 
 	[Button]
@@ -192,6 +204,97 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		RemoveDisconnectedMapPieces();
 
+		SetMapPieceNeighbours();
+
+		SpawnEnemies();
+
+		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
+		foreach (GridGraph gridGraph in astarData.graphs)
+		{
+			gridGraph.center = mapBounds.center;
+			gridGraph.SetDimensions((int)mapBounds.size.x, (int)mapBounds.size.y, gridGraph.nodeSize);
+			AstarPath.active.Scan(gridGraph);
+		}
+
+		while (AstarPath.active.IsAnyGraphUpdateInProgress)
+		{
+			yield return null;
+		}
+
+		if (debugMapPiecesInSceneDictionary)
+		{
+			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
+			{
+				Debug.Log($"{mapPiece.Key.name} - {mapPiece.Value}", mapPiece.Key);
+			}
+		}
+
+		stopwatch.Stop();
+		long generationTime = stopwatch.ElapsedMilliseconds;
+		string colorString = "";
+
+		if (generationTime < goodGenerationTime) colorString = "lime";
+		else if (generationTime > goodGenerationTime && generationTime < passibleGenerationTime) colorString = "yellow";
+		else if (generationTime > passibleGenerationTime && generationTime < okGenerationTime) colorString = "orange";
+		else if (generationTime > okGenerationTime && generationTime < badGenerationTime) colorString = "brown";
+		else if (generationTime > TerribleGenerationTime) colorString = "red";
+
+		Debug.Log($"<color={colorString}>Level Generation took: {generationTime}ms</color>");
+		if (debugConnections || debugOverlaps || debugMapPiecesInSceneDictionary || debugMapPiecesOutsidePlayerSafeZone) Debug.Log($"<color=cyan>Enabling Debugging Logs adds extra time to the level generation within the Editor. Disable any extra debug logging within the Level Generator to get the actual level generation times</color>");
+
+		yield return null;
+	}
+
+	private void SpawnEnemies()
+	{
+		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
+		{
+			float distanceToSpawn = Vector2.Distance(Vector2.zero, mapPiece.Value);
+			int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset;
+
+			Bounds safeZoneBounds = new Bounds
+			{
+				center = Vector2.zero,
+				size = new Vector2(playerSafeZoneSize, playerSafeZoneSize)
+			};
+
+			Bounds mapPieceBounds = new Bounds()
+			{
+				center = mapPiece.Value,
+				size = new Vector2(mapPieceOffset, mapPieceOffset)
+			};
+
+			if (safeZoneBounds.Intersects(mapPieceBounds)) continue;
+			if (debugMapPiecesOutsidePlayerSafeZone) Debug.Log($"<color=magenta>{mapPiece.Key.name} is outside of the Player Safe Zone and can spawn enemies</color>", mapPiece.Key);
+
+			GameObject mapPieceGO = mapPiece.Key;
+			Transform mapPieceFloorParentTransform = mapPieceGO.transform.Find("Floors");
+			Transform[] floorTiles = mapPieceFloorParentTransform.GetComponentsInChildren<Transform>();
+
+			List<int> spawnIndeces = new List<int>();
+			// ec = EnemyCount
+			for (int ec = 0; ec < enemyCountPerMapPiece; ec++)
+			{
+				int spawnIndex = Random.Range(1, floorTiles.Length);
+				while (spawnIndeces.Contains(spawnIndex))
+				{
+					spawnIndex = Random.Range(1, floorTiles.Length);
+				}
+				spawnIndeces.Add(spawnIndex);
+			}
+
+			foreach (int spawnIndex in spawnIndeces)
+			{
+				Transform spawnTile = floorTiles[spawnIndex];
+				Instantiate(enemyPrefabs.GetRandom(), new Vector2(spawnTile.position.x, spawnTile.position.y), Quaternion.identity, enemyParentTransform);
+			}
+		}
+
+
+	}
+
+	private void SetMapPieceNeighbours()
+	{
 		// Loop through all the map pieces in the scene and set their neighbours
 		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
 		{
@@ -225,50 +328,53 @@ public class LevelGeneratorV3 : MonoBehaviour
 			if (hasBottomNeighbour && bottomNeighbourGO != null) mapPiece.AddNeighbour(bottomNeighbourGO);
 			if (hasLeftNeighbour && leftNeighbourGO != null) mapPiece.AddNeighbour(leftNeighbourGO);
 		}
-
-		if (debugMapPiecesInSceneDictionary)
-		{
-			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
-			{
-				Debug.Log($"{mapPiece.Key.name} - {mapPiece.Value}", mapPiece.Key);
-			}
-		}
-
-		// Spawn enemies
-
-		stopwatch.Stop();
-		long generationTime = stopwatch.ElapsedMilliseconds;
-		string colorString = "";
-
-		if (generationTime < goodGenerationTime) colorString = "lime";
-		else if (generationTime > goodGenerationTime && generationTime < passibleGenerationTime) colorString = "yellow";
-		else if (generationTime > passibleGenerationTime && generationTime < okGenerationTime) colorString = "orange";
-		else if (generationTime > okGenerationTime && generationTime < badGenerationTime) colorString = "brown";
-		else if (generationTime > TerribleGenerationTime) colorString = "red";
-
-		Debug.Log($"<color={colorString}>Level Generation took: {generationTime}ms</color>");
-		if (debugConnections || debugOverlaps || debugMapPiecesInSceneDictionary) Debug.Log($"<color=cyan>Enabling Debugging Logs adds extra time to the level generation within the Editor. Disable any extra debug logging within the Level Generator to get the actual level generation times</color>");
-
-		yield return null;
 	}
 
 	#region Helper Functions
 	[Button]
 	private void CleanUp()
 	{
+		ClearLog();
+
+		// Remove map Pieces
 		List<Transform> connectedMapPieces = connectedMapPiecesParent.GetComponentsInChildren<Transform>().ToList();
 		for (int i = connectedMapPieces.Count - 1; i >= 0; i--)
 		{
 			Transform mapPieceTransform = connectedMapPieces[i];
 			if (mapPieceTransform != connectedMapPiecesParent)
 			{
-				DestroyImmediate(mapPieceTransform.gameObject);
+				if (Application.isEditor)
+				{
+					DestroyImmediate(mapPieceTransform.gameObject);
+				}
+				else
+				{
+					Destroy(mapPieceTransform.gameObject);
+				}
 			}
 		}
 		mapPiecesInScene.Clear();
 		connectionPointsInScene.Clear();
-		ClearLog();
 		RemoveDisconnectedMapPieces();
+
+		// Remove enemies
+		List<Transform> enemiesInScene = enemyParentTransform.GetComponentsInChildren<Transform>().ToList();
+		for (int e = enemiesInScene.Count - 1; e >= 0; e--)
+		{
+			Transform enemyTransform = enemiesInScene[e];
+			if (enemyTransform != enemyParentTransform)
+			{
+				if (Application.isEditor)
+				{
+					DestroyImmediate(enemyTransform.gameObject);
+				}
+				else
+				{
+					Destroy(enemyTransform.gameObject);
+				}
+			}
+
+		}
 	}
 	private void RemoveDisconnectedMapPieces()
 	{
@@ -343,6 +449,18 @@ public class LevelGeneratorV3 : MonoBehaviour
 			Debug.LogWarning("No connection points could be found!");
 			return null;
 		}
+	}
+	Bounds GetMaxBounds(GameObject gameObject)
+	{
+		// https://gamedev.stackexchange.com/questions/86863/calculating-the-bounding-box-of-a-game-object-based-on-its-children
+		Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
+		if (renderers.Length == 0) return new Bounds(gameObject.transform.position, Vector3.zero);
+		Bounds Bounds = renderers[0].bounds;
+		foreach (Renderer renderer in renderers)
+		{
+			Bounds.Encapsulate(renderer.bounds);
+		}
+		return Bounds;
 	}
 	#endregion
 }
