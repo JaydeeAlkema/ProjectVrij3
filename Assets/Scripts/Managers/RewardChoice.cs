@@ -11,7 +11,8 @@ public class RewardChoice : MonoBehaviour
 	[SerializeField] private float slowMultiplier = 2;
 	[SerializeField] private float markMultiplier = 2;
 
-	[Header("Reward Settings")]
+	[Header( "Reward Settings" )]
+	[SerializeField] private int healOnPointSpend;
 	[SerializeField] private GameObject choicePopUp;
 	[SerializeField] private GameObject abilityButtonPopUp;
 	[SerializeField] private IAbility abilityToGive;
@@ -75,11 +76,14 @@ public class RewardChoice : MonoBehaviour
 
 		//Rolling for upgrade all folders must contain atleast 1 upgrade
 		roll = Random.Range(1, 1000001);
+
+		System.Random rand = new System.Random();
+
 		if (roll >= t3Chance)
 		{
 			if (tier3Upgrades.Length > 0)
 			{
-				upgradeToGive = tier3Upgrades[Random.Range(0, tier3Upgrades.Length)];
+				upgradeToGive = tier3Upgrades[rand.Next(0, tier3Upgrades.Length -1)];
 				Debug.Log(upgradeToGive.name);
 			}
 		}
@@ -87,7 +91,7 @@ public class RewardChoice : MonoBehaviour
 		{
 			if (tier2Upgrades.Length > 0)
 			{
-				upgradeToGive = tier2Upgrades[Random.Range(0, tier2Upgrades.Length)];
+				upgradeToGive = tier2Upgrades[rand.Next( 0, tier2Upgrades.Length -1)];
 				Debug.Log(upgradeToGive.name);
 			}
 		}
@@ -95,7 +99,7 @@ public class RewardChoice : MonoBehaviour
 		{
 			if (tier1Upgrades.Length > 0)
 			{
-				upgradeToGive = tier1Upgrades[Random.Range(0, tier1Upgrades.Length)];
+				upgradeToGive = tier1Upgrades[rand.Next( 0, tier1Upgrades.Length -1)];
 				Debug.Log(upgradeToGive.name);
 			}
 		}
@@ -129,6 +133,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability1 = abilityStats;
 						player.Ability1.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -142,6 +147,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability2 = abilityStats;
 						player.Ability2.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -155,6 +161,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability3 = abilityStats;
 						player.Ability3.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -168,6 +175,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability4 = abilityStats;
 						player.Ability4.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -189,6 +197,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability1 = abilityStats;
 						player.Ability1.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -202,6 +211,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability2 = abilityStats;
 						player.Ability2.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -215,6 +225,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability3 = abilityStats;
 						player.Ability3.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -228,6 +239,7 @@ public class RewardChoice : MonoBehaviour
 						player.Ability4 = abilityStats;
 						player.Ability4.SetBaseStats();
 						GameManager.Instance.ExpManager.PlayerPoints -= 1;
+						GameManager.Instance.PlayerHP.value += healOnPointSpend;
 						abilityButton = 0;
 						GameManager.Instance.SetPauseState(false);
 						player.initAbilities();
@@ -256,6 +268,7 @@ public class RewardChoice : MonoBehaviour
 			// give one of possible upgrades
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
+			GameManager.Instance.PlayerHP.value += healOnPointSpend;
 			player.MeleeAttackScr.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
 			player.MeleeAttackScr.Damage += upgradeToGive.DamageUpgrade;
 			player.MeleeAttackScr.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);
@@ -319,6 +332,7 @@ public class RewardChoice : MonoBehaviour
 			// give one of possible upgrades
 			GameManager.Instance.SetPauseState(false);
 			GameManager.Instance.ExpManager.PlayerPoints -= 1;
+			GameManager.Instance.PlayerHP.value += healOnPointSpend;
 			player.RangedAttackScr.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
 			player.RangedAttackScr.Damage += upgradeToGive.DamageUpgrade;
 			player.RangedAttackScr.BoxSize += new Vector2(upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade);

@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
 			ChangeGameState( GameState.GameOver );
 		}
 
+		if(PlayerHP.value > playerHP.startValue)
+		{
+			playerHP.value = playerHP.startValue;
+		}
+
 		if( Input.GetKeyDown( KeyCode.Escape ) )
 		{
 			TogglePauseGame();

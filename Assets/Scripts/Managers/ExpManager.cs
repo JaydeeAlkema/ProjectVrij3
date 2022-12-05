@@ -35,7 +35,7 @@ public class ExpManager : MonoBehaviour
 		if (playerExp.value >= expToNextPoint)
 		{
 			AddPoint();
-			playerExp.value = 0;
+			playerExp.value -= expToNextPoint;
 		}
 	}
 
