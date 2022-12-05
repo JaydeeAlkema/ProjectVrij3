@@ -209,10 +209,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 			GameObject bottomNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == bottomNeighbourPos).Key;
 			GameObject leftNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == leftNeighbourPos).Key;
 
-			bool hasTopNeighbour = topNeighbourGO == null ? false : true;
-			bool hasRightNeighbour = rightNeighbourGO == null ? false : true;
-			bool hasBottomNeighbour = bottomNeighbourGO == null ? false : true;
-			bool hasLeftNeighbour = leftNeighbourGO == null ? false : true;
+			bool hasTopNeighbour = topNeighbourGO != null;
+			bool hasRightNeighbour = rightNeighbourGO != null;
+			bool hasBottomNeighbour = bottomNeighbourGO != null;
+			bool hasLeftNeighbour = leftNeighbourGO != null;
 
 			if (hasTopNeighbour && topNeighbourGO != null) mapPiece.AddNeighbour(topNeighbourGO);
 			if (hasRightNeighbour && rightNeighbourGO != null) mapPiece.AddNeighbour(rightNeighbourGO);
