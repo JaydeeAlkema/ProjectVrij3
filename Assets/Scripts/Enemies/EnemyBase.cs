@@ -94,8 +94,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	{
 
 		rb2d = GetComponent<Rigidbody2D>();
-		destinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
-		aiPath = GetComponent<Pathfinding.AIPath>();
+		destinationSetter = GetComponent<AIDestinationSetter>();
+		aiPath = GetComponent<AIPath>();
 		SetValueToBase();
 	}
 

@@ -16,6 +16,7 @@ public class MiniBoss1 : BossBase
 	[SerializeField] private float outerOrbitRotationSpeed;
 	[SerializeField] private BoxCollider2D bodyBlock;
 	[SerializeField] private float shockwaveExpansionSpeed;
+	private float storedSpeed;
 	public Vector2[] innerSpawnPoints;
 	public Vector2[] outerSpawnPoints;
 	public GameObject spawnedShockwaveObject = null;
@@ -28,6 +29,7 @@ public class MiniBoss1 : BossBase
 	{
 		base.Start();
 		maxHealthPoints = HealthPoints;
+		storedSpeed = Speed;
 		if (healthBar != null)
 		{
 			healthBar.GetComponent<Slider>().maxValue = maxHealthPoints;
@@ -39,6 +41,7 @@ public class MiniBoss1 : BossBase
 
 	private void Update()
 	{
+		base.Update();
 		healthBar.GetComponent<Slider>().value = HealthPoints;
 		MobListUpdate();
 		LookAtTarget();
@@ -120,6 +123,18 @@ public class MiniBoss1 : BossBase
 		shockwaveScript.MaxRadius = new Vector3(radius, radius, radius);
 		shockwaveScript.ExpansionSpeed = shockwaveExpansionSpeed;
 		shockwave.GetComponent<ShockwaveVFX>().DrawShockwave();
+	}
+
+	public void StandStill(bool isStill)
+	{
+		if (isStill)
+		{
+			Speed = 0f;
+		}
+		else
+		{
+			Speed = storedSpeed;
+		}
 	}
 
 	public override void OnHitVFX()

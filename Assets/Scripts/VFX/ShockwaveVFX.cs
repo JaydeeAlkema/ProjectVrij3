@@ -24,7 +24,7 @@ public class ShockwaveVFX : MonoBehaviour
 
 	private void Update()
 	{
-		if (ExpandCircle(shockwaveIndicator, maxRadius, 20f) && shockwave != null)
+		if (ExpandCircle(shockwaveIndicator, maxRadius, 50f) && shockwave != null)
 		{
 			if (ExpandCircle(shockwave, maxRadius, expansionSpeed))
 			{
@@ -54,7 +54,7 @@ public class ShockwaveVFX : MonoBehaviour
 	{
 		//Draw shockwave
 		var drawnCircle = new GameObject { name = "ShockWave" };
-		drawnCircle.DrawCircle(1f, 0.04f);
+		drawnCircle.DrawCircle(1f, 0.1f);
 		drawnCircle.GetComponent<LineRenderer>().material = setMaterial;
 		drawnCircle.GetComponent<LineRenderer>().startColor = Color.red;
 		drawnCircle.GetComponent<LineRenderer>().endColor = Color.red;
@@ -70,13 +70,14 @@ public class ShockwaveVFX : MonoBehaviour
 
 	bool ExpandCircle(GameObject circle, Vector3 maxRadius, float expansionSpeed)
 	{
+		circle.transform.localScale += expansionSpeed * Time.deltaTime * Vector3.one;
 		if (circle.transform.localScale.magnitude < maxRadius.magnitude)
 		{
-			circle.transform.localScale += expansionSpeed * Time.deltaTime * Vector3.one;
 			return false;
 		}
 		else
 		{
+			circle.transform.localScale = maxRadius;
 			return true;
 		}
 	}

@@ -12,6 +12,11 @@ public class BossBase : EnemyBase
 		base.Start();
 	}
 
+	private void Update()
+	{
+		base.Update();
+	}
+
 	public virtual void SpawnMobs()
 	{
 
