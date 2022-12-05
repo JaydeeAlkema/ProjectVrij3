@@ -50,14 +50,14 @@ public class ShockwaveVFX : MonoBehaviour
 	}
 
 	//Only after indicator has been drawn!
-	public void DrawShockwave()
+	public void DrawShockwave(Color color)
 	{
 		//Draw shockwave
 		var drawnCircle = new GameObject { name = "ShockWave" };
 		drawnCircle.DrawCircle(1f, 0.1f);
 		drawnCircle.GetComponent<LineRenderer>().material = setMaterial;
-		drawnCircle.GetComponent<LineRenderer>().startColor = Color.red;
-		drawnCircle.GetComponent<LineRenderer>().endColor = Color.red;
+		drawnCircle.GetComponent<LineRenderer>().startColor = color;
+		drawnCircle.GetComponent<LineRenderer>().endColor = color;
 		drawnCircle.AddComponent<LineRendererCollision>();
 		drawnCircle.GetComponent<EdgeCollider2D>().isTrigger = true;
 		drawnCircle.AddComponent<ShockwaveCollision>();

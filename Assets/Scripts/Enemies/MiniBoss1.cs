@@ -111,7 +111,7 @@ public class MiniBoss1 : BossBase
 	{
 		if (spawnedShockwaveObject != null)
 		{
-			spawnedShockwaveObject.GetComponent<ShockwaveVFX>().DrawShockwave();
+			spawnedShockwaveObject.GetComponent<ShockwaveVFX>().DrawShockwave(Color.red);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class MiniBoss1 : BossBase
 		shockwaveScript.Damage = damage;
 		shockwaveScript.MaxRadius = new Vector3(radius, radius, radius);
 		shockwaveScript.ExpansionSpeed = shockwaveExpansionSpeed;
-		shockwave.GetComponent<ShockwaveVFX>().DrawShockwave();
+		shockwave.GetComponent<ShockwaveVFX>().DrawShockwave(Color.red);
 	}
 
 	public void StandStill(bool isStill)
