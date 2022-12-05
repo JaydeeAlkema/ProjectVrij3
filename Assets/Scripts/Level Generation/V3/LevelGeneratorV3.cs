@@ -208,6 +208,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		SpawnEnemies();
 
+		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
+		foreach (GridGraph gridGraph in astarData.graphs)
+		{
+			gridGraph.center = mapBounds.center;
+			gridGraph.SetDimensions((int)mapBounds.size.x, (int)mapBounds.size.y, gridGraph.nodeSize);
+			AstarPath.active.Scan(gridGraph);
+		}
+
 		if (debugMapPiecesInSceneDictionary)
 		{
 			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
@@ -237,7 +245,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
 		{
 			float distanceToSpawn = Vector2.Distance(Vector2.zero, mapPiece.Value);
-			int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset;
+			int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset - 1;
 
 			Bounds safeZoneBounds = new Bounds
 			{
