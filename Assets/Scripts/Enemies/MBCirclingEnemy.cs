@@ -74,9 +74,13 @@ public class MBCirclingEnemy : EnemyBase
 	void HitBox()
 	{
 		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, this.GetComponent<CircleCollider2D>().radius, playerLayer);
-		if (playerBody != null && HasHitbox)
+		if (playerBody != null && !aggro)
 		{
 			AttackPlayer(playerBody.gameObject);
+		}
+		else if (playerBody != null && aggro)
+		{
+			Explode();
 		}
 	}
 
@@ -90,15 +94,20 @@ public class MBCirclingEnemy : EnemyBase
 		transform.position = Vector2.MoveTowards(transform.position, launchDestination, Speed * Time.deltaTime);
 		if (Vector2.Distance(transform.position, launchDestination) < 0.5f)
 		{
-			Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, explosionRadius, playerLayer);
-			if (playerBody != null)
-			{
-				AttackPlayer(playerBody.gameObject);
-			}
-			GameObject decal = Instantiate(crackedGround, transform.position, Quaternion.identity);
-			decal.transform.localScale = Vector3.one * explosionRadius;
-			Die();
+			Explode();
 		}
+	}
+
+	void Explode()
+	{
+		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, explosionRadius, playerLayer);
+		if (playerBody != null)
+		{
+			AttackPlayer(playerBody.gameObject);
+		}
+		GameObject decal = Instantiate(crackedGround, transform.position, Quaternion.identity);
+		decal.transform.localScale = Vector3.one * explosionRadius;
+		Die();
 	}
 
 	public override void Die()

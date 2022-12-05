@@ -21,12 +21,12 @@ public class CameraToMouseFollow : MonoBehaviour
 				this.transform.position = player.localPosition + Vector3.ClampMagnitude(followDir, threshold);
 
 			}
-			else
-			{
-				Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-				Vector3 followDir = mousePos - player.transform.localPosition;
-				this.transform.position = player.localPosition + Vector3.ClampMagnitude(followDir, threshold);
-			}
+		}
+		else
+		{
+			Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+			Vector3 followDir = mousePos - player.transform.localPosition;
+			this.transform.position = player.localPosition + Vector3.ClampMagnitude(followDir, threshold);
 		}
 	}
 }

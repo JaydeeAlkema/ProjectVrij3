@@ -129,7 +129,7 @@ public class MiniBoss1 : BossBase
 				mobScript.aggro = true;
 				if (player != null)
 				{
-					mobScript.LaunchDestination = player.transform.position;
+					mobScript.LaunchDestination = player.transform.position + ((player.transform.position - transform.position).normalized * Random.Range(2f, 5f));
 				}
 				yield return new WaitForSeconds(0.2f);
 			}

@@ -103,7 +103,7 @@ public class MeleeAttack : Ability
 				IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack1", "isAttacking2");
 				anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 				anim.CallAbility(player);
-				AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
+				//AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
 			}
 		}
 		else
@@ -175,6 +175,7 @@ public class MeleeAttack : Ability
 		thirdHit = false;
 		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
+		enemiesInBox = null;
 		yield return null;
 	}
 

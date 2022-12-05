@@ -90,11 +90,12 @@ MonoBehaviour:
   healthPoints: 300
   damageBase: 25
   damage: 25
-  speed: 8
+  speed: 13
   aggroRange: 0
   attackRange: 0
   expAmount: 0
   expAmountBase: 0
+  markHits: 1
   attacking: 0
   rb2d: {fileID: 5793724696057155425}
   deathPoof: {fileID: 6120905142384714952, guid: 89bbbe65ccd36084b8f301d8530e047f, type: 3}
@@ -125,7 +126,7 @@ MonoBehaviour:
   crackedGround: {fileID: 3586400302612292111, guid: 20a1e604c30d5f042be8dd972a3f2b14, type: 3}
   player: {fileID: 0}
   boss: {fileID: 0}
-  explosionRadius: 2
+  explosionRadius: 3
   center: {x: 0, y: 0, z: 0}
   orbitRadius: 2.5
   radiusSpeed: 2
@@ -216,6 +217,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   target: {fileID: 0}
+  delay: 0
+  constantTargetUpdate: 1
 --- !u!1 &6604600376302972743
 GameObject:
   m_ObjectHideFlags: 0
