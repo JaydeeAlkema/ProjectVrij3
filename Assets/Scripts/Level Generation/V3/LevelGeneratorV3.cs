@@ -21,8 +21,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
 
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
+	[Space]
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugConnections = false;
+	[SerializeField, BoxGroup("Debug Variables")] private bool debugMapPiecesInSceneDictionary = false;
+	[Space]
 	[SerializeField, BoxGroup("Debug Variables")] private int goodGenerationTime;
 	[SerializeField, BoxGroup("Debug Variables")] private int okGenerationTime;
 	[SerializeField, BoxGroup("Debug Variables")] private int passibleGenerationTime;
@@ -60,9 +63,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 		for (int i = 0; i < mapPieceLimit; i++)
 		{
 			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
-			GameObject newMapPieceGO = Instantiate(mapPieces.GetRandom());
-			newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
+			GameObject newMapPieceGO = i == 0 ? Instantiate(spawnMapPiece) : Instantiate(mapPieces.GetRandom());
 
+			newMapPieceGO.name += $"[{i}]";
+			newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 			int retryLimit = mapPiecePlacementTryLimit;
 			while (newMapPieceGO != null && retryLimit > 0)
 			{
@@ -105,7 +109,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
 
 
 								newMapPieceConnectionPointSouth.Occupied = true;
@@ -119,7 +123,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
 
 								newMapPieceConnectionPointWest.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -132,7 +136,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
 
 								newMapPieceConnectionPointNorth.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -145,7 +149,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 							{
 								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
 
 								newMapPieceConnectionPointEast.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -188,7 +192,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 			GameObject mapPieceGO = mapPieceInScene.Key;
 			Vector2 mapPiecePos = mapPieceInScene.Value;
 
-			if (!mapPieceGO.TryGetComponent<MapPiece>(out var mapPiece)) continue;
+			if (!mapPieceGO.TryGetComponent<MapPiece>(out var mapPiece))
+			{
+				Debug.Log($"<color=red>Couldn't find MapPiece Component!", mapPieceGO);
+				continue;
+			}
 			mapPiece.GetConnectionPointsFromChildren();
 
 			Vector2 topNeighbourPos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
@@ -201,15 +209,23 @@ public class LevelGeneratorV3 : MonoBehaviour
 			GameObject bottomNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == bottomNeighbourPos).Key;
 			GameObject leftNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == leftNeighbourPos).Key;
 
-			bool hasTopNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
-			bool hasRightNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
-			bool hasBottomNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
-			bool hasLeftNeighbour = mapPiecesInScene.ContainsValue(topNeighbourPos);
+			bool hasTopNeighbour = topNeighbourGO == null ? false : true;
+			bool hasRightNeighbour = rightNeighbourGO == null ? false : true;
+			bool hasBottomNeighbour = bottomNeighbourGO == null ? false : true;
+			bool hasLeftNeighbour = leftNeighbourGO == null ? false : true;
 
 			if (hasTopNeighbour && topNeighbourGO != null) mapPiece.AddNeighbour(topNeighbourGO);
 			if (hasRightNeighbour && rightNeighbourGO != null) mapPiece.AddNeighbour(rightNeighbourGO);
 			if (hasBottomNeighbour && bottomNeighbourGO != null) mapPiece.AddNeighbour(bottomNeighbourGO);
 			if (hasLeftNeighbour && leftNeighbourGO != null) mapPiece.AddNeighbour(leftNeighbourGO);
+		}
+
+		if (debugMapPiecesInSceneDictionary)
+		{
+			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
+			{
+				Debug.Log($"{mapPiece.Key.name} - {mapPiece.Value}", mapPiece.Key);
+			}
 		}
 
 		stopwatch.Stop();
@@ -223,7 +239,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		else if (generationTime > TerribleGenerationTime) colorString = "red";
 
 		Debug.Log($"<color={colorString}>Level Generation took: {generationTime}ms</color>");
-		if (debugConnections || debugOverlaps) Debug.Log($"<color=cyan>Enabling Debugging Logs adds extra time to the level generation within the Editor. Disable any extra debug logging within the Level Generator to get the actual level generation times</color>");
+		if (debugConnections || debugOverlaps || debugMapPiecesInSceneDictionary) Debug.Log($"<color=cyan>Enabling Debugging Logs adds extra time to the level generation within the Editor. Disable any extra debug logging within the Level Generator to get the actual level generation times</color>");
 
 		yield return null;
 	}
@@ -269,10 +285,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 		var method = type.GetMethod("Clear");
 		method.Invoke(new object(), null);
 	}
-	private bool Overlap(Vector2 centerPoint, Vector2 size)
+	private bool Overlap(GameObject origin, Vector2 center, Vector2 size)
 	{
 		Bounds bounds = new Bounds();
-		bounds.center = centerPoint;
+		bounds.center = center;
 		bounds.size = size;
 
 		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
@@ -284,7 +300,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 			GameObject mapPieceGO = mapPiece.Key;
 			if (bounds.Intersects(mapPieceBounds))
 			{
-				if (debugOverlaps) Debug.Log($"Overlap found with {mapPieceGO.name} at position {mapPieceGO.transform.position}", mapPieceGO);
+				if (debugOverlaps) Debug.Log($"<color=orange>[{origin.name}] Overlap found with[{mapPieceGO.name}]</color>", mapPieceGO);
 				return true;
 			}
 		}
