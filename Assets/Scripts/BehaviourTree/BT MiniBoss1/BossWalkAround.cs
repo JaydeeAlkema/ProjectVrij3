@@ -8,20 +8,17 @@ public class BossWalkAround : BTNode
 {
 	private Transform player;
 	private BossBase bossScript;
-	private Transform[] wayPoints;
 	private int attackStep;
-	private int currentWayPoint = 0;
 	private float timer;
 	private float walkDuration;
-	private string animationName;
+	private List<string> animationNames;
 
-	public BossWalkAround(int attackStep, BossBase bossScript, float duration, string animationToPlay, Transform[] waypoints)
+	public BossWalkAround(int attackStep, BossBase bossScript, float duration, List<string> animationsToPlay)
 	{
 		this.attackStep = attackStep;
 		this.bossScript = bossScript;
-		wayPoints = waypoints;
 		walkDuration = duration;
-		animationName = animationToPlay;
+		animationNames = animationsToPlay;
 	}
 
 	public override BTNodeState Evaluate()
@@ -66,34 +63,18 @@ public class BossWalkAround : BTNode
 			return state;
 		}
 
-		if (!bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+		if (!bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationNames[0]))
 		{
-			bossScript.enemyAnimator.Play(animationName);
+			bossScript.enemyAnimator.Play(animationNames[0]);
 		}
 
 		if (bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target == null)
 		{
 			bossScript.MoveToTarget(player);
-			//Debug.Log("Moving to waypoint: " + currentWayPoint);
-			//bossScript.MoveToTarget(wayPoints[currentWayPoint]);
+			bossScript.enemyAnimator.Play(animationNames[1]);
 		}
 
-		//if (Vector2.Distance(bossScript.gameObject.transform.position, bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target.position) < 2f)
-		//{
-		//	bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target = null;
-		//	bossScript.StopMovingToTarget();
-		//	//currentWayPoint = Random.Range(0, wayPoints.Length);
-		//	//while (currentWayPoint == ignoreWaypoint)
-		//	//{
-		//	//	Debug.Log("Rolled into old waypoint, rerolling.");
-		//	//	currentWayPoint = Random.Range(0, wayPoints.Length);
-		//	//	break;
-		//	//}
-		//	//Debug.Log("New waypoint: " + currentWayPoint);
-		//}
-
 		timer += Time.deltaTime;
-		Debug.Log("Walking with animation: " + animationName + " for " + walkDuration + " seconds.");
 		state = BTNodeState.RUNNING;
 		return state;
 	}

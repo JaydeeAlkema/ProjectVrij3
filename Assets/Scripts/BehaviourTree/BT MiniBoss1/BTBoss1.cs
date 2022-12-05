@@ -8,7 +8,6 @@ public class BTBoss1 : BTTree
 {
 	[SerializeField] private int enemyType = 4;
 	[SerializeField] private int amountOfAttacks = 2;
-	[SerializeField] private Transform[] waypoints;
 	public BossBase bossScript;
 
 	protected override BTNode SetupTree()
@@ -24,7 +23,7 @@ public class BTBoss1 : BTTree
 					new BossWaitWithAnimation(1, bossScript, 1f, "MiniBoss1Charging"),
 					new BossSpawnMinions(2, bossScript),
 					new BossWaitWithAnimation(3, bossScript, 1f, "MiniBoss1Charging"),
-					new BossWalkAround(4, bossScript, 8f, "MiniBoss1Walking", waypoints),
+					new BossWalkAround(4, bossScript, 8f, new List<string>{ "MiniBoss1Walking", "MiniBoss1Idle" }),
 					new BossLaunchMobs(5, bossScript),
 					new BossPlayAnimationUntilCompletion(6, bossScript, "MiniBoss1StartCharging"),
 					new BossWaitWithAnimation(7, bossScript, 4f, "MiniBoss1Charging"),
@@ -52,7 +51,7 @@ public class BTBoss1 : BTTree
 			}),
 			new Sequence(new List<BTNode> //Idle and roll new attack
 			{
-				new BossWalkAround(0, bossScript, 3f, "MiniBoss1Walking", waypoints),
+				new BossWalkAround(0, bossScript, 3f, new List<string>{ "MiniBoss1Walking", "MiniBoss1Idle" }),
 				new BossClearAttackSequence(new List<string>{"currentAttackStep"}),
 				new BossRollNewAttack(amountOfAttacks),
 			}),

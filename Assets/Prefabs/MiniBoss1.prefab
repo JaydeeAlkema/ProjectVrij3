@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 4854315342416871620}
   - component: {fileID: 4854315342416871622}
   - component: {fileID: 4301883337042835587}
+  - component: {fileID: 3409888667710691881}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -176,6 +177,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebda90a52c11d943a36c1d1362f927d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3409888667710691881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4854315342416871641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385155154d6585b47ba0610dd20872cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unityEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4854315343805222046}
+        m_TargetAssemblyTypeName: MiniBoss1, Assembly-CSharp
+        m_MethodName: SmallShockWave
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 4
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4854315343805222032
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +242,7 @@ Transform:
   - {fileID: 4854315342416871623}
   - {fileID: 4854315341767582279}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &4854315343805222044
 Rigidbody2D:
@@ -283,6 +311,7 @@ MonoBehaviour:
   attackRange: 0
   expAmount: 0
   expAmountBase: 0
+  markHits: 1
   attacking: 0
   rb2d: {fileID: 4854315343805222044}
   deathPoof: {fileID: 6120905142384714952, guid: 89bbbe65ccd36084b8f301d8530e047f, type: 3}
@@ -312,13 +341,14 @@ MonoBehaviour:
     m_Bits: 0
   mobs: []
   player: {fileID: 0}
+  healthBar: {fileID: 0}
+  maxHealthPoints: 0
   mobPrefab: {fileID: 5793724696057155428, guid: f314134a3cc6a1545a9ad57355bf7949, type: 3}
   innerRadius: 3
   innerOrbitRotationSpeed: 20
   outerRadius: 6
   outerOrbitRotationSpeed: 20
   bodyBlock: {fileID: 4854315341767582276}
-  shockwaveMaxRadius: 15
   shockwaveExpansionSpeed: 8
   innerSpawnPoints:
   - {x: 1, y: 1}
@@ -338,6 +368,7 @@ MonoBehaviour:
   - {x: -6, y: 6}
   - {x: -6, y: 0}
   - {x: -6, y: -6}
+  spawnedShockwaveObject: {fileID: 0}
   shockwaveVFXPrefab: {fileID: 2530599393635534783, guid: f43d69c44af4577498860bf4248aeafa, type: 3}
   rewardInstance: {fileID: 0}
 --- !u!114 &4854315343805222033
@@ -354,11 +385,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 4
   amountOfAttacks: 2
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   bossScript: {fileID: 4854315343805222046}
 --- !u!114 &4854315343805222040
 MonoBehaviour:
@@ -423,9 +449,9 @@ MonoBehaviour:
   targetCompatibility: {fileID: 0}
   maxAcceleration: -2.5
   rotationSpeed: 360
-  slowdownDistance: 0.6
+  slowdownDistance: 0.2
   pickNextWaypointDist: 1
-  endReachedDistance: 0.2
+  endReachedDistance: 0.1
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0

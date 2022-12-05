@@ -40,10 +40,11 @@ public class ShockwaveVFX : MonoBehaviour
 	{
 		//Draw indicator
 		var drawnCircle2 = new GameObject { name = "ShockWaveIndicator" };
-		drawnCircle2.DrawCircle(maxRadius.x, 0.04f);
+		drawnCircle2.DrawCircle(1f, 0.04f);
 		drawnCircle2.GetComponent<LineRenderer>().material = setMaterial;
 		drawnCircle2.GetComponent<LineRenderer>().startColor = Color.white;
 		drawnCircle2.GetComponent<LineRenderer>().endColor = Color.white;
+		drawnCircle2.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 		drawnCircle2.transform.position = transform.position;
 		shockwaveIndicator = drawnCircle2;
 	}
