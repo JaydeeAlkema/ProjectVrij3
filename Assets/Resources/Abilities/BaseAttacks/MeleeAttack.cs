@@ -35,7 +35,9 @@ public class MeleeAttack : Ability
 			AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
 		}
 		//player.IsAttackPositionLocked = true;
-		caller.CallCoroutine(TestCoroutine());
+		caller.CallCoroutine( TestCoroutine() );
+
+
 	}
 
 	public void DamageDetectedEnemies(Collider2D enemy)

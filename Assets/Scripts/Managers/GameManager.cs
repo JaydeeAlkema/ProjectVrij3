@@ -66,7 +66,12 @@ public class GameManager : MonoBehaviour
 			ChangeGameState(GameState.GameOver);
 		}
 
-		if (Input.GetKeyDown(KeyCode.Escape))
+		if(PlayerHP.value > playerHP.startValue)
+		{
+			playerHP.value = playerHP.startValue;
+		}
+
+		if( Input.GetKeyDown( KeyCode.Escape ) )
 		{
 			TogglePauseGame();
 			uiManager.SetUIActive(3, isPaused);

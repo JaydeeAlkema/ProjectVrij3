@@ -7,6 +7,7 @@ public class LevelingStatue : MonoBehaviour
     private ExpManager expMan;
     private LevelManager levelMan;
 	private bool canInteract;
+	[SerializeField] private int healOnPointSpend;
 
 	private void Awake()
 	{
@@ -21,6 +22,7 @@ public class LevelingStatue : MonoBehaviour
 			if( Input.GetKeyDown( KeyCode.F ) && expMan.PlayerPoints >= levelMan.PointToLevel )
 			{
 				expMan.PlayerPoints -= levelMan.PointToLevel;
+				GameManager.Instance.PlayerHP.value += healOnPointSpend;
 				Debug.Log( "level up, current points: " + expMan.PlayerPoints + " Points to level was: " + levelMan.PointToLevel );
 				levelMan.IncreaseLevel();
 			}

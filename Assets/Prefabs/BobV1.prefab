@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 400
+  baseHealthPoints: 400
   damageBase: 50
   damage: 0
   speed: 6
@@ -114,6 +115,7 @@ MonoBehaviour:
   attackRange: 9
   expAmount: 20
   expAmountBase: 20
+  markHits: 1
   attacking: 0
   rb2d: {fileID: 4442677197823009441}
   deathPoof: {fileID: 6120905142384714952, guid: 89bbbe65ccd36084b8f301d8530e047f, type: 3}

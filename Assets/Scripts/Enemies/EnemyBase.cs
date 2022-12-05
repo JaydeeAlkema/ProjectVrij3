@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 {
 	[SerializeField] private int healthPoints = 0;
+	[SerializeField] private int baseHealthPoints = 0;
 	[SerializeField] private int damageBase = 0;
 	[SerializeField] protected int damage = 0;
 	[SerializeField] private float speed = 0;
@@ -292,8 +293,18 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void OnLeveled(int level , float dificultyModifier)
 	{
-		expAmount = Mathf.RoundToInt(expAmountBase * Mathf.Pow(dificultyModifier, level));
-		damage = Mathf.RoundToInt(damageBase * Mathf.Pow(dificultyModifier, level));
+		if( expAmountBase >= expAmount )
+		{
+			expAmount = Mathf.RoundToInt( expAmountBase * Mathf.Pow( dificultyModifier, level ) );
+		}
+		if(damageBase >= damage)
+		{
+			damage = Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) );
+		}
+		if( baseHealthPoints >= healthPoints )
+		{
+			healthPoints = Mathf.RoundToInt( baseHealthPoints * Mathf.Pow( dificultyModifier, level ) );
+		}
 	}
 
 	public void beingDisplaced()

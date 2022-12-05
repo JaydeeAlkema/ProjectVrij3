@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 100
+  baseHealthPoints: 100
   damageBase: 15
   damage: 0
   speed: 7
@@ -97,12 +98,14 @@ MonoBehaviour:
   attackRange: 5
   expAmount: 5
   expAmountBase: 5
+  markHits: 1
   attacking: 0
   rb2d: {fileID: 4442677197823009441}
   deathPoof: {fileID: 6120905142384714952, guid: 89bbbe65ccd36084b8f301d8530e047f, type: 3}
   damageNumberText: {fileID: 3426772444218467690, guid: e334bec80b959dc4b903ac92713abb5d, type: 3}
   enemySprite: {fileID: 4605739585943561647}
   vfxHitSpark: {fileID: 7225220435252655472, guid: 22534dcfbb229cf479e11bf50dc90f69, type: 3}
+  reward: 0
   enemyAnimator: {fileID: 6017575560788466592}
   hasHitbox: 1
   unwalkableDetection:

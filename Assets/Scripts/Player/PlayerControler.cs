@@ -118,17 +118,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		GameManager.Instance.OnGameStateChanged -= OnStart;
 	}
-	
-	void Awake()
+
+	private void Awake()
 	{
-		if (GameManager.Instance != null)
+		if( GameManager.Instance != null )
 		{
 			GameManager.Instance.OnGameStateChanged += OnStart;
-			Debug.Log("subscribed to ongamestatechanged");
+			Debug.Log( "subscribed to ongamestatechanged" );
 		}
-
 	}
 
+	// Start is called before the first frame update
 	void Start()
 	{
 		trail.emitting = false;
