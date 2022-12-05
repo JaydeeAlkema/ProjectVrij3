@@ -17,7 +17,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Map Piece References")] private int mapPieceOffset = 21;
 	[SerializeField, BoxGroup("Map Piece References")] private Transform connectedMapPiecesParent = default;
 	[SerializeField, BoxGroup("Map Piece References")] private Transform disconnectedMapPiecesParent = default;
-	[SerializeField, BoxGroup("Map Piece References")] private GameObject spawnMapPiece = default;
+	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> spawnMapPieces = new WeightedRandomList<GameObject>();
 	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
 
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
@@ -58,15 +58,21 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
 
+		GameObject spawnMapPieceGO = Instantiate(spawnMapPieces.GetRandom());
+		spawnMapPieceGO.name += $" [Spawn]";
+		spawnMapPieceGO.transform.position = Vector2.zero;
+		spawnMapPieceGO.transform.parent = connectedMapPiecesParent;
+		mapPiecesInScene.Add(spawnMapPieceGO, Vector2.zero);
+
 		// Generate the level. This is a dirty generation, meaning it has lots of dead-ends, incorrect connections, etc. We clean those up later.
 		List<ConnectionPoint> levelConnectionPointsInScene = new List<ConnectionPoint>();
 		for (int i = 0; i < mapPieceLimit; i++)
 		{
 			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
-			GameObject newMapPieceGO = i == 0 ? Instantiate(spawnMapPiece) : Instantiate(mapPieces.GetRandom());
+			GameObject newMapPieceGO = Instantiate(mapPieces.GetRandom());
 
-			newMapPieceGO.name += $"[{i}]";
 			newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
+
 			int retryLimit = mapPiecePlacementTryLimit;
 			while (newMapPieceGO != null && retryLimit > 0)
 			{
@@ -107,10 +113,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect North to South
 							if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
 								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
-
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointSouth.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -121,9 +126,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect East to West
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
 								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointWest.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -134,9 +139,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect South to North
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
 								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointNorth.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -147,9 +152,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect West to East
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
 								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointEast.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -161,7 +166,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 					}
 				}
 
-				if (!connected && i > 1 && i < mapPieceLimit)
+				if (!connected)
 				{
 					if (debugConnections) Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
 
@@ -176,6 +181,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 				}
 				else
 				{
+					newMapPieceGO.name += $" [{mapPiecesInScene.Count}]";
 					newMapPieceGO.transform.position = newMapPiecePos;
 					newMapPieceGO.transform.parent = connectedMapPiecesParent;
 					mapPiecesInScene.Add(newMapPieceGO, newMapPiecePos);
@@ -227,6 +233,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 				Debug.Log($"{mapPiece.Key.name} - {mapPiece.Value}", mapPiece.Key);
 			}
 		}
+
+		// Spawn enemies
 
 		stopwatch.Stop();
 		long generationTime = stopwatch.ElapsedMilliseconds;
