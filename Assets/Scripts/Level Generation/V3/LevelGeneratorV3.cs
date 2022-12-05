@@ -208,19 +208,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		SpawnEnemies();
 
-		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
-		foreach (GridGraph gridGraph in astarData.graphs)
-		{
-			gridGraph.center = mapBounds.center;
-			gridGraph.SetDimensions((int)mapBounds.size.x, (int)mapBounds.size.y, gridGraph.nodeSize);
-			AstarPath.active.Scan(gridGraph);
-		}
-
-		while (AstarPath.active.IsAnyGraphUpdateInProgress)
-		{
-			yield return null;
-		}
-
 		if (debugMapPiecesInSceneDictionary)
 		{
 			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
@@ -290,7 +277,13 @@ public class LevelGeneratorV3 : MonoBehaviour
 			}
 		}
 
-
+		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
+		foreach (GridGraph gridGraph in astarData.graphs)
+		{
+			gridGraph.center = mapBounds.center;
+			gridGraph.SetDimensions((int)mapBounds.size.x, (int)mapBounds.size.y, gridGraph.nodeSize);
+			AstarPath.active.Scan(gridGraph);
+		}
 	}
 
 	private void SetMapPieceNeighbours()
