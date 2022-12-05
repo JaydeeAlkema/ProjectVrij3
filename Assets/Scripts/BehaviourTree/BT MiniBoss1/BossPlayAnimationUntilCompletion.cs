@@ -9,6 +9,7 @@ public class BossPlayAnimationUntilCompletion : BTNode
 	private BossBase bossScript;
 	private string animationName;
 	private int attackStep;
+	private float timer = 0f;
 
 	public BossPlayAnimationUntilCompletion(int attackStep, BossBase bossScript, string animationToPlay)
 	{
@@ -38,19 +39,26 @@ public class BossPlayAnimationUntilCompletion : BTNode
 			return state;
 		}
 
+		//-----
+
+
+
 		if (!bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
 		{
 			bossScript.enemyAnimator.Play(animationName);
 		}
 
-		if (bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+		if (timer >= bossScript.enemyAnimator.GetCurrentAnimatorClipInfo(0).Length)
 		{
 			Debug.Log("Done animating: " + animationName);
+			timer = 0f;
 			parent.SetData("currentAttackStep", currentAttackStep + 1);
+			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + (currentAttackStep + 1));
 			state = BTNodeState.SUCCESS;
 			return state;
 		}
 
+		timer += Time.deltaTime;
 		state = BTNodeState.RUNNING;
 		return state;
 	}

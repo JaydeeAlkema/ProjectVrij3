@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class MiniBoss1 : BossBase
 {
 	[SerializeField] private GameObject player = null;
-	[SerializeField] Transform healthBar;
+	[SerializeField] private Transform healthBar;
 	[SerializeField] private int maxHealthPoints;
 	[SerializeField] private GameObject mobPrefab;
 	[SerializeField] private float innerRadius;
@@ -15,6 +14,7 @@ public class MiniBoss1 : BossBase
 	[SerializeField] private float outerRadius;
 	[SerializeField] private float outerOrbitRotationSpeed;
 	[SerializeField] private BoxCollider2D bodyBlock;
+	[SerializeField] private Transform enemyShadow;
 	[SerializeField] private float shockwaveExpansionSpeed;
 	private float storedSpeed;
 	public Vector2[] innerSpawnPoints;
@@ -96,6 +96,8 @@ public class MiniBoss1 : BossBase
 		flippedValue = enemySprite.flipX ? -1f : 1f;
 		GetComponent<BoxCollider2D>().offset = new Vector2(Mathf.Abs(GetComponent<BoxCollider2D>().offset.x) * flippedValue, GetComponent<BoxCollider2D>().offset.y);
 		bodyBlock.offset = new Vector2(Mathf.Abs(bodyBlock.offset.x) * -flippedValue, bodyBlock.offset.y);
+		enemyShadow.localPosition = new Vector2(Mathf.Abs(enemyShadow.localPosition.x) * flippedValue, enemyShadow.localPosition.y);
+		
 	}
 
 	public void SpawnShockWaveObject(float radius)

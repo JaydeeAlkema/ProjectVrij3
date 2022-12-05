@@ -37,13 +37,11 @@ public class BTBoss1 : BTTree
 				new BossCheckCurrentAttack(2, bossScript), //Check if Smash attack
 				new Sequence(new List<BTNode> //Smash attack sequence
 				{
-					new BossWaitWithAnimation(0, bossScript, 1f, "MiniBoss1Windup"),
-					new BossWaitWithAnimation(1, bossScript, 0.1f, "MiniBoss1LeapUp"), // Replace with BossPlayAnimationUntilCompletion when animations are implemented
-					//new BossPlayAnimationUntilCompletion(1, bossScript, "MiniBoss1LeapUp"),
-					new BossWaitWithAnimation(2, bossScript, 0.75f, "MiniBoss1WaitToFallDown"),
-					new BossWaitWithAnimation(3, bossScript, 0.1f, "MiniBoss1FallDown"), // Replace with BossPlayAnimationUntilCompletion when animations are implemented
-					//new BossPlayAnimationUntilCompletion(3, bossScript, "MiniBoss1FallDown"),
-					new BossStompAttack(4, (MiniBoss1)bossScript), //Make sure the shockwave object has been spawned BEFORE this!
+					new BossPlayAnimationUntilCompletion(0, bossScript, "MiniBoss1StartWindup"),
+					new BossWaitWithAnimation(1, bossScript, 0.1f, "MiniBoss1WindingUp"),
+					new BossPlayAnimationUntilCompletion(2, bossScript, "MiniBoss1Up"),
+					new BossWaitWithAnimation(3, bossScript, 2f, "MiniBoss1WaitToFallDown"),
+					new BossPlayAnimationUntilCompletion(4, bossScript, "MiniBoss1Down"),
 					new BossPlayAnimationUntilCompletion(5, bossScript, "MiniBoss1StartEndlag"),
 					new BossWaitWithAnimation(6, bossScript, 3f, "MiniBoss1Endlag"),
 					new BossClearAttackSequence(new List<string>{ "currentAttackStep", "currentAttackType" })
