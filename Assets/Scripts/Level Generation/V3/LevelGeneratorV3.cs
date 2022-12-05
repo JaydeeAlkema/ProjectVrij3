@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,15 +15,29 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Main Settings")] private int mapPieceLimit = 100;
 	[SerializeField, BoxGroup("Main Settings")] private int mapPiecePlacementTryLimit = 2;
 
-	[SerializeField, BoxGroup("Map Piece References")] private int mapPieceOffset = 21;
-	[SerializeField, BoxGroup("Map Piece References")] private Transform connectedMapPiecesParent = default;
-	[SerializeField, BoxGroup("Map Piece References")] private Transform disconnectedMapPiecesParent = default;
-	[SerializeField, BoxGroup("Map Piece References")] private GameObject spawnMapPiece = default;
-	[SerializeField, BoxGroup("Map Piece References")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
+	[SerializeField, BoxGroup("Map Piece Settings")] private int mapPieceOffset = 21;
+	[SerializeField, BoxGroup("Map Piece Settings")] private Transform connectedMapPiecesParent = default;
+	[SerializeField, BoxGroup("Map Piece Settings")] private Transform disconnectedMapPiecesParent = default;
+	[Space]
+	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> spawnMapPieces = new WeightedRandomList<GameObject>();
+	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
+
+	[SerializeField, BoxGroup("Enemy Settings")] private AstarPath astarData = null;
+	[SerializeField, BoxGroup("Enemy Settings")] private Transform enemyParentTransform = null;
+	[Space]
+	[SerializeField, BoxGroup("Enemy Settings")] private int playerSafeZoneRadii = 2;
+	[SerializeField, BoxGroup("Enemy Settings")] private int enemyCountPerMapPiece = 5;
+	[SerializeField, BoxGroup("Enemy Settings")] private WeightedRandomList<GameObject> enemyPrefabs = new WeightedRandomList<GameObject>();
+	[SerializeField, BoxGroup("Enemy Settings")] private int rewardEnemyCountPerLevel = 3;
+	[SerializeField, BoxGroup("Enemy Settings")] private WeightedRandomList<GameObject> rewardEnemyPrefabs = new WeightedRandomList<GameObject>();
 
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
+	[Space]
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugConnections = false;
+	[SerializeField, BoxGroup("Debug Variables")] private bool debugMapPiecesInSceneDictionary = false;
+	[SerializeField, BoxGroup("Debug Variables")] private bool debugMapPiecesOutsidePlayerSafeZone = false;
+	[Space]
 	[SerializeField, BoxGroup("Debug Variables")] private int goodGenerationTime;
 	[SerializeField, BoxGroup("Debug Variables")] private int okGenerationTime;
 	[SerializeField, BoxGroup("Debug Variables")] private int passibleGenerationTime;
@@ -35,7 +50,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 	private void Start()
 	{
-		GameManager.Instance.FetchDungeonReferences();
+		if (GameManager.Instance) GameManager.Instance.FetchDungeonReferences();
 	}
 
 	[Button]
@@ -55,11 +70,19 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
 
+		GameObject spawnMapPieceGO = Instantiate(spawnMapPieces.GetRandom());
+		spawnMapPieceGO.name += $" [Spawn]";
+		spawnMapPieceGO.transform.position = Vector2.zero;
+		spawnMapPieceGO.transform.parent = connectedMapPiecesParent;
+		mapPiecesInScene.Add(spawnMapPieceGO, Vector2.zero);
+
+		// Generate the level. This is a dirty generation, meaning it has lots of dead-ends, incorrect connections, etc. We clean those up later.
 		List<ConnectionPoint> levelConnectionPointsInScene = new List<ConnectionPoint>();
 		for (int i = 0; i < mapPieceLimit; i++)
 		{
 			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
 			GameObject newMapPieceGO = Instantiate(mapPieces.GetRandom());
+
 			newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 
 			int retryLimit = mapPiecePlacementTryLimit;
@@ -102,10 +125,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect North to South
 							if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
-
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointSouth.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -116,9 +138,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect East to West
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointWest.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -129,9 +151,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect South to North
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointNorth.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -142,9 +164,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 							// Connect West to East
 							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
 							{
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 								newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
-								if (Overlap(newMapPiecePos, overlapSize)) continue;
+								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
+								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 								newMapPieceConnectionPointEast.Occupied = true;
 								mapPieceInSceneConnectionPoint.Occupied = true;
@@ -156,7 +178,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 					}
 				}
 
-				if (!connected && i > 1 && i < mapPieceLimit)
+				if (!connected)
 				{
 					if (debugConnections) Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
 
@@ -171,6 +193,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 				}
 				else
 				{
+					newMapPieceGO.name += $" [{mapPiecesInScene.Count}]";
 					newMapPieceGO.transform.position = newMapPiecePos;
 					newMapPieceGO.transform.parent = connectedMapPiecesParent;
 					mapPiecesInScene.Add(newMapPieceGO, newMapPiecePos);
@@ -180,6 +203,18 @@ public class LevelGeneratorV3 : MonoBehaviour
 		}
 
 		RemoveDisconnectedMapPieces();
+
+		SetMapPieceNeighbours();
+
+		SpawnEnemies();
+
+		if (debugMapPiecesInSceneDictionary)
+		{
+			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
+			{
+				Debug.Log($"{mapPiece.Key.name} - {mapPiece.Value}", mapPiece.Key);
+			}
+		}
 
 		stopwatch.Stop();
 		long generationTime = stopwatch.ElapsedMilliseconds;
@@ -192,23 +227,147 @@ public class LevelGeneratorV3 : MonoBehaviour
 		else if (generationTime > TerribleGenerationTime) colorString = "red";
 
 		Debug.Log($"<color={colorString}>Level Generation took: {generationTime}ms</color>");
-		if (debugConnections || debugOverlaps) Debug.Log($"<color=cyan>Enabling Debugging Logs adds extra time to the level generation within the Editor. Disable any extra debug logging within the Level Generator to get the actual level generation times</color>");
+		if (debugConnections || debugOverlaps || debugMapPiecesInSceneDictionary || debugMapPiecesOutsidePlayerSafeZone) Debug.Log($"<color=cyan>Enabling Debugging Logs adds extra time to the level generation within the Editor. Disable any extra debug logging within the Level Generator to get the actual level generation times</color>");
 
 		yield return null;
+	}
+
+	private void SpawnEnemies()
+	{
+		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
+		{
+			float distanceToSpawn = Vector2.Distance(Vector2.zero, mapPiece.Value);
+			int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset;
+
+			Bounds safeZoneBounds = new Bounds
+			{
+				center = Vector2.zero,
+				size = new Vector2(playerSafeZoneSize, playerSafeZoneSize)
+			};
+
+			Bounds mapPieceBounds = new Bounds()
+			{
+				center = mapPiece.Value,
+				size = new Vector2(mapPieceOffset, mapPieceOffset)
+			};
+
+			if (safeZoneBounds.Intersects(mapPieceBounds)) continue;
+			if (debugMapPiecesOutsidePlayerSafeZone) Debug.Log($"<color=magenta>{mapPiece.Key.name} is outside of the Player Safe Zone and can spawn enemies</color>", mapPiece.Key);
+
+			GameObject mapPieceGO = mapPiece.Key;
+			Transform mapPieceFloorParentTransform = mapPieceGO.transform.Find("Floors");
+			Transform[] floorTiles = mapPieceFloorParentTransform.GetComponentsInChildren<Transform>();
+
+			List<int> spawnIndeces = new List<int>();
+			// ec = EnemyCount
+			for (int ec = 0; ec < enemyCountPerMapPiece; ec++)
+			{
+				int spawnIndex = Random.Range(1, floorTiles.Length);
+				while (spawnIndeces.Contains(spawnIndex))
+				{
+					spawnIndex = Random.Range(1, floorTiles.Length);
+				}
+				spawnIndeces.Add(spawnIndex);
+			}
+
+			foreach (int spawnIndex in spawnIndeces)
+			{
+				Transform spawnTile = floorTiles[spawnIndex];
+				Instantiate(enemyPrefabs.GetRandom(), new Vector2(spawnTile.position.x, spawnTile.position.y), Quaternion.identity, enemyParentTransform);
+			}
+		}
+
+		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
+		foreach (GridGraph gridGraph in astarData.graphs)
+		{
+			gridGraph.center = mapBounds.center;
+			gridGraph.SetDimensions((int)mapBounds.size.x, (int)mapBounds.size.y, gridGraph.nodeSize);
+			AstarPath.active.Scan(gridGraph);
+		}
+	}
+
+	private void SetMapPieceNeighbours()
+	{
+		// Loop through all the map pieces in the scene and set their neighbours
+		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+		{
+			GameObject mapPieceGO = mapPieceInScene.Key;
+			Vector2 mapPiecePos = mapPieceInScene.Value;
+
+			if (!mapPieceGO.TryGetComponent<MapPiece>(out var mapPiece))
+			{
+				Debug.Log($"<color=red>Couldn't find MapPiece Component!", mapPieceGO);
+				continue;
+			}
+			mapPiece.GetConnectionPointsFromChildren();
+
+			Vector2 topNeighbourPos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
+			Vector2 rightNeighbourPos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
+			Vector2 bottomNeighbourPos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
+			Vector2 leftNeighbourPos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
+
+			GameObject topNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == topNeighbourPos).Key;
+			GameObject rightNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == rightNeighbourPos).Key;
+			GameObject bottomNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == bottomNeighbourPos).Key;
+			GameObject leftNeighbourGO = mapPiecesInScene.FirstOrDefault(x => x.Value == leftNeighbourPos).Key;
+
+			bool hasTopNeighbour = topNeighbourGO != null;
+			bool hasRightNeighbour = rightNeighbourGO != null;
+			bool hasBottomNeighbour = bottomNeighbourGO != null;
+			bool hasLeftNeighbour = leftNeighbourGO != null;
+
+			if (hasTopNeighbour && topNeighbourGO != null) mapPiece.AddNeighbour(topNeighbourGO);
+			if (hasRightNeighbour && rightNeighbourGO != null) mapPiece.AddNeighbour(rightNeighbourGO);
+			if (hasBottomNeighbour && bottomNeighbourGO != null) mapPiece.AddNeighbour(bottomNeighbourGO);
+			if (hasLeftNeighbour && leftNeighbourGO != null) mapPiece.AddNeighbour(leftNeighbourGO);
+		}
 	}
 
 	#region Helper Functions
 	[Button]
 	private void CleanUp()
 	{
-		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene.ToList())
+		ClearLog();
+
+		// Remove map Pieces
+		List<Transform> connectedMapPieces = connectedMapPiecesParent.GetComponentsInChildren<Transform>().ToList();
+		for (int i = connectedMapPieces.Count - 1; i >= 0; i--)
 		{
-			DestroyImmediate(mapPiece.Key);
+			Transform mapPieceTransform = connectedMapPieces[i];
+			if (mapPieceTransform != connectedMapPiecesParent)
+			{
+				if (Application.isEditor)
+				{
+					DestroyImmediate(mapPieceTransform.gameObject);
+				}
+				else
+				{
+					Destroy(mapPieceTransform.gameObject);
+				}
+			}
 		}
 		mapPiecesInScene.Clear();
 		connectionPointsInScene.Clear();
-		ClearLog();
 		RemoveDisconnectedMapPieces();
+
+		// Remove enemies
+		List<Transform> enemiesInScene = enemyParentTransform.GetComponentsInChildren<Transform>().ToList();
+		for (int e = enemiesInScene.Count - 1; e >= 0; e--)
+		{
+			Transform enemyTransform = enemiesInScene[e];
+			if (enemyTransform != enemyParentTransform)
+			{
+				if (Application.isEditor)
+				{
+					DestroyImmediate(enemyTransform.gameObject);
+				}
+				else
+				{
+					Destroy(enemyTransform.gameObject);
+				}
+			}
+
+		}
 	}
 	private void RemoveDisconnectedMapPieces()
 	{
@@ -216,10 +375,13 @@ public class LevelGeneratorV3 : MonoBehaviour
 		{
 			if (disconnectedMapPieceTransform != disconnectedMapPiecesParent && disconnectedMapPieceTransform != null)
 			{
+				GameObject disconnectedMapPieceGO = disconnectedMapPieceTransform.gameObject;
 				if (Application.isEditor)
-					DestroyImmediate(disconnectedMapPieceTransform.gameObject);
+					DestroyImmediate(disconnectedMapPieceGO);
 				else
-					Destroy(disconnectedMapPieceTransform.gameObject);
+					Destroy(disconnectedMapPieceGO);
+
+				mapPiecesInScene.Remove(disconnectedMapPieceGO);
 			}
 		}
 	}
@@ -230,10 +392,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 		var method = type.GetMethod("Clear");
 		method.Invoke(new object(), null);
 	}
-	private bool Overlap(Vector2 centerPoint, Vector2 size)
+	private bool Overlap(GameObject origin, Vector2 center, Vector2 size)
 	{
 		Bounds bounds = new Bounds();
-		bounds.center = centerPoint;
+		bounds.center = center;
 		bounds.size = size;
 
 		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
@@ -245,7 +407,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 			GameObject mapPieceGO = mapPiece.Key;
 			if (bounds.Intersects(mapPieceBounds))
 			{
-				if (debugOverlaps) Debug.Log($"Overlap found with {mapPieceGO.name} at position {mapPieceGO.transform.position}", mapPieceGO);
+				if (debugOverlaps) Debug.Log($"<color=orange>[{origin.name}] Overlap found with[{mapPieceGO.name}]</color>", mapPieceGO);
 				return true;
 			}
 		}
@@ -280,6 +442,18 @@ public class LevelGeneratorV3 : MonoBehaviour
 			Debug.LogWarning("No connection points could be found!");
 			return null;
 		}
+	}
+	Bounds GetMaxBounds(GameObject gameObject)
+	{
+		// https://gamedev.stackexchange.com/questions/86863/calculating-the-bounding-box-of-a-game-object-based-on-its-children
+		Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
+		if (renderers.Length == 0) return new Bounds(gameObject.transform.position, Vector3.zero);
+		Bounds Bounds = renderers[0].bounds;
+		foreach (Renderer renderer in renderers)
+		{
+			Bounds.Encapsulate(renderer.bounds);
+		}
+		return Bounds;
 	}
 	#endregion
 }
