@@ -208,6 +208,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		SpawnEnemies();
 
+		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
+		foreach (GridGraph gridGraph in astarData.graphs)
+		{
+			gridGraph.center = mapBounds.center;
+			gridGraph.SetDimensions((int)mapBounds.size.x, (int)mapBounds.size.y, gridGraph.nodeSize);
+			AstarPath.active.Scan(gridGraph);
+		}
+
 		if (debugMapPiecesInSceneDictionary)
 		{
 			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
@@ -234,16 +242,17 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 	private void SpawnEnemies()
 	{
+		int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset - 1;
+		Bounds safeZoneBounds = new Bounds
+		{
+			center = Vector2.zero,
+			size = new Vector2(playerSafeZoneSize, playerSafeZoneSize)
+		};
+
+		// Spawn Regular Enemies
 		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
 		{
 			float distanceToSpawn = Vector2.Distance(Vector2.zero, mapPiece.Value);
-			int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset;
-
-			Bounds safeZoneBounds = new Bounds
-			{
-				center = Vector2.zero,
-				size = new Vector2(playerSafeZoneSize, playerSafeZoneSize)
-			};
 
 			Bounds mapPieceBounds = new Bounds()
 			{
@@ -258,31 +267,47 @@ public class LevelGeneratorV3 : MonoBehaviour
 			Transform mapPieceFloorParentTransform = mapPieceGO.transform.Find("Floors");
 			Transform[] floorTiles = mapPieceFloorParentTransform.GetComponentsInChildren<Transform>();
 
-			List<int> spawnIndeces = new List<int>();
-			// ec = EnemyCount
-			for (int ec = 0; ec < enemyCountPerMapPiece; ec++)
+			List<int> regularEnemySpawnIndeces = new List<int>();
+			for (int enemyCount = 0; enemyCount < enemyCountPerMapPiece; enemyCount++)
 			{
 				int spawnIndex = Random.Range(1, floorTiles.Length);
-				while (spawnIndeces.Contains(spawnIndex))
+				while (regularEnemySpawnIndeces.Contains(spawnIndex))
 				{
 					spawnIndex = Random.Range(1, floorTiles.Length);
 				}
-				spawnIndeces.Add(spawnIndex);
+				regularEnemySpawnIndeces.Add(spawnIndex);
 			}
 
-			foreach (int spawnIndex in spawnIndeces)
+			foreach (int spawnIndex in regularEnemySpawnIndeces)
 			{
 				Transform spawnTile = floorTiles[spawnIndex];
 				Instantiate(enemyPrefabs.GetRandom(), new Vector2(spawnTile.position.x, spawnTile.position.y), Quaternion.identity, enemyParentTransform);
 			}
 		}
 
-		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
-		foreach (GridGraph gridGraph in astarData.graphs)
+		// Spawn Reward Enemies
+		List<int> rewardEnemyMapPieceSpawnIndeces = new List<int>();
+		for (int rewardEnemyCount = 0; rewardEnemyCount < rewardEnemyCountPerLevel; rewardEnemyCount++)
 		{
-			gridGraph.center = mapBounds.center;
-			gridGraph.SetDimensions((int)mapBounds.size.x, (int)mapBounds.size.y, gridGraph.nodeSize);
-			AstarPath.active.Scan(gridGraph);
+			int spawnIndex = Random.Range(1, mapPiecesInScene.Count);
+			while (rewardEnemyMapPieceSpawnIndeces.Contains(spawnIndex))
+			{
+				spawnIndex = Random.Range(1, mapPiecesInScene.Count);
+			}
+			rewardEnemyMapPieceSpawnIndeces.Add(spawnIndex);
+		}
+
+		int i = 0;
+		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
+		{
+			if (rewardEnemyMapPieceSpawnIndeces.Contains(i++))
+			{
+				GameObject mapPieceGO = mapPiece.Key;
+				Transform mapPieceFloorParentTransform = mapPieceGO.transform.Find("Floors");
+				Transform[] floorTiles = mapPieceFloorParentTransform.GetComponentsInChildren<Transform>();
+				Transform spawnTile = floorTiles[Random.Range(0, floorTiles.Length)];
+				Instantiate(rewardEnemyPrefabs.GetRandom(), new Vector2(spawnTile.position.x, spawnTile.position.y), Quaternion.identity, enemyParentTransform);
+			}
 		}
 	}
 
