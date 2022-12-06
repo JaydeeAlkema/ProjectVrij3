@@ -469,7 +469,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 			}
 		}
 
-		Instantiate(bossPortalPrefab, furthestPositionFromSpawn, Quaternion.identity, interactablesParent);
+		GameObject bossPortalGO = Instantiate(bossPortalPrefab, furthestPositionFromSpawn, Quaternion.identity, interactablesParent);
+		Portal portal = bossPortalGO.GetComponent<Portal>();
+		portal.CurrentSceneName = "Jaydee Testing Scene";
+		portal.SceneToLoadName = "Boss Testing";
 	}
 	private void SpawnEnemies()
 	{
