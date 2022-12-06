@@ -361,16 +361,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 			Transform mapPieceTransform = connectedMapPieces[i];
 			if (mapPieceTransform != connectedMapPiecesParent)
 			{
-				if (Application.isEditor)
-				{
-					DestroyImmediate(mapPieceTransform.gameObject);
-				}
-				else
-				{
-					Destroy(mapPieceTransform.gameObject);
-				}
+				DestroyImmediate(mapPieceTransform.gameObject);
 			}
 		}
+
 		mapPiecesInScene.Clear();
 		connectionPointsInScene.Clear();
 		RemoveDisconnectedMapPieces();
@@ -382,18 +376,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 			Transform enemyTransform = enemiesInScene[e];
 			if (enemyTransform != enemyParentTransform)
 			{
-				if (Application.isEditor)
-				{
-					DestroyImmediate(enemyTransform.gameObject);
-				}
-				else
-				{
-					Destroy(enemyTransform.gameObject);
-				}
+				DestroyImmediate(enemyTransform.gameObject);
 			}
-
 		}
 	}
+
 	private void RemoveDisconnectedMapPieces()
 	{
 		foreach (Transform disconnectedMapPieceTransform in disconnectedMapPiecesParent.GetComponentsInChildren<Transform>())
