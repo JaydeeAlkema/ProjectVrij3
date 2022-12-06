@@ -18,6 +18,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Map Piece Settings")] private int mapPieceOffset = 21;
 	[SerializeField, BoxGroup("Map Piece Settings")] private Transform connectedMapPiecesParent = default;
 	[SerializeField, BoxGroup("Map Piece Settings")] private Transform disconnectedMapPiecesParent = default;
+	[SerializeField, BoxGroup("Map Piece Settings")] private Transform interactablesParent = default;
 	[Space]
 	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> spawnMapPieces = new WeightedRandomList<GameObject>();
 	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> mapPieces = new WeightedRandomList<GameObject>();
@@ -25,6 +26,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> rightDeadEndMapPieces = new WeightedRandomList<GameObject>();
 	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> bottomDeadEndMapPieces = new WeightedRandomList<GameObject>();
 	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> leftDeadEndMapPieces = new WeightedRandomList<GameObject>();
+	[Space]
+	[SerializeField, BoxGroup("Map Piece Settings")] private GameObject bossPortalPrefab = default;
 
 	[SerializeField, BoxGroup("Enemy Settings")] private AstarPath astarData = null;
 	[SerializeField, BoxGroup("Enemy Settings")] private Transform enemyParentTransform = null;
@@ -62,7 +65,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 	{
 		StartCoroutine(Generate());
 	}
-
 	public IEnumerator Generate()
 	{
 		if (Application.isEditor)
@@ -242,7 +244,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		yield return null;
 	}
-
 	private void RemoveDisconnectedMapPieces()
 	{
 		foreach (Transform disconnectedMapPieceTransform in disconnectedMapPiecesParent.GetComponentsInChildren<Transform>())
@@ -299,6 +300,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 				}
 			}
 		}
+
+		float dst = 0;
+		Vector2 furthestPositionFromSpawn = new Vector2();
 
 		foreach (MapPiece mapPiece in inCompleteMapPieces)
 		{
@@ -371,12 +375,22 @@ public class LevelGeneratorV3 : MonoBehaviour
 					DestroyImmediate(northNeigbourGO);
 					continue;
 				}
+
 				MapPiece northNeighbourMapPiece = northNeigbourGO.GetComponent<MapPiece>();
 				northNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
 				northNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = northConnectionPoint;
+
 				northConnectionPoint.Occupied = true;
 				northConnectionPoint.ConnectedTo = northNeighbourMapPiece.ConnectionPoints[0];
+
 				mapPiecesInScene.Add(northNeigbourGO, mapPiecePos + northNeighbourPosition);
+
+				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + northNeighbourPosition);
+				if (distanceToMapPiece > dst)
+				{
+					dst = distanceToMapPiece;
+					furthestPositionFromSpawn = mapPiecePos + northNeighbourPosition;
+				}
 			}
 			else if (eastConnectionPoint != null && eastConnectionPoint.Occupied == false && eastNeighbour == null)
 			{
@@ -386,12 +400,22 @@ public class LevelGeneratorV3 : MonoBehaviour
 					DestroyImmediate(eastNeighbourGO);
 					continue;
 				}
+
 				MapPiece eastNeighbourMapPiece = eastNeighbourGO.GetComponent<MapPiece>();
 				eastNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
 				eastNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = eastConnectionPoint;
+
 				eastConnectionPoint.Occupied = true;
 				eastConnectionPoint.ConnectedTo = eastNeighbourMapPiece.ConnectionPoints[0];
+
 				mapPiecesInScene.Add(eastNeighbourGO, mapPiecePos + eastNeighbourPosition);
+
+				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + eastNeighbourPosition);
+				if (distanceToMapPiece > dst)
+				{
+					dst = distanceToMapPiece;
+					furthestPositionFromSpawn = mapPiecePos + eastNeighbourPosition;
+				}
 			}
 			else if (southConnectionPoint != null && southConnectionPoint.Occupied == false && southNeighbour == null)
 			{
@@ -401,12 +425,22 @@ public class LevelGeneratorV3 : MonoBehaviour
 					DestroyImmediate(southNeighbourGO);
 					continue;
 				}
+
 				MapPiece southNeighbourMapPiece = southNeighbourGO.GetComponent<MapPiece>();
 				southNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
 				southNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = southConnectionPoint;
+
 				southConnectionPoint.Occupied = true;
 				southConnectionPoint.ConnectedTo = southNeighbourMapPiece.ConnectionPoints[0];
+
 				mapPiecesInScene.Add(southNeighbourGO, mapPiecePos + southNeighbourPosition);
+
+				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + southNeighbourPosition);
+				if (distanceToMapPiece > dst)
+				{
+					dst = distanceToMapPiece;
+					furthestPositionFromSpawn = mapPiecePos + southNeighbourPosition;
+				}
 			}
 			else if (westConnectionPoint != null && westConnectionPoint.Occupied == false && westNeighbour == null)
 			{
@@ -416,14 +450,26 @@ public class LevelGeneratorV3 : MonoBehaviour
 					DestroyImmediate(westNeighbourGO);
 					continue;
 				}
+
 				MapPiece westNeighbourMapPiece = westNeighbourGO.GetComponent<MapPiece>();
 				westNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
 				westNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
+
 				westConnectionPoint.Occupied = true;
 				westConnectionPoint.ConnectedTo = westNeighbourMapPiece.ConnectionPoints[0];
+
 				mapPiecesInScene.Add(westNeighbourGO, mapPiecePos + westNeighbourPosition);
+
+				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + westNeighbourPosition);
+				if (distanceToMapPiece > dst)
+				{
+					dst = distanceToMapPiece;
+					furthestPositionFromSpawn = mapPiecePos + westNeighbourPosition;
+				}
 			}
 		}
+
+		Instantiate(bossPortalPrefab, furthestPositionFromSpawn, Quaternion.identity, interactablesParent);
 	}
 	private void SpawnEnemies()
 	{
@@ -504,9 +550,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		// Remove map Pieces
 		List<Transform> connectedMapPieces = connectedMapPiecesParent.GetComponentsInChildren<Transform>().ToList();
-		for (int i = connectedMapPieces.Count - 1; i >= 0; i--)
+		for (int m = connectedMapPieces.Count - 1; m >= 0; m--)
 		{
-			Transform mapPieceTransform = connectedMapPieces[i];
+			Transform mapPieceTransform = connectedMapPieces[m];
 			if (mapPieceTransform != connectedMapPiecesParent)
 			{
 				DestroyImmediate(mapPieceTransform.gameObject);
@@ -525,6 +571,17 @@ public class LevelGeneratorV3 : MonoBehaviour
 			if (enemyTransform != enemyParentTransform)
 			{
 				DestroyImmediate(enemyTransform.gameObject);
+			}
+		}
+
+		// Remove Interactables
+		List<Transform> interactablesInScene = interactablesParent.GetComponentsInChildren<Transform>().ToList();
+		for (int i = interactablesInScene.Count - 1; i >= 0; i--)
+		{
+			Transform interactableTransform = interactablesInScene[i];
+			if (interactableTransform != interactablesParent)
+			{
+				DestroyImmediate(interactableTransform.gameObject);
 			}
 		}
 	}
