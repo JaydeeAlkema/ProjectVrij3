@@ -582,6 +582,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	IEnumerator PlayerIFrames(float invulTime)
 	{
+		invulnerable = true;
 		yield return new WaitForSeconds(invulTime);
 		invulnerable = false;
 		yield return new WaitForEndOfFrame();

@@ -78,7 +78,7 @@ public class MBCirclingEnemy : EnemyBase
 		{
 			AttackPlayer(playerBody.gameObject);
 		}
-		else if (playerBody != null && aggro)
+		else if (playerBody != null && aggro && !playerBody.gameObject.GetComponent<PlayerControler>().Invulnerable)
 		{
 			Explode();
 		}
