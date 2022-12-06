@@ -21,7 +21,7 @@ public class MapPiece : MonoBehaviour
 
 	public void AddNeighbour(GameObject neighbour)
 	{
-		if (neighbours.Contains(neighbour) == false)
+		if (neighbours.Contains(neighbour) == false && neighbour != null)
 		{
 			neighbours.Add(neighbour);
 		}
