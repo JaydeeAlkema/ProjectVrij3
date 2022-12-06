@@ -7,8 +7,8 @@ public class MiniBoss1 : BossBase
 {
 	[SerializeField] private GameObject player = null;
 	[SerializeField] private Transform healthBar;
-	[SerializeField] private int maxHealthPoints;
 	[SerializeField] private GameObject mobPrefab;
+	[SerializeField] private int maxHealthPoints;
 	[SerializeField] private float innerRadius;
 	[SerializeField] private float innerOrbitRotationSpeed;
 	[SerializeField] private float outerRadius;
