@@ -448,15 +448,15 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	Bounds GetMaxBounds(GameObject gameObject)
 	{
-		// https://gamedev.stackexchange.com/questions/86863/calculating-the-bounding-box-of-a-game-object-based-on-its-children
-		Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
-		if (renderers.Length == 0) return new Bounds(gameObject.transform.position, Vector3.zero);
-		Bounds Bounds = renderers[0].bounds;
-		foreach (Renderer renderer in renderers)
+		Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
+		if (colliders.Length == 0) return new Bounds(gameObject.transform.position, Vector3.zero);
+		Bounds bounds = colliders[0].bounds;
+		for (int i = 1; i < colliders.Length; i++)
 		{
-			Bounds.Encapsulate(renderer.bounds);
+			bounds.Encapsulate(colliders[i].bounds);
 		}
-		return Bounds;
+		return bounds;
 	}
+
 	#endregion
 }
