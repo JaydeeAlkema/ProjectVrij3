@@ -120,6 +120,17 @@ public class UIManager : MonoBehaviour
 		abilityUIElements[i].abilityIcon.GetComponent<Image>().color = iconColor;
 	}
 
+	public void ResetAbilityUIValues()
+	{
+		foreach(abilityUI abilityUI in abilityUIElements)
+		{
+			abilityUI.abilityIcon.GetComponent<Image>().sprite = null;
+			Color iconColor = abilityUI.abilityIcon.GetComponent<Image>().color;
+			iconColor.a = 0f;
+			abilityUI.abilityIcon.GetComponent<Image>().color = iconColor;
+		}
+	}
+
 	public void CooldownCountDown(IAbility ability, int abilityInBar)
 	{
 		abilityUIElements[abilityInBar].cooldown = ability.CoolDown;

@@ -20,7 +20,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//private Camera cam;
 	public Vector2 lookDir;
 	[SerializeField] private Transform castFromPoint;
-	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
+	[SerializeField] private Vector2 boxSize = new Vector2(4, 6);
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] private SpriteRenderer playerSprite;
@@ -73,7 +73,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public TrailRenderer Trail { get => trail; set => trail = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
-	[Header( "Abilities" )]
+	[Header("Abilities")]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -164,16 +164,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	}
 
-	public void OnStart( GameState gameState, GameState lastGameState )
+	public void OnStart(GameState gameState, GameState lastGameState)
 	{
-		Debug.Log( "ongamestatechanged got called with state: " + gameState + " and with last state: " + lastGameState );
-		if( gameState == GameState.Dungeon && lastGameState != gameState )
+		Debug.Log("ongamestatechanged got called with state: " + gameState + " and with last state: " + lastGameState);
+		if (gameState == GameState.Dungeon && lastGameState != gameState)
 		{
 			currentMeleeAttack = new MeleeAttack();
 			currentRangedAttack = new RangedAttack();
 			currentDash = new Dash();
 			abilityController = AbilityController.AbilityControllerInstance;
-			Debug.Log( abilityController );
+			Debug.Log(abilityController);
 			rb2d = GetComponent<Rigidbody2D>();
 			abilityController.Player = this;
 			currentMeleeAttack.BaseStats = meleeAttack;
@@ -188,7 +188,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentMeleeAttack = currentMeleeAttack;
 			abilityController.CurrentRangedAttack = currentRangedAttack;
 			abilityController.CurrentDash = currentDash;
-			Debug.Log( currentMeleeAttack.BurnDamage );
+			Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
 		}
 	}
@@ -206,10 +206,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void initAbilities()
 	{
-		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
-		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
-		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
-		if( currentAbility4 != null ) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; }
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
+		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
+		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; }
 		abilityController.SetAbility();
 	}
 
@@ -219,10 +219,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		vel = rb2d.velocity.magnitude;
 
-		if( !GameManager.Instance.IsPaused )
+		if (GameManager.Instance == null || !GameManager.Instance.IsPaused)
 		{
 			//Melee input
-			if( Input.GetMouseButtonDown( 0 ) )
+			if (Input.GetMouseButtonDown(0))
 			{
 				bufferCounterMelee = bufferTimeMelee;
 			}
@@ -230,10 +230,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			{
 				bufferCounterMelee -= Time.fixedDeltaTime;
 			}
-			if( bufferCounterMelee > 0f ) MeleeAttack();
+			if (bufferCounterMelee > 0f) MeleeAttack();
 
 			//Cast input
-			if( Input.GetMouseButtonDown( 1 ) )
+			if (Input.GetMouseButtonDown(1))
 			{
 				bufferCounterCast = bufferTimeCast;
 			}
@@ -241,16 +241,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			{
 				bufferCounterCast -= Time.fixedDeltaTime;
 			}
-			if( bufferCounterCast > 0f ) RangedAttack();
+			if (bufferCounterCast > 0f) RangedAttack();
 
 
-			if( Input.GetKeyDown( KeyCode.Q ) ) AbilityOneAttack();
-			if( Input.GetKeyDown( KeyCode.E ) ) AbilityTwoAttack();
-			if( Input.GetKeyDown( KeyCode.R ) ) AbilityThreeAttack();
-			if( Input.GetKeyDown( KeyCode.T ) ) AbilityFourAttack();
+			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
+			if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
+			if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
+			if (Input.GetKeyDown(KeyCode.T)) AbilityFourAttack();
 
 			//Dash input
-			if( Input.GetKeyDown( KeyCode.Space ) )
+			if (Input.GetKeyDown(KeyCode.Space))
 			{
 				bufferCounterDash = bufferTimeDash;
 			}
@@ -258,20 +258,20 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			{
 				bufferCounterDash -= Time.fixedDeltaTime;
 			}
-			if( bufferCounterDash > 0f ) DashAbility();
+			if (bufferCounterDash > 0f) DashAbility();
 
 			MouseLook();
 
 			playerSprite.flipX = lookDir.x > 0 ? true : false;
 		}
 
-		Debug.DrawRay( rb2d.position, lookDir, Color.magenta );
-		if( !isDashing )
+		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
+		if (!isDashing)
 		{
 			trail.emitting = false;
-			horizontal = ( int )Input.GetAxisRaw( "Horizontal" );
-			vertical = ( int )Input.GetAxisRaw( "Vertical" );
-			rb2d.velocity = new Vector3( horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime ).normalized * MoveSpeed.value * selfSlowMultiplier;
+			horizontal = (int)Input.GetAxisRaw("Horizontal");
+			vertical = (int)Input.GetAxisRaw("Vertical");
+			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
@@ -280,8 +280,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void OnDrawGizmos()
 	{
 		Gizmos.color = Color.blue;
-		Gizmos.matrix = Matrix4x4.TRS( rb2d.transform.position + castFromPoint.transform.up * meleeAttack.Distance, castFromPoint.transform.rotation, meleeAttack.BoxSize );
-		Gizmos.DrawWireCube( Vector3.zero, Vector3.one );
+		Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * meleeAttack.Distance, castFromPoint.transform.rotation, meleeAttack.BoxSize);
+		Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
 		//Gizmos.color = Color.red;
 		//Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 5, castFromPoint.transform.rotation, new Vector3(circleSize, circleSize, 0));
 		//Gizmos.DrawWireSphere(Vector3.zero, 1);
@@ -290,13 +290,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void CastSelfSlow()
 	{
 		//Slow player while using ranged attack
-		if( selfSlowCounter < selfSlowTime )
+		if (selfSlowCounter < selfSlowTime)
 		{
 			selfSlowCounter += Time.deltaTime;
 			selfSlowMultiplier = 0.4f;
 		}
 		//Speed-up player while melee attacking
-		else if( isAttackPositionLocked )
+		else if (isAttackPositionLocked)
 		{
 			selfSlowMultiplier = 1.5f;
 		}
@@ -308,13 +308,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MouseLook()
 	{
-		if( !isAttackPositionLocked )
+		if (!isAttackPositionLocked)
 		{
-			mousePos = Camera.main.ScreenToWorldPoint( Input.mousePosition );
+			mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			lookDir = mousePos - rb2d.transform.position;
-			angle = Mathf.Atan2( lookDir.y, lookDir.x ) * Mathf.Rad2Deg - 90f;
-			castFromPoint.transform.rotation = Quaternion.Euler( 0f, 0f, angle );
-			pivot_AttackAnimation.transform.rotation = Quaternion.Euler( 0f, 0f, angle + 180 );
+			angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
 
 			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
@@ -326,8 +326,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		CheckAbilityUpdate();
 		outOfCombatCounter = 0f;
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
-		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		abilityController.MeleeAttacked( currentMeleeAttack );
+		abilityController.CurrentMeleeAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+		abilityController.MeleeAttacked(currentMeleeAttack);
 	}
 
 	void RangedAttack()
@@ -335,139 +335,155 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		CheckAbilityUpdate();
 		outOfCombatCounter = 0f;
 		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
-		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		abilityController.RangeAttacked( currentRangedAttack );
+		abilityController.CurrentRangedAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+		abilityController.RangeAttacked(currentRangedAttack);
 	}
 
 	void DashAbility()
 	{
 		CheckAbilityUpdate();
 		abilityController.CurrentDash.BaseStats = dash;
-		abilityController.CurrentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		abilityController.Dashing( currentDash );
-		StartCoroutine( PlayerIFrames( dashInvulTime ) );
+		abilityController.CurrentDash.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+		abilityController.Dashing(currentDash);
+		StartCoroutine(PlayerIFrames(dashInvulTime));
 	}
 
 	void AbilityOneAttack()
 	{
-		if( currentAbility1 != null )
+		if (currentAbility1 != null)
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log( CurrentAbility1 );
+			Debug.Log(CurrentAbility1);
 			abilityController.CurrentAbility1.BaseStats = ability1;
-			abilityController.CurrentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityOneAttacked( currentAbility1 );
+			abilityController.CurrentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityOneAttacked(currentAbility1);
 		}
 	}
 
 	void AbilityTwoAttack()
 	{
-		if( currentAbility2 != null )
+		if (currentAbility2 != null)
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log( CurrentAbility2 );
+			Debug.Log(CurrentAbility2);
 			abilityController.CurrentAbility2.BaseStats = ability2;
-			abilityController.CurrentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityTwoAttacked( currentAbility2 );
+			abilityController.CurrentAbility2.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityTwoAttacked(currentAbility2);
 		}
 	}
 
 	void AbilityThreeAttack()
 	{
-		if( currentAbility3 != null )
+		if (currentAbility3 != null)
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log( CurrentAbility3 );
+			Debug.Log(CurrentAbility3);
 			abilityController.CurrentAbility3.BaseStats = ability3;
-			abilityController.CurrentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityThreeAttacked( currentAbility3 );
+			abilityController.CurrentAbility3.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityThreeAttacked(currentAbility3);
 		}
 	}
 
 	void AbilityFourAttack()
 	{
-		if( currentAbility4 != null )
+		if (currentAbility4 != null)
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log( currentAbility4 );
+			Debug.Log(currentAbility4);
 			abilityController.CurrentAbility4.BaseStats = ability4;
-			abilityController.CurrentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-			abilityController.AbilityFourAttacked( currentAbility4 );
+			abilityController.CurrentAbility4.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+			abilityController.AbilityFourAttacked(currentAbility4);
 		}
 	}
 
 	void CheckAbilityUpdate()
 	{
-		AbilityController.AbilityControllerInstance.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
-		if( meleeAttack != null )
+		AbilityController.AbilityControllerInstance.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
+		if (meleeAttack != null)
 		{
 			meleeAttack.UpdateStatusEffects();
 		}
 
-		if( rangedAttack != null )
+		if (rangedAttack != null)
 		{
 			rangedAttack.UpdateStatusEffects();
 		}
 
-		if( dash != null )
+		if (dash != null)
 		{
 			dash.UpdateStatusEffects();
 		}
 
-		if( ability1 != null )
+		if (ability1 != null)
 		{
 			ability1.UpdateStatusEffects();
 		}
 
-		if( ability2 != null )
+		if (ability2 != null)
 		{
 			ability2.UpdateStatusEffects();
 		}
 
-		if( ability3 != null )
+		if (ability3 != null)
 		{
 			ability3.UpdateStatusEffects();
 		}
 
-		if( ability4 != null )
+		if (ability4 != null)
 		{
 			ability4.UpdateStatusEffects();
 		}
-		AbilityController.AbilityControllerInstance.UpdateCoolDown( meleeAttack, rangedAttack, ability1, ability2, ability3, ability4, dash );
+		AbilityController.AbilityControllerInstance.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3, ability4, dash);
 	}
 
-	public void TakeDamage( int damage )
+	public void TakeDamage(int damage)
 	{
-		if( !invulnerable && GameManager.Instance.currentGameState == GameState.Dungeon )
+		if (GameManager.Instance != null)
 		{
-			AkSoundEngine.PostEvent( "plr_dmg_npc", this.gameObject );
-			GameObject onHitSpark = Instantiate( playerDeathSpark, transform.position, Quaternion.Euler( 0, 0, Random.Range( 0, 360 ) ) );
-			onHitSpark.GetComponent<SpriteRenderer>().color = new Color32( 149, 43, 84, 255 );
-			StartCoroutine( HitSlow( 0.12f ) );
-			StartCoroutine( playerFlashColor() );
-			GameManager.Instance.PlayerHP.value -= damage;
-			//healthBar.SetHP(currentHealthPoints);
-			invulnerable = true;
-			outOfCombatCounter = 0f;
-			StartCoroutine( PlayerIFrames( hitInvulTime ) );
+			if (!invulnerable && GameManager.Instance.currentGameState == GameState.Dungeon)
+			{
+				AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
+				GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+				onHitSpark.GetComponent<SpriteRenderer>().color = new Color32(149, 43, 84, 255);
+				StartCoroutine(HitSlow(0.12f));
+				StartCoroutine(playerFlashColor());
+				GameManager.Instance.PlayerHP.value -= damage;
+				//healthBar.SetHP(currentHealthPoints);
+				invulnerable = true;
+				outOfCombatCounter = 0f;
+				StartCoroutine(PlayerIFrames(hitInvulTime));
+			}
+			else //If in testing scene, damage visuals without changing HP
+			{
+				if (!invulnerable)
+				{
+					AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
+					GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+					onHitSpark.GetComponent<SpriteRenderer>().color = new Color32(149, 43, 84, 255);
+					StartCoroutine(HitSlow(0.12f));
+					StartCoroutine(playerFlashColor());
+					invulnerable = true;
+					outOfCombatCounter = 0f;
+					StartCoroutine(PlayerIFrames(hitInvulTime));
+				}
+			}
 		}
 	}
-
-	public void GameOverVFX( int vfx )
+	public void GameOverVFX(int vfx)
 	{
-		switch( vfx )
+		switch (vfx)
 		{
 			case 1:
-				GameObject deathSpark = Instantiate( playerDeathSpark, transform.position, Quaternion.identity );
-				deathSpark.transform.localScale = new Vector3( 0.8f, 0.8f, 0.8f );
+				GameObject deathSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.identity);
+				deathSpark.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 				deathSpark.GetComponent<SpriteRenderer>().color = Color.red;
 				break;
 			case 2:
-				Instantiate( playerDeathPoof, transform.position, Quaternion.identity );
+				Instantiate(playerDeathPoof, transform.position, Quaternion.identity);
 				break;
 
 		}
@@ -476,45 +492,48 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void OutOfCombatSpeed()
 	{
-		if( outOfCombatCounter < outOfCombatTimer )
+		if (outOfCombatCounter < outOfCombatTimer)
 		{
 			outOfCombatCounter += Time.deltaTime;
 			inCombat = true;
-			Debug.Log( "In combat, no boost" );
+			Debug.Log("In combat, no boost");
 		}
 		else
 		{
 			inCombat = false;
 		}
 
-		if( !inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1 )
+		if (GameManager.Instance != null)
 		{
-			selfSlowMultiplier = 2f;
-			Debug.Log( "Out of combat boost granted" );
+			if (!inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1)
+			{
+				selfSlowMultiplier = 2f;
+				Debug.Log("Out of combat boost granted");
+			}
 		}
 	}
 
-	public void TakeDamage( int damage, int damageType )
+	public void TakeDamage(int damage, int damageType)
 	{
 
 	}
 
-	public void GetSlowed( float slowAmount )
+	public void GetSlowed(float slowAmount)
 	{
 
 	}
 
-	public void GetMarked( int markType, float markHits )
+	public void GetMarked(int markType, float markHits)
 	{
 
 	}
 
-	public void ApplyStatusEffect( IStatusEffect statusEffect )
+	public void ApplyStatusEffect(IStatusEffect statusEffect)
 	{
 
 	}
 
-	public void RemoveStatusEffect( IStatusEffect statusEffect )
+	public void RemoveStatusEffect(IStatusEffect statusEffect)
 	{
 
 	}
@@ -546,10 +565,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//	yield return null;
 	//}
 
-	public IEnumerator HitSlow( float duration )
+	public IEnumerator HitSlow(float duration)
 	{
 		Time.timeScale = 0.2f;
-		yield return new WaitForSecondsRealtime( duration );
+		yield return new WaitForSecondsRealtime(duration);
 		Time.timeScale = 1f;
 		yield return null;
 	}
@@ -557,13 +576,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	IEnumerator playerFlashColor()
 	{
 		playerSprite.material = materialHit;
-		yield return new WaitForSeconds( 0.09f );
+		yield return new WaitForSeconds(0.09f);
 		playerSprite.material = materialDefault;
 	}
 
-	IEnumerator PlayerIFrames( float invulTime )
+	IEnumerator PlayerIFrames(float invulTime)
 	{
-		yield return new WaitForSeconds( invulTime );
+		invulnerable = true;
+		yield return new WaitForSeconds(invulTime);
 		invulnerable = false;
 		yield return new WaitForEndOfFrame();
 	}

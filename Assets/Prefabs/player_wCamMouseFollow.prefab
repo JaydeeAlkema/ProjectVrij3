@@ -848,7 +848,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
-  m_Antialiasing: 0
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -1023,7 +1023,7 @@ MonoBehaviour:
   isDashing: 0
   invulnerable: 0
   hitInvulTime: 0.5
-  dashInvulTime: 0.06
+  dashInvulTime: 0.1
   lookDir: {x: 0, y: 0}
   castFromPoint: {fileID: 3607252476989244952}
   boxSize: {x: 4, y: 6}
@@ -1038,18 +1038,20 @@ MonoBehaviour:
   playerDeathPoof: {fileID: 6120905142384714952, guid: 7f48faa6ddcfbd848adbc4009d1e75eb, type: 3}
   animPlayer: {fileID: 2846144575864148852}
   outOfCombatTimer: 3
-  bufferTimeMelee: 0.3
+  bufferTimeMelee: 0.4
   bufferTimeCast: 0.3
   bufferTimeDash: 0.65
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
   isAttackPositionLocked: 0
+  abilityController: {fileID: 0}
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
   rangedAttack: {fileID: 11400000, guid: a77f254daa25cf246ac11bb2468736dc, type: 2}
   dash: {fileID: 11400000, guid: d0aa0c52c1c565d47a2076fec02e7279, type: 2}
   ability1: {fileID: 0}
   ability2: {fileID: 0}
   ability3: {fileID: 0}
+  ability4: {fileID: 0}
 --- !u!114 &2121885897375394524
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,6 +20,13 @@ public class PlaceholderMenu : MonoBehaviour
 		SceneManager.UnloadSceneAsync("MainMenu");
 	}
 
+	public void GoToScene(string scene)
+	{
+		SceneManager.LoadScene("UIScene", LoadSceneMode.Additive);
+		SceneManager.LoadScene(scene, LoadSceneMode.Additive);
+		SceneManager.UnloadSceneAsync("MainMenu");
+	}
+
 	public void QuitGame()
 	{
 		Application.Quit();

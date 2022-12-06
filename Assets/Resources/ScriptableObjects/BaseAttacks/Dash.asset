@@ -28,6 +28,7 @@ MonoBehaviour:
   baseBurnDamage: 1
   baseSlowAmount: 0
   baseSlowDuration: 0
+  baseMarkHits: 1
   baseStatusEffectType: 0
   abilityIcon: {fileID: 0}
   coolDown: 1000
@@ -45,9 +46,10 @@ MonoBehaviour:
   force: 30
   burnObject: {fileID: 0}
   trailUpgrade: 0
-  dashSpeed: 60
-  dashDuration: 0.06
+  dashSpeed: 30
+  dashDuration: 0.15
   attackTime: 200
+  markHits: 1
   burnDamage: 1
   slowAmount: 0
   slowDuration: 0

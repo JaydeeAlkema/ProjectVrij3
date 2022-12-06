@@ -3,7 +3,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,17 +15,19 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private AK.Wwise.State SoundStateCrowded;
 	[SerializeField] private AK.Wwise.State CurrentSoundState;
 	[SerializeField] private AK.Wwise.Event startMusic;
+	[SerializeField] private AK.Wwise.Event stopMusic;
+
 	[SerializeField] private int numberOfEnemiesAggrod = 0;
 
 
-	[Header( "Managers" )]
-	[SerializeField] private LevelGeneratorV2 levelGenerator = null;
+	[Header("Managers")]
+	[SerializeField] private LevelGeneratorV3 levelGenerator = null;
 	[SerializeField] private HubSceneManager HubSceneManager = null;
 	[SerializeField] private ExpManager expManager = null;
 	[SerializeField] private UIManager uiManager = null;
 	[SerializeField] private CheatsManager cheatsManager = null;
 
-	[Header( "Player" )]
+	[Header("Player")]
 	[SerializeField] private GameObject playerInstance = null;
 	[SerializeField] private ScriptablePlayer scriptablePlayer = null;
 
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
 	#region Unity Callbacks
 	private void Awake()
 	{
-		if( !instance || instance != this )
+		if (!instance || instance != this)
 		{
 			instance = this;
 		}
@@ -54,15 +55,15 @@ public class GameManager : MonoBehaviour
 		QualitySettings.vSyncCount = 1;
 		//scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance("ScriptablePlayer");
 
-		SceneManager.LoadScene( "MainMenu", LoadSceneMode.Additive );
+		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
 	}
 	#endregion
 
 	public void Update()
 	{
-		if( PlayerHP.value <= 0 && currentGameState == GameState.Dungeon )
+		if (PlayerHP.value <= 0 && currentGameState == GameState.Dungeon)
 		{
-			ChangeGameState( GameState.GameOver );
+			ChangeGameState(GameState.GameOver);
 		}
 
 		if(PlayerHP.value > playerHP.startValue)
@@ -73,16 +74,16 @@ public class GameManager : MonoBehaviour
 		if( Input.GetKeyDown( KeyCode.Escape ) )
 		{
 			TogglePauseGame();
-			uiManager.SetUIActive( 3, isPaused );
+			uiManager.SetUIActive(3, isPaused);
 		}
 
 
 	}
 
-	public void EnemyAggroCount( bool isAggro )
+	public void EnemyAggroCount(bool isAggro)
 	{
 		numberOfEnemiesAggrod += isAggro ? 1 : -1;
-		if( numberOfEnemiesAggrod == 0 )
+		if (numberOfEnemiesAggrod == 0)
 		{
 			CurrentSoundState = SoundStateCalm;
 			CurrentSoundState.SetValue();
@@ -100,7 +101,7 @@ public class GameManager : MonoBehaviour
 		Time.timeScale = isPaused ? 0f : 1f;
 	}
 
-	public void SetPauseState( bool pause )
+	public void SetPauseState(bool pause)
 	{
 		isPaused = pause;
 		Time.timeScale = isPaused ? 0f : 1f;
@@ -108,58 +109,85 @@ public class GameManager : MonoBehaviour
 
 	public void FetchDungeonReferences()
 	{
-		if( FindObjectOfType<LevelGeneratorV2>() != null )
+		if (FindObjectOfType<LevelGeneratorV3>() != null)
 		{
 			// Use the awake method for fetching references.
-			levelGenerator = FindObjectOfType<LevelGeneratorV2>();
+			levelGenerator = FindObjectOfType<LevelGeneratorV3>();
 			HubSceneManager = FindObjectOfType<HubSceneManager>();
 			expManager = FindObjectOfType<ExpManager>();
 			uiManager = FindObjectOfType<UIManager>();
 			cheatsManager = FindObjectOfType<CheatsManager>();
 
 			playerInstance = FindObjectOfType<PlayerControler>().gameObject;
-			playerInstance.SetActive( false );
+			playerInstance.SetActive(false);
 
 			uiManager.SetupDungeonUI();
 			uiManager.DisableAllUI();
 
 			TMP_InputField cheatsInputfield = uiManager.UiStates[5].GetComponentInChildren<TMP_InputField>();
-			cheatsInputfield.onEndEdit.AddListener( cheatsManager.ExecuteCommand );
+			cheatsInputfield.onEndEdit.AddListener(cheatsManager.ExecuteCommand);
 
-			SceneManager.SetActiveScene( SceneManager.GetSceneByName( "Jaydee Testing Scene" ) );
+			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Jaydee Testing Scene"));
 		}
-		//scriptablePlayer.Player = playerInstance.GetComponent<PlayerControler>();
-		StartCoroutine( SetupLevel() );
+
+		StartCoroutine(SetupLevel());
 	}
 
-	public void ChangeGameState( GameState newGameState )
+	public void SetupNonDungeon(string scene)
+	{
+		HubSceneManager = FindObjectOfType<HubSceneManager>();
+		expManager = FindObjectOfType<ExpManager>();
+		uiManager = FindObjectOfType<UIManager>();
+		cheatsManager = FindObjectOfType<CheatsManager>();
+		ChangeGameState(GameState.Dungeon);
+		playerInstance = FindObjectOfType<PlayerControler>().gameObject;
+		//playerInstance.SetActive(false);
+
+		uiManager.SetupDungeonUI();
+		uiManager.DisableAllUI();
+
+		TMP_InputField cheatsInputfield = uiManager.UiStates[5].GetComponentInChildren<TMP_InputField>();
+		cheatsInputfield.onEndEdit.AddListener(cheatsManager.ExecuteCommand);
+
+		SceneManager.SetActiveScene(SceneManager.GetSceneByName(scene));
+		StartCoroutine(SetupSetRoom());
+	}
+
+	public void ChangeGameState(GameState newGameState)
 	{
 		lastGamestate = currentGameState;
-		if( newGameState != currentGameState )
+		if (newGameState != currentGameState)
 		{
 			currentGameState = newGameState;
-			switch( currentGameState )
+			switch (currentGameState)
 			{
 				case GameState.Dungeon:
 					CurrentSoundState = SoundStateCrowded;
 					CurrentSoundState.SetValue();
-					AudioManager.Instance.PostEventGlobal( startMusic );
-					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
+					AudioManager.Instance.PostEventGlobal(stopMusic);
+					Debug.Log("Stopping music.");
+					AudioManager.Instance.PostEventGlobal(startMusic);
+					Debug.Log("Starting music.");
+					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 					break;
 				case GameState.GameOver:
-					StartCoroutine( GameOver() );
-					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
+					StartCoroutine(GameOver());
+					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 					break;
 				case GameState.Hub:
+					AudioManager.Instance.PostEventGlobal(stopMusic);
+					Debug.Log("Stopping music.");
 					PlayerHP.ResetValue();
 					ExpManager.ResetExp();
-					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
+					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 					break;
 				case GameState.Menu:
-					startMusic.Stop( AudioManager.Instance.gameObject );
+					//startMusic.Stop( AudioManager.Instance.gameObject );
+					AudioManager.Instance.PostEventGlobal(stopMusic);
+					Debug.Log("Stopping music.");
 					PlayerHP.ResetValue();
 					ExpManager.ResetExp();
-					OnGameStateChanged?.Invoke( currentGameState, lastGamestate );
+					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 					break;
 			}
 		}
@@ -172,18 +200,27 @@ public class GameManager : MonoBehaviour
 	private IEnumerator SetupLevel()
 	{
 		//Show loading screen
-		uiManager.SetUIActive( 2, true );
+		uiManager.SetUIActive(2, true);
 
-		yield return StartCoroutine( levelGenerator.GenerateLevel() );
-		GameObject startingRoom = levelGenerator.Rooms[0].gameObject;
-		Vector3 playerSpawnPos = new Vector3( startingRoom.transform.position.x, startingRoom.transform.position.y, 0 );
-		playerInstance.transform.position = playerSpawnPos;
-		playerInstance.SetActive( true );
-		ChangeGameState( GameState.Dungeon );
+		yield return StartCoroutine(levelGenerator.Generate());
+		playerInstance.SetActive(true);
+		ChangeGameState(GameState.Dungeon);
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.SetUIActive( 1, true );
+		uiManager.ResetAbilityUIValues();
+		uiManager.SetUIActive(1, true);
+	}
+
+	private IEnumerator SetupSetRoom()
+	{
+		//playerInstance.SetActive(true);
+
+		//Show dungeon HUD
+		uiManager.DisableAllUI();
+		uiManager.ResetAbilityUIValues();
+		uiManager.SetUIActive(1, true);
+		yield return new WaitForEndOfFrame();
 	}
 
 	IEnumerator GameOver()
@@ -191,40 +228,40 @@ public class GameManager : MonoBehaviour
 		playerInstance.GetComponent<PlayerControler>().Invulnerable = true;
 		uiManager.DisableAllUI();
 		playerInstance.GetComponentInChildren<CameraToMouseFollow>().gameObject.transform.localPosition = Vector3.zero;
-		playerInstance.GetComponent<PlayerControler>().GameOverVFX( 1 );
+		playerInstance.GetComponent<PlayerControler>().GameOverVFX(1);
 		Time.timeScale = 0f;    //Hitstop
-		yield return new WaitForSecondsRealtime( 0.5f );
+		yield return new WaitForSecondsRealtime(0.5f);
 
-		playerInstance.GetComponent<PlayerControler>().GameOverVFX( 2 );
+		playerInstance.GetComponent<PlayerControler>().GameOverVFX(2);
 		playerInstance.GetComponent<PlayerControler>().enabled = false;
 		SpriteRenderer[] playerSprites = playerInstance.GetComponentsInChildren<SpriteRenderer>();
-		foreach( SpriteRenderer playerSprite in playerSprites )
+		foreach (SpriteRenderer playerSprite in playerSprites)
 		{
-			playerSprite.gameObject.SetActive( false );
+			playerSprite.gameObject.SetActive(false);
 		}
 		Time.timeScale = 0.2f;    //Slowdown
-		yield return new WaitForSecondsRealtime( 2f );
+		yield return new WaitForSecondsRealtime(2f);
 
 		//Return to normal time
 		Time.timeScale = 1f;
-		yield return new WaitForSecondsRealtime( 0.5f );
+		yield return new WaitForSecondsRealtime(0.5f);
 
 		//Deathscreen
-		uiManager.SetUIActive( 4, true );
-		yield return new WaitForSecondsRealtime( 3f );
+		uiManager.SetUIActive(4, true);
+		yield return new WaitForSecondsRealtime(3f);
 
-		HubSceneManager.sceneManagerInstance.ChangeScene( "Hub Prototype", SceneManager.GetActiveScene().name );
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
 
 		PlayerHP.ResetValue();
 		ExpManager.ResetExp();
 
 		uiManager.DisableAllUI();
-		uiManager.SetUIActive( 0, true );
-		ChangeGameState( GameState.Hub );
+		uiManager.SetUIActive(0, true);
+		ChangeGameState(GameState.Hub);
 		yield return null;
 	}
 
-	public delegate void OnGameStateChange( GameState gameState, GameState lastGameState );
+	public delegate void OnGameStateChange(GameState gameState, GameState lastGameState);
 
 	public event OnGameStateChange OnGameStateChanged;
 }

@@ -5,9 +5,12 @@ using UnityEngine;
 public class MBCirclingEnemy : EnemyBase
 {
 	private int playerLayer = 1 << 8;
-
+	[SerializeField] private GameObject crackedGround;
 	[SerializeField] private GameObject player;
-	private float checkMaxHP;
+	[SerializeField] private GameObject boss;
+	[SerializeField] private float explosionRadius;
+	private Vector2 launchDestination;
+	//private float checkMaxHP;
 
 	public Vector3 center;
 	public float orbitRadius;
@@ -16,11 +19,15 @@ public class MBCirclingEnemy : EnemyBase
 	public bool agitated = false;
 	public bool aggro = false;
 
-	void Awake()
+	public GameObject Boss { get => boss; set => boss = value; }
+	public Vector2 LaunchDestination { get => launchDestination; set => launchDestination = value; }
+
+
+	private void Start()
 	{
-		checkMaxHP = HealthPoints;
+		base.Start();
 		player = FindObjectOfType<PlayerControler>().gameObject;
-		transform.position = (transform.position - center).normalized * orbitRadius + center;
+		transform.position = (transform.position - boss.transform.position).normalized * orbitRadius + boss.transform.position;
 	}
 
 	void Update()
@@ -28,82 +35,90 @@ public class MBCirclingEnemy : EnemyBase
 		base.Update();
 		HitBox();
 		CircleAroundBoss();
-		//MoveToPlayer();
 		if (aggro)
 		{
-			MoveToTarget(Target);
+			LaunchToPlayer();
 		}
 	}
 
-	public override void TakeDamage(int damage, int damageType)
-	{
-		int damageToTake = damage;
-		if( damageType == 0 && meleeTarget )
-		{
-			HealthPoints -= ( ( int )( damage * markHits ) );
-			meleeTarget = false;
-			damageToTake = ( ( int )( damageToTake * markHits ) );
-			damageToTake += damage;
-		}
-		if( damageType == 1 && castTarget )
-		{
-			HealthPoints -= ( ( int )( damage * markHits ) );
-			castTarget = false;
-			damageToTake = ( ( int )( damageToTake * markHits ) );
-			damageToTake += damage;
-		}
-		DamagePopup(damageToTake);
-		HealthPoints -= damage;
-		this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-		StartCoroutine(FlashColor());
-		agitated = true;
-		if (HealthPoints <= 0) Die();
-	}
+	//public override void TakeDamage(int damage, int damageType)
+	//{
+	//	if (damageType == 0 && meleeTarget)
+	//	{
+	//		HealthPoints -= damage;
+	//		meleeTarget = false;
+	//	}
+	//	if (damageType == 1 && castTarget)
+	//	{
+	//		HealthPoints -= damage;
+	//		castTarget = false;
+	//	}
+	//	DamagePopup(damage);
+	//	HealthPoints -= damage;
+	//	enemySprite.color = Color.white;
+	//	StartCoroutine(FlashColor());
+	//	if (HealthPoints <= 0) Die();
+	//}
 
 	void CircleAroundBoss()
 	{
 		if (!aggro)
 		{
-			transform.RotateAround(center, Vector3.forward, rotationSpeed * Time.deltaTime);
-			var desiredPosition = (transform.position - center).normalized * orbitRadius + center;
+			transform.RotateAround(boss.transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
+			var desiredPosition = (transform.position - boss.transform.position).normalized * orbitRadius + boss.transform.position;
 			transform.position = Vector3.MoveTowards(transform.position, desiredPosition, radiusSpeed * Time.deltaTime);
+			transform.rotation = Quaternion.identity;
 		}
 	}
 
 	void HitBox()
 	{
 		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, this.GetComponent<CircleCollider2D>().radius, playerLayer);
-		if (playerBody != null && HasHitbox)
+		if (playerBody != null && !aggro)
 		{
 			AttackPlayer(playerBody.gameObject);
-			HasHitbox = false;
-			aggro = false;
+		}
+		else if (playerBody != null && aggro && !playerBody.gameObject.GetComponent<PlayerControler>().Invulnerable)
+		{
+			Explode();
 		}
 	}
 
 	void AttackPlayer(GameObject playerObject)
 	{
 		playerObject.GetComponent<PlayerControler>().TakeDamage(damage);
-		StartCoroutine(AttackTimer());
 	}
 
-	IEnumerator AttackTimer()
+	void LaunchToPlayer()
 	{
-		yield return new WaitForSeconds(0.5f);
-		HasHitbox = true;
-		yield return null;
-	}
-
-	void MoveToPlayer()
-	{
-		if (aggro)
+		transform.position = Vector2.MoveTowards(transform.position, launchDestination, Speed * Time.deltaTime);
+		if (Vector2.Distance(transform.position, launchDestination) < 0.5f)
 		{
-			//Vector3 targetDir = player.transform.position - this.Rb2d.transform.position;
-			//Rb2d.velocity = targetDir.normalized * Speed * Time.deltaTime;
-
-			transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Speed*Time.deltaTime);
-
+			Explode();
 		}
+	}
+
+	void Explode()
+	{
+		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, explosionRadius, playerLayer);
+		if (playerBody != null)
+		{
+			AttackPlayer(playerBody.gameObject);
+		}
+		GameObject decal = Instantiate(crackedGround, transform.position, Quaternion.identity);
+		decal.transform.localScale = Vector3.one * explosionRadius;
+		Die();
+	}
+
+	public override void Die()
+	{
+		StopAllCoroutines();
+		Time.timeScale = 1f;
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.EnemyAggroCount(false);
+		}
+		Destroy(this.gameObject);
 	}
 
 }
