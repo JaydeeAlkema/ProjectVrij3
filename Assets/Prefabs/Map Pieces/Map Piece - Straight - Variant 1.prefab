@@ -653,8 +653,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6954600674820484952}
   - {fileID: 1550972617568499512}
+  - {fileID: 6954600674820484952}
   m_Father: {fileID: 6688237861213788212}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -855,7 +855,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectionPointsParent: {fileID: 5175853765679789889}
-  connectionPoints: []
+  connectionPoints:
+  - {fileID: 104735229004920400}
+  - {fileID: 4148938542568140342}
   neighbours: []
 --- !u!1 &7770234926316365134
 GameObject:
