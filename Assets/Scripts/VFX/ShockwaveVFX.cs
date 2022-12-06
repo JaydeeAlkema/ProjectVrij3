@@ -54,7 +54,7 @@ public class ShockwaveVFX : MonoBehaviour
 	{
 		//Draw shockwave
 		var drawnCircle = new GameObject { name = "ShockWave" };
-		drawnCircle.DrawCircle(1f, 0.1f);
+		drawnCircle.DrawCircle(1f, 0.4f);
 		drawnCircle.GetComponent<LineRenderer>().material = setMaterial;
 		drawnCircle.GetComponent<LineRenderer>().startColor = color;
 		drawnCircle.GetComponent<LineRenderer>().endColor = color;

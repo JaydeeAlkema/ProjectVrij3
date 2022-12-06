@@ -40,7 +40,7 @@ public class BTBoss1 : BTTree
 					new BossPlayAnimationUntilCompletion(0, bossScript, "MiniBoss1StartWindup"),
 					new BossWaitWithAnimation(1, bossScript, 0.1f, "MiniBoss1WindingUp"),
 					new BossPlayAnimationUntilCompletion(2, bossScript, "MiniBoss1Up"),
-					new BossWaitWithAnimation(3, bossScript, 2f, "MiniBoss1WaitToFallDown"),
+					new BossWaitWithAnimation(3, bossScript, 1.5f, "MiniBoss1WaitToFallDown"),
 					new BossPlayAnimationUntilCompletion(4, bossScript, "MiniBoss1Down"),
 					new BossPlayAnimationUntilCompletion(5, bossScript, "MiniBoss1StartEndlag"),
 					new BossWaitWithAnimation(6, bossScript, 3f, "MiniBoss1Endlag"),
