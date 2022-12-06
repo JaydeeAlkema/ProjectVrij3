@@ -7,6 +7,9 @@ public class MapPiece : MonoBehaviour
 	[SerializeField] private List<ConnectionPoint> connectionPoints = new List<ConnectionPoint>();
 	[SerializeField] private List<GameObject> neighbours = new List<GameObject>();
 
+	public List<ConnectionPoint> ConnectionPoints { get => connectionPoints; private set => connectionPoints = value; }
+	public List<GameObject> Neighbours { get => neighbours; private set => neighbours = value; }
+
 	public void GetConnectionPointsFromChildren()
 	{
 		foreach (Transform childTransform in connectionPointsParent.GetComponentsInChildren<Transform>())
@@ -21,7 +24,7 @@ public class MapPiece : MonoBehaviour
 
 	public void AddNeighbour(GameObject neighbour)
 	{
-		if (neighbours.Contains(neighbour) == false)
+		if (neighbours.Contains(neighbour) == false && neighbour != null)
 		{
 			neighbours.Add(neighbour);
 		}
