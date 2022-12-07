@@ -43,7 +43,7 @@ public class HubSceneManager : MonoBehaviour
 	private void HubSceneManager_completed( AsyncOperation obj )
 	{
 		SceneManager.SetActiveScene( SceneManager.GetSceneByName( loadScene ) );
-		if( loadScene != "Hub Prototype" && lastScene != "Hub Prototype") { HoldPlayerOnSceneLoad(); }
+		if( GameManager.Instance.currentGameState == GameState.Dungeon && GameManager.Instance.lastGamestate == GameManager.Instance.currentGameState) { HoldPlayerOnSceneLoad(); }
 		Debug.Log( "hold player stats" );
 	}
 
