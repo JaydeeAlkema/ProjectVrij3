@@ -221,6 +221,24 @@ public class LevelGeneratorV3 : MonoBehaviour
 			AstarPath.active.Scan(gridGraph);
 		}
 
+
+		float dst = 0;
+		Vector2 furthestPositionFromSpawn = new Vector2();
+		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+		{
+			float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPieceInScene.Value);
+			if (distanceToMapPiece > dst)
+			{
+				dst = distanceToMapPiece;
+				furthestPositionFromSpawn = mapPieceInScene.Value;
+			}
+		}
+
+		GameObject bossPortalGO = Instantiate(bossPortalPrefab, furthestPositionFromSpawn, Quaternion.identity, interactablesParent);
+		Portal portal = bossPortalGO.GetComponent<Portal>();
+		portal.CurrentSceneName = "Jaydee Testing Scene";
+		portal.SceneToLoadName = "Boss Testing";
+
 		if (debugMapPiecesInSceneDictionary)
 		{
 			foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
@@ -301,8 +319,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 			}
 		}
 
-		float dst = 0;
-		Vector2 furthestPositionFromSpawn = new Vector2();
+
+		// I don't know what I was doing here... But it works.
+		// I advice against changing anything down below, it just works, so no touchy!
+		// Beware any developer that ever tries to refactor this, it's gonna be a pain/
 
 		foreach (MapPiece mapPiece in inCompleteMapPieces)
 		{
@@ -367,7 +387,141 @@ public class LevelGeneratorV3 : MonoBehaviour
 				}
 			}
 
-			if (northConnectionPoint != null && northConnectionPoint.Occupied == false && northNeighbour == null)
+			// Edge Case Dead End Checks
+			// Corner - North Unoccupied, East Occupied
+			if (northConnectionPoint != null && northConnectionPoint.Occupied == false && eastConnectionPoint != null && eastConnectionPoint.Occupied == true && northNeighbour != null && southConnectionPoint == null && westConnectionPoint == null)
+			{
+				GameObject westNeigbourGO = Instantiate(leftDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
+				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
+				DestroyImmediate(mapPiece.transform.gameObject);
+				if (Overlap(westNeigbourGO, westNeigbourGO.transform.position, overlapSize))
+				{
+					DestroyImmediate(westNeigbourGO);
+					continue;
+				}
+
+				MapPiece westNeighbourMapPiece = westNeigbourGO.GetComponent<MapPiece>();
+				westNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+				westNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
+
+				eastConnectionPoint.Occupied = true;
+				eastConnectionPoint.ConnectedTo = westNeighbourMapPiece.ConnectionPoints[0];
+
+				mapPiecesInScene.Add(westNeigbourGO, mapPiecePos);
+			}
+			// Corner - North Occupied, East Unoccupied
+			else if (northConnectionPoint != null && northConnectionPoint.Occupied == true && eastConnectionPoint != null && eastConnectionPoint.Occupied == false && eastNeighbour != null && southConnectionPoint == null && westConnectionPoint == null)
+			{
+				GameObject southNeigbourGO = Instantiate(bottomDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
+				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
+				DestroyImmediate(mapPiece.transform.gameObject);
+				if (Overlap(southNeigbourGO, southNeigbourGO.transform.position, overlapSize))
+				{
+					DestroyImmediate(southNeigbourGO);
+					continue;
+				}
+
+				MapPiece southNeighbourMapPiece = southNeigbourGO.GetComponent<MapPiece>();
+				southNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+				southNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
+
+				northConnectionPoint.Occupied = true;
+				northConnectionPoint.ConnectedTo = southNeighbourMapPiece.ConnectionPoints[0];
+
+				mapPiecesInScene.Add(southNeigbourGO, mapPiecePos);
+			}
+
+			// Corner - East Unoccupied, South Occupied
+			else if (southConnectionPoint != null && southConnectionPoint.Occupied == true && eastConnectionPoint != null && eastConnectionPoint.Occupied == false && northNeighbour == null && westConnectionPoint == null && northConnectionPoint == null)
+			{
+				GameObject northNeigbourGO = Instantiate(topDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
+				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
+				DestroyImmediate(mapPiece.transform.gameObject);
+				if (Overlap(northNeigbourGO, northNeigbourGO.transform.position, overlapSize))
+				{
+					DestroyImmediate(northNeigbourGO);
+					continue;
+				}
+
+				MapPiece northNeighbourMapPiece = northNeigbourGO.GetComponent<MapPiece>();
+				northNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+				northNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
+
+				southConnectionPoint.Occupied = true;
+				southConnectionPoint.ConnectedTo = northNeighbourMapPiece.ConnectionPoints[0];
+
+				mapPiecesInScene.Add(northNeigbourGO, mapPiecePos);
+			}
+			// Corner - East Occupied, South Unoccupied
+			else if (southConnectionPoint != null && southConnectionPoint.Occupied == false && eastConnectionPoint != null && eastConnectionPoint.Occupied == true && eastNeighbour != null && westConnectionPoint == null && northConnectionPoint == null)
+			{
+				GameObject westNeigbourGO = Instantiate(leftDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
+				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
+				DestroyImmediate(mapPiece.transform.gameObject);
+				if (Overlap(westNeigbourGO, westNeigbourGO.transform.position, overlapSize))
+				{
+					DestroyImmediate(westNeigbourGO);
+					continue;
+				}
+
+				MapPiece westNeighbourMapPiece = westNeigbourGO.GetComponent<MapPiece>();
+				westNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+				westNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
+
+				eastConnectionPoint.Occupied = true;
+				eastConnectionPoint.ConnectedTo = westNeighbourMapPiece.ConnectionPoints[0];
+
+				mapPiecesInScene.Add(westNeigbourGO, mapPiecePos);
+			}
+
+			// Corner - North Unoccupied, West Ocupied
+			else if (northConnectionPoint != null && northConnectionPoint.Occupied == false && westConnectionPoint != null && westConnectionPoint.Occupied && northNeighbour != null && eastConnectionPoint == null && southConnectionPoint == null)
+			{
+				GameObject eastNeigbourGO = Instantiate(rightDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
+				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
+				DestroyImmediate(mapPiece.transform.gameObject);
+				if (Overlap(eastNeigbourGO, eastNeigbourGO.transform.position, overlapSize))
+				{
+					DestroyImmediate(eastNeigbourGO);
+					continue;
+				}
+
+				MapPiece eastNeighbourMapPiece = eastNeigbourGO.GetComponent<MapPiece>();
+				eastNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+				eastNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
+
+				westConnectionPoint.Occupied = true;
+				westConnectionPoint.ConnectedTo = eastNeighbourMapPiece.ConnectionPoints[0];
+
+				mapPiecesInScene.Add(eastNeigbourGO, mapPiecePos);
+			}
+			// Corner - North Occupied, West Unnocupied
+
+			// Corner - East Unoccupied, West Ocupied
+			//else if (northConnectionPoint != null && northConnectionPoint.Occupied == false && westConnectionPoint != null && westConnectionPoint.Occupied && northNeighbour != null && eastConnectionPoint == null && southConnectionPoint == null)
+			//{
+			//	GameObject eastNeigbourGO = Instantiate(rightDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
+			//	mapPiecesInScene.Remove(mapPiece.transform.gameObject);
+			//	DestroyImmediate(mapPiece.transform.gameObject);
+			//	if (Overlap(eastNeigbourGO, eastNeigbourGO.transform.position, overlapSize))
+			//	{
+			//		DestroyImmediate(eastNeigbourGO);
+			//		continue;
+			//	}
+
+			//	MapPiece eastNeighbourMapPiece = eastNeigbourGO.GetComponent<MapPiece>();
+			//	eastNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+			//	eastNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
+
+			//	westConnectionPoint.Occupied = true;
+			//	westConnectionPoint.ConnectedTo = eastNeighbourMapPiece.ConnectionPoints[0];
+
+			//	mapPiecesInScene.Add(eastNeigbourGO, mapPiecePos);
+			//}
+
+			// Regular Dead End Checks
+			// North Dead End
+			else if (northConnectionPoint != null && northConnectionPoint.Occupied == false && northNeighbour == null)
 			{
 				GameObject northNeigbourGO = Instantiate(topDeadEndMapPieces.GetRandom(), mapPiecePos + northNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
 				if (Overlap(northNeigbourGO, northNeigbourGO.transform.position, overlapSize))
@@ -384,14 +538,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 				northConnectionPoint.ConnectedTo = northNeighbourMapPiece.ConnectionPoints[0];
 
 				mapPiecesInScene.Add(northNeigbourGO, mapPiecePos + northNeighbourPosition);
-
-				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + northNeighbourPosition);
-				if (distanceToMapPiece > dst)
-				{
-					dst = distanceToMapPiece;
-					furthestPositionFromSpawn = mapPiecePos + northNeighbourPosition;
-				}
 			}
+			// East Dead End
 			else if (eastConnectionPoint != null && eastConnectionPoint.Occupied == false && eastNeighbour == null)
 			{
 				GameObject eastNeighbourGO = Instantiate(rightDeadEndMapPieces.GetRandom(), mapPiecePos + eastNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
@@ -409,14 +557,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 				eastConnectionPoint.ConnectedTo = eastNeighbourMapPiece.ConnectionPoints[0];
 
 				mapPiecesInScene.Add(eastNeighbourGO, mapPiecePos + eastNeighbourPosition);
-
-				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + eastNeighbourPosition);
-				if (distanceToMapPiece > dst)
-				{
-					dst = distanceToMapPiece;
-					furthestPositionFromSpawn = mapPiecePos + eastNeighbourPosition;
-				}
 			}
+			// South Dead End
 			else if (southConnectionPoint != null && southConnectionPoint.Occupied == false && southNeighbour == null)
 			{
 				GameObject southNeighbourGO = Instantiate(bottomDeadEndMapPieces.GetRandom(), mapPiecePos + southNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
@@ -434,14 +576,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 				southConnectionPoint.ConnectedTo = southNeighbourMapPiece.ConnectionPoints[0];
 
 				mapPiecesInScene.Add(southNeighbourGO, mapPiecePos + southNeighbourPosition);
-
-				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + southNeighbourPosition);
-				if (distanceToMapPiece > dst)
-				{
-					dst = distanceToMapPiece;
-					furthestPositionFromSpawn = mapPiecePos + southNeighbourPosition;
-				}
 			}
+			// West Dead End
 			else if (westConnectionPoint != null && westConnectionPoint.Occupied == false && westNeighbour == null)
 			{
 				GameObject westNeighbourGO = Instantiate(leftDeadEndMapPieces.GetRandom(), mapPiecePos + westNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
@@ -459,20 +595,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 				westConnectionPoint.ConnectedTo = westNeighbourMapPiece.ConnectionPoints[0];
 
 				mapPiecesInScene.Add(westNeighbourGO, mapPiecePos + westNeighbourPosition);
-
-				float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPiecePos + westNeighbourPosition);
-				if (distanceToMapPiece > dst)
-				{
-					dst = distanceToMapPiece;
-					furthestPositionFromSpawn = mapPiecePos + westNeighbourPosition;
-				}
 			}
 		}
-
-		GameObject bossPortalGO = Instantiate(bossPortalPrefab, furthestPositionFromSpawn, Quaternion.identity, interactablesParent);
-		Portal portal = bossPortalGO.GetComponent<Portal>();
-		portal.CurrentSceneName = "Jaydee Testing Scene";
-		portal.SceneToLoadName = "Boss Testing";
 	}
 	private void SpawnEnemies()
 	{
