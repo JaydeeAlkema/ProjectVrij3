@@ -22,6 +22,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] public SpriteRenderer enemySprite = null;
 	[SerializeField] protected GameObject vfxHitSpark = null;
 	[SerializeField] protected AbilityReward reward;
+	[SerializeField] protected GameObject castMarkDecal;
+	[SerializeField] protected GameObject meleeMarkDecal;
 
 	public Animator enemyAnimator;
 
@@ -174,6 +176,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			healthPoints -= ((int)(damage * markHits));
 			meleeTarget = false;
+			meleeMarkDecal.SetActive( false );
 			damageToTake = ((int)(damageToTake * markHits));
 			damageToTake += damage;
 		}
@@ -181,6 +184,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			healthPoints -= ( ( int )( damage * markHits ) );
 			castTarget = false;
+			castMarkDecal.SetActive( false );
 			damageToTake = ( ( int )( damageToTake * markHits ) );
 			damageToTake += damage;
 		}
@@ -226,9 +230,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			case 0:
 				meleeTarget = true;
+				meleeMarkDecal.SetActive( true );
 				break;
 			case 1:
 				castTarget = true;
+				castMarkDecal.SetActive( true );
 				break;
 		}
 	}

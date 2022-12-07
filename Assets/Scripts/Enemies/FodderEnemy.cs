@@ -108,6 +108,7 @@ public class FodderEnemy : EnemyBase
 		{
 			HealthPoints -= ( ( int )( damage * markHits ) );
 			meleeTarget = false;
+			meleeMarkDecal.SetActive( false );
 			damageToTake = ( ( int )( damageToTake * markHits ) );
 			damageToTake += damage;
 		}
@@ -115,6 +116,7 @@ public class FodderEnemy : EnemyBase
 		{
 			HealthPoints -= ( ( int )( damage * markHits ) );
 			castTarget = false;
+			castMarkDecal.SetActive( false );
 			damageToTake = ( ( int )( damageToTake * markHits ) );
 			damageToTake += damage;
 		}
