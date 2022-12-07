@@ -9,6 +9,7 @@ public class HubSceneManager : MonoBehaviour
 	private string loadScene;
 	private string lastScene;
 	private PlayerControler playerValues;
+	private PlayerControler player;
 
 	private void Awake()
 	{
@@ -26,7 +27,7 @@ public class HubSceneManager : MonoBehaviour
 	public void ChangeScene(string sceneToLoad, string currentScene)
 	{
 		loadScene = sceneToLoad;
-		if((sceneToLoad != "Hub Prototype" || sceneToLoad != "MainMenu") && GameManager.Instance.PlayerInstance != null)
+		if((GameManager.Instance.currentGameState == GameState.Dungeon || GameManager.Instance.currentGameState == GameManager.Instance.lastGamestate) && GameManager.Instance.PlayerInstance != null)
 		{
 			if(GameManager.Instance.ScriptablePlayer != null) { GameManager.Instance.ScriptablePlayer = null; }
 			GameManager.Instance.ScriptablePlayer = ( ScriptablePlayer )ScriptableObject.CreateInstance( "ScriptablePlayer" );
@@ -55,7 +56,8 @@ public class HubSceneManager : MonoBehaviour
 
 	private void HoldPlayerOnSceneLoad()
 	{
-		PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
+		//PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
+		player = FindObjectOfType<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
 		player.PlayerAbilityController = playerValues.PlayerAbilityController;
 		player.PlayerAbilityController.Player = player;
@@ -76,6 +78,7 @@ public class HubSceneManager : MonoBehaviour
 		{ 
 			player.CurrentAbility1 = playerValues.CurrentAbility1;
 			player.CurrentAbility1.Player = player;
+			player.Ability1 = playerValues.Ability1;
 			player.Ability1.SetHoldStats(playerValues.Ability1);
 			player.CurrentAbility1.Init = playerValues.CurrentAbility1.Init;
 		}
@@ -83,6 +86,7 @@ public class HubSceneManager : MonoBehaviour
 		{
 			player.CurrentAbility2 = playerValues.CurrentAbility2;
 			player.CurrentAbility2.Player = player;
+			player.Ability2 = playerValues.Ability2;
 			player.Ability2.SetHoldStats(playerValues.Ability2);
 			player.CurrentAbility2.Init = playerValues.CurrentAbility2.Init;
 		}
@@ -90,6 +94,7 @@ public class HubSceneManager : MonoBehaviour
 		{
 			player.CurrentAbility3 = playerValues.CurrentAbility3;
 			player.CurrentAbility3.Player = player;
+			player.Ability3 = playerValues.Ability3;
 			player.Ability3.SetHoldStats(playerValues.Ability3);
 			player.CurrentAbility3.Init = playerValues.CurrentAbility3.Init;
 		}
@@ -97,6 +102,7 @@ public class HubSceneManager : MonoBehaviour
 		{
 			player.CurrentAbility4 = playerValues.CurrentAbility4;
 			player.CurrentAbility4.Player = player;
+			player.Ability4 = playerValues.Ability4;
 			player.Ability4.SetHoldStats(playerValues.Ability4);
 			player.CurrentAbility4.Init = playerValues.CurrentAbility4.Init;
 		}
