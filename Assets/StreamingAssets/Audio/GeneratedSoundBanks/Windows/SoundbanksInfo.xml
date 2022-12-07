@@ -1,21 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="140">
 	<RootPaths>
-		<ProjectRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\</ProjectRoot>
-		<SourceFilesRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\</SourceFilesRoot>
-		<SoundBanksRoot>C:\Users\maxjo\Documents\Unity Projects\ProjectVrij3\Assets\StreamingAssets\Audio\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ProjectRoot>C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\</ProjectRoot>
+		<SourceFilesRoot>C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\</SourceFilesRoot>
+		<SoundBanksRoot>C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\GeneratedSoundBanks\Windows\</SoundBanksRoot>
 		<ExternalSourcesInputFile></ExternalSourcesInputFile>
-		<ExternalSourcesOutputRoot>C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+		<ExternalSourcesOutputRoot>C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
 	</RootPaths>
 	<DialogueEvents/>
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="534561221" Language="SFX" Hash="1797642508">
-			<ObjectPath>\SoundBanks\Default Work Unit\MainSoundbank</ObjectPath>
+		<SoundBank Id="534561221" Language="SFX" Hash="1324063329">
+			<ObjectPath>\SoundBanks\Run SoundBanks\MainSoundbank</ObjectPath>
 			<ShortName>MainSoundbank</ShortName>
 			<Path>MainSoundbank.bnk</Path>
 			<IncludedEvents>
+				<Event Id="722571157" Name="env_torch_burning" ObjectPath="\Events\Environment\env_torch_burning" DurationType="Infinite">
+					<IncludedMemoryFiles>
+						<File Id="962874528" Language="SFX">
+							<ShortName>lb_sx_uni_env_torches_burning.wav</ShortName>
+							<Path>SFX\lb_sx_uni_env_torches_burning_D79FB2B7.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1242269928" Name="fdr_attck_jump" ObjectPath="\Events\NPC\fdr_attck_jump" DurationType="OneShot" DurationMin="0.251148" DurationMax="0.614826">
+					<IncludedMemoryFiles>
+						<File Id="64477681" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_07.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_07_10C4C929.wem</Path>
+						</File>
+						<File Id="77444700" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_011.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_011_10C4C929.wem</Path>
+						</File>
+						<File Id="118912499" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_05.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_05_10C4C929.wem</Path>
+						</File>
+						<File Id="418721574" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_010.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_010_10C4C929.wem</Path>
+						</File>
+						<File Id="421568608" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_04.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_04_10C4C929.wem</Path>
+						</File>
+						<File Id="433890079" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_09.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_09_10C4C929.wem</Path>
+						</File>
+						<File Id="465132775" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_01.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_01_10C4C929.wem</Path>
+						</File>
+						<File Id="476356866" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_03.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_03_10C4C929.wem</Path>
+						</File>
+						<File Id="710419810" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_06.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_06_10C4C929.wem</Path>
+						</File>
+						<File Id="872112254" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_02.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_02_10C4C929.wem</Path>
+						</File>
+						<File Id="968057856" Language="SFX">
+							<ShortName>lb_sx_uni_npc_fodder_attack_08.wav</ShortName>
+							<Path>SFX\lb_sx_uni_npc_fodder_attack_08_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
 				<Event Id="3509614367" Name="npc_dmg_cast" ObjectPath="\Events\NPC\npc_dmg_cast" DurationType="OneShot" DurationMin="1.258499" DurationMax="1.333333">
 					<IncludedMemoryFiles>
 						<File Id="859909442" Language="SFX">
@@ -32,6 +88,7 @@
 						</File>
 					</IncludedMemoryFiles>
 				</Event>
+				<Event Id="2932040671" Name="play_music" ObjectPath="\Events\Music\play_music" DurationType="Infinite"/>
 				<Event Id="1994383775" Name="plr_attck_cast" ObjectPath="\Events\Player\Player Actions\plr_attck_cast" DurationType="OneShot" DurationMin="1.31639" DurationMax="1.394667">
 					<IncludedMemoryFiles>
 						<File Id="586357725" Language="SFX">
@@ -56,17 +113,74 @@
 						</File>
 					</IncludedMemoryFiles>
 				</Event>
+				<Event Id="2837384057" Name="stop_music" ObjectPath="\Events\Music\stop_music" MaxAttenuation="0." DurationType="OneShot" DurationMin="0." DurationMax="0."/>
 			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="55312973" Language="SFX">
+					<ShortName>lb_mx_run_trn_crowded_to_calm.wav</ShortName>
+					<Path>SFX\lb_mx_run_trn_crowded_to_calm_D79FB2B7.wem</Path>
+				</File>
+				<File Id="201842440" Language="SFX">
+					<ShortName>lb_sx_uni_plr_attck_melee_01.wav</ShortName>
+					<Path>SFX\lb_sx_uni_plr_attck_melee_01_10C4C929.wem</Path>
+				</File>
+				<File Id="457766068" Language="SFX">
+					<ShortName>lb_sx_uni_npc_dmg_melee_01.wav</ShortName>
+					<Path>SFX\lb_sx_uni_npc_dmg_melee_01_10C4C929.wem</Path>
+				</File>
+				<File Id="506543933" Language="SFX">
+					<ShortName>lb_sx_uni_plr_dmg_npc_01.wav</ShortName>
+					<Path>SFX\lb_sx_uni_plr_dmg_npc_01_10C4C929.wem</Path>
+				</File>
+				<File Id="548907848" Language="SFX">
+					<ShortName>lb_mx_run_amb_segment_a.wav</ShortName>
+					<Path>SFX\lb_mx_run_amb_segment_a_D79FB2B7.wem</Path>
+				</File>
+				<File Id="568065659" Language="SFX">
+					<ShortName>lb_mx_run_amb_segment_c.wav</ShortName>
+					<Path>SFX\lb_mx_run_amb_segment_c_D79FB2B7.wem</Path>
+				</File>
+				<File Id="586357725" Language="SFX">
+					<ShortName>lb_sx_uni_plr_attck_cast_01.wav</ShortName>
+					<Path>SFX\lb_sx_uni_plr_attck_cast_01_10C4C929.wem</Path>
+				</File>
+				<File Id="677631767" Language="SFX">
+					<ShortName>lb_mx_run_amb_segment_b.wav</ShortName>
+					<Path>SFX\lb_mx_run_amb_segment_b_D79FB2B7.wem</Path>
+				</File>
+				<File Id="770650953" Language="SFX">
+					<ShortName>lb_mx_run_trn_calm_to_crowded.wav</ShortName>
+					<Path>SFX\lb_mx_run_trn_calm_to_crowded_D79FB2B7.wem</Path>
+				</File>
+				<File Id="859909442" Language="SFX">
+					<ShortName>lb_sx_uni_npc_dmg_cast_01.wav</ShortName>
+					<Path>SFX\lb_sx_uni_npc_dmg_cast_01_10C4C929.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+			<StateGroups>
+				<StateGroup Id="4091656514" Name="GameState" ObjectPath="\States\Default Work Unit\GameState" GUID="{D63EE88D-0DE2-45B1-9CC1-CAEBBDC15A37}">
+					<States>
+						<State Id="748895195" Name="None" ObjectPath="\States\Default Work Unit\GameState\None" GUID="{825491BB-9DEA-4CBB-9345-68F2E8740EDB}"/>
+						<State Id="1971956607" Name="Crowded" ObjectPath="\States\Default Work Unit\GameState\Crowded" GUID="{E4CE3B2B-D7CA-4076-ABD0-40EF77782CDF}"/>
+						<State Id="3753286132" Name="Calm" ObjectPath="\States\Default Work Unit\GameState\Calm" GUID="{60BBF052-1D2C-4459-A9F5-E5CA3108C68F}"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1355168291" Language="SFX" Hash="3218791417">
+		<SoundBank Id="1355168291" Language="SFX" Hash="3040836706">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<IncludedAuxBusses>
-				<AuxBus Id="247451540" Name="CaveBig" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\CaveBig"/>
 				<AuxBus Id="992774748" Name="Graveyard" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\Graveyard"/>
 				<AuxBus Id="3545700988" Name="Reverbs" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs"/>
+				<AuxBus Id="4202071913" Name="Big_Room" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus\Reverbs\Big_Room"/>
 			</IncludedAuxBusses>
+		</SoundBank>
+		<SoundBank Id="3181896701" Language="SFX" Hash="542591308">
+			<ObjectPath>\SoundBanks\Hub SoundBanks\HubSoundBank</ObjectPath>
+			<ShortName>HubSoundBank</ShortName>
+			<Path>HubSoundBank.bnk</Path>
 		</SoundBank>
 	</SoundBanks>
 </SoundBanksInfo>

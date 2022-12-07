@@ -1,14 +1,43 @@
 Event	ID	Name			Wwise Object Path	Notes
+	722571157	env_torch_burning			\Environment\env_torch_burning	
+	1242269928	fdr_attck_jump			\NPC\fdr_attck_jump	
 	1994383775	plr_attck_cast			\Player\Player Actions\plr_attck_cast	
 	2025828010	npc_dmg_melee			\NPC\npc_dmg_melee	
 	2474305640	plr_dmg_npc			\Player\Player Actions\plr_dmg_npc	
+	2837384057	stop_music			\Music\stop_music	
+	2932040671	play_music			\Music\play_music	
 	3420739114	plr_attck_melee			\Player\Player Actions\plr_attck_melee	
 	3509614367	npc_dmg_cast			\NPC\npc_dmg_cast	
 
+State Group	ID	Name			Wwise Object Path	Notes
+	4091656514	GameState			\Default Work Unit\GameState	
+
+State	ID	Name	State Group			Notes
+	748895195	None	GameState			
+	1971956607	Crowded	GameState			
+	3753286132	Calm	GameState			
+
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	201842440	lb_sx_uni_plr_attck_melee_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_attck_melee_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player Actions\plr_attck_melee\lb_sx_uni_plr_attck_melee_01		182512
-	457766068	lb_sx_uni_npc_dmg_melee_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_dmg_melee_01_10C4C929.wem		\Actor-Mixer Hierarchy\NPC Interactives\npc_dmg_melee\lb_sx_uni_npc_dmg_melee_01		152168
-	506543933	lb_sx_uni_plr_dmg_npc_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_dmg_npc_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player Actions\plr_dmg_npc\lb_sx_uni_plr_dmg_npc_01		246844
-	586357725	lb_sx_uni_plr_attck_cast_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_attck_cast_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player Actions\plr_attck_cast\lb_sx_uni_plr_attck_cast_01		267920
-	859909442	lb_sx_uni_npc_dmg_cast_01	C:\Users\maxjo\Perforce\Lichbound\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_dmg_cast_01_10C4C929.wem		\Actor-Mixer Hierarchy\NPC Interactives\npc_dmg_cast\lb_sx_uni_npc_dmg_cast_01		256144
+	55312973	lb_mx_run_trn_crowded_to_calm	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_mx_run_trn_crowded_to_calm_D79FB2B7.wem		\Interactive Music Hierarchy\Run\Run\Crowded\lb_mx_run_trn_crowded_to_calm\lb_mx_run_trn_crowded_to_calm		6144240
+	64477681	lb_sx_uni_npc_fodder_attack_07	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_07_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_01\lb_sx_uni_npc_fodder_attack_07		68716
+	77444700	lb_sx_uni_npc_fodder_attack_011	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_011_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_01\lb_sx_uni_npc_fodder_attack_011		62900
+	118912499	lb_sx_uni_npc_fodder_attack_05	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_05_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_01\lb_sx_uni_npc_fodder_attack_05		31596
+	201842440	lb_sx_uni_plr_attck_melee_01	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_attck_melee_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player\Player\Player Actions\plr_attck_melee\lb_sx_uni_plr_attck_melee_01		182512
+	418721574	lb_sx_uni_npc_fodder_attack_010	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_010_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_02\lb_sx_uni_npc_fodder_attack_010		76544
+	421568608	lb_sx_uni_npc_fodder_attack_04	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_04_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_02\lb_sx_uni_npc_fodder_attack_04		71244
+	433890079	lb_sx_uni_npc_fodder_attack_09	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_09_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_01\lb_sx_uni_npc_fodder_attack_09		48944
+	457766068	lb_sx_uni_npc_dmg_melee_01	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_dmg_melee_01_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Damage\npc_dmg_melee\lb_sx_uni_npc_dmg_melee_01		152168
+	465132775	lb_sx_uni_npc_fodder_attack_01	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_01_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_01\lb_sx_uni_npc_fodder_attack_01		61980
+	476356866	lb_sx_uni_npc_fodder_attack_03	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_03_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_01\lb_sx_uni_npc_fodder_attack_03		45212
+	506543933	lb_sx_uni_plr_dmg_npc_01	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_dmg_npc_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player\Player\Player Actions\plr_dmg_npc\lb_sx_uni_plr_dmg_npc_01		246844
+	548907848	lb_mx_run_amb_segment_a	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_mx_run_amb_segment_a_D79FB2B7.wem		\Interactive Music Hierarchy\Run\Run\Crowded\lb_mx_run_amb_segment_a\lb_mx_run_amb_segment_a		8064144
+	568065659	lb_mx_run_amb_segment_c	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_mx_run_amb_segment_c_D79FB2B7.wem		\Interactive Music Hierarchy\Run\Run\Crowded\lb_mx_run_amb_segment_c\lb_mx_run_amb_segment_c		7680192
+	586357725	lb_sx_uni_plr_attck_cast_01	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_plr_attck_cast_01_10C4C929.wem		\Actor-Mixer Hierarchy\Player\Player\Player Actions\plr_attck_cast\lb_sx_uni_plr_attck_cast_01		267920
+	677631767	lb_mx_run_amb_segment_b	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_mx_run_amb_segment_b_D79FB2B7.wem		\Interactive Music Hierarchy\Run\Run\Crowded\lb_mx_run_amb_segment_b\lb_mx_run_amb_segment_b		8064144
+	710419810	lb_sx_uni_npc_fodder_attack_06	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_06_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_02\lb_sx_uni_npc_fodder_attack_06		80544
+	770650953	lb_mx_run_trn_calm_to_crowded	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_mx_run_trn_calm_to_crowded_D79FB2B7.wem		\Interactive Music Hierarchy\Run\Run\Crowded\lb_mx_run_trn_calm_to_crowded\lb_mx_run_trn_calm_to_crowded		3840144
+	859909442	lb_sx_uni_npc_dmg_cast_01	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_dmg_cast_01_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Damage\npc_dmg_cast\lb_sx_uni_npc_dmg_cast_01		256144
+	872112254	lb_sx_uni_npc_fodder_attack_02	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_02_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_02\lb_sx_uni_npc_fodder_attack_02		75944
+	962874528	lb_sx_uni_env_torches_burning	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_env_torches_burning_D79FB2B7.wem		\Actor-Mixer Hierarchy\Environment\Environment\Dungeon\Dungeon\lb_sx_uni_env_torches_burning		11520144
+	968057856	lb_sx_uni_npc_fodder_attack_08	C:\Users\maxdw\Perforce\Lichbound_developer\Lichbound_WwiseProject\.cache\Windows\SFX\lb_sx_uni_npc_fodder_attack_08_10C4C929.wem		\Actor-Mixer Hierarchy\NPC\NPC\NPC Locomotion\NPC Attacks\fdr_attack\attack_02\lb_sx_uni_npc_fodder_attack_08		45172
 

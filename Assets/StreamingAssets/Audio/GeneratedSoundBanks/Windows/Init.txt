@@ -1,19 +1,28 @@
 State Group	ID	Name			Wwise Object Path	Notes
+	3285234865	PlayerState			\Default Work Unit\PlayerState	
 	4091656514	GameState			\Default Work Unit\GameState	
 
 State	ID	Name	State Group			Notes
+	655265632	Alive	PlayerState			
+	748895195	None	PlayerState			
+	2044049779	Dead	PlayerState			
 	748895195	None	GameState			
+	1971956607	Crowded	GameState			
+	3753286132	Calm	GameState			
 
 Audio Bus	ID	Name			Wwise Object Path	Notes
+	143634621	Ambience Master			\Default Work Unit\Master Audio Bus\Ambience Master	
 	439959608	Player Master			\Default Work Unit\Master Audio Bus\Player Master	
-	746174771	Ambient Master			\Default Work Unit\Master Audio Bus\Ambient Master	
 	3362801048	NPC Master			\Default Work Unit\Master Audio Bus\NPC Master	
 	3803692087	Master Audio Bus			\Default Work Unit\Master Audio Bus	
 
 Auxiliary Bus	ID	Name			Wwise Object Path	Notes
-	247451540	CaveBig			\Default Work Unit\Master Audio Bus\Reverbs\CaveBig	
 	992774748	Graveyard			\Default Work Unit\Master Audio Bus\Reverbs\Graveyard	
 	3545700988	Reverbs			\Default Work Unit\Master Audio Bus\Reverbs	
+	4202071913	Big_Room			\Default Work Unit\Master Audio Bus\Reverbs\Big_Room	
+
+Effect plug-ins	ID	Name	Type				Notes
+	2791153688	Hall_Small	Wwise RoomVerb			
 
 Audio Devices	ID	Name	Type				Notes
 	2317455096	No_Output	No Output			
