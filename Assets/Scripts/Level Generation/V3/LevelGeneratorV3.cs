@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+#if UNITY_EDITOR
 using Debug = UnityEngine.Debug;
+#endif
 
 public class LevelGeneratorV3 : MonoBehaviour
 {
@@ -714,10 +716,12 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	public void ClearLog()
 	{
+#if UNITY_EDITOR
 		var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
 		var type = assembly.GetType("UnityEditor.LogEntries");
 		var method = type.GetMethod("Clear");
 		method.Invoke(new object(), null);
+#endif
 	}
 	private bool Overlap(GameObject origin, Vector2 center, Vector2 size)
 	{

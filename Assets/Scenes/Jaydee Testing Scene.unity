@@ -896,7 +896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 793452642
-  generateRandomSeed: 0
+  generateRandomSeed: 1
   mapPieceLimit: 20
   mapPiecePlacementTryLimit: 5
   mapPieceOffset: 21
@@ -969,12 +969,6 @@ MonoBehaviour:
     - item: {fileID: 4442677197823009440, guid: 61fc9d0ea1da44b4d98702d03a3351c7, type: 3}
       weight: 0
   rewardEnemyCountPerLevel: 3
-  rewardEnemyPrefabs:
-    list:
-    - item: {fileID: 4442677197823009440, guid: 61fc9d0ea1da44b4d98702d03a3351c7, type: 3}
-      weight: 1
-    - item: {fileID: 4442677197823009440, guid: f738b166daa0c6e4db190bb79a6c9c3a, type: 3}
-      weight: 1
   debugTime: 0.5
   debugOverlaps: 0
   debugConnections: 0
