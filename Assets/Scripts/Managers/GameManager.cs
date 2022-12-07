@@ -156,8 +156,8 @@ public class GameManager : MonoBehaviour
 	public void ChangeGameState(GameState newGameState)
 	{
 		lastGamestate = currentGameState;
-		if (newGameState != currentGameState)
-		{
+		//if (newGameState != currentGameState)
+		//{
 			currentGameState = newGameState;
 			switch (currentGameState)
 			{
@@ -190,7 +190,7 @@ public class GameManager : MonoBehaviour
 					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 					break;
 			}
-		}
+		//}
 	}
 
 	/// <summary>
