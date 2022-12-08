@@ -139,6 +139,12 @@ public class MiniBoss1 : BossBase
 		}
 	}
 
+	public override void DamagePopup(int damage)
+	{
+		Transform damageNumber = Instantiate(damageNumberText, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.identity);
+		damageNumber.GetComponent<DamageNumberPopup>()?.SetDamageText(damage);
+	}
+
 	public override void OnHitVFX()
 	{
 		Instantiate(vfxHitSpark, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.Euler(0, 0, Random.Range(0, 360)));

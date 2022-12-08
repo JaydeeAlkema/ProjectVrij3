@@ -5,6 +5,7 @@ using UnityEngine;
 public class BossBase : EnemyBase
 {
 
+	[SerializeField] private SpriteRenderer weakSpotSprite;
 	public List<GameObject> mobs = new List<GameObject>();
 
 	private void Start()
@@ -17,9 +18,18 @@ public class BossBase : EnemyBase
 		base.Update();
 	}
 
+
 	public virtual void SpawnMobs()
 	{
 
+	}
+
+
+	public override IEnumerator FlashColor()
+	{
+		weakSpotSprite.material = MaterialHit;
+		yield return new WaitForSeconds(0.09f);
+		weakSpotSprite.material = MaterialDefault;
 	}
 
 }

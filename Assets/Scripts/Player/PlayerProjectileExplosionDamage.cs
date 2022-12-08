@@ -9,7 +9,7 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 	[SerializeField] private float radius;
 	[SerializeField] private int damage;
 	private Collider2D[] collidersInArea;
-	private List<GameObject> enemiesInArea;
+	private List<GameObject> enemiesInArea = new List<GameObject>();
 
 	public IAbility CastedFrom { get => castedFrom; set => castedFrom = value; }
 	public int LayerMask { get => layerMask; set => layerMask = value; }
@@ -24,7 +24,7 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 	void Start()
 	{
 		collidersInArea = Physics2D.OverlapCircleAll(transform.position, radius, layerMask);
-		foreach(Collider2D collider2D in collidersInArea)
+		foreach (Collider2D collider2D in collidersInArea)
 		{
 			if (!enemiesInArea.Contains(collider2D.gameObject))
 			{
@@ -35,6 +35,7 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 				enemiesInArea.Add(collider2D.gameObject); //Add enemy gameobject to list to prevent double hits on multiple colliders on the same object
 			}
 		}
+		enemiesInArea.Clear();
 	}
 
 	public void OnDrawGizmosSelected()
