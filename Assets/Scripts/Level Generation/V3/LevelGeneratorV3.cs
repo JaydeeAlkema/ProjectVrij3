@@ -127,37 +127,41 @@ public class LevelGeneratorV3 : MonoBehaviour
 					{
 						bool mapPieceInSceneConnectionPointOccupied = mapPieceInSceneConnectionPoint.Occupied;
 
-						if (mapPieceInSceneConnectionPointOccupied == false && !connected)
+						if (mapPieceInSceneConnectionPointOccupied == true || connected) continue;
+
+						switch (mapPieceInSceneConnectionPoint.Direction)
 						{
-							switch (mapPieceInSceneConnectionPoint.Direction)
-							{
-								case ConnectionPointDirection.North:
-									newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
-									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointSouth, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
-									break;
-								case ConnectionPointDirection.East:
-									newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
-									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointWest, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
-									break;
-								case ConnectionPointDirection.South:
-									newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
-									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointNorth, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
-									break;
-								case ConnectionPointDirection.West:
-									newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
-									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointEast, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
-									break;
-							}
+							case ConnectionPointDirection.North:
+								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
+								ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointSouth, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+								break;
+							case ConnectionPointDirection.East:
+								newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
+								ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointWest, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+								break;
+							case ConnectionPointDirection.South:
+								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
+								ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointNorth, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+								break;
+							case ConnectionPointDirection.West:
+								newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
+								ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointEast, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+								break;
 						}
 					}
 				}
 
-				if (!connected)
+				if (connected)
 				{
-					if (debugConnections)
-					{
-						Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
-					}
+					newMapPieceGO.name += $" [{mapPiecesInScene.Count}]";
+					newMapPieceGO.transform.position = newMapPiecePos;
+					newMapPieceGO.transform.parent = connectedMapPiecesParent;
+					mapPiecesInScene.Add(newMapPieceGO, newMapPiecePos);
+					newMapPieceGO = null;
+				}
+				else
+				{
+					if (debugConnections) Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
 
 					// Destroy the new map piece if it was not connected to any other map pieces
 					DestroyImmediate(newMapPieceGO);
@@ -166,14 +170,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 					newMapPieceGO = Instantiate(mapPieces.GetRandom());
 					newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 					retryLimit--;
-				}
-				else
-				{
-					newMapPieceGO.name += $" [{mapPiecesInScene.Count}]";
-					newMapPieceGO.transform.position = newMapPiecePos;
-					newMapPieceGO.transform.parent = connectedMapPiecesParent;
-					mapPiecesInScene.Add(newMapPieceGO, newMapPiecePos);
-					newMapPieceGO = null;
 				}
 			}
 		}
@@ -292,7 +288,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		// I don't know what I was doing here... But it works.
 		// I advice against changing anything down below, it just works, so no touchy!
-		// Beware any developer that ever tries to refactor this, it's gonna be a pain/
+		// Beware any developer that ever tries to refactor this, it's gonna be a pain.
 
 		foreach (MapPiece mapPiece in inCompleteMapPieces)
 		{
@@ -565,10 +561,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		{
 			if (!Overlap(newMapPieceGO, newMapPiecePos, overlapSize))
 			{
-				if (debugConnections)
-				{
-					Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-				}
+				if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
 				newMapPieceConnectionPoint.Occupied = true;
 				mapPieceInSceneConnectionPoint.Occupied = true;
