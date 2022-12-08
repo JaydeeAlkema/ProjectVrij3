@@ -197,7 +197,10 @@ public class RewardChoice : MonoBehaviour
 			}
 
 			// Apply the upgrade
-			meleeAttack.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
+			if( meleeAttack.CoolDown > upgradeToGive.AttackSpeedUpgrade )
+			{
+				meleeAttack.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
+			}
 			meleeAttack.Damage += upgradeToGive.DamageUpgrade;
 			meleeAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
 			meleeAttack.Distance += upgradeToGive.DistanceUpgrade;
@@ -255,7 +258,10 @@ public class RewardChoice : MonoBehaviour
 			}
 
 			// Apply upgrades to rangedAttack
-			rangedAttack.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
+			if( rangedAttack.CoolDown > upgradeToGive.AttackSpeedUpgrade )
+			{
+				rangedAttack.CoolDown -= upgradeToGive.AttackSpeedUpgrade;
+			}
 			rangedAttack.Damage += upgradeToGive.DamageUpgrade;
 			rangedAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
 			rangedAttack.CircleSize += upgradeToGive.CircleSizeUpgrade;
