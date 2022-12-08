@@ -11,7 +11,7 @@ public class Projectile : MonoBehaviour
 	[SerializeField] private float lifeSpan;
 	private int burnDamage;
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
-	[SerializeField] private TrailRenderer trail = null;
+	[SerializeField] private GameObject trail = null;
 	[SerializeField] private GameObject explosion = null;
 	[SerializeField] private bool trailUpgrade = false;
 	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
@@ -44,7 +44,7 @@ public class Projectile : MonoBehaviour
 	{
 		if( trailUpgrade )
 		{
-			addedTrail = Instantiate( trail.gameObject, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform );
+			addedTrail = Instantiate( trail, this.transform.position + transform.up * 0.15f, this.transform.rotation, this.transform );
 			TrailWithTrigger trailTrigger = addedTrail.GetComponent<TrailWithTrigger>();
 			trailTrigger.BurnDamage = burnDamage;
 			trailUpgrade = false;
