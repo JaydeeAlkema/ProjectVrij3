@@ -58,9 +58,17 @@ public class HubSceneManager : MonoBehaviour
 		//PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		player = FindObjectOfType<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
-		//player.gameObject.GetComponent<AbilityController>() = GameManager.Instance.ScriptablePlayer.AbilityController;
 		player.PlayerAbilityController = playerValues.PlayerAbilityController;
 		player.PlayerAbilityController.Player = player;
+		#region abilitycontroller sets
+		AbilityController.AbilityControllerInstance.CurrentAbility1 = GameManager.Instance.ScriptablePlayer.AbilityController.CurrentAbility1;
+		AbilityController.AbilityControllerInstance.CurrentAbility2 = GameManager.Instance.ScriptablePlayer.AbilityController.CurrentAbility2;
+		AbilityController.AbilityControllerInstance.CurrentAbility3 = GameManager.Instance.ScriptablePlayer.AbilityController.CurrentAbility3;
+		AbilityController.AbilityControllerInstance.CurrentAbility4 = GameManager.Instance.ScriptablePlayer.AbilityController.CurrentAbility4;
+		AbilityController.AbilityControllerInstance.CurrentDash = GameManager.Instance.ScriptablePlayer.AbilityController.CurrentDash;
+		AbilityController.AbilityControllerInstance.CurrentRangedAttack = GameManager.Instance.ScriptablePlayer.AbilityController.CurrentRangedAttack;
+		AbilityController.AbilityControllerInstance.CurrentMeleeAttack = GameManager.Instance.ScriptablePlayer.AbilityController.CurrentMeleeAttack;
+		#endregion
 		player.CurrentMeleeAttack = playerValues.CurrentMeleeAttack;
 		player.CurrentMeleeAttack.Player = player;
 		player.CurrentMeleeAttack.Init = playerValues.CurrentMeleeAttack.Init;
