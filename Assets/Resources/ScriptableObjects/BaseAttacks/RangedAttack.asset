@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
   m_Name: RangedAttack
   m_EditorClassIdentifier: 
-  baseCooldown: 400
-  baseDamage: 25
+  baseCooldown: 700
+  baseDamage: 90
   basePierce: 1
   baseCritChance: 0
   baseDistance: 0
@@ -31,13 +31,13 @@ MonoBehaviour:
   baseMarkHits: 1
   baseStatusEffectType: 0
   abilityIcon: {fileID: 0}
-  coolDown: 400
-  damage: 25
+  coolDown: 800
+  damage: 100
   pierce: 1
   critChance: 0
   distance: 0
   boxSize: {x: 4, y: 6}
-  circleSize: 0
+  circleSize: 0.2
   layerMask:
     serializedVersion: 2
     m_Bits: 0

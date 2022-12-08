@@ -35,7 +35,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] Animator animPlayer;
 
 	//[SerializeField] PlayerHealthBar healthBar;
-	private float selfSlowTime = 0.35f;
+	private float selfSlowTime = 0.25f;
 	private float selfSlowCounter = 0f;
 	private float selfSlowMultiplier = 1f;
 	private bool inCombat = false;
@@ -293,7 +293,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if (selfSlowCounter < selfSlowTime)
 		{
 			selfSlowCounter += Time.deltaTime;
-			selfSlowMultiplier = 0.4f;
+			selfSlowMultiplier = 0.0f;
 		}
 		//Speed-up player while melee attacking
 		else if (isAttackPositionLocked)
