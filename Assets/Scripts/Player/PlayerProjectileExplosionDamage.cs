@@ -6,7 +6,7 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 {
 	[SerializeField] private IAbility castedFrom;
 	[SerializeField] private LayerMask layerMask;
-	[SerializeField] private float radius = 0.2f;
+	[SerializeField] private float radius;
 	[SerializeField] private int damage;
 	private Collider2D[] enemiesInArea;
 
@@ -18,12 +18,12 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 
 	private void Awake()
 	{
-		transform.localScale = new Vector3(radius, radius, radius);
+		transform.localScale = new Vector3(radius, radius, radius) * 2;
 	}
 
 	void Start()
 	{
-		enemiesInArea = Physics2D.OverlapCircleAll(transform.position, radius * 6, layerMask);
+		enemiesInArea = Physics2D.OverlapCircleAll(transform.position, radius, layerMask);
 		foreach (Collider2D enemy in enemiesInArea)
 		{
 			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
@@ -35,6 +35,6 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 	public void OnDrawGizmosSelected()
 	{
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, radius * 6);
+		Gizmos.DrawWireSphere(transform.position, radius);
 	}
 }

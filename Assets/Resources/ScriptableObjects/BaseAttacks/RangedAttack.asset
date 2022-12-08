@@ -20,7 +20,7 @@ MonoBehaviour:
   baseLifeSpan: 0.4
   baseForce: 25
   baseBoxSize: {x: 4, y: 6}
-  baseCircleSize: 0.2
+  baseCircleSize: 1
   baseDashSpeed: 100
   baseDashDuration: 0.2
   baseAttackTime: 200
@@ -31,13 +31,13 @@ MonoBehaviour:
   baseMarkHits: 1
   baseStatusEffectType: 0
   abilityIcon: {fileID: 0}
-  coolDown: 800
-  damage: 100
+  coolDown: 700
+  damage: 90
   pierce: 1
   critChance: 0
   distance: 0
   boxSize: {x: 4, y: 6}
-  circleSize: 0.2
+  circleSize: 1.2
   layerMask:
     serializedVersion: 2
     m_Bits: 0
