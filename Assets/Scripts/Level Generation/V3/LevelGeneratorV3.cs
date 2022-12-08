@@ -116,69 +116,37 @@ public class LevelGeneratorV3 : MonoBehaviour
 				// If the set reference to the existing map piece does not connect with the new map piece, we continue the loop until we find two map pieces that fit together.
 				Vector2 newMapPiecePos = new Vector2();
 				bool connected = false;
+
 				foreach (KeyValuePair<GameObject, Vector2> keyValuePair in mapPiecesInScene)
 				{
 					GameObject mapPieceInScene = keyValuePair.Key;
+					Vector2 mapPiecePos = keyValuePair.Value;
 					List<ConnectionPoint> mapPieceInSceneConnectionPoints = GetConnectionPoints(mapPieceInScene);
 
 					foreach (ConnectionPoint mapPieceInSceneConnectionPoint in mapPieceInSceneConnectionPoints)
 					{
-						if (mapPieceInSceneConnectionPoint.Occupied == false && !connected)
+						bool mapPieceInSceneConnectionPointOccupied = mapPieceInSceneConnectionPoint.Occupied;
+
+						if (mapPieceInSceneConnectionPointOccupied == false && !connected)
 						{
-							GameObject mapPieceInSceneGO = mapPieceInScene;
-							Vector2 mapPiecePos = keyValuePair.Value;
-
-							// Connect North to South
-							if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.North && newMapPieceConnectionPointSouth != null && newMapPieceConnectionPointSouth.Occupied == false)
+							switch (mapPieceInSceneConnectionPoint.Direction)
 							{
-								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
-								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-
-								newMapPieceConnectionPointSouth.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								newMapPieceConnectionPointSouth.ConnectedTo = mapPieceInSceneConnectionPoint;
-								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointSouth;
-								connected = true;
-							}
-							// Connect East to West
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.East && newMapPieceConnectionPointWest != null && newMapPieceConnectionPointWest.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
-								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-
-								newMapPieceConnectionPointWest.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								newMapPieceConnectionPointWest.ConnectedTo = mapPieceInSceneConnectionPoint;
-								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointWest;
-								connected = true;
-							}
-							// Connect South to North
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.South && newMapPieceConnectionPointNorth != null && newMapPieceConnectionPointNorth.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
-								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-
-								newMapPieceConnectionPointNorth.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								newMapPieceConnectionPointNorth.ConnectedTo = mapPieceInSceneConnectionPoint;
-								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointNorth;
-								connected = true;
-							}
-							// Connect West to East
-							else if (mapPieceInSceneConnectionPoint.Direction == ConnectionPointDirection.West && newMapPieceConnectionPointEast != null && newMapPieceConnectionPointEast.Occupied == false)
-							{
-								newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
-								if (Overlap(newMapPieceGO, newMapPiecePos, overlapSize)) continue;
-								if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
-
-								newMapPieceConnectionPointEast.Occupied = true;
-								mapPieceInSceneConnectionPoint.Occupied = true;
-								newMapPieceConnectionPointEast.ConnectedTo = mapPieceInSceneConnectionPoint;
-								mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPointEast;
-								connected = true;
+								case ConnectionPointDirection.North:
+									newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y + mapPieceOffset);
+									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointSouth, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+									break;
+								case ConnectionPointDirection.East:
+									newMapPiecePos = new Vector2(mapPiecePos.x + mapPieceOffset, mapPiecePos.y);
+									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointWest, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+									break;
+								case ConnectionPointDirection.South:
+									newMapPiecePos = new Vector2(mapPiecePos.x, mapPiecePos.y - mapPieceOffset);
+									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointNorth, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+									break;
+								case ConnectionPointDirection.West:
+									newMapPiecePos = new Vector2(mapPiecePos.x - mapPieceOffset, mapPiecePos.y);
+									ConnectMapPieces(newMapPieceGO, mapPieceInScene, newMapPieceConnectionPointEast, mapPieceInSceneConnectionPoint, newMapPiecePos, overlapSize, ref connected);
+									break;
 							}
 						}
 					}
@@ -186,13 +154,15 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 				if (!connected)
 				{
-					if (debugConnections) Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
+					if (debugConnections)
+					{
+						Debug.Log($"<color=red>Failed to connect {newMapPieceGO.name}</color>", newMapPieceGO);
+					}
 
-					if (Application.isEditor)
-						DestroyImmediate(newMapPieceGO);
-					else
-						Destroy(newMapPieceGO);
+					// Destroy the new map piece if it was not connected to any other map pieces
+					DestroyImmediate(newMapPieceGO);
 
+					// Generate a new map piece and set its parent to the disconnected map pieces parent
 					newMapPieceGO = Instantiate(mapPieces.GetRandom());
 					newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 					retryLimit--;
@@ -387,141 +357,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 				}
 			}
 
-			// Edge Case Dead End Checks
-			// Corner - North Unoccupied, East Occupied
-			if (northConnectionPoint != null && northConnectionPoint.Occupied == false && eastConnectionPoint != null && eastConnectionPoint.Occupied == true && northNeighbour != null && southConnectionPoint == null && westConnectionPoint == null)
-			{
-				GameObject westNeigbourGO = Instantiate(leftDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
-				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
-				DestroyImmediate(mapPiece.transform.gameObject);
-				if (Overlap(westNeigbourGO, westNeigbourGO.transform.position, overlapSize))
-				{
-					DestroyImmediate(westNeigbourGO);
-					continue;
-				}
-
-				MapPiece westNeighbourMapPiece = westNeigbourGO.GetComponent<MapPiece>();
-				westNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
-				westNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
-
-				eastConnectionPoint.Occupied = true;
-				eastConnectionPoint.ConnectedTo = westNeighbourMapPiece.ConnectionPoints[0];
-
-				mapPiecesInScene.Add(westNeigbourGO, mapPiecePos);
-			}
-			// Corner - North Occupied, East Unoccupied
-			else if (northConnectionPoint != null && northConnectionPoint.Occupied == true && eastConnectionPoint != null && eastConnectionPoint.Occupied == false && eastNeighbour != null && southConnectionPoint == null && westConnectionPoint == null)
-			{
-				GameObject southNeigbourGO = Instantiate(bottomDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
-				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
-				DestroyImmediate(mapPiece.transform.gameObject);
-				if (Overlap(southNeigbourGO, southNeigbourGO.transform.position, overlapSize))
-				{
-					DestroyImmediate(southNeigbourGO);
-					continue;
-				}
-
-				MapPiece southNeighbourMapPiece = southNeigbourGO.GetComponent<MapPiece>();
-				southNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
-				southNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
-
-				northConnectionPoint.Occupied = true;
-				northConnectionPoint.ConnectedTo = southNeighbourMapPiece.ConnectionPoints[0];
-
-				mapPiecesInScene.Add(southNeigbourGO, mapPiecePos);
-			}
-
-			// Corner - East Unoccupied, South Occupied
-			else if (southConnectionPoint != null && southConnectionPoint.Occupied == true && eastConnectionPoint != null && eastConnectionPoint.Occupied == false && northNeighbour == null && westConnectionPoint == null && northConnectionPoint == null)
-			{
-				GameObject northNeigbourGO = Instantiate(topDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
-				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
-				DestroyImmediate(mapPiece.transform.gameObject);
-				if (Overlap(northNeigbourGO, northNeigbourGO.transform.position, overlapSize))
-				{
-					DestroyImmediate(northNeigbourGO);
-					continue;
-				}
-
-				MapPiece northNeighbourMapPiece = northNeigbourGO.GetComponent<MapPiece>();
-				northNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
-				northNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
-
-				southConnectionPoint.Occupied = true;
-				southConnectionPoint.ConnectedTo = northNeighbourMapPiece.ConnectionPoints[0];
-
-				mapPiecesInScene.Add(northNeigbourGO, mapPiecePos);
-			}
-			// Corner - East Occupied, South Unoccupied
-			else if (southConnectionPoint != null && southConnectionPoint.Occupied == false && eastConnectionPoint != null && eastConnectionPoint.Occupied == true && eastNeighbour != null && westConnectionPoint == null && northConnectionPoint == null)
-			{
-				GameObject westNeigbourGO = Instantiate(leftDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
-				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
-				DestroyImmediate(mapPiece.transform.gameObject);
-				if (Overlap(westNeigbourGO, westNeigbourGO.transform.position, overlapSize))
-				{
-					DestroyImmediate(westNeigbourGO);
-					continue;
-				}
-
-				MapPiece westNeighbourMapPiece = westNeigbourGO.GetComponent<MapPiece>();
-				westNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
-				westNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
-
-				eastConnectionPoint.Occupied = true;
-				eastConnectionPoint.ConnectedTo = westNeighbourMapPiece.ConnectionPoints[0];
-
-				mapPiecesInScene.Add(westNeigbourGO, mapPiecePos);
-			}
-
-			// Corner - North Unoccupied, West Ocupied
-			else if (northConnectionPoint != null && northConnectionPoint.Occupied == false && westConnectionPoint != null && westConnectionPoint.Occupied && northNeighbour != null && eastConnectionPoint == null && southConnectionPoint == null)
-			{
-				GameObject eastNeigbourGO = Instantiate(rightDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
-				mapPiecesInScene.Remove(mapPiece.transform.gameObject);
-				DestroyImmediate(mapPiece.transform.gameObject);
-				if (Overlap(eastNeigbourGO, eastNeigbourGO.transform.position, overlapSize))
-				{
-					DestroyImmediate(eastNeigbourGO);
-					continue;
-				}
-
-				MapPiece eastNeighbourMapPiece = eastNeigbourGO.GetComponent<MapPiece>();
-				eastNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
-				eastNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
-
-				westConnectionPoint.Occupied = true;
-				westConnectionPoint.ConnectedTo = eastNeighbourMapPiece.ConnectionPoints[0];
-
-				mapPiecesInScene.Add(eastNeigbourGO, mapPiecePos);
-			}
-			// Corner - North Occupied, West Unnocupied
-
-			// Corner - East Unoccupied, West Ocupied
-			//else if (northConnectionPoint != null && northConnectionPoint.Occupied == false && westConnectionPoint != null && westConnectionPoint.Occupied && northNeighbour != null && eastConnectionPoint == null && southConnectionPoint == null)
-			//{
-			//	GameObject eastNeigbourGO = Instantiate(rightDeadEndMapPieces.GetRandom(), mapPiecePos, Quaternion.identity, connectedMapPiecesParent);
-			//	mapPiecesInScene.Remove(mapPiece.transform.gameObject);
-			//	DestroyImmediate(mapPiece.transform.gameObject);
-			//	if (Overlap(eastNeigbourGO, eastNeigbourGO.transform.position, overlapSize))
-			//	{
-			//		DestroyImmediate(eastNeigbourGO);
-			//		continue;
-			//	}
-
-			//	MapPiece eastNeighbourMapPiece = eastNeigbourGO.GetComponent<MapPiece>();
-			//	eastNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
-			//	eastNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
-
-			//	westConnectionPoint.Occupied = true;
-			//	westConnectionPoint.ConnectedTo = eastNeighbourMapPiece.ConnectionPoints[0];
-
-			//	mapPiecesInScene.Add(eastNeigbourGO, mapPiecePos);
-			//}
-
 			// Regular Dead End Checks
 			// North Dead End
-			else if (northConnectionPoint != null && northConnectionPoint.Occupied == false && northNeighbour == null)
+			if (northConnectionPoint != null && northConnectionPoint.Occupied == false && northNeighbour == null)
 			{
 				GameObject northNeigbourGO = Instantiate(topDeadEndMapPieces.GetRandom(), mapPiecePos + northNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
 				if (Overlap(northNeigbourGO, northNeigbourGO.transform.position, overlapSize))
@@ -720,6 +558,25 @@ public class LevelGeneratorV3 : MonoBehaviour
 		var method = type.GetMethod("Clear");
 		method.Invoke(new object(), null);
 #endif
+	}
+	private void ConnectMapPieces(GameObject newMapPieceGO, GameObject mapPieceInScene, ConnectionPoint newMapPieceConnectionPoint, ConnectionPoint mapPieceInSceneConnectionPoint, Vector2 newMapPiecePos, Vector2 overlapSize, ref bool connected)
+	{
+		if (newMapPieceConnectionPoint != null && newMapPieceConnectionPoint.Occupied == false)
+		{
+			if (!Overlap(newMapPieceGO, newMapPiecePos, overlapSize))
+			{
+				if (debugConnections)
+				{
+					Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
+				}
+
+				newMapPieceConnectionPoint.Occupied = true;
+				mapPieceInSceneConnectionPoint.Occupied = true;
+				newMapPieceConnectionPoint.ConnectedTo = mapPieceInSceneConnectionPoint;
+				mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPoint;
+				connected = true;
+			}
+		}
 	}
 	private bool Overlap(GameObject origin, Vector2 center, Vector2 size)
 	{
