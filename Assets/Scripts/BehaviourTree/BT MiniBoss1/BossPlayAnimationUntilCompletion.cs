@@ -64,6 +64,10 @@ public class BossPlayAnimationUntilCompletion : BTNode
 		if (timer >= bossScript.enemyAnimator.GetCurrentAnimatorClipInfo(0).Length)
 		{
 			Debug.Log("Done animating: " + animationName);
+			if (orbAnimation != null)
+			{
+				bossScript.WeakspotAnimator.Play("Nothing");
+			}
 			timer = 0f;
 			parent.SetData("currentAttackStep", currentAttackStep + 1);
 			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + (currentAttackStep + 1));
