@@ -149,6 +149,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		currentRangedAttack.SetStartValues();
 		currentDash.SetStartValues();
 		abilityController.SetAttacks();
+		initAbilities();
 
 		//currentHealthPoints = maxHealthPoints;
 		//if (healthBar != null)
@@ -188,7 +189,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentMeleeAttack = currentMeleeAttack;
 			abilityController.CurrentRangedAttack = currentRangedAttack;
 			abilityController.CurrentDash = currentDash;
-			Debug.Log(currentMeleeAttack.BurnDamage);
+			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
 		}
 	}
@@ -206,10 +207,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void initAbilities()
 	{
-		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
-		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
-		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
-		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; }
+		GameManager.Instance.UiManager.ResetAbilityUIValues();
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues( 0, currentAbility1.BaseStats.AbilityIcon ); }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues( 1, currentAbility2.BaseStats.AbilityIcon ); }
+		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues( 2, currentAbility3.BaseStats.AbilityIcon ); }
+		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues( 3, currentAbility4.BaseStats.AbilityIcon ); }
 		abilityController.SetAbility();
 	}
 
@@ -354,7 +356,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(CurrentAbility1);
+			//Debug.Log(CurrentAbility1);
 			abilityController.CurrentAbility1.BaseStats = ability1;
 			abilityController.CurrentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityOneAttacked(currentAbility1);
@@ -367,7 +369,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(CurrentAbility2);
+			//Debug.Log(CurrentAbility2);
 			abilityController.CurrentAbility2.BaseStats = ability2;
 			abilityController.CurrentAbility2.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityTwoAttacked(currentAbility2);
@@ -380,7 +382,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(CurrentAbility3);
+			//Debug.Log(CurrentAbility3);
 			abilityController.CurrentAbility3.BaseStats = ability3;
 			abilityController.CurrentAbility3.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityThreeAttacked(currentAbility3);
@@ -393,7 +395,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(currentAbility4);
+			//Debug.Log(currentAbility4);
 			abilityController.CurrentAbility4.BaseStats = ability4;
 			abilityController.CurrentAbility4.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityFourAttacked(currentAbility4);
@@ -496,7 +498,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			outOfCombatCounter += Time.deltaTime;
 			inCombat = true;
-			Debug.Log("In combat, no boost");
+			//Debug.Log("In combat, no boost");
 		}
 		else
 		{
@@ -508,7 +510,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (!inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1)
 			{
 				selfSlowMultiplier = 2f;
-				Debug.Log("Out of combat boost granted");
+				//Debug.Log("Out of combat boost granted");
 			}
 		}
 	}

@@ -43,6 +43,7 @@ public class HubSceneManager : MonoBehaviour
 	private void HubSceneManager_completed( AsyncOperation obj )
 	{
 		SceneManager.SetActiveScene( SceneManager.GetSceneByName( loadScene ) );
+		Debug.Log( loadScene.ToString() );
 		if( loadScene != "Hub Prototype" && lastScene != "Hub Prototype" ) { HoldPlayerOnSceneLoad(); }
 		Debug.Log( "hold player stats" );
 	}
@@ -58,7 +59,7 @@ public class HubSceneManager : MonoBehaviour
 		//PlayerControler player = FindObjectOfType<PlayerControler>().gameObject.GetComponent<PlayerControler>();
 		player = FindObjectOfType<PlayerControler>();
 		GameManager.Instance.PlayerInstance = player.gameObject;
-		GameManager.Instance.UiManager.ResetAbilityUIValues();
+		//GameManager.Instance.UiManager.ResetAbilityUIValues();
 		player.PlayerAbilityController = playerValues.PlayerAbilityController;
 		player.PlayerAbilityController.Player = player;
 		#region abilitycontroller sets
@@ -90,7 +91,6 @@ public class HubSceneManager : MonoBehaviour
 			player.Ability1 = playerValues.Ability1;
 			player.Ability1.SetHoldStats( playerValues.Ability1 );
 			player.CurrentAbility1.Init = playerValues.CurrentAbility1.Init;
-			GameManager.Instance.UiManager.SetAbilityUIValues( 1, player.CurrentAbility1.BaseStats.AbilityIcon );
 		}
 		if( playerValues.CurrentAbility2 != null )
 		{
@@ -99,7 +99,6 @@ public class HubSceneManager : MonoBehaviour
 			player.Ability2 = playerValues.Ability2;
 			player.Ability2.SetHoldStats( playerValues.Ability2 );
 			player.CurrentAbility2.Init = playerValues.CurrentAbility2.Init;
-			GameManager.Instance.UiManager.SetAbilityUIValues( 2, player.CurrentAbility2.BaseStats.AbilityIcon );
 		}
 		if( playerValues.CurrentAbility3 != null )
 		{
@@ -108,7 +107,6 @@ public class HubSceneManager : MonoBehaviour
 			player.Ability3 = playerValues.Ability3;
 			player.Ability3.SetHoldStats( playerValues.Ability3 );
 			player.CurrentAbility3.Init = playerValues.CurrentAbility3.Init;
-			GameManager.Instance.UiManager.SetAbilityUIValues( 3, player.CurrentAbility3.BaseStats.AbilityIcon);
 		}
 		if( playerValues.CurrentAbility4 != null )
 		{
@@ -117,7 +115,6 @@ public class HubSceneManager : MonoBehaviour
 			player.Ability4 = playerValues.Ability4;
 			player.Ability4.SetHoldStats( playerValues.Ability4 );
 			player.CurrentAbility4.Init = playerValues.CurrentAbility4.Init;
-			GameManager.Instance.UiManager.SetAbilityUIValues( 4, player.CurrentAbility4.BaseStats.AbilityIcon);
 		}
 		//player.ReloadAttacks();
 		player.initAbilities();
