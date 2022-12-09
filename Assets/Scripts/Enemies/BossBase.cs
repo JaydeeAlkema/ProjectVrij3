@@ -6,18 +6,19 @@ public class BossBase : EnemyBase
 {
 
 	[SerializeField] private SpriteRenderer weakSpotSprite;
-	[SerializeField] private bool invulnerable = false;
+	[SerializeField] protected bool invulnerable = false;
+	protected Animator weakspotAnimator;
 	public List<GameObject> mobs = new List<GameObject>();
 
 	public SpriteRenderer WeakSpotSprite { get => weakSpotSprite; set => weakSpotSprite = value; }
-	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
 
-	private void Start()
+	protected void Start()
 	{
 		base.Start();
+		weakspotAnimator = weakSpotSprite.gameObject.GetComponent<Animator>();
 	}
 
-	private void Update()
+	protected void Update()
 	{
 		base.Update();
 	}
@@ -103,7 +104,7 @@ public class BossBase : EnemyBase
 	public override IEnumerator FlashColor()
 	{
 		weakSpotSprite.enabled = true;
-		yield return new WaitForSeconds(0.15f);
+		yield return new WaitForSeconds(0.2f);
 		weakSpotSprite.enabled = false;
 	}
 

@@ -22,7 +22,6 @@ public class MiniBoss1 : BossBase
 	public GameObject spawnedShockwaveObject = null;
 
 	[SerializeField] private GameObject shockwaveVFXPrefab;
-
 	[SerializeField] private GameObject rewardInstance;
 
 	private void Start()
@@ -45,6 +44,7 @@ public class MiniBoss1 : BossBase
 		healthBar.GetComponent<Slider>().value = HealthPoints;
 		MobListUpdate();
 		LookAtTarget();
+		SyncOrbAnimations();
 	}
 
 	public override void SpawnMobs()
@@ -98,7 +98,7 @@ public class MiniBoss1 : BossBase
 		GetComponent<BoxCollider2D>().offset = new Vector2(Mathf.Abs(GetComponent<BoxCollider2D>().offset.x) * flippedValue, GetComponent<BoxCollider2D>().offset.y);
 		bodyBlock.offset = new Vector2(Mathf.Abs(bodyBlock.offset.x) * -flippedValue, bodyBlock.offset.y);
 		enemyShadow.localPosition = new Vector2(Mathf.Abs(enemyShadow.localPosition.x) * flippedValue, enemyShadow.localPosition.y);
-		
+
 	}
 
 	public void SpawnShockWaveObject(float radius)
@@ -140,9 +140,33 @@ public class MiniBoss1 : BossBase
 		}
 	}
 
-	public void SyncOrbAnimation(string orbAnimationToPlay)
+	//public void SyncOrbAnimation(string orbAnimationToPlay)
+	//{
+	//	WeakSpotSprite.gameObject.GetComponent<Animator>().Play(orbAnimationToPlay, default, 0f);
+	//}
+
+	public void SyncOrbAnimations()
 	{
-		WeakSpotSprite.gameObject.GetComponent<Animator>().Play(orbAnimationToPlay);
+		if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Walking") && !weakspotAnimator.GetCurrentAnimatorStateInfo(0).IsName("OrbMiniBoss1Walking"))
+		{
+			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1Walking", default, 0f);
+			invulnerable = false;
+		}
+		else if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1StartEndlag") && !weakspotAnimator.GetCurrentAnimatorStateInfo(0).IsName("OrbMiniBoss1StartEndlag"))
+		{
+			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1StartEndlag", default, 0f);
+			invulnerable = false;
+		}
+		else if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Endlag") && !weakspotAnimator.GetCurrentAnimatorStateInfo(0).IsName("OrbMiniBoss1Endlag"))
+		{
+			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1Endlag", default, 0f);
+			invulnerable = false;
+		}
+		else if (!enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Walking") && !enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1StartEndlag") && !enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Endlag"))
+		{
+			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("Nothing", default, 0f);
+			invulnerable = true;
+		}
 	}
 
 	public override void DamagePopup(int damage)
