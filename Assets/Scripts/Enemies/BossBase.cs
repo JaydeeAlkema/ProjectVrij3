@@ -11,6 +11,7 @@ public class BossBase : EnemyBase
 	public List<GameObject> mobs = new List<GameObject>();
 
 	public SpriteRenderer WeakSpotSprite { get => weakSpotSprite; set => weakSpotSprite = value; }
+	public Animator WeakspotAnimator { get => weakspotAnimator; set => weakspotAnimator = value; }
 
 	protected void Start()
 	{
@@ -70,6 +71,7 @@ public class BossBase : EnemyBase
 			Debug.Log("i took " + damage + " damage");
 			DamagePopup(damageToTake);
 			HealthPoints -= damage;
+			StopCoroutine(FlashColor());
 			StartCoroutine(FlashColor());
 			if (HealthPoints <= 0) Die();
 		}
@@ -104,7 +106,19 @@ public class BossBase : EnemyBase
 	public override IEnumerator FlashColor()
 	{
 		weakSpotSprite.enabled = true;
-		yield return new WaitForSeconds(0.2f);
+		Color orbColor = weakSpotSprite.color;
+		orbColor.a = 1f;
+		weakSpotSprite.color = orbColor;
+		yield return new WaitForSeconds(0.1f);
+		while (orbColor.a > 0 && !invulnerable)
+		{
+			orbColor = weakSpotSprite.color;
+			orbColor.a -= 5f * Time.deltaTime;
+			weakSpotSprite.color = orbColor;
+			yield return new WaitForEndOfFrame();
+		}
+		orbColor.a = 0f;
+		weakSpotSprite.color = orbColor;
 		weakSpotSprite.enabled = false;
 	}
 

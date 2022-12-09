@@ -147,22 +147,26 @@ public class MiniBoss1 : BossBase
 
 	public void SyncOrbAnimations()
 	{
-		if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Walking") && !weakspotAnimator.GetCurrentAnimatorStateInfo(0).IsName("OrbMiniBoss1Walking"))
+		if (enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime != weakspotAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime)
 		{
-			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1Walking", default, 0f);
-			invulnerable = false;
+			if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Walking"))
+			{
+				WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1Walking", default, enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 2 * Time.deltaTime);
+				invulnerable = false;
+			}
+			else if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1StartEndlag"))
+			{
+				WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1StartEndlag", default, enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 2 * Time.deltaTime);
+				invulnerable = false;
+			}
+			else if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Endlag"))
+			{
+				WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1Endlag", default, enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 2 * Time.deltaTime);
+				invulnerable = false;
+			}
 		}
-		else if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1StartEndlag") && !weakspotAnimator.GetCurrentAnimatorStateInfo(0).IsName("OrbMiniBoss1StartEndlag"))
-		{
-			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1StartEndlag", default, 0f);
-			invulnerable = false;
-		}
-		else if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Endlag") && !weakspotAnimator.GetCurrentAnimatorStateInfo(0).IsName("OrbMiniBoss1Endlag"))
-		{
-			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("OrbMiniBoss1Endlag", default, 0f);
-			invulnerable = false;
-		}
-		else if (!enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Walking") && !enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1StartEndlag") && !enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Endlag"))
+
+		if (!enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Walking") && !enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1StartEndlag") && !enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Endlag"))
 		{
 			WeakSpotSprite.gameObject.GetComponent<Animator>().Play("Nothing", default, 0f);
 			invulnerable = true;
