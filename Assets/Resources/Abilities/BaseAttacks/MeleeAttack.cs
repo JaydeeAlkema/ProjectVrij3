@@ -161,10 +161,13 @@ public class MeleeAttack : Ability
 			{
 				foreach (Collider2D enemy in enemiesInBox)
 				{
-					if (!enemyList.Contains(enemy.gameObject) && enemy != null)
+					if (enemy != null)
 					{
-						enemyList.Add(enemy.gameObject);
-						DamageDetectedEnemies(enemy.gameObject);
+						if (!enemyList.Contains(enemy.gameObject))
+						{
+							enemyList.Add(enemy.gameObject);
+							DamageDetectedEnemies(enemy.gameObject);
+						}
 					}
 				}
 			}

@@ -91,6 +91,7 @@ public class MiniBoss1 : BossBase
 		if (DestinationSetter.target != null && enemySprite != null)
 		{
 			enemySprite.flipX = (DestinationSetter.GetComponent<Pathfinding.IAstarAI>().destination - transform.position).normalized.x > 0 ? true : false;
+			WeakSpotSprite.flipX = (DestinationSetter.GetComponent<Pathfinding.IAstarAI>().destination - transform.position).normalized.x > 0 ? true : false;
 		}
 		float flippedValue;
 		flippedValue = enemySprite.flipX ? -1f : 1f;
@@ -139,6 +140,11 @@ public class MiniBoss1 : BossBase
 		}
 	}
 
+	public void SyncOrbAnimation(string orbAnimationToPlay)
+	{
+		WeakSpotSprite.gameObject.GetComponent<Animator>().Play(orbAnimationToPlay);
+	}
+
 	public override void DamagePopup(int damage)
 	{
 		Transform damageNumber = Instantiate(damageNumberText, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.identity);
@@ -147,7 +153,8 @@ public class MiniBoss1 : BossBase
 
 	public override void OnHitVFX()
 	{
-		Instantiate(vfxHitSpark, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+		GameObject hitspark = Instantiate(vfxHitSpark, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+		hitspark.transform.localScale *= 2f;
 	}
 
 	public IEnumerator LaunchMobs()
