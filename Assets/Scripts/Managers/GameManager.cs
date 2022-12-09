@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
 			uiManager.SetUIActive(3, isPaused);
 		}
 
-
+		StopMusicForTesting();
 	}
 
 	public void EnemyAggroCount(bool isAggro)
@@ -99,6 +99,14 @@ public class GameManager : MonoBehaviour
 	{
 		isPaused = !isPaused;
 		Time.timeScale = isPaused ? 0f : 1f;
+	}
+
+	public void StopMusicForTesting()
+	{
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			AudioManager.Instance.PostEventGlobal(stopMusic);
+		}
 	}
 
 	public void SetPauseState(bool pause)
