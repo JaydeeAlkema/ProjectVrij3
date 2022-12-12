@@ -32,7 +32,7 @@ public class CoolDownDecorator : AbilityDecorator
 		{
 			cooledDown = false;
 			ability.CooledDown = false;
-			Debug.Log( "I got cooled" );
+			//Debug.Log( "I got cooled" );
 			ability.BaseStats = baseStats;
 			ability.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle, TrailUpgrade);
 			ability.CallAbility(Player);

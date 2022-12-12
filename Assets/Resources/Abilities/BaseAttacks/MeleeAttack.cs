@@ -80,7 +80,7 @@ public class MeleeAttack : Ability
 		}
 		comboTimerCoroutine = ComboTimer();
 		caller.CallCoroutine(comboTimerCoroutine);
-		Debug.Log("Combo timer has been reset");
+		//Debug.Log("Combo timer has been reset");
 	}
 
 	public IEnumerator TestCoroutine()
@@ -97,7 +97,7 @@ public class MeleeAttack : Ability
 		if (comboCounter < 3)
 		{
 			thirdHit = false;
-			Debug.Log("Combo: " + comboCounter);
+			//Debug.Log("Combo: " + comboCounter);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialDefault;
 
 			if (comboCounter == 2)
@@ -111,7 +111,7 @@ public class MeleeAttack : Ability
 		else
 		{
 			thirdHit = true;
-			Debug.Log("Full combo!");
+			//Debug.Log("Full combo!");
 			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3");
 			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 			anim.CallAbility(player);
@@ -189,6 +189,6 @@ public class MeleeAttack : Ability
 		yield return new WaitForSeconds(0.7f);
 
 		comboCounter = 0;
-		Debug.Log("Combo timer ends, combo counter is: " + comboCounter);
+		//Debug.Log("Combo timer ends, combo counter is: " + comboCounter);
 	}
 }

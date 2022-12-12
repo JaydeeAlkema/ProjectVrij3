@@ -155,7 +155,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void TakeDamage(int damage)
 	{
-		Debug.Log("i took " + damage + " damage without type");
+		//Debug.Log("i took " + damage + " damage without type");
 		DamagePopup(damage);
 		healthPoints -= damage;
 		if (!isAggro)
@@ -203,7 +203,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		Debug.Log("i took " + damage + " damage");
+		//Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
 		if (!isAggro)
@@ -318,12 +318,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		StopMovingToTarget();
 		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
-			Debug.Log("actually gonna pull");
+			//Debug.Log("actually gonna pull");
 			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
 		}
 		else
 		{
-			Debug.Log("already at pullpoint: " + pullPoint + ", my position is: " + transform.position);
+			//Debug.Log("already at pullpoint: " + pullPoint + ", my position is: " + transform.position);
 			beingCrowdControlled = false;
 			this.pullPoint = Vector2.zero;
 			Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, true);

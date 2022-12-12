@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.ResetAbilityUIValues();
+		//uiManager.ResetAbilityUIValues();
 		uiManager.SetUIActive(1, true);
 	}
 
@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.ResetAbilityUIValues();
+		//uiManager.ResetAbilityUIValues();
 		uiManager.SetUIActive(1, true);
 		yield return new WaitForEndOfFrame();
 	}

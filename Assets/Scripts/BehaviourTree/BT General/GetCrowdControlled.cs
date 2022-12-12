@@ -15,7 +15,7 @@ public class GetCrowdControlled : BTNode
 	{
 		if( enemyScript.beingCrowdControlled )
 		{
-			Debug.Log( "i got pulled" );
+			//Debug.Log( "i got pulled" );
 			ClearData("dashDestination");
 			ClearData( "dashDir" );
 			ClearData( "target" );
