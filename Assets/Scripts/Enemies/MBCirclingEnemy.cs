@@ -80,7 +80,7 @@ public class MBCirclingEnemy : EnemyBase
 		}
 		else if (playerBody != null && aggro && !playerBody.gameObject.GetComponent<PlayerControler>().Invulnerable)
 		{
-			Explode();
+			StartExploding();
 		}
 	}
 
@@ -94,12 +94,18 @@ public class MBCirclingEnemy : EnemyBase
 		transform.position = Vector2.MoveTowards(transform.position, launchDestination, Speed * Time.deltaTime);
 		if (Vector2.Distance(transform.position, launchDestination) < 0.5f)
 		{
-			Explode();
+			StartExploding();
 		}
 	}
 
-	void Explode()
+	public void StartExploding()
 	{
+		enemyAnimator.SetTrigger("StartExplosion");
+	}
+
+	public void Explode()
+	{
+		Speed = 0f;
 		Collider2D playerBody = Physics2D.OverlapCircle(this.transform.position, explosionRadius, playerLayer);
 		if (playerBody != null)
 		{
@@ -107,7 +113,6 @@ public class MBCirclingEnemy : EnemyBase
 		}
 		GameObject decal = Instantiate(crackedGround, transform.position, Quaternion.identity);
 		decal.transform.localScale = Vector3.one * explosionRadius;
-		Die();
 	}
 
 	public override void Die()

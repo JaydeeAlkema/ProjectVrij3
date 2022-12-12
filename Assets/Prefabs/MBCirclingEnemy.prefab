@@ -108,7 +108,7 @@ MonoBehaviour:
   reward: 0
   castMarkDecal: {fileID: 5268567721037026687}
   meleeMarkDecal: {fileID: 8247970461085753938}
-  enemyAnimator: {fileID: 0}
+  enemyAnimator: {fileID: 5999133109781208124}
   hasHitbox: 1
   unwalkableDetection:
     serializedVersion: 2
@@ -234,6 +234,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3754701804924251718}
   - component: {fileID: 1753625506168775905}
+  - component: {fileID: 5999133109781208124}
+  - component: {fileID: 2028798216797920323}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -308,6 +310,67 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!95 &5999133109781208124
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604600376302972743}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f9ec991f79372b24aa27c51c8518c8b9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2028798216797920323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604600376302972743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385155154d6585b47ba0610dd20872cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unityEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5793724696057155427}
+        m_TargetAssemblyTypeName: MBCirclingEnemy, Assembly-CSharp
+        m_MethodName: Explode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5793724696057155427}
+        m_TargetAssemblyTypeName: MBCirclingEnemy, Assembly-CSharp
+        m_MethodName: Die
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &201716531003488397
 PrefabInstance:
   m_ObjectHideFlags: 0
