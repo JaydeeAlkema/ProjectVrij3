@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
 	// 3 = Pause Screen
 	// 4 = Death Screen
 	// 5 = Cheat Menu
+	// 6 = Empower enemies UI
 
 	[SerializeField] private Transform[] DevUIComponents;
 	// 0 = Melee Upgrades
