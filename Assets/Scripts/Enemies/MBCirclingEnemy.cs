@@ -92,7 +92,7 @@ public class MBCirclingEnemy : EnemyBase
 	void LaunchToPlayer()
 	{
 		transform.position = Vector2.MoveTowards(transform.position, launchDestination, Speed * Time.deltaTime);
-		if (Vector2.Distance(transform.position, launchDestination) < 0.5f)
+		if (Vector2.Distance(transform.position, launchDestination) < 2.5f)
 		{
 			StartExploding();
 		}
