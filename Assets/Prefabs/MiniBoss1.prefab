@@ -691,22 +691,16 @@ MonoBehaviour:
   shockwaveExpansionSpeed: 8
   innerSpawnPoints:
   - {x: 1, y: 1}
-  - {x: 1, y: 0}
   - {x: 1, y: -1}
-  - {x: 0, y: 1}
-  - {x: 0, y: -1}
   - {x: -1, y: 1}
-  - {x: -1, y: 0}
   - {x: -1, y: -1}
   outerSpawnPoints:
   - {x: 6, y: 6}
-  - {x: 6, y: 0}
-  - {x: 6, y: -6}
   - {x: 0, y: 6}
-  - {x: 0, y: -6}
-  - {x: -6, y: 6}
+  - {x: 6, y: 0}
   - {x: -6, y: 0}
   - {x: -6, y: -6}
+  - {x: 0, y: -6}
   spawnedShockwaveObject: {fileID: 0}
   shockwaveVFXPrefab: {fileID: 2530599393635534783, guid: f43d69c44af4577498860bf4248aeafa, type: 3}
   rewardInstance: {fileID: 0}
