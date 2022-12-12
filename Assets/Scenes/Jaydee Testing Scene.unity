@@ -895,8 +895,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa8fc2217d13f24882d9693fbc43d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 1316809882
-  generateRandomSeed: 1
+  seed: 0
+  generateRandomSeed: 0
   mapPieceLimit: 20
   mapPiecePlacementTryLimit: 5
   mapPieceOffset: 21
@@ -916,15 +916,15 @@ MonoBehaviour:
   mapPieces:
     list:
     - item: {fileID: 6298534505889208130, guid: 92772b46e93c0d544994b90fd9847071, type: 3}
-      weight: 7
+      weight: 10
     - item: {fileID: 6298534505889208130, guid: 4a2158eb65fd6c547ab8f23ecfaf8c41, type: 3}
-      weight: 7
+      weight: 10
     - item: {fileID: 6298534505889208130, guid: 4a2158eb65fd6c547ab8f23ecfaf8c41, type: 3}
-      weight: 7
+      weight: 10
     - item: {fileID: 6298534505889208130, guid: 0943ca3228589bf4d85a7ff414ef1200, type: 3}
-      weight: 7
+      weight: 10
     - item: {fileID: 6298534505889208130, guid: 0a7234052ac0297478141343152477ad, type: 3}
-      weight: 7
+      weight: 10
     - item: {fileID: 6298534505889208130, guid: 3741fe1836d7a8f488a0507608be3dfc, type: 3}
       weight: 20
     - item: {fileID: 6298534505889208130, guid: d484131287a4d6d44aaedcb9b56d37ce, type: 3}

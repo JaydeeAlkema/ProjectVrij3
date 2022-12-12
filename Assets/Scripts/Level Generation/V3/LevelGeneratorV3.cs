@@ -161,6 +161,19 @@ public class LevelGeneratorV3 : MonoBehaviour
 					newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 					retryLimit--;
 				}
+
+				// Temp
+				foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+				{
+					MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
+					foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
+					{
+						if (connectionPoint.ConnectedTo == null)
+						{
+							connectionPoint.Occupied = false;
+						}
+					}
+				}
 			}
 		}
 
@@ -222,21 +235,17 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		yield return null;
 	}
-
 	private bool IsMapPieceBlockedFromConnecting(GameObject newMapPieceGO)
 	{
 		bool blocked = false;
 		MapPiece mapPiece = newMapPieceGO.GetComponent<MapPiece>();
 		Vector2 newMapPiecePosition = new Vector2(newMapPieceGO.transform.position.x, newMapPieceGO.transform.position.y);
 
+		Bounds neighbourBounds = new Bounds { size = overlapSize };
 		foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
 		{
 			if (connectionPoint.Occupied == true) continue;
 
-			Bounds neighbourBounds = new Bounds
-			{
-				size = overlapSize
-			};
 			switch (connectionPoint.Direction)
 			{
 				case ConnectionPointDirection.North:
@@ -263,15 +272,12 @@ public class LevelGeneratorV3 : MonoBehaviour
 					size = overlapSize
 				};
 
-				if (!mapPieceInSceneBounds.Intersects(neighbourBounds)) continue;
-
-				blocked = true;
+				if (mapPieceInSceneBounds.Intersects(neighbourBounds)) blocked = true;
 			}
 		}
 
 		return blocked;
 	}
-
 	private void RemoveDisconnectedMapPieces()
 	{
 		foreach (Transform disconnectedMapPieceTransform in disconnectedMapPiecesParent.GetComponentsInChildren<Transform>())
@@ -314,16 +320,13 @@ public class LevelGeneratorV3 : MonoBehaviour
 				if (!connectionPoint.Occupied)
 				{
 					inCompleteMapPieces.Add(mapPiece);
-					continue;
 				}
 			}
 		}
 
-
 		// I don't know what I was doing here... But it works.
 		// I advice against changing anything down below, it just works, so no touchy!
 		// Beware any developer that ever tries to refactor this, it's gonna be a pain.
-
 		foreach (MapPiece mapPiece in inCompleteMapPieces)
 		{
 			Vector2 mapPiecePos = mapPiece.transform.position;
@@ -387,7 +390,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 				}
 			}
 
-			// Regular Dead End Checks
+			// Add dead end to the map
 			// North Dead End
 			if (northConnectionPoint != null && northConnectionPoint.Occupied == false && northNeighbour == null)
 			{
