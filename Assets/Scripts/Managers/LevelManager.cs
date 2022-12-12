@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
     public float DificultyModifier { get => dificultyModifier; set => dificultyModifier = value; }
     public int PointToLevel { get => pointToLevel; private set => pointToLevel = value; }
     public int UpgradeCount { get => upgradeCount; set => upgradeCount = value; }
+    public int CurrentLevel { get => currentLevel; set => currentLevel = value; }
 
 	private void Awake()
 	{

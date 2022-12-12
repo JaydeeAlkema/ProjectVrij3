@@ -108,12 +108,12 @@ public class RewardChoice : MonoBehaviour
 
 	private void Update()
 	{
-		currentRewardCost = Mathf.RoundToInt( ( rewardCost * ( LevelManager.LevelManagerInstance.UpgradeCount / rewardCostMultiplier ) ) * LevelManager.LevelManagerInstance.DificultyModifier );
+		currentRewardCost = Mathf.RoundToInt( ( rewardCost * Mathf.Pow(rewardCostMultiplier * LevelManager.LevelManagerInstance.DificultyModifier, LevelManager.LevelManagerInstance.UpgradeCount)));
 	}
 
 	public void ChooseAbility()
 	{
-		if( GameManager.Instance.ExpManager.PlayerPoints >= (int)((rewardCost * (LevelManager.LevelManagerInstance.UpgradeCount/ rewardCostMultiplier ) ) * LevelManager.LevelManagerInstance.DificultyModifier))
+		if( GameManager.Instance.ExpManager.PlayerPoints >= currentRewardCost)
 		{
 			IAbility abilityToGive = null;
 			switch( reward )
@@ -170,7 +170,7 @@ public class RewardChoice : MonoBehaviour
 
 				if( hasChosen )
 				{
-					GameManager.Instance.ExpManager.PlayerPoints -= ( int )( ( rewardCost * ( LevelManager.LevelManagerInstance.UpgradeCount / rewardCostMultiplier ) ) * LevelManager.LevelManagerInstance.DificultyModifier );
+					GameManager.Instance.ExpManager.PlayerPoints -= currentRewardCost;
 					GameManager.Instance.PlayerHP.value += healOnPointSpend;
 					abilityButton = 0;
 					GameManager.Instance.SetPauseState( false );
@@ -185,12 +185,12 @@ public class RewardChoice : MonoBehaviour
 	public void ChooseMeleeUpgrade()
 	{
 		// Check if the player has enough points to upgrade
-		if( GameManager.Instance.ExpManager.PlayerPoints >= ( int )( ( rewardCost * ( LevelManager.LevelManagerInstance.UpgradeCount / rewardCostMultiplier ) ) * LevelManager.LevelManagerInstance.DificultyModifier ) )
+		if( GameManager.Instance.ExpManager.PlayerPoints >= currentRewardCost )
 		{
 			meleeAttack = player.MeleeAttackScr;
 
 			GameManager.Instance.SetPauseState( false );
-			GameManager.Instance.ExpManager.PlayerPoints -= ( int )( ( rewardCost * ( LevelManager.LevelManagerInstance.UpgradeCount / rewardCostMultiplier ) ) * LevelManager.LevelManagerInstance.DificultyModifier );
+			GameManager.Instance.ExpManager.PlayerPoints -= currentRewardCost;
 			GameManager.Instance.PlayerHP.value += healOnPointSpend;
 			LevelManager.LevelManagerInstance.UpgradeCount++;
 
@@ -247,11 +247,11 @@ public class RewardChoice : MonoBehaviour
 
 	public void ChooseRangedUpgrade()
 	{
-		if( GameManager.Instance.ExpManager.PlayerPoints >= ( int )( ( rewardCost * ( LevelManager.LevelManagerInstance.UpgradeCount / rewardCostMultiplier ) ) * LevelManager.LevelManagerInstance.DificultyModifier ) )
+		if( GameManager.Instance.ExpManager.PlayerPoints >= currentRewardCost )
 		{
 			rangedAttack = player.RangedAttackScr;
 			GameManager.Instance.SetPauseState( false );
-			GameManager.Instance.ExpManager.PlayerPoints -= ( int )( ( rewardCost * ( LevelManager.LevelManagerInstance.UpgradeCount / rewardCostMultiplier ) ) * LevelManager.LevelManagerInstance.DificultyModifier );
+			GameManager.Instance.ExpManager.PlayerPoints -= currentRewardCost;
 			GameManager.Instance.PlayerHP.value += healOnPointSpend;
 			LevelManager.LevelManagerInstance.UpgradeCount++;
 
