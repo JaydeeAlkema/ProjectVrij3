@@ -178,7 +178,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 		}
 
 		RemoveDisconnectedMapPieces();
-		AddDeadEnds();
 		SpawnEnemies();
 
 		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
@@ -186,6 +185,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 			MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
 			SetMapPieceNeighbours(mapPiece);
 		}
+		AddDeadEnds();
 
 		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
 		foreach (GridGraph gridGraph in astarData.graphs)
