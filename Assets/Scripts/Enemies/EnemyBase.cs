@@ -50,8 +50,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	private Vector2[] path;
 	private int targetIndex = 0;
 
-	private Vector2 pullPoint = new Vector2();
-	private Vector2 vel = new Vector2();
+	protected Vector2 pullPoint = new Vector2();
+	protected Vector2 ccVel = new Vector2();
 	public bool beingCrowdControlled = false;
 	public bool meleeTarget = false;
 	public bool castTarget = false;
@@ -313,13 +313,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		}
 	}
 
-	public void beingDisplaced()
+	public virtual void BeingDisplaced()
 	{
 		StopMovingToTarget();
 		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
 			//Debug.Log("actually gonna pull");
-			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
+			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref ccVel, 8f * Time.deltaTime));
 		}
 		else
 		{

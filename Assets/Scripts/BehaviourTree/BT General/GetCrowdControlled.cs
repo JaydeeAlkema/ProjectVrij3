@@ -20,7 +20,7 @@ public class GetCrowdControlled : BTNode
 			ClearData( "dashDir" );
 			ClearData( "target" );
 			ClearData( "ready" );
-			enemyScript.beingDisplaced();
+			enemyScript.BeingDisplaced();
 			state = BTNodeState.RUNNING;
 			return state;
 		}
