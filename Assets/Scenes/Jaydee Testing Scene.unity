@@ -376,7 +376,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.2
+  m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 1fa0190e00000000ef81cc13df576d5747dfe74dcb5dc0dfbd7817d36f307172
@@ -918,13 +918,13 @@ MonoBehaviour:
     - item: {fileID: 6298534505889208130, guid: 92772b46e93c0d544994b90fd9847071, type: 3}
       weight: 10
     - item: {fileID: 6298534505889208130, guid: 4a2158eb65fd6c547ab8f23ecfaf8c41, type: 3}
-      weight: 10
-    - item: {fileID: 6298534505889208130, guid: 4a2158eb65fd6c547ab8f23ecfaf8c41, type: 3}
-      weight: 10
+      weight: 15
     - item: {fileID: 6298534505889208130, guid: 0943ca3228589bf4d85a7ff414ef1200, type: 3}
-      weight: 10
+      weight: 15
+    - item: {fileID: 6298534505889208130, guid: 7c82012f051dccb488c653df9b346205, type: 3}
+      weight: 15
     - item: {fileID: 6298534505889208130, guid: 0a7234052ac0297478141343152477ad, type: 3}
-      weight: 10
+      weight: 15
     - item: {fileID: 6298534505889208130, guid: 3741fe1836d7a8f488a0507608be3dfc, type: 3}
       weight: 20
     - item: {fileID: 6298534505889208130, guid: d484131287a4d6d44aaedcb9b56d37ce, type: 3}
@@ -956,7 +956,7 @@ MonoBehaviour:
   bossPortalPrefab: {fileID: 7033657127096513241, guid: 35d4ecfc122a8b6428c3102f1d2565eb, type: 3}
   astarData: {fileID: 1269124204}
   enemyParentTransform: {fileID: 1763383205}
-  playerSafeZoneRadii: 2
+  playerSafeZoneRadii: 1
   enemyPrefabs:
     list:
     - item: {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
@@ -965,9 +965,9 @@ MonoBehaviour:
   rewardEnemyPrefabs:
     list:
     - item: {fileID: 4442677197823009440, guid: f738b166daa0c6e4db190bb79a6c9c3a, type: 3}
-      weight: 1
+      weight: 10
     - item: {fileID: 4442677197823009440, guid: 61fc9d0ea1da44b4d98702d03a3351c7, type: 3}
-      weight: 1
+      weight: 10
   rewardEnemyCountPerLevel: 3
   debugTime: 0.5
   debugOverlaps: 0
