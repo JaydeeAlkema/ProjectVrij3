@@ -53,9 +53,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public Material materialDefault = null;
 	public Material materialHit = null;
 
-	//Temporary, remove when implementing real death screen
-	//[SerializeField] Transform deathScreenTest;
-	//private bool isDying = false;
+	public bool isDying = false;
 
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
 	public GameObject AttackAnimation { get => attackAnimation; set => attackAnimation = value; }
@@ -121,10 +119,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	private void Awake()
 	{
-		if( GameManager.Instance != null )
+		if (GameManager.Instance != null)
 		{
 			GameManager.Instance.OnGameStateChanged += OnStart;
-			Debug.Log( "subscribed to ongamestatechanged" );
+			Debug.Log("subscribed to ongamestatechanged");
 		}
 	}
 
@@ -151,18 +149,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.SetAttacks();
 		initAbilities();
 
-		//currentHealthPoints = maxHealthPoints;
-		//if (healthBar != null)
-		//{
-		//	healthBar.SetMaxHP(maxHealthPoints);
-		//}
-
-		//Death screen test, remove later
-		//if (deathScreenTest != null)
-		//{
-		//	deathScreenTest.gameObject.SetActive(false);
-		//}
-
+		if (Time.timeScale != 1f)
+		{
+			Time.timeScale = 1f;
+		}
 	}
 
 	public void OnStart(GameState gameState, GameState lastGameState)
@@ -208,10 +198,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public void initAbilities()
 	{
 		GameManager.Instance.UiManager.ResetAbilityUIValues();
-		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues( 0, currentAbility1.BaseStats.AbilityIcon ); }
-		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues( 1, currentAbility2.BaseStats.AbilityIcon ); }
-		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues( 2, currentAbility3.BaseStats.AbilityIcon ); }
-		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues( 3, currentAbility4.BaseStats.AbilityIcon ); }
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues(0, currentAbility1.BaseStats.AbilityIcon); }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues(1, currentAbility2.BaseStats.AbilityIcon); }
+		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues(2, currentAbility3.BaseStats.AbilityIcon); }
+		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues(3, currentAbility4.BaseStats.AbilityIcon); }
 		abilityController.SetAbility();
 	}
 
@@ -221,7 +211,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		vel = rb2d.velocity.magnitude;
 
-		if (GameManager.Instance == null || !GameManager.Instance.IsPaused)
+		if ((GameManager.Instance == null || !GameManager.Instance.IsPaused) && !isDying)
 		{
 			//Melee input
 			if (Input.GetMouseButtonDown(0))
@@ -268,7 +258,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		}
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
-		if (!isDashing)
+		if (!isDashing && !isDying)
 		{
 			trail.emitting = false;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
