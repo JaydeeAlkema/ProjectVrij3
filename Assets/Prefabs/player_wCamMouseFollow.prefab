@@ -1038,11 +1038,12 @@ MonoBehaviour:
   playerDeathPoof: {fileID: 6120905142384714952, guid: 7f48faa6ddcfbd848adbc4009d1e75eb, type: 3}
   animPlayer: {fileID: 2846144575864148852}
   outOfCombatTimer: 3
-  bufferTimeMelee: 0.4
+  bufferTimeMelee: 0.3
   bufferTimeCast: 0.3
   bufferTimeDash: 0.65
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
+  isDying: 0
   isAttackPositionLocked: 0
   abilityController: {fileID: 0}
   meleeAttack: {fileID: 11400000, guid: 3798e7fa6b113bc448a1bd9ac1c53e01, type: 2}
