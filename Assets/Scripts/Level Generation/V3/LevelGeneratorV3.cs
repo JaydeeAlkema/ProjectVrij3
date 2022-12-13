@@ -197,6 +197,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Vector2 furthestPositionFromSpawn = new Vector2();
 		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
 		{
+			if (mapPieceInScene.Key.name.ToLower().Contains("dead end") == false) continue;
 			float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPieceInScene.Value);
 			if (distanceToMapPiece > dst)
 			{

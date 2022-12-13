@@ -896,7 +896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  generateRandomSeed: 1
+  generateRandomSeed: 0
   mapPieceLimit: 20
   mapPiecePlacementTryLimit: 5
   mapPieceOffset: 21
@@ -956,7 +956,7 @@ MonoBehaviour:
   bossPortalPrefab: {fileID: 7033657127096513241, guid: 35d4ecfc122a8b6428c3102f1d2565eb, type: 3}
   astarData: {fileID: 1269124204}
   enemyParentTransform: {fileID: 1763383205}
-  playerSafeZoneRadii: 1
+  playerSafeZoneRadii: 2
   enemyPrefabs:
     list:
     - item: {fileID: 4442677197823009440, guid: c7dfca059ee50ec46a3555308c8ec9f6, type: 3}
