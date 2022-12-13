@@ -116,9 +116,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 					foreach (ConnectionPoint mapPieceInSceneConnectionPoint in mapPieceInSceneConnectionPoints)
 					{
-						bool mapPieceInSceneConnectionPointOccupied = mapPieceInSceneConnectionPoint.Occupied;
+						ConnectionPointStatus mapPieceInSceneConnectionPointStatus = mapPieceInSceneConnectionPoint.Status;
 
-						if (mapPieceInSceneConnectionPointOccupied == true || connected) continue;
+						if (mapPieceInSceneConnectionPointStatus == ConnectionPointStatus.Connected || connected) continue;
 
 						switch (mapPieceInSceneConnectionPoint.Direction)
 						{
@@ -170,9 +170,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 					SetMapPieceNeighbours(mapPiece);
 					foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
 					{
-						if (connectionPoint.ConnectedTo == null && connectionPoint.Occupied)
+						if (connectionPoint.ConnectedTo == null && connectionPoint.Status == ConnectionPointStatus.Connected)
 						{
-							connectionPoint.Occupied = false;
+							connectionPoint.Status = ConnectionPointStatus.Disconnected;
 						}
 					}
 				}
@@ -197,6 +197,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Vector2 furthestPositionFromSpawn = new Vector2();
 		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
 		{
+			if (mapPieceInScene.Key.name.ToLower().Contains("dead end") == false) continue;
 			float distanceToMapPiece = Vector2.Distance(Vector2.zero, mapPieceInScene.Value);
 			if (distanceToMapPiece > dst)
 			{
@@ -253,7 +254,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 			MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
 			foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
 			{
-				if (connectionPoint.Occupied == false)
+				if (connectionPoint.Status == ConnectionPointStatus.Disconnected)
 				{
 					inCompleteMapPieces.Add(mapPiece);
 				}
@@ -265,6 +266,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		// Beware any developer that ever tries to refactor this, it's gonna be a pain.
 		foreach (MapPiece mapPiece in inCompleteMapPieces)
 		{
+			SetMapPieceNeighbours(mapPiece);
 			if (mapPiece.transform.name == "Map Piece - Wide - Variant 4(Clone) [20]")
 			{
 				Debug.Log("Found!");
@@ -333,7 +335,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 			// Add dead end to the map
 			// North Dead End
-			if (northConnectionPoint != null && northConnectionPoint.Occupied == false && northNeighbour == null)
+			if (northConnectionPoint != null && northConnectionPoint.Status == ConnectionPointStatus.Disconnected && northNeighbour == null)
 			{
 				GameObject northNeigbourGO = Instantiate(northDeadEndMapPieces.GetRandom(), mapPiecePos + northNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
 				if (Overlap(northNeigbourGO, northNeigbourGO.transform.position, overlapSize))
@@ -343,17 +345,22 @@ public class LevelGeneratorV3 : MonoBehaviour
 				else
 				{
 					MapPiece northNeighbourMapPiece = northNeigbourGO.GetComponent<MapPiece>();
-					northNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+					northNeighbourMapPiece.ConnectionPoints[0].Status = ConnectionPointStatus.Connected;
 					northNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = northConnectionPoint;
 
-					northConnectionPoint.Occupied = true;
+					northConnectionPoint.Status = ConnectionPointStatus.Connected;
 					northConnectionPoint.ConnectedTo = northNeighbourMapPiece.ConnectionPoints[0];
 
 					mapPiecesInScene.Add(northNeigbourGO, mapPiecePos + northNeighbourPosition);
 				}
 			}
+			else if (northConnectionPoint != null && northConnectionPoint.Status == ConnectionPointStatus.Disconnected && northNeighbour != null && northConnectionPoint.DeadEnd != null)
+			{
+				northConnectionPoint.DeadEnd.Enable();
+				northConnectionPoint.Status = ConnectionPointStatus.Blocked;
+			}
 			// East Dead End
-			if (eastConnectionPoint != null && eastConnectionPoint.Occupied == false && eastNeighbour == null)
+			if (eastConnectionPoint != null && eastConnectionPoint.Status == ConnectionPointStatus.Disconnected && eastNeighbour == null)
 			{
 				GameObject eastNeighbourGO = Instantiate(eastDeadEndMapPieces.GetRandom(), mapPiecePos + eastNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
 				if (Overlap(eastNeighbourGO, eastNeighbourGO.transform.position, overlapSize))
@@ -363,17 +370,22 @@ public class LevelGeneratorV3 : MonoBehaviour
 				else
 				{
 					MapPiece eastNeighbourMapPiece = eastNeighbourGO.GetComponent<MapPiece>();
-					eastNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+					eastNeighbourMapPiece.ConnectionPoints[0].Status = ConnectionPointStatus.Connected;
 					eastNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = eastConnectionPoint;
 
-					eastConnectionPoint.Occupied = true;
+					eastConnectionPoint.Status = ConnectionPointStatus.Connected;
 					eastConnectionPoint.ConnectedTo = eastNeighbourMapPiece.ConnectionPoints[0];
 
 					mapPiecesInScene.Add(eastNeighbourGO, mapPiecePos + eastNeighbourPosition);
 				}
 			}
+			else if (eastConnectionPoint != null && eastConnectionPoint.Status == ConnectionPointStatus.Disconnected && eastNeighbour != null && eastConnectionPoint.DeadEnd != null)
+			{
+				eastConnectionPoint.DeadEnd.Enable();
+				eastConnectionPoint.Status = ConnectionPointStatus.Blocked;
+			}
 			// South Dead End
-			if (southConnectionPoint != null && southConnectionPoint.Occupied == false && southNeighbour == null)
+			if (southConnectionPoint != null && southConnectionPoint.Status == ConnectionPointStatus.Disconnected && southNeighbour == null)
 			{
 				GameObject southNeighbourGO = Instantiate(southDeadEndMapPieces.GetRandom(), mapPiecePos + southNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
 				if (Overlap(southNeighbourGO, southNeighbourGO.transform.position, overlapSize))
@@ -383,17 +395,22 @@ public class LevelGeneratorV3 : MonoBehaviour
 				else
 				{
 					MapPiece southNeighbourMapPiece = southNeighbourGO.GetComponent<MapPiece>();
-					southNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+					southNeighbourMapPiece.ConnectionPoints[0].Status = ConnectionPointStatus.Connected;
 					southNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = southConnectionPoint;
 
-					southConnectionPoint.Occupied = true;
+					southConnectionPoint.Status = ConnectionPointStatus.Connected;
 					southConnectionPoint.ConnectedTo = southNeighbourMapPiece.ConnectionPoints[0];
 
 					mapPiecesInScene.Add(southNeighbourGO, mapPiecePos + southNeighbourPosition);
 				}
 			}
+			else if (southConnectionPoint != null && southConnectionPoint.Status == ConnectionPointStatus.Disconnected && southNeighbour != null && southConnectionPoint.DeadEnd != null)
+			{
+				southConnectionPoint.DeadEnd.Enable();
+				southConnectionPoint.Status = ConnectionPointStatus.Blocked;
+			}
 			// West Dead End
-			if (westConnectionPoint != null && westConnectionPoint.Occupied == false && westNeighbour == null)
+			if (westConnectionPoint != null && westConnectionPoint.Status == ConnectionPointStatus.Disconnected && westNeighbour == null)
 			{
 				GameObject westNeighbourGO = Instantiate(westDeadEndMapPieces.GetRandom(), mapPiecePos + westNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
 				if (Overlap(westNeighbourGO, westNeighbourGO.transform.position, overlapSize))
@@ -403,14 +420,19 @@ public class LevelGeneratorV3 : MonoBehaviour
 				else
 				{
 					MapPiece westNeighbourMapPiece = westNeighbourGO.GetComponent<MapPiece>();
-					westNeighbourMapPiece.ConnectionPoints[0].Occupied = true;
+					westNeighbourMapPiece.ConnectionPoints[0].Status = ConnectionPointStatus.Connected;
 					westNeighbourMapPiece.ConnectionPoints[0].ConnectedTo = westConnectionPoint;
 
-					westConnectionPoint.Occupied = true;
+					westConnectionPoint.Status = ConnectionPointStatus.Connected;
 					westConnectionPoint.ConnectedTo = westNeighbourMapPiece.ConnectionPoints[0];
 
 					mapPiecesInScene.Add(westNeighbourGO, mapPiecePos + westNeighbourPosition);
 				}
+			}
+			else if (westConnectionPoint != null && westConnectionPoint.Status == ConnectionPointStatus.Disconnected && westNeighbour != null && westConnectionPoint.DeadEnd != null)
+			{
+				westConnectionPoint.DeadEnd.Enable();
+				westConnectionPoint.Status = ConnectionPointStatus.Blocked;
 			}
 		}
 	}
@@ -546,7 +568,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Bounds neighbourBounds = new Bounds { size = overlapSize };
 		foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
 		{
-			if (connectionPoint.Occupied == true) continue;
+			if (connectionPoint.Status == ConnectionPointStatus.Connected) continue;
 
 			switch (connectionPoint.Direction)
 			{
@@ -601,14 +623,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	private void ConnectMapPieces(GameObject newMapPieceGO, GameObject mapPieceInScene, ConnectionPoint newMapPieceConnectionPoint, ConnectionPoint mapPieceInSceneConnectionPoint, Vector2 newMapPiecePos, ref bool connected)
 	{
-		if (newMapPieceConnectionPoint != null && newMapPieceConnectionPoint.Occupied == false)
+		if (newMapPieceConnectionPoint != null && newMapPieceConnectionPoint.Status == ConnectionPointStatus.Disconnected)
 		{
 			if (!Overlap(newMapPieceGO, newMapPiecePos, overlapSize))
 			{
 				if (debugConnections) Debug.Log($"Connecting {newMapPieceGO.name} to {mapPieceInScene.name}", newMapPieceGO);
 
-				newMapPieceConnectionPoint.Occupied = true;
-				mapPieceInSceneConnectionPoint.Occupied = true;
+				newMapPieceConnectionPoint.Status = ConnectionPointStatus.Connected;
+				mapPieceInSceneConnectionPoint.Status = ConnectionPointStatus.Connected;
 				newMapPieceConnectionPoint.ConnectedTo = mapPieceInSceneConnectionPoint;
 				mapPieceInSceneConnectionPoint.ConnectedTo = newMapPieceConnectionPoint;
 				connected = true;
@@ -640,23 +662,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 	{
 		ConnectionPoint[] connectionPoints = gameObject.GetComponentsInChildren<ConnectionPoint>();
 		if (connectionPoints.Length > 0)
-		{
-			return connectionPoints.ToList();
-		}
-		else
-		{
-			Debug.LogWarning("No connection points could be found!");
-			return null;
-		}
-	}
-	private List<ConnectionPoint> GetConnectionPoints(List<GameObject> gameObjects)
-	{
-		List<ConnectionPoint> connectionPoints = new List<ConnectionPoint>();
-		foreach (GameObject go in gameObjects)
-		{
-			connectionPoints.AddRange(gameObject.GetComponentsInChildren<ConnectionPoint>());
-		}
-		if (connectionPoints.Count > 0)
 		{
 			return connectionPoints.ToList();
 		}
