@@ -89,8 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aace50b1d3022e4a88d9c9ab350a24f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 300
-  baseHealthPoints: 0
+  healthPoints: 200
+  baseHealthPoints: 200
   damageBase: 50
   damage: 0
   speed: 13
@@ -128,6 +128,9 @@ MonoBehaviour:
   avoidEnemyLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  wallHitMask:
+    serializedVersion: 2
+    m_Bits: 0
   crackedGround: {fileID: 3586400302612292111, guid: 20a1e604c30d5f042be8dd972a3f2b14, type: 3}
   player: {fileID: 0}
   boss: {fileID: 0}
