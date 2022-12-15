@@ -14,7 +14,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Main Settings")] private bool generateRandomSeed = false;
 	[SerializeField, BoxGroup("Main Settings")] private int mapPieceLimit = 100;
 	[SerializeField, BoxGroup("Main Settings")] private int mapPiecePlacementTryLimit = 2;
+
 	[Space(10)]
+
 	[SerializeField, BoxGroup("Map Piece Settings")] private int mapPieceOffset = 21;
 	[SerializeField, BoxGroup("Map Piece Settings")] private Transform connectedMapPiecesParent = default;
 	[SerializeField, BoxGroup("Map Piece Settings")] private Transform disconnectedMapPiecesParent = default;
@@ -29,7 +31,10 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Map Piece Settings")] private WeightedRandomList<GameObject> westDeadEndMapPieces = new WeightedRandomList<GameObject>();
 	[Space]
 	[SerializeField, BoxGroup("Map Piece Settings")] private GameObject bossPortalPrefab = default;
+	[SerializeField, BoxGroup("Map Piece Settings")] private GameObject levelStatuePrefab = default;
+
 	[Space(10)]
+
 	[SerializeField, BoxGroup("Enemy Settings")] private AstarPath astarData = null;
 	[SerializeField, BoxGroup("Enemy Settings")] private Transform enemyParentTransform = null;
 	[Space]
@@ -38,7 +43,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 	[SerializeField, BoxGroup("Enemy Settings")] private int enemyCountPerMapPiece = 5;
 	[SerializeField, BoxGroup("Enemy Settings")] private WeightedRandomList<GameObject> rewardEnemyPrefabs = new WeightedRandomList<GameObject>();
 	[SerializeField, BoxGroup("Enemy Settings")] private int rewardEnemyCountPerLevel = 3;
+
 	[Space(10)]
+
 	[SerializeField, BoxGroup("Debug Variables")] private float debugTime = 0.5f;
 	[Space]
 	[SerializeField, BoxGroup("Debug Variables")] private bool debugOverlaps = false;
@@ -182,6 +189,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		RemoveDisconnectedMapPieces();
 		SpawnEnemies();
 		AddDeadEnds();
+		SpawnLevelStatue();
 
 		// Set GridGraph position and size.
 		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
@@ -506,6 +514,35 @@ public class LevelGeneratorV3 : MonoBehaviour
 			}
 		}
 	}
+	private void SpawnLevelStatue()
+	{
+		MapPiece mapPiece = null;
+		List<GameObject> levelStatueSpawnPointsInMapPiece = null;
+		int randSpawnPoint = 0;
+		GameObject levelStatueSpawnPoint = null;
+
+		// Try to find a valid map piece and spawn point
+		// that is not a "dead end"
+		while (mapPiece == null || levelStatueSpawnPointsInMapPiece == null || levelStatueSpawnPointsInMapPiece.Count == 0)
+		{
+			KeyValuePair<GameObject, Vector2> mapPieceKeyValuePair = mapPiecesInScene.ElementAt(Random.Range(0, mapPiecesInScene.Count));
+			if (mapPieceKeyValuePair.Key.name.ToLower().Contains("dead end") == false)
+			{
+				mapPiece = mapPieceKeyValuePair.Key.GetComponent<MapPiece>();
+				levelStatueSpawnPointsInMapPiece = mapPiece.StatueSpawnPoints;
+				randSpawnPoint = Random.Range(0, levelStatueSpawnPointsInMapPiece.Count);
+				levelStatueSpawnPoint = levelStatueSpawnPointsInMapPiece[randSpawnPoint];
+			}
+		}
+
+		// If a valid map piece and spawn point was found,
+		// instantiate the level statue at the spawn point
+		if (mapPiece != null && levelStatueSpawnPoint != null)
+		{
+			Instantiate(levelStatuePrefab, levelStatueSpawnPoint.transform.position, Quaternion.identity, interactablesParent);
+		}
+	}
+
 
 	#region Helper Functions
 	[Button]
