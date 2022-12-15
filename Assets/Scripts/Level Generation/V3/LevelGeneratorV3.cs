@@ -516,18 +516,33 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	private void SpawnLevelStatue()
 	{
-		KeyValuePair<GameObject, Vector2> mapPieceKeyValuePair = mapPiecesInScene.ElementAt(Random.Range(0, mapPiecesInScene.Count));
-		while (mapPieceKeyValuePair.Key.name.ToLower().Contains("dead end") == true)
+		MapPiece mapPiece = null;
+		List<GameObject> levelStatueSpawnPointsInMapPiece = null;
+		int randSpawnPoint = 0;
+		GameObject levelStatueSpawnPoint = null;
+
+		// Try to find a valid map piece and spawn point
+		// that is not a "dead end"
+		while (mapPiece == null || levelStatueSpawnPointsInMapPiece == null || levelStatueSpawnPointsInMapPiece.Count == 0)
 		{
-			mapPieceKeyValuePair = mapPiecesInScene.ElementAt(Random.Range(0, mapPiecesInScene.Count));
+			KeyValuePair<GameObject, Vector2> mapPieceKeyValuePair = mapPiecesInScene.ElementAt(Random.Range(0, mapPiecesInScene.Count));
+			if (mapPieceKeyValuePair.Key.name.ToLower().Contains("dead end") == false)
+			{
+				mapPiece = mapPieceKeyValuePair.Key.GetComponent<MapPiece>();
+				levelStatueSpawnPointsInMapPiece = mapPiece.StatueSpawnPoints;
+				randSpawnPoint = Random.Range(0, levelStatueSpawnPointsInMapPiece.Count);
+				levelStatueSpawnPoint = levelStatueSpawnPointsInMapPiece[randSpawnPoint];
+			}
 		}
 
-		MapPiece mapPiece = mapPieceKeyValuePair.Key.GetComponent<MapPiece>();
-		List<GameObject> levelStatueSpawnPointsInMapPiece = mapPiece.StatueSpawnPoints;
-		int randSpawnPoint = Random.Range(0, levelStatueSpawnPointsInMapPiece.Count);
-		GameObject levelStatueSpawnPoint = levelStatueSpawnPointsInMapPiece[randSpawnPoint];
-		Instantiate(levelStatuePrefab, levelStatueSpawnPoint.transform.position, Quaternion.identity, interactablesParent);
+		// If a valid map piece and spawn point was found,
+		// instantiate the level statue at the spawn point
+		if (mapPiece != null && levelStatueSpawnPoint != null)
+		{
+			Instantiate(levelStatuePrefab, levelStatueSpawnPoint.transform.position, Quaternion.identity, interactablesParent);
+		}
 	}
+
 
 	#region Helper Functions
 	[Button]
