@@ -518,7 +518,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 	{
 		MapPiece mapPiece = null;
 		List<GameObject> levelStatueSpawnPointsInMapPiece = null;
-		int randSpawnPoint = 0;
 		GameObject levelStatueSpawnPoint = null;
 
 		// Try to find a valid map piece and spawn point
@@ -530,8 +529,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 			{
 				mapPiece = mapPieceKeyValuePair.Key.GetComponent<MapPiece>();
 				levelStatueSpawnPointsInMapPiece = mapPiece.StatueSpawnPoints;
-				randSpawnPoint = Random.Range(0, levelStatueSpawnPointsInMapPiece.Count);
-				levelStatueSpawnPoint = levelStatueSpawnPointsInMapPiece[randSpawnPoint];
+				levelStatueSpawnPoint = levelStatueSpawnPointsInMapPiece[Random.Range(0, levelStatueSpawnPointsInMapPiece.Count)];
 			}
 		}
 
@@ -660,7 +658,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	private void ConnectMapPieces(GameObject newMapPieceGO, GameObject mapPieceInScene, ConnectionPoint newMapPieceConnectionPoint, ConnectionPoint mapPieceInSceneConnectionPoint, Vector2 newMapPiecePos, ref bool connected)
 	{
-		if (newMapPieceConnectionPoint != null && newMapPieceConnectionPoint.Status == ConnectionPointStatus.Disconnected)
+		if (newMapPieceConnectionPoint != null && newMapPieceConnectionPoint.Status == ConnectionPointStatus.Disconnected && mapPieceInScene.name.ToLower().Contains(newMapPieceGO.name.ToLower()) == false)
 		{
 			if (!Overlap(newMapPieceGO, newMapPiecePos, overlapSize))
 			{
