@@ -11,8 +11,8 @@ public class MBCirclingEnemy : EnemyBase
 	[SerializeField] private GameObject boss;
 	[SerializeField] private float explosionRadius;
 	private Vector2 launchDestination;
-	[SerializeField] private float launchLifeTime;
-	private float lifeTimeTimer = 0f;
+	//[SerializeField] private float launchLifeTime;
+	//private float lifeTimeTimer = 0f;
 	//private float checkMaxHP;
 
 	public Vector3 center;
@@ -31,7 +31,7 @@ public class MBCirclingEnemy : EnemyBase
 		base.Start();
 		player = FindObjectOfType<PlayerControler>().gameObject;
 		transform.position = (transform.position - boss.transform.position).normalized * orbitRadius + boss.transform.position;
-		launchLifeTime = Random.Range(1f, 2f);
+		//launchLifeTime = Random.Range(0.5f, 2f);
 	}
 
 	void Update()
@@ -90,14 +90,14 @@ public class MBCirclingEnemy : EnemyBase
 			StartExploding();
 		}
 
-		if (lifeTimeTimer >= launchLifeTime)
+		if (Vector2.Distance((Vector2)transform.position, launchDestination) < 3f)
 		{
 			StartExploding();
 		}
-		else
-		{
-			lifeTimeTimer += Time.deltaTime;
-		}
+		//else
+		//{
+		//	lifeTimeTimer += Time.deltaTime;
+		//}
 	}
 
 	public void StartExploding()
