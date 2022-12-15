@@ -24,10 +24,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] private SpriteRenderer playerSprite;
-	[SerializeField] GameObject pivot_AttackAnimation;
-	[SerializeField] GameObject attackAnimation;
+	[SerializeField] private GameObject pivot_AttackAnimation;
+	[SerializeField] private GameObject pivot_DashAnimation;
+	[SerializeField] private GameObject attackAnimation;
+	[SerializeField] private GameObject dashVFX;
 	[SerializeField] Animator animAttack;
-	[SerializeField] private TrailRenderer trail;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
@@ -68,7 +69,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
-	public TrailRenderer Trail { get => trail; set => trail = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
 	[Header("Abilities")]
@@ -109,6 +109,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
 	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
 	public GameObject Pivot_AttackAnimation { get => pivot_AttackAnimation; set => pivot_AttackAnimation = value; }
+	public GameObject DashVFX { get => dashVFX; set => dashVFX = value; }
+	public GameObject Pivot_DashAnimation { get => pivot_DashAnimation; set => pivot_DashAnimation = value; }
 
 	#endregion
 
@@ -129,8 +131,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	// Start is called before the first frame update
 	void Start()
 	{
-		trail.emitting = false;
-
 		materialDefault = playerSprite.material;
 
 		selfSlowCounter = selfSlowTime;
@@ -242,7 +242,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (Input.GetKeyDown(KeyCode.T)) AbilityFourAttack();
 
 			//Dash input
-			if (Input.GetKeyDown(KeyCode.Space))
+			if (Input.GetKeyDown(KeyCode.Space) && vel != 0f)
 			{
 				bufferCounterDash = bufferTimeDash;
 			}
@@ -253,14 +253,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (bufferCounterDash > 0f) DashAbility();
 
 			MouseLook();
-
-			playerSprite.flipX = lookDir.x > 0 ? true : false;
 		}
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing && !isDying)
 		{
-			trail.emitting = false;
+			playerSprite.flipX = lookDir.x > 0 ? true : false;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
 			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
@@ -311,7 +309,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
 	}
-
 
 	void MeleeAttack()
 	{
