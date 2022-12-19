@@ -131,6 +131,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	// Start is called before the first frame update
 	void Start()
 	{
+
 		materialDefault = playerSprite.material;
 
 		selfSlowCounter = selfSlowTime;
@@ -181,6 +182,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentDash = currentDash;
 			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
+
+			if (GameManager.Instance != null)
+			{
+				GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
+			}
 		}
 	}
 
@@ -208,7 +214,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	// Update is called once per frame
 	void Update()
 	{
-
 		vel = rb2d.velocity.magnitude;
 
 		if ((GameManager.Instance == null || !GameManager.Instance.IsPaused) && !isDying)
@@ -445,6 +450,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				invulnerable = true;
 				outOfCombatCounter = 0f;
 				StartCoroutine(PlayerIFrames(hitInvulTime));
+				GameManager.Instance.UiManager.PlayerHitScreenEffect();
 			}
 			else //If in testing scene, damage visuals without changing HP
 			{
