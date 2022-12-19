@@ -451,6 +451,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				outOfCombatCounter = 0f;
 				StartCoroutine(PlayerIFrames(hitInvulTime));
 				GameManager.Instance.UiManager.PlayerHitScreenEffect();
+				CameraShake.Instance.ShakeCamera(1f, 0.05f);
 			}
 			else //If in testing scene, damage visuals without changing HP
 			{
