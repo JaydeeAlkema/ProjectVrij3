@@ -24,10 +24,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] private SpriteRenderer playerSprite;
-	[SerializeField] GameObject pivot_AttackAnimation;
-	[SerializeField] GameObject attackAnimation;
+	[SerializeField] private GameObject pivot_AttackAnimation;
+	[SerializeField] private GameObject pivot_DashAnimation;
+	[SerializeField] private GameObject attackAnimation;
+	[SerializeField] private GameObject dashVFX;
 	[SerializeField] Animator animAttack;
-	[SerializeField] private TrailRenderer trail;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
@@ -35,7 +36,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] Animator animPlayer;
 
 	//[SerializeField] PlayerHealthBar healthBar;
-	private float selfSlowTime = 0.35f;
+	private float selfSlowTime = 0.25f;
 	private float selfSlowCounter = 0f;
 	private float selfSlowMultiplier = 1f;
 	private bool inCombat = false;
@@ -53,9 +54,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public Material materialDefault = null;
 	public Material materialHit = null;
 
-	//Temporary, remove when implementing real death screen
-	//[SerializeField] Transform deathScreenTest;
-	//private bool isDying = false;
+	public bool isDying = false;
 
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
 	public GameObject AttackAnimation { get => attackAnimation; set => attackAnimation = value; }
@@ -70,7 +69,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
-	public TrailRenderer Trail { get => trail; set => trail = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
 	[Header("Abilities")]
@@ -111,6 +109,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
 	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
 	public GameObject Pivot_AttackAnimation { get => pivot_AttackAnimation; set => pivot_AttackAnimation = value; }
+	public GameObject DashVFX { get => dashVFX; set => dashVFX = value; }
+	public GameObject Pivot_DashAnimation { get => pivot_DashAnimation; set => pivot_DashAnimation = value; }
 
 	#endregion
 
@@ -121,17 +121,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	private void Awake()
 	{
-		if( GameManager.Instance != null )
+		if (GameManager.Instance != null)
 		{
 			GameManager.Instance.OnGameStateChanged += OnStart;
-			Debug.Log( "subscribed to ongamestatechanged" );
+			Debug.Log("subscribed to ongamestatechanged");
 		}
 	}
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		trail.emitting = false;
 
 		materialDefault = playerSprite.material;
 
@@ -151,18 +150,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		abilityController.SetAttacks();
 		initAbilities();
 
-		//currentHealthPoints = maxHealthPoints;
-		//if (healthBar != null)
-		//{
-		//	healthBar.SetMaxHP(maxHealthPoints);
-		//}
-
-		//Death screen test, remove later
-		//if (deathScreenTest != null)
-		//{
-		//	deathScreenTest.gameObject.SetActive(false);
-		//}
-
+		if (Time.timeScale != 1f)
+		{
+			Time.timeScale = 1f;
+		}
 	}
 
 	public void OnStart(GameState gameState, GameState lastGameState)
@@ -191,6 +182,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentDash = currentDash;
 			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
+
+			if (GameManager.Instance != null)
+			{
+				GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
+			}
 		}
 	}
 
@@ -208,20 +204,19 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public void initAbilities()
 	{
 		GameManager.Instance.UiManager.ResetAbilityUIValues();
-		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues( 0, currentAbility1.BaseStats.AbilityIcon ); }
-		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues( 1, currentAbility2.BaseStats.AbilityIcon ); }
-		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues( 2, currentAbility3.BaseStats.AbilityIcon ); }
-		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues( 3, currentAbility4.BaseStats.AbilityIcon ); }
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues(0, currentAbility1.BaseStats.AbilityIcon); }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues(1, currentAbility2.BaseStats.AbilityIcon); }
+		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues(2, currentAbility3.BaseStats.AbilityIcon); }
+		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues(3, currentAbility4.BaseStats.AbilityIcon); }
 		abilityController.SetAbility();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-
 		vel = rb2d.velocity.magnitude;
 
-		if (GameManager.Instance == null || !GameManager.Instance.IsPaused)
+		if ((GameManager.Instance == null || !GameManager.Instance.IsPaused) && !isDying)
 		{
 			//Melee input
 			if (Input.GetMouseButtonDown(0))
@@ -252,7 +247,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (Input.GetKeyDown(KeyCode.T)) AbilityFourAttack();
 
 			//Dash input
-			if (Input.GetKeyDown(KeyCode.Space))
+			if (Input.GetKeyDown(KeyCode.Space) && vel != 0f)
 			{
 				bufferCounterDash = bufferTimeDash;
 			}
@@ -263,14 +258,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (bufferCounterDash > 0f) DashAbility();
 
 			MouseLook();
-
-			playerSprite.flipX = lookDir.x > 0 ? true : false;
 		}
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
-		if (!isDashing)
+		if (!isDashing && !isDying)
 		{
-			trail.emitting = false;
+			playerSprite.flipX = lookDir.x > 0 ? true : false;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
 			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
@@ -295,7 +288,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if (selfSlowCounter < selfSlowTime)
 		{
 			selfSlowCounter += Time.deltaTime;
-			selfSlowMultiplier = 0.4f;
+			selfSlowMultiplier = 0.0f;
 		}
 		//Speed-up player while melee attacking
 		else if (isAttackPositionLocked)
@@ -321,7 +314,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
 		}
 	}
-
 
 	void MeleeAttack()
 	{
@@ -458,6 +450,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				invulnerable = true;
 				outOfCombatCounter = 0f;
 				StartCoroutine(PlayerIFrames(hitInvulTime));
+				GameManager.Instance.UiManager.PlayerHitScreenEffect();
 			}
 			else //If in testing scene, damage visuals without changing HP
 			{

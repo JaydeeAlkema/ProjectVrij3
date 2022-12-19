@@ -31,4 +31,5 @@ public class UpgradeScriptable : ScriptableObject
 	public float DistanceUpgrade { get => distanceUpgrade; set => distanceUpgrade = value; }
 	public StatusEffectType StatusEffect { get => statusEffect; set => statusEffect = value; }
 	public TMP_Text ToolTipInfo { get => toolTipText; set => toolTipText = value; }
+	public string UpgradeName { get => upgradeName; set => upgradeName = value; }
 }

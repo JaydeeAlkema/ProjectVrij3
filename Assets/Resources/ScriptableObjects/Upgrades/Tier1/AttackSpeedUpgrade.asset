@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b47f30bca6c5645bdf23fc4fce4485, type: 3}
   m_Name: AttackSpeedUpgrade
   m_EditorClassIdentifier: 
+  upgradeName: Hasted
   upgradeImageMelee: {fileID: 0}
   upgradeImageRanged: {fileID: 0}
+  toolTipText: {fileID: 0}
   damageUpgrade: 0
   hitBoxUpgrade: 0
   attackSpeedUpgrade: 50
   critChanceUpgrade: 0
-  circleSize: 0
+  circleSizeUpgrade: 0
+  distanceUpgrade: 0
   statusEffect: 0

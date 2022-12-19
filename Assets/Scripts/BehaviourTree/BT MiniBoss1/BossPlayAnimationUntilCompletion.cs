@@ -8,6 +8,7 @@ public class BossPlayAnimationUntilCompletion : BTNode
 {
 	private BossBase bossScript;
 	private string animationName;
+	private string orbAnimation = null;
 	private int attackStep;
 	private float timer = 0f;
 
@@ -16,6 +17,14 @@ public class BossPlayAnimationUntilCompletion : BTNode
 		this.bossScript = bossScript;
 		animationName = animationToPlay;
 		this.attackStep = attackStep;
+	}
+
+	public BossPlayAnimationUntilCompletion(int attackStep, BossBase bossScript, string animationToPlay, string orbAnimationToPlay)
+	{
+		this.bossScript = bossScript;
+		animationName = animationToPlay;
+		this.attackStep = attackStep;
+		orbAnimation = orbAnimationToPlay;
 	}
 
 	public override BTNodeState Evaluate()
@@ -46,11 +55,19 @@ public class BossPlayAnimationUntilCompletion : BTNode
 		if (!bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
 		{
 			bossScript.enemyAnimator.Play(animationName);
+			if (orbAnimation != null)
+			{
+				bossScript.WeakspotAnimator.Play(orbAnimation);
+			}
 		}
 
 		if (timer >= bossScript.enemyAnimator.GetCurrentAnimatorClipInfo(0).Length)
 		{
 			Debug.Log("Done animating: " + animationName);
+			if (orbAnimation != null)
+			{
+				bossScript.WeakspotAnimator.Play("Nothing");
+			}
 			timer = 0f;
 			parent.SetData("currentAttackStep", currentAttackStep + 1);
 			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + (currentAttackStep + 1));

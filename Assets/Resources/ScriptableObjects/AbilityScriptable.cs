@@ -89,6 +89,7 @@ public class AbilityScriptable : ScriptableObject
 	public AK.Wwise.Event AbilitySound1 { get => abilitySound1; set => abilitySound1 = value; }
 	public Sprite AbilityIcon { get => abilityIcon; set => abilityIcon = value; }
 	public TMP_Text ToolTipText { get => toolTipText; set => toolTipText = value; }
+	public string AbilityName { get => abilityName; set => abilityName = value; }
 
 	public int markType;
 

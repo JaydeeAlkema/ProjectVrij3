@@ -48,6 +48,8 @@ public class TrailWithTrigger : MonoBehaviour
 	{
 		GameObject ground = Instantiate(burningGround, transform.position, Quaternion.identity);
 		ground.GetComponent<OnTriggerStatusEffectApply>().BurnDamage = burnDamage;
+		ground.GetComponent<BurningGround>().lifeSpan = 4f; //Fixed lifespan, scale later if needed
+
 	}
 
 	//void SetTriggerPointsFromTrail(TrailRenderer trail, EdgeCollider2D collider)

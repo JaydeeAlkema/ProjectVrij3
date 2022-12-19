@@ -12,6 +12,7 @@ public class BossWalkAround : BTNode
 	private float timer;
 	private float walkDuration;
 	private List<string> animationNames;
+	private string orbAnimation = null;
 
 	public BossWalkAround(int attackStep, BossBase bossScript, float duration, List<string> animationsToPlay)
 	{
@@ -19,6 +20,15 @@ public class BossWalkAround : BTNode
 		this.bossScript = bossScript;
 		walkDuration = duration;
 		animationNames = animationsToPlay;
+	}
+	
+	public BossWalkAround(int attackStep, BossBase bossScript, float duration, List<string> animationsToPlay, string orbAnimationToPlay)
+	{
+		this.attackStep = attackStep;
+		this.bossScript = bossScript;
+		walkDuration = duration;
+		animationNames = animationsToPlay;
+		orbAnimation = orbAnimationToPlay;
 	}
 
 	public override BTNodeState Evaluate()
@@ -66,6 +76,10 @@ public class BossWalkAround : BTNode
 		if (!bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationNames[0]))
 		{
 			bossScript.enemyAnimator.Play(animationNames[0]);
+			if (orbAnimation != null)
+			{
+				bossScript.WeakspotAnimator.Play(orbAnimation);
+			}
 		}
 
 		if (bossScript.GetComponent<Pathfinding.AIDestinationSetter>().target == null)

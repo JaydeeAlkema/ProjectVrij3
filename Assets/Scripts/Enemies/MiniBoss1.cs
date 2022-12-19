@@ -22,7 +22,6 @@ public class MiniBoss1 : BossBase
 	public GameObject spawnedShockwaveObject = null;
 
 	[SerializeField] private GameObject shockwaveVFXPrefab;
-
 	[SerializeField] private GameObject rewardInstance;
 
 	private void Start()
@@ -45,6 +44,7 @@ public class MiniBoss1 : BossBase
 		healthBar.GetComponent<Slider>().value = HealthPoints;
 		MobListUpdate();
 		LookAtTarget();
+		SyncOrbAnimations();
 	}
 
 	public override void SpawnMobs()
@@ -91,13 +91,14 @@ public class MiniBoss1 : BossBase
 		if (DestinationSetter.target != null && enemySprite != null)
 		{
 			enemySprite.flipX = (DestinationSetter.GetComponent<Pathfinding.IAstarAI>().destination - transform.position).normalized.x > 0 ? true : false;
+			WeakSpotSprite.flipX = (DestinationSetter.GetComponent<Pathfinding.IAstarAI>().destination - transform.position).normalized.x > 0 ? true : false;
 		}
 		float flippedValue;
 		flippedValue = enemySprite.flipX ? -1f : 1f;
 		GetComponent<BoxCollider2D>().offset = new Vector2(Mathf.Abs(GetComponent<BoxCollider2D>().offset.x) * flippedValue, GetComponent<BoxCollider2D>().offset.y);
 		bodyBlock.offset = new Vector2(Mathf.Abs(bodyBlock.offset.x) * -flippedValue, bodyBlock.offset.y);
 		enemyShadow.localPosition = new Vector2(Mathf.Abs(enemyShadow.localPosition.x) * flippedValue, enemyShadow.localPosition.y);
-		
+
 	}
 
 	public void SpawnShockWaveObject(float radius)
@@ -139,9 +140,33 @@ public class MiniBoss1 : BossBase
 		}
 	}
 
+	//public void SyncOrbAnimation(string orbAnimationToPlay)
+	//{
+	//	WeakSpotSprite.gameObject.GetComponent<Animator>().Play(orbAnimationToPlay, default, 0f);
+	//}
+
+	public void SyncOrbAnimations()
+	{
+		if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Walking") || enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1StartEndlag") || enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("MiniBoss1Endlag"))
+		{
+			invulnerable = false;
+		}
+		else
+		{
+			invulnerable = true;
+		}
+	}
+
+	public override void DamagePopup(int damage)
+	{
+		Transform damageNumber = Instantiate(damageNumberText, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.identity);
+		damageNumber.GetComponent<DamageNumberPopup>()?.SetDamageText(damage);
+	}
+
 	public override void OnHitVFX()
 	{
-		Instantiate(vfxHitSpark, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+		GameObject hitspark = Instantiate(vfxHitSpark, (Vector2)transform.position + GetComponent<BoxCollider2D>().offset, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+		hitspark.transform.localScale *= 2f;
 	}
 
 	public IEnumerator LaunchMobs()
