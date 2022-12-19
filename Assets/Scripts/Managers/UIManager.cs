@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Image playerHitEffect;
 	[SerializeField] private float playerHitEffectDuration;
 	[SerializeField] private Canvas shaderCanvas;
+	[SerializeField] private RenderTexture miniMap;
 	private String playerHitEffectPropertyName = "_Amount";
 	private Material playerHitEffectMaterial;
 
@@ -184,6 +185,14 @@ public class UIManager : MonoBehaviour
 		if (shaderCanvas.worldCamera == null)
 		{
 			shaderCanvas.worldCamera = camera;
+		}
+	}
+
+	public void AssignRenderTextureToMinimapCamera(Camera camera)
+	{
+		if(camera.targetTexture == null)
+		{
+			camera.targetTexture = miniMap;
 		}
 	}
 
