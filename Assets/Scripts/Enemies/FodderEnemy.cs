@@ -127,7 +127,7 @@ public class FodderEnemy : EnemyBase
 			AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
 			if (Time.timeScale == 1f)
 			{
-				StartCoroutine(HitStop(0.1f));
+				StartCoroutine(HitStop(0.02f));
 			}
 		}
 
@@ -136,13 +136,16 @@ public class FodderEnemy : EnemyBase
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		Debug.Log("i took " + damage + " damage");
+		//Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		HealthPoints -= damage;
 		if (!IsAggro)
 		{
 			IsAggro = true;
-			GameManager.Instance.EnemyAggroCount(true);
+			if (GameManager.Instance != null)
+			{
+				GameManager.Instance.EnemyAggroCount(true);
+			}
 		}
 		//this.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		StartCoroutine(FlashColor());

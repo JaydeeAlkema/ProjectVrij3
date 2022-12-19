@@ -50,8 +50,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	private Vector2[] path;
 	private int targetIndex = 0;
 
-	private Vector2 pullPoint = new Vector2();
-	private Vector2 vel = new Vector2();
+	protected Vector2 pullPoint = new Vector2();
+	protected Vector2 ccVel = new Vector2();
 	public bool beingCrowdControlled = false;
 	public bool meleeTarget = false;
 	public bool castTarget = false;
@@ -155,7 +155,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void TakeDamage(int damage)
 	{
-		Debug.Log("i took " + damage + " damage without type");
+		//Debug.Log("i took " + damage + " damage without type");
 		DamagePopup(damage);
 		healthPoints -= damage;
 		if (!isAggro)
@@ -203,7 +203,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 			AkSoundEngine.PostEvent("npc_dmg_cast", this.gameObject);
 		}
 		OnHitVFX();
-		Debug.Log("i took " + damage + " damage");
+		//Debug.Log("i took " + damage + " damage");
 		DamagePopup(damageToTake);
 		healthPoints -= damage;
 		if (!isAggro)
@@ -313,17 +313,17 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		}
 	}
 
-	public void beingDisplaced()
+	public virtual void BeingDisplaced()
 	{
 		StopMovingToTarget();
 		if (Vector2.Distance(transform.position, pullPoint) > 0.5f)
 		{
-			Debug.Log("actually gonna pull");
-			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref vel, 8f * Time.deltaTime));
+			//Debug.Log("actually gonna pull");
+			GetComponent<Rigidbody2D>().MovePosition(Vector2.SmoothDamp(transform.position, pullPoint, ref ccVel, 8f * Time.deltaTime));
 		}
 		else
 		{
-			Debug.Log("already at pullpoint: " + pullPoint + ", my position is: " + transform.position);
+			//Debug.Log("already at pullpoint: " + pullPoint + ", my position is: " + transform.position);
 			beingCrowdControlled = false;
 			this.pullPoint = Vector2.zero;
 			Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, true);

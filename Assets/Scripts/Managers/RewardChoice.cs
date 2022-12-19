@@ -12,6 +12,9 @@ public class RewardChoice : MonoBehaviour
 	[SerializeField] private float markMultiplier = 2;
 
 	[Header( "Reward Settings" )]
+	[SerializeField] private float rewardCostMultiplier = 1;
+	[SerializeField] private int rewardCost = 1;
+	[SerializeField] private int currentRewardCost;
 	[SerializeField] private int healOnPointSpend;
 	[SerializeField] private GameObject choicePopUp;
 	[SerializeField] private GameObject abilityButtonPopUp;
@@ -73,7 +76,7 @@ public class RewardChoice : MonoBehaviour
 			if (tier3Upgrades.Length > 0)
 			{
 				upgradeToGive = tier3Upgrades[rand.Next(0, tier3Upgrades.Length -1)];
-				Debug.Log(upgradeToGive.name);
+				//Debug.Log(upgradeToGive.name);
 			}
 		}
 		else if (roll >= t2Chance && roll < t3Chance)
@@ -81,7 +84,7 @@ public class RewardChoice : MonoBehaviour
 			if (tier2Upgrades.Length > 0)
 			{
 				upgradeToGive = tier2Upgrades[rand.Next( 0, tier2Upgrades.Length -1)];
-				Debug.Log(upgradeToGive.name);
+				//Debug.Log(upgradeToGive.name);
 			}
 		}
 		else
@@ -89,7 +92,7 @@ public class RewardChoice : MonoBehaviour
 			if (tier1Upgrades.Length > 0)
 			{
 				upgradeToGive = tier1Upgrades[rand.Next( 0, tier1Upgrades.Length -1)];
-				Debug.Log(upgradeToGive.name);
+				//Debug.Log(upgradeToGive.name);
 			}
 		}
 
@@ -99,13 +102,19 @@ public class RewardChoice : MonoBehaviour
 		{
 			abilityImg.sprite = abilityStats.AbilityIcon;
 		}
-		MeleeTitle.text = upgradeToGive.name + " Melee";
-		RangedTitle.text = upgradeToGive.name + " Ranged";
+		MeleeTitle.text = upgradeToGive.UpgradeName + " Slash";
+		RangedTitle.text = upgradeToGive.UpgradeName + " Cast";
+		AbilityTitle.text = AbilityStats.AbilityName;
+	}
+
+	private void Update()
+	{
+		currentRewardCost = Mathf.RoundToInt( ( rewardCost * Mathf.Pow(rewardCostMultiplier * LevelManager.LevelManagerInstance.DificultyModifier, LevelManager.LevelManagerInstance.UpgradeCount)));
 	}
 
 	public void ChooseAbility()
 	{
-		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
+		if( GameManager.Instance.ExpManager.PlayerPoints >= currentRewardCost)
 		{
 			IAbility abilityToGive = null;
 			switch( reward )
@@ -126,7 +135,7 @@ public class RewardChoice : MonoBehaviour
 					player.CurrentAbility1 = abilityToGive;
 					player.Ability1 = abilityStats;
 					player.Ability1.SetBaseStats();
-					GameManager.Instance.UiManager.SetAbilityUIValues( 0, player.Ability1.AbilityIcon );
+					//GameManager.Instance.UiManager.SetAbilityUIValues( 0, player.Ability1.AbilityIcon );
 					hasChosen = true;
 				}
 				else if( player.CurrentAbility2 == null || abilityButton == 2 )
@@ -134,7 +143,7 @@ public class RewardChoice : MonoBehaviour
 					player.CurrentAbility2 = abilityToGive;
 					player.Ability2 = abilityStats;
 					player.Ability2.SetBaseStats();
-					GameManager.Instance.UiManager.SetAbilityUIValues( 1, player.Ability2.AbilityIcon );
+					//GameManager.Instance.UiManager.SetAbilityUIValues( 1, player.Ability2.AbilityIcon );
 					hasChosen = true;
 				}
 				else if( player.CurrentAbility3 == null || abilityButton == 3 )
@@ -142,7 +151,7 @@ public class RewardChoice : MonoBehaviour
 					player.CurrentAbility3 = abilityToGive;
 					player.Ability3 = abilityStats;
 					player.Ability3.SetBaseStats();
-					GameManager.Instance.UiManager.SetAbilityUIValues( 2, player.Ability3.AbilityIcon );
+					//GameManager.Instance.UiManager.SetAbilityUIValues( 2, player.Ability3.AbilityIcon );
 					hasChosen = true;
 				}
 				else if( player.CurrentAbility4 == null || abilityButton == 4 )
@@ -150,7 +159,7 @@ public class RewardChoice : MonoBehaviour
 					player.CurrentAbility4 = abilityToGive;
 					player.Ability4 = abilityStats;
 					player.Ability4.SetBaseStats();
-					GameManager.Instance.UiManager.SetAbilityUIValues( 3, player.Ability4.AbilityIcon );
+					//GameManager.Instance.UiManager.SetAbilityUIValues( 3, player.Ability4.AbilityIcon );
 					hasChosen = true;
 				}
 				else
@@ -162,11 +171,12 @@ public class RewardChoice : MonoBehaviour
 
 				if( hasChosen )
 				{
-					GameManager.Instance.ExpManager.PlayerPoints -= 1;
+					GameManager.Instance.ExpManager.PlayerPoints -= currentRewardCost;
 					GameManager.Instance.PlayerHP.value += healOnPointSpend;
 					abilityButton = 0;
 					GameManager.Instance.SetPauseState( false );
 					player.initAbilities();
+					LevelManager.LevelManagerInstance.UpgradeCount++;
 					Destroy( this.gameObject );
 				}
 			}
@@ -176,13 +186,14 @@ public class RewardChoice : MonoBehaviour
 	public void ChooseMeleeUpgrade()
 	{
 		// Check if the player has enough points to upgrade
-		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
+		if( GameManager.Instance.ExpManager.PlayerPoints >= currentRewardCost )
 		{
 			meleeAttack = player.MeleeAttackScr;
 
 			GameManager.Instance.SetPauseState( false );
-			GameManager.Instance.ExpManager.PlayerPoints -= 1;
+			GameManager.Instance.ExpManager.PlayerPoints -= currentRewardCost;
 			GameManager.Instance.PlayerHP.value += healOnPointSpend;
+			LevelManager.LevelManagerInstance.UpgradeCount++;
 
 			// Check if the upgrade already exists and apply it if necessary
 			if( player.CurrentMeleeAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )
@@ -237,12 +248,13 @@ public class RewardChoice : MonoBehaviour
 
 	public void ChooseRangedUpgrade()
 	{
-		if( GameManager.Instance.ExpManager.PlayerPoints >= 1 )
+		if( GameManager.Instance.ExpManager.PlayerPoints >= currentRewardCost )
 		{
 			rangedAttack = player.RangedAttackScr;
 			GameManager.Instance.SetPauseState( false );
-			GameManager.Instance.ExpManager.PlayerPoints -= 1;
+			GameManager.Instance.ExpManager.PlayerPoints -= currentRewardCost;
 			GameManager.Instance.PlayerHP.value += healOnPointSpend;
+			LevelManager.LevelManagerInstance.UpgradeCount++;
 
 			// Check if upgradeToGive.StatusEffect exists in player.CurrentRangedAttack.AbilityUpgrades
 			if( player.CurrentRangedAttack.AbilityUpgrades.ContainsKey( upgradeToGive.StatusEffect ) )

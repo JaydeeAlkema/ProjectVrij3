@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.ResetAbilityUIValues();
+		//uiManager.ResetAbilityUIValues();
 		uiManager.SetUIActive(1, true);
 	}
 
@@ -226,22 +226,24 @@ public class GameManager : MonoBehaviour
 
 		//Show dungeon HUD
 		uiManager.DisableAllUI();
-		uiManager.ResetAbilityUIValues();
+		//uiManager.ResetAbilityUIValues();
 		uiManager.SetUIActive(1, true);
 		yield return new WaitForEndOfFrame();
 	}
 
 	IEnumerator GameOver()
 	{
-		playerInstance.GetComponent<PlayerControler>().Invulnerable = true;
+		PlayerControler playerScript = playerInstance.GetComponent<PlayerControler>();
+		playerScript.Invulnerable = true;
+		playerScript.isDying = true;
 		uiManager.DisableAllUI();
 		playerInstance.GetComponentInChildren<CameraToMouseFollow>().gameObject.transform.localPosition = Vector3.zero;
-		playerInstance.GetComponent<PlayerControler>().GameOverVFX(1);
+		playerScript.GameOverVFX(1);
 		Time.timeScale = 0f;    //Hitstop
 		yield return new WaitForSecondsRealtime(0.5f);
 
-		playerInstance.GetComponent<PlayerControler>().GameOverVFX(2);
-		playerInstance.GetComponent<PlayerControler>().enabled = false;
+		playerScript.GameOverVFX(2);
+		playerScript.enabled = false;
 		SpriteRenderer[] playerSprites = playerInstance.GetComponentsInChildren<SpriteRenderer>();
 		foreach (SpriteRenderer playerSprite in playerSprites)
 		{

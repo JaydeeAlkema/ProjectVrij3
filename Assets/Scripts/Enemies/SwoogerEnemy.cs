@@ -132,7 +132,7 @@ public class SwoogerEnemy : EnemyBase
 		rewardObject.GetComponent<RewardChoice>().AbilityStats = abilityStats;
 		rewardObject.GetComponent<RewardChoice>().AbilityToGive = ability;
 		rewardObject.GetComponent<RewardChoice>().Reward = reward;
-		Debug.Log(rewardObject.GetComponent<RewardChoice>().AbilityToGive);
+		//Debug.Log(rewardObject.GetComponent<RewardChoice>().AbilityToGive);
 		Destroy(this.gameObject);
 	}
 

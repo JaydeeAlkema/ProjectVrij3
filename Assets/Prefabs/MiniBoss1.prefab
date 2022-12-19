@@ -137,7 +137,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3474265077007885640}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_Sprite: {fileID: 661179809, guid: af8a46ee929d5a34b952635b1a55906a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -691,22 +691,16 @@ MonoBehaviour:
   shockwaveExpansionSpeed: 8
   innerSpawnPoints:
   - {x: 1, y: 1}
-  - {x: 1, y: 0}
   - {x: 1, y: -1}
-  - {x: 0, y: 1}
-  - {x: 0, y: -1}
   - {x: -1, y: 1}
-  - {x: -1, y: 0}
   - {x: -1, y: -1}
   outerSpawnPoints:
   - {x: 6, y: 6}
-  - {x: 6, y: 0}
-  - {x: 6, y: -6}
   - {x: 0, y: 6}
-  - {x: 0, y: -6}
-  - {x: -6, y: 6}
+  - {x: 6, y: 0}
   - {x: -6, y: 0}
   - {x: -6, y: -6}
+  - {x: 0, y: -6}
   spawnedShockwaveObject: {fileID: 0}
   shockwaveVFXPrefab: {fileID: 2530599393635534783, guid: f43d69c44af4577498860bf4248aeafa, type: 3}
   rewardInstance: {fileID: 0}
@@ -809,7 +803,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   target: {fileID: 0}
-  delay: 2
+  delay: 4
   constantTargetUpdate: 0
 --- !u!1001 &3579834853767832170
 PrefabInstance:
