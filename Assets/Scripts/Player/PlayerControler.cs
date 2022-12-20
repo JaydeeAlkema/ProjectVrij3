@@ -182,11 +182,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentDash = currentDash;
 			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
-
-			if (GameManager.Instance != null)
-			{
-				GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
-			}
+		}
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
 		}
 	}
 
