@@ -190,6 +190,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		SpawnEnemies();
 		AddDeadEnds();
 		SpawnLevelStatue();
+		DecorateLevel();
 
 		// Set GridGraph position and size.
 		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
@@ -540,7 +541,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 			Instantiate(levelStatuePrefab, levelStatueSpawnPoint.transform.position, Quaternion.identity, interactablesParent);
 		}
 	}
-
+	private void DecorateLevel()
+	{
+		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+		{
+			MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
+			if (mapPiece != null) mapPiece.Decorate();
+		}
+	}
 
 	#region Helper Functions
 	[Button]
