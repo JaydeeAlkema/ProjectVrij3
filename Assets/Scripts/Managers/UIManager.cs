@@ -11,6 +11,12 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private TMP_Text pointText;
 	[SerializeField] private TMP_Text hpAmountText;
 	[SerializeField] private TMP_Text expAmountText;
+	[SerializeField] private Image playerHitEffect;
+	[SerializeField] private float playerHitEffectDuration;
+	[SerializeField] private Canvas shaderCanvas;
+	[SerializeField] private RenderTexture miniMap;
+	private String playerHitEffectPropertyName = "_Amount";
+	private Material playerHitEffectMaterial;
 
 	//TODO: Create custom struct that holds UI elements so we don't have to user indeces for enabling/disabling UI, but instead call them by name/type etc.
 	[SerializeField] private GameObject[] uiStates;
@@ -23,6 +29,7 @@ public class UIManager : MonoBehaviour
 	// 3 = Pause Screen
 	// 4 = Death Screen
 	// 5 = Cheat Menu
+	// 6 = Empower enemies UI
 
 	[SerializeField] private Transform[] DevUIComponents;
 	// 0 = Melee Upgrades
@@ -38,6 +45,13 @@ public class UIManager : MonoBehaviour
 	}
 
 	[SerializeField] private abilityUI[] abilityUIElements;
+
+	private void Start()
+	{
+		playerHitEffectMaterial = playerHitEffect.material;
+		playerHitEffectMaterial.SetFloat(playerHitEffectPropertyName, 0.5f);
+		playerHitEffect.gameObject.SetActive(false);
+	}
 
 	void Update()
 	{
@@ -126,7 +140,7 @@ public class UIManager : MonoBehaviour
 
 	public void ResetAbilityUIValues()
 	{
-		foreach(abilityUI abilityUI in abilityUIElements)
+		foreach (abilityUI abilityUI in abilityUIElements)
 		{
 			abilityUI.abilityIcon.GetComponent<Image>().sprite = null;
 			Color iconColor = abilityUI.abilityIcon.GetComponent<Image>().color;
@@ -154,7 +168,7 @@ public class UIManager : MonoBehaviour
 			{
 				if (abilityUI.cooldownClock.fillAmount > 0)
 				{
-					abilityUI.cooldownClock.fillAmount -= 1 / (abilityUI.cooldown/1000) * Time.deltaTime;
+					abilityUI.cooldownClock.fillAmount -= 1 / (abilityUI.cooldown / 1000) * Time.deltaTime;
 				}
 				else
 				{
@@ -164,5 +178,45 @@ public class UIManager : MonoBehaviour
 			}
 
 		}
+	}
+
+	public void AssignPlayerCameraToShaderCanvas(Camera camera)
+	{
+		if (shaderCanvas.worldCamera == null)
+		{
+			shaderCanvas.worldCamera = camera;
+		}
+	}
+
+	public void AssignRenderTextureToMinimapCamera(Camera camera)
+	{
+		if(camera.targetTexture == null)
+		{
+			camera.targetTexture = miniMap;
+		}
+	}
+
+	public void PlayerHitScreenEffect()
+	{
+		StopCoroutine(ScreenVFXOnPlayerHit());
+		StartCoroutine(ScreenVFXOnPlayerHit());
+	}
+
+	IEnumerator ScreenVFXOnPlayerHit()
+	{
+		playerHitEffect.gameObject.SetActive(true);
+		ScriptableInt playerHP = GameManager.Instance.PlayerHP;
+		float amount = ((float)playerHP.value / (float)playerHP.startValue);
+		playerHitEffectMaterial.SetFloat(playerHitEffectPropertyName, Mathf.Lerp(0.5f, 0.38f, 1 - amount));
+		float currentTime = 0;
+		while (currentTime < playerHitEffectDuration)
+		{
+			currentTime += Time.deltaTime;
+			Color effectColor = playerHitEffect.color;
+			effectColor.a = 1 - Mathf.Clamp01(currentTime / playerHitEffectDuration);
+			playerHitEffect.color = effectColor;
+			yield return new WaitForEndOfFrame();
+		}
+		playerHitEffect.gameObject.SetActive(false);
 	}
 }

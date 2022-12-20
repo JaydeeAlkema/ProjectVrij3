@@ -10,6 +10,7 @@ public class BossWaitWithAnimation : BTNode
 	private float waitDuration;
 	private float timer = 0f;
 	private string animationName;
+	private string orbAnimation = null;
 	private int attackStep;
 
 	public BossWaitWithAnimation(int attackStep, BossBase bossScript, float duration, string animationToPlay)
@@ -18,6 +19,14 @@ public class BossWaitWithAnimation : BTNode
 		waitDuration = duration;
 		animationName = animationToPlay;
 		this.attackStep = attackStep;
+	}
+	public BossWaitWithAnimation(int attackStep, BossBase bossScript, float duration, string animationToPlay, string orbAnimationToPlay)
+	{
+		this.bossScript = bossScript;
+		waitDuration = duration;
+		animationName = animationToPlay;
+		this.attackStep = attackStep;
+		orbAnimation = orbAnimationToPlay;
 	}
 
 	public override BTNodeState Evaluate()
@@ -49,6 +58,10 @@ public class BossWaitWithAnimation : BTNode
 		if (timer >= waitDuration)
 		{
 			timer = 0f;
+			if (orbAnimation != null)
+			{
+				bossScript.WeakspotAnimator.Play("Nothing");
+			}
 			parent.SetData("currentAttackStep", currentAttackStep + 1);
 			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + (currentAttackStep + 1));
 			state = BTNodeState.SUCCESS;
@@ -58,6 +71,10 @@ public class BossWaitWithAnimation : BTNode
 		if (!bossScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
 		{
 			bossScript.enemyAnimator.Play(animationName);
+			if (orbAnimation != null)
+			{
+				bossScript.WeakspotAnimator.Play(orbAnimation);
+			}
 		}
 
 		timer += Time.deltaTime;

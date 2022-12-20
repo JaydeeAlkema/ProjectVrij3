@@ -19,7 +19,7 @@ public class BobEnemy : EnemyBase
 	[SerializeField] private GameObject runToObject = null;
 
 	[SerializeField] private float hitDetectionRadius = 1f;
-	public CapsuleCollider2D hurtbox;
+	//public CapsuleCollider2D hurtbox;
 
 	public AK.Wwise.Event Event;
 
@@ -28,7 +28,7 @@ public class BobEnemy : EnemyBase
 	void Awake()
 	{
 		base.Awake();
-		hurtbox = this.GetComponent<CapsuleCollider2D>();
+		//hurtbox = this.GetComponent<CapsuleCollider2D>();
 
 		baseSpeed = Speed;
 	}

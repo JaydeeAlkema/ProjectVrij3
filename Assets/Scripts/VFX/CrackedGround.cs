@@ -7,6 +7,14 @@ public class CrackedGround : MonoBehaviour
 	public int damage;
 	public bool isErupting = false;
 	[SerializeField] private LayerMask layerMask;
+	[SerializeField] private SpriteRenderer sprite;
+	private Animator animator;
+
+	private void Start()
+	{
+		animator = sprite.gameObject.GetComponent<Animator>();
+		GetComponent<CircleCollider2D>().radius = 0.125f * transform.localScale.x;
+	}
 
 	public void StartEruption()
 	{
@@ -18,24 +26,28 @@ public class CrackedGround : MonoBehaviour
 
 	public void EruptionHitbox()
 	{
-		Collider2D playerInArea = Physics2D.OverlapCircle(transform.position, transform.localScale.x * 0.5f, layerMask); //Add boss layer later maybe to damage orb? Test!
+		Collider2D playerInArea = Physics2D.OverlapCircle(transform.position, 0.5f * transform.localScale.x, layerMask); //Add boss layer later maybe to damage orb? Test!
 		if (playerInArea != null)
 		{
 			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
 			playerInArea.GetComponent<IDamageable>()?.TakeDamage(damageToDeal);
 		}
-		Destroy(this.gameObject, 1f);
+	}
+
+	public void EruptionDone()
+	{
+		Destroy(this.gameObject);
 	}
 
 	IEnumerator Eruption()
 	{
 		isErupting = true;
-		SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
-		sprite.color = Color.green;
+
+		animator.SetTrigger("StartBuildup");
 
 		yield return new WaitForSeconds(0.5f);
 
-		EruptionHitbox();
+		animator.SetTrigger("StartEruption");
 
 		yield return new WaitForEndOfFrame();
 	}

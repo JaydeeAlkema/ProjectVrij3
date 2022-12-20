@@ -15,12 +15,12 @@ public class GetCrowdControlled : BTNode
 	{
 		if( enemyScript.beingCrowdControlled )
 		{
-			Debug.Log( "i got pulled" );
+			//Debug.Log( "i got pulled" );
 			ClearData("dashDestination");
 			ClearData( "dashDir" );
 			ClearData( "target" );
 			ClearData( "ready" );
-			enemyScript.beingDisplaced();
+			enemyScript.BeingDisplaced();
 			state = BTNodeState.RUNNING;
 			return state;
 		}

@@ -8,7 +8,7 @@ public class MeleeAttack : Ability
 	public bool burnAreaUpgrade = false;
 	public GameObject burningGround;
 	System.Timers.Timer attackTimer = new System.Timers.Timer();
-	private List<Collider2D> enemyList = new List<Collider2D>();
+	private List<GameObject> enemyList = new List<GameObject>();
 	private Collider2D[] enemiesInBox;
 	private bool hitDetecting = false;
 	private PlayerControler player;
@@ -35,26 +35,26 @@ public class MeleeAttack : Ability
 			AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
 		}
 		//player.IsAttackPositionLocked = true;
-		caller.CallCoroutine( TestCoroutine() );
+		caller.CallCoroutine(TestCoroutine());
 
 
 	}
 
-	public void DamageDetectedEnemies(Collider2D enemy)
+	public void DamageDetectedEnemies(GameObject enemy)
 	{
 		if (enemyList != null)
 		{
 			//Debug.Log("Starting enemy damaging");
-			if(enemy == null)
+			if (enemy == null)
 			{
 				enemyList.Remove(enemy);
 				return;
 			}
-			int damageToDeal = ( int )( damage * Random.Range( 0.8f, 1.2f ) );
-			if( enemy != null )
+			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
+			if (enemy != null)
 			{
-				enemy.GetComponent<IDamageable>()?.TakeDamage( damageToDeal + ( 20 * comboCounter ), 0 );
-				OnHitApplyStatusEffects( enemy.GetComponent<IDamageable>() );
+				enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal + (20 * comboCounter), 0);
+				OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
 			}
 			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
 		}
@@ -80,7 +80,7 @@ public class MeleeAttack : Ability
 		}
 		comboTimerCoroutine = ComboTimer();
 		caller.CallCoroutine(comboTimerCoroutine);
-		Debug.Log("Combo timer has been reset");
+		//Debug.Log("Combo timer has been reset");
 	}
 
 	public IEnumerator TestCoroutine()
@@ -97,7 +97,7 @@ public class MeleeAttack : Ability
 		if (comboCounter < 3)
 		{
 			thirdHit = false;
-			Debug.Log("Combo: " + comboCounter);
+			//Debug.Log("Combo: " + comboCounter);
 			player.AttackAnimation.GetComponent<SpriteRenderer>().material = player.materialDefault;
 
 			if (comboCounter == 2)
@@ -111,7 +111,7 @@ public class MeleeAttack : Ability
 		else
 		{
 			thirdHit = true;
-			Debug.Log("Full combo!");
+			//Debug.Log("Full combo!");
 			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3");
 			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 			anim.CallAbility(player);
@@ -161,10 +161,13 @@ public class MeleeAttack : Ability
 			{
 				foreach (Collider2D enemy in enemiesInBox)
 				{
-					if (!enemyList.Contains(enemy))
+					if (enemy != null)
 					{
-						enemyList.Add(enemy);
-						DamageDetectedEnemies(enemy);
+						if (!enemyList.Contains(enemy.gameObject))
+						{
+							enemyList.Add(enemy.gameObject);
+							DamageDetectedEnemies(enemy.gameObject);
+						}
 					}
 				}
 			}
@@ -186,6 +189,6 @@ public class MeleeAttack : Ability
 		yield return new WaitForSeconds(0.7f);
 
 		comboCounter = 0;
-		Debug.Log("Combo timer ends, combo counter is: " + comboCounter);
+		//Debug.Log("Combo timer ends, combo counter is: " + comboCounter);
 	}
 }
