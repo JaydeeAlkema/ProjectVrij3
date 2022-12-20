@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
@@ -225,7 +224,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				bufferCounterMelee -= Time.fixedDeltaTime;
+				bufferCounterMelee -= Time.deltaTime;
 			}
 			if (bufferCounterMelee > 0f) MeleeAttack();
 
@@ -236,7 +235,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				bufferCounterCast -= Time.fixedDeltaTime;
+				bufferCounterCast -= Time.deltaTime;
 			}
 			if (bufferCounterCast > 0f) RangedAttack();
 
@@ -253,7 +252,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				bufferCounterDash -= Time.fixedDeltaTime;
+				bufferCounterDash -= Time.deltaTime;
 			}
 			if (bufferCounterDash > 0f) DashAbility();
 
@@ -263,10 +262,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing && !isDying)
 		{
-			playerSprite.flipX = lookDir.x > 0 ? true : false;
+			playerSprite.flipX = lookDir.x > 0;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
+			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3(horizontal, vertical).normalized;
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
@@ -311,7 +310,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
 
-			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
+			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0;
 		}
 	}
 
