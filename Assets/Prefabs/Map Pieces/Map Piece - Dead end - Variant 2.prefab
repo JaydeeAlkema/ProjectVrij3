@@ -409,8 +409,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4159209644390549415}
-  - {fileID: 1347387471804011230}
+  - {fileID: 7309579113131470895}
+  - {fileID: 1668783300561028413}
   m_Father: {fileID: 6688237861213788212}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -495,7 +495,6 @@ Transform:
   m_Father: {fileID: 172752555122271033}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  deadEnd: {fileID: 0}
 --- !u!1 &4919469044214575349
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,7 +738,6 @@ MonoBehaviour:
   - {fileID: 1009304441209653588}
   - {fileID: 5788463179848998844}
   breakableObjectSpawnChance: 75
-  statueSpawnPoints: []
 --- !u!1 &8480794304754224811
 GameObject:
   m_ObjectHideFlags: 0
