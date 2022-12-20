@@ -217,6 +217,8 @@ public class RewardChoice : MonoBehaviour
 			meleeAttack.Distance += upgradeToGive.DistanceUpgrade;
 			meleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
 
+			GameManager.Instance.UiManager.MeleeUpgradeIcons.AddNewSpriteToIcons( upgradeToGive.UpgradeImageMelee );
+
 			// Remove the upgrade object
 			Destroy( this.gameObject );
 		}
@@ -280,7 +282,7 @@ public class RewardChoice : MonoBehaviour
 			rangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
 
 			//Dev UI text, remove later
-			GameManager.Instance.UiManager.AddDevText( 1, upgradeToGive.name );
+			GameManager.Instance.UiManager.RangedUpgradeIcons.AddNewSpriteToIcons(upgradeToGive.UpgradeImageRanged);
 
 			Destroy( this.gameObject );
 		}
