@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Image playerHitEffect;
 	[SerializeField] private float playerHitEffectDuration;
 	[SerializeField] private Canvas shaderCanvas;
-	[SerializeField] private RenderTexture miniMap;
+	[SerializeField] private GameObject map;
 	private String playerHitEffectPropertyName = "_Amount";
 	private Material playerHitEffectMaterial;
 
@@ -188,11 +188,11 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	public void AssignRenderTextureToMinimapCamera(Camera camera)
+	public void ToggleMapOverlay(bool isEnabled)
 	{
-		if(camera.targetTexture == null)
+		if (map.activeSelf != isEnabled)
 		{
-			camera.targetTexture = miniMap;
+			map.SetActive(isEnabled);
 		}
 	}
 

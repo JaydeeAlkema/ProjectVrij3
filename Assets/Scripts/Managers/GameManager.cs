@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,6 +31,8 @@ public class GameManager : MonoBehaviour
 	[Header("Player")]
 	[SerializeField] private GameObject playerInstance = null;
 	[SerializeField] private ScriptablePlayer scriptablePlayer = null;
+
+	[SerializeField] private GameObject minimapCamera = null;
 
 	public GameState currentGameState;
 	public GameState lastGamestate;
@@ -66,18 +69,28 @@ public class GameManager : MonoBehaviour
 			ChangeGameState(GameState.GameOver);
 		}
 
-		if(PlayerHP.value > playerHP.startValue)
+		if (PlayerHP.value > playerHP.startValue)
 		{
 			playerHP.value = playerHP.startValue;
 		}
 
-		if( Input.GetKeyDown( KeyCode.Escape ) )
+		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			TogglePauseGame();
 			uiManager.SetUIActive(3, isPaused);
+			uiManager.ToggleMapOverlay(false);
 		}
 
+		//Hold tab to show static dungeon map
+		if (Input.GetKeyDown(KeyCode.Tab) && !isPaused)
+		{
+			uiManager.ToggleMapOverlay(true);
+		}
 
+		if (Input.GetKeyUp(KeyCode.Tab))
+		{
+			uiManager.ToggleMapOverlay(false);
+		}
 	}
 
 	public void EnemyAggroCount(bool isAggro)
@@ -105,6 +118,23 @@ public class GameManager : MonoBehaviour
 	{
 		isPaused = pause;
 		Time.timeScale = isPaused ? 0f : 1f;
+	}
+
+	private void SetupMinimapCamera()
+	{
+		Bounds levelBounds = new Bounds();
+		foreach (KeyValuePair<GameObject, Vector2> mappiece in levelGenerator.MapPiecesInScene)
+		{
+			Bounds mappieceBounds = new Bounds()
+			{
+				size = levelGenerator.OverlapSize,
+				center = mappiece.Value
+			};
+			levelBounds.Encapsulate(mappieceBounds);
+		}
+		minimapCamera = GameObject.FindGameObjectWithTag("MinimapCamera");
+		minimapCamera.transform.position = new Vector3(levelBounds.center.x, levelBounds.center.y, -100);
+		minimapCamera.GetComponent<Camera>().orthographicSize = Mathf.Max(levelBounds.size.x, levelBounds.size.y) * 0.5f;
 	}
 
 	public void FetchDungeonReferences()
@@ -158,38 +188,38 @@ public class GameManager : MonoBehaviour
 		lastGamestate = currentGameState;
 		//if (newGameState != currentGameState)
 		//{
-			currentGameState = newGameState;
-			switch (currentGameState)
-			{
-				case GameState.Dungeon:
-					CurrentSoundState = SoundStateCrowded;
-					CurrentSoundState.SetValue();
-					AudioManager.Instance.PostEventGlobal(stopMusic);
-					Debug.Log("Stopping music.");
-					AudioManager.Instance.PostEventGlobal(startMusic);
-					Debug.Log("Starting music.");
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-				case GameState.GameOver:
-					StartCoroutine(GameOver());
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-				case GameState.Hub:
-					AudioManager.Instance.PostEventGlobal(stopMusic);
-					Debug.Log("Stopping music.");
-					PlayerHP.ResetValue();
-					ExpManager.ResetExp();
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-				case GameState.Menu:
-					//startMusic.Stop( AudioManager.Instance.gameObject );
-					AudioManager.Instance.PostEventGlobal(stopMusic);
-					Debug.Log("Stopping music.");
-					PlayerHP.ResetValue();
-					ExpManager.ResetExp();
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-			}
+		currentGameState = newGameState;
+		switch (currentGameState)
+		{
+			case GameState.Dungeon:
+				CurrentSoundState = SoundStateCrowded;
+				CurrentSoundState.SetValue();
+				AudioManager.Instance.PostEventGlobal(stopMusic);
+				Debug.Log("Stopping music.");
+				AudioManager.Instance.PostEventGlobal(startMusic);
+				Debug.Log("Starting music.");
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+			case GameState.GameOver:
+				StartCoroutine(GameOver());
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+			case GameState.Hub:
+				AudioManager.Instance.PostEventGlobal(stopMusic);
+				Debug.Log("Stopping music.");
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+			case GameState.Menu:
+				//startMusic.Stop( AudioManager.Instance.gameObject );
+				AudioManager.Instance.PostEventGlobal(stopMusic);
+				Debug.Log("Stopping music.");
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+		}
 		//}
 	}
 
@@ -204,6 +234,8 @@ public class GameManager : MonoBehaviour
 
 		yield return StartCoroutine(levelGenerator.Generate());
 		playerInstance.SetActive(true);
+		SetupMinimapCamera();
+		uiManager.ToggleMapOverlay(false);
 		ChangeGameState(GameState.Dungeon);
 
 		//Show dungeon HUD

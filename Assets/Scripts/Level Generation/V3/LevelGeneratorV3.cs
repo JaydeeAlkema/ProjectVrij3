@@ -63,6 +63,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 	private Dictionary<ConnectionPoint, Vector2> connectionPointsInScene = new Dictionary<ConnectionPoint, Vector2>();
 	private Vector2 overlapSize = new Vector2(20, 20);
 
+	public Dictionary<GameObject, Vector2> MapPiecesInScene { get => mapPiecesInScene; private set => mapPiecesInScene = value; }
+	public Vector2 OverlapSize { get => overlapSize; private set => overlapSize = value; }
+
 	private void Start()
 	{
 		if (GameManager.Instance) GameManager.Instance.FetchDungeonReferences();
