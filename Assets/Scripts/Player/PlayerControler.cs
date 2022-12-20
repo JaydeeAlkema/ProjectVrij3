@@ -534,6 +534,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	}
 
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if(isDashing && collision.gameObject.layer == LayerMask.NameToLayer("Breakable Objects"))
+		{
+			collision.GetComponent<IDamageable>()?.TakeDamage(1);
+		}
+	}
+
 	//void Die()
 	//{
 	//	isDying = true;
