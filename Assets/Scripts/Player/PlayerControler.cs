@@ -152,6 +152,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (Time.timeScale != 1f)
 		{
+			StopCoroutine("HitSlow");
 			Time.timeScale = 1f;
 		}
 	}
