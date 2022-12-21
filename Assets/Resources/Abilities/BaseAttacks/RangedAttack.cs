@@ -54,7 +54,8 @@ public class RangedAttack : Ability
 			proj.TurnOnTrail();
 			proj.Damage = damage + (int)chargeTime;
 			proj.LifeSpan = lifeSpan + chargeTime;
-			proj.Force = force + chargeTime;
+			proj.Force = force + (chargeTime/2);
+			proj.ChargeRadius = chargeTime / 50;
 			proj.CastedFrom = this;
 			CastedObject.transform.SetParent( null );
 		}

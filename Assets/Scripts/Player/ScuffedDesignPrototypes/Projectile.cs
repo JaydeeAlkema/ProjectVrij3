@@ -5,23 +5,25 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 	[SerializeField] private IAbility castedFrom;
-	public IAbility CastedFrom { get => castedFrom; set => castedFrom = value; }
 	[SerializeField] private GameObject projectileAnimation;
-	private float counter = 0f;
+	[SerializeField] private int typeOfLayer = 6;
 	[SerializeField] private float lifeSpan;
-	private int burnDamage;
-	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	[SerializeField] private GameObject trail = null;
 	[SerializeField] private GameObject explosion = null;
 	[SerializeField] private bool trailUpgrade = false;
-	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
 	[SerializeField] private float force;
-	public float Force { get => force; set => force = value; }
+	[SerializeField] private float chargeRadius;
 	private int damage;
+	public IAbility CastedFrom { get => castedFrom; set => castedFrom = value; }
+	private float counter = 0f;
+	private int burnDamage;
+	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
+	public bool TrailUpgrade { get => trailUpgrade; set => trailUpgrade = value; }
+	public float Force { get => force; set => force = value; }
 	public int Damage { get => damage; set => damage = value; }
-	[SerializeField] private int typeOfLayer = 6;
 	private GameObject addedTrail = null;
 	public int BurnDamage { get => burnDamage; set => burnDamage = value; }
+	public float ChargeRadius { get => chargeRadius; set => chargeRadius = value; }
 
 	private void Awake()
 	{
@@ -66,7 +68,7 @@ public class Projectile : MonoBehaviour
 		GameObject aoe = Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 		aoe.GetComponent<PlayerProjectileExplosionDamage>().CastedFrom = castedFrom;
 		aoe.GetComponent<PlayerProjectileExplosionDamage>().Damage = damage;
-		aoe.GetComponent<PlayerProjectileExplosionDamage>().Radius = castedFrom.BaseStats.CircleSize;
+		aoe.GetComponent<PlayerProjectileExplosionDamage>().Radius = castedFrom.BaseStats.CircleSize + chargeRadius;
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
