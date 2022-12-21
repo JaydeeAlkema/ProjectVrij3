@@ -124,6 +124,7 @@ public class MeleeAttack : Ability
 
 		hitDetecting = true;
 		yield return new WaitForFixedUpdate();
+		player.IsDashing = false;
 
 
 		//while ((player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl")) && player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
@@ -185,7 +186,7 @@ public class MeleeAttack : Ability
 		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
 		enemiesInBox = null;
-		player.IsDashing = false;
+
 		yield return null;
 	}
 
