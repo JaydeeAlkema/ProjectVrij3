@@ -16,6 +16,11 @@ public class Portal : MonoBehaviour
 		{
 			if (collision.gameObject.GetComponent<PlayerControler>())
 			{
+				if (currentSceneName == "Jaydee Testing Scene" && GameManager.Instance.CurrentDungeonFloor < GameManager.Instance.MaxDungeonFloor)
+				{
+					sceneToLoadName = currentSceneName;
+					GameManager.Instance.CurrentDungeonFloor++;
+				}
 				loadingNewScene = true;
 				Debug.Log("load new scene");
 				HubSceneManager.sceneManagerInstance.ChangeScene(sceneToLoadName, currentSceneName);
