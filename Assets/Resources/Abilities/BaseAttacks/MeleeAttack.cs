@@ -35,6 +35,9 @@ public class MeleeAttack : Ability
 			AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
 		}
 		//player.IsAttackPositionLocked = true;
+		player.IsDashing = true;
+		Vector2 dashDir = new Vector3( player.Horizontal, player.Vertical ).normalized;
+		Rb2d.velocity = dashDir.normalized * baseStats.DashSpeed;
 		caller.CallCoroutine(TestCoroutine());
 
 
@@ -122,6 +125,7 @@ public class MeleeAttack : Ability
 		hitDetecting = true;
 		yield return new WaitForFixedUpdate();
 
+
 		//while ((player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl")) && player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
 		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl"))
 		{
@@ -181,6 +185,7 @@ public class MeleeAttack : Ability
 		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
 		enemiesInBox = null;
+		player.IsDashing = false;
 		yield return null;
 	}
 
