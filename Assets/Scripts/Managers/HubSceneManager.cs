@@ -24,7 +24,7 @@ public class HubSceneManager : MonoBehaviour
 
 	public void ChangeScene(string sceneToLoad, string currentScene)
 	{
-		if ((GameManager.Instance.currentGameState == GameState.Dungeon || GameManager.Instance.currentGameState == GameManager.Instance.lastGamestate) && GameManager.Instance.PlayerInstance != null)
+		if ((GameManager.Instance.CurrentGameState == GameState.Dungeon || GameManager.Instance.CurrentGameState == GameManager.Instance.LastGamestate) && GameManager.Instance.PlayerInstance != null)
 		{
 			loadScene = sceneToLoad;
 			if (GameManager.Instance.ScriptablePlayer != null) { GameManager.Instance.ScriptablePlayer = null; }

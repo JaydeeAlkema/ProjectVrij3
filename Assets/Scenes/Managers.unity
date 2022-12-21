@@ -415,6 +415,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be8c03bce8b49de47bf05eba024f949c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startUpgradeCount: 1
+  upgradeCount: 0
   pointToLevelBase: 1
   pointToLevel: 0
   levelCostModifier: 1.2
@@ -464,7 +466,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1760711958
 MonoBehaviour:
@@ -478,6 +480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12756184773945a4eb9d8ef4f22bef3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerValues: {fileID: 0}
+  player: {fileID: 0}
 --- !u!1 &1815278055
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +512,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1815278057
 MonoBehaviour:
@@ -522,8 +526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d16b6cf2318ddf74eb7e7e41dcbb4bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHP: {fileID: 11400000, guid: c577354bd3f8d04449749e16dc6498ac, type: 2}
-  playerSpeed: {fileID: 11400000, guid: a68f778a3ea0dc348b38d85afbd4f57e, type: 2}
   isPaused: 0
   SoundStateCalm:
     idInternal: 0
@@ -559,5 +561,8 @@ MonoBehaviour:
   cheatsManager: {fileID: 0}
   playerInstance: {fileID: 0}
   scriptablePlayer: {fileID: 0}
+  playerHP: {fileID: 11400000, guid: c577354bd3f8d04449749e16dc6498ac, type: 2}
+  playerSpeed: {fileID: 11400000, guid: a68f778a3ea0dc348b38d85afbd4f57e, type: 2}
+  minimapCamera: {fileID: 0}
   currentGameState: 0
   lastGamestate: 0
