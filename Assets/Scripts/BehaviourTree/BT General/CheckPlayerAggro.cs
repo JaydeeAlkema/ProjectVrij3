@@ -32,8 +32,7 @@ public class CheckPlayerAggro : BTNode
 			{
 				Vector2 dir = playerCollider.transform.position - rb2d.transform.position;
 				RaycastHit2D hit = Physics2D.Raycast(rb2d.transform.position, dir, dir.magnitude, enemyScript.UnwalkableDetection);
-				Debug.DrawRay(rb2d.transform.position, dir, Color.yellow, 0.1f);
-				Debug.Log(hit.point);
+				//Debug.DrawRay(rb2d.transform.position, dir, Color.yellow, 0.1f);
 
 				if (hit.point != Vector2.zero)
 				{
@@ -42,7 +41,7 @@ public class CheckPlayerAggro : BTNode
 					return state;
 				}
 
-				Debug.DrawRay(rb2d.transform.position, dir, Color.white, 1f);
+				//Debug.DrawRay(rb2d.transform.position, dir, Color.white, 1f);
 				parent.parent.SetData("target", playerCollider.transform);
 				enemyScript.Target = playerCollider.transform;
 				if (!enemyScript.IsAggro)
