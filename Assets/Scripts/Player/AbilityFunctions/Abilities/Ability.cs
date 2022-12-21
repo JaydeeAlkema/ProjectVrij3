@@ -19,6 +19,8 @@ public abstract class Ability : IAbility
 	protected AbilityScriptable baseStats;
 	protected float critChance;
 	protected bool init = true;
+	protected bool charging = false;
+	protected float chargeTime;
 	protected Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 	public AbilityScriptable BaseStats { get => baseStats; set => baseStats = value; }
 	public PlayerControler Player { get; set; }
@@ -48,6 +50,8 @@ public abstract class Ability : IAbility
 	public bool Init { get => init; set => init = value; }
 	public IAbility ability { get; set; }
 	public bool CooledDown { get; set; }
+	public bool Charging { get => charging; set => charging =  value ; }
+	public float ChargeTime { get => chargeTime; set => chargeTime = value; }
 
 	public virtual void CallAbility(PlayerControler _player) { }
 	public virtual void CallAbility( bool resetCooldown ) { }

@@ -11,7 +11,7 @@ public class UpgradeScriptable : ScriptableObject
 	[SerializeField] private string upgradeName;
 	[SerializeField] private Sprite upgradeImageMelee;
 	[SerializeField] private Sprite upgradeImageRanged;
-	[SerializeField] private TMP_Text toolTipText;
+	[SerializeField] private string toolTipText;
 
 	[Header("Upgrade Stats")]
 	[SerializeField] private int damageUpgrade;
@@ -30,6 +30,6 @@ public class UpgradeScriptable : ScriptableObject
 	public float CircleSizeUpgrade { get => circleSizeUpgrade; set => circleSizeUpgrade = value; }
 	public float DistanceUpgrade { get => distanceUpgrade; set => distanceUpgrade = value; }
 	public StatusEffectType StatusEffect { get => statusEffect; set => statusEffect = value; }
-	public TMP_Text ToolTipInfo { get => toolTipText; set => toolTipText = value; }
+	public string ToolTipInfo { get => toolTipText; set => toolTipText = value; }
 	public string UpgradeName { get => upgradeName; set => upgradeName = value; }
 }

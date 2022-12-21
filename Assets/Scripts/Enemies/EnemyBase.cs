@@ -86,11 +86,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			materialDefault = enemySprite.material;
 		}
-
-		if (LevelManager.LevelManagerInstance != null)
-		{
-			LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
-		}
+		ListenToEvents();
+		
 	}
 
 	public void Awake()
@@ -132,6 +129,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (LevelManager.LevelManagerInstance != null)
 		{
 			LevelManager.LevelManagerInstance.OnLevelIncrease -= OnLeveled;
+		}
+	}
+
+	protected virtual void ListenToEvents()
+	{
+		if( LevelManager.LevelManagerInstance != null )
+		{
+			LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
 		}
 	}
 
@@ -299,15 +304,17 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public virtual void OnLeveled(int level , float dificultyModifier)
 	{
-		if( expAmountBase >= expAmount )
+		Debug.Log( "got leveled with level: " + level + " and difficultymodifier: " + dificultyModifier );
+		if( expAmountBase <= expAmount )
 		{
 			expAmount = Mathf.RoundToInt( expAmountBase * Mathf.Pow( dificultyModifier, level ) );
 		}
-		if(damageBase >= damage)
+		if(damageBase <= damage)
 		{
 			damage = Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) );
+			Debug.Log( "damage should be: " + Mathf.RoundToInt( damageBase * Mathf.Pow( dificultyModifier, level ) ) );
 		}
-		if( baseHealthPoints >= healthPoints )
+		if( baseHealthPoints <= healthPoints )
 		{
 			healthPoints = Mathf.RoundToInt( baseHealthPoints * Mathf.Pow( dificultyModifier, level ) );
 		}

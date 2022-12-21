@@ -12,6 +12,7 @@ public class EmpowerEnemiesFunctionality : MonoBehaviour
 	//[SerializeField] private int currentPointCost; //Increase cost, keep updated
 
 	[SerializeField] private int healOnPointSpend;
+	[SerializeField] private TMP_Text upgradeCost;
 	[SerializeField] private TMP_Text currentLevelText;
 	[SerializeField] private TMP_Text newLevelText;
 	[SerializeField] private List<TMP_Text> currentStatTexts = new List<TMP_Text>();
@@ -44,11 +45,12 @@ public class EmpowerEnemiesFunctionality : MonoBehaviour
 	void UpdateEmpowerUI()
 	{
 		GameManager.Instance.SetPauseState(true);
+		upgradeCost.text = levelMan.PointToLevel.ToString();
 		currentLevelText.text = levelMan.CurrentLevel.ToString();
 		int newLevelNumber = levelMan.CurrentLevel + 1;
 		newLevelText.text = newLevelNumber.ToString();
-		currentStat = ((levelMan.DificultyModifier - 1f) * 100f) * levelMan.CurrentLevel;
-		increasedStat = ((levelMan.DificultyModifier - 1f) * 100f) * newLevelNumber;
+		currentStat =((Mathf.Pow(levelMan.DificultyModifier , levelMan.CurrentLevel)) -1f) * 100;
+		increasedStat = ((Mathf.Pow(levelMan.DificultyModifier , newLevelNumber)) -1f) * 100;
 		foreach (TMP_Text statText in currentStatTexts)
 		{
 			statText.text = currentStat.ToString() + "%";

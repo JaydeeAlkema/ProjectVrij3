@@ -34,6 +34,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	[SerializeField] Animator animPlayer;
 
+	//hold right mousebutton
+	[SerializeField] private float holdTime = 0;
+
 	//[SerializeField] PlayerHealthBar healthBar;
 	private float selfSlowTime = 0.25f;
 	private float selfSlowCounter = 0f;
@@ -229,15 +232,36 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (bufferCounterMelee > 0f) MeleeAttack();
 
 			//Cast input
-			if (Input.GetMouseButtonDown(1))
+			if(Input.GetMouseButtonDown(1)) { holdTime = 0; }
+			if( Input.GetMouseButton( 1 ) )
 			{
-				bufferCounterCast = bufferTimeCast;
+				if( currentRangedAttack.CooledDown )
+				{
+					Debug.Log( "Holding" );
+					currentRangedAttack.Charging = true;
+					holdTime++;
+					currentRangedAttack.ChargeTime = holdTime;
+					
+				}
+				else
+				{
+					Debug.Log( "fizzle******" );
+				}
 			}
 			else
 			{
-				bufferCounterCast -= Time.deltaTime;
+				if(holdTime <= 5){ currentRangedAttack.Charging = false; }
+				if (Input.GetMouseButtonUp(1))
+				{
+					bufferCounterCast = bufferTimeCast;
+				}
+				else
+				{
+					bufferCounterCast -= Time.deltaTime;
+				}
+				if (bufferCounterCast > 0f) RangedAttack();
+				holdTime = 0;
 			}
-			if (bufferCounterCast > 0f) RangedAttack();
 
 
 			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
@@ -288,6 +312,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			selfSlowCounter += Time.deltaTime;
 			selfSlowMultiplier = 0.0f;
+		}
+		//slow player on charging
+		else if(holdTime > 5)
+		{
+			selfSlowMultiplier = 0.5f;
 		}
 		//Speed-up player while melee attacking
 		else if (isAttackPositionLocked)

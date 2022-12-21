@@ -12,7 +12,7 @@ public class AbilityScriptable : ScriptableObject
 	[Header( "Ability Info" )]
 	[SerializeField] private string abilityName;
 	[SerializeField] private Sprite abilityIcon;
-	[SerializeField] private TMP_Text toolTipText;
+	[SerializeField] private string toolTipText;
 	#endregion
 	#region basestats
 	[Header("BaseStats")]
@@ -88,7 +88,7 @@ public class AbilityScriptable : ScriptableObject
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public AK.Wwise.Event AbilitySound1 { get => abilitySound1; set => abilitySound1 = value; }
 	public Sprite AbilityIcon { get => abilityIcon; set => abilityIcon = value; }
-	public TMP_Text ToolTipText { get => toolTipText; set => toolTipText = value; }
+	public string ToolTipText { get => toolTipText; set => toolTipText = value; }
 	public string AbilityName { get => abilityName; set => abilityName = value; }
 
 	public int markType;
