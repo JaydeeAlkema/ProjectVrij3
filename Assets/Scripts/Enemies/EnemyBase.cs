@@ -343,7 +343,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		this.pullPoint = pullPoint;
 	}
 
-	void DropExpOrbsOnDeath()
+	protected void DropExpOrbsOnDeath()
 	{
 		List<GameObject> orbList = new List<GameObject>();
 
