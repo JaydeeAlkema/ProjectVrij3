@@ -86,11 +86,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		{
 			materialDefault = enemySprite.material;
 		}
-
-		if (LevelManager.LevelManagerInstance != null)
-		{
-			LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
-		}
+		ListenToEvents();
+		
 	}
 
 	public void Awake()
@@ -132,6 +129,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (LevelManager.LevelManagerInstance != null)
 		{
 			LevelManager.LevelManagerInstance.OnLevelIncrease -= OnLeveled;
+		}
+	}
+
+	protected virtual void ListenToEvents()
+	{
+		if( LevelManager.LevelManagerInstance != null )
+		{
+			LevelManager.LevelManagerInstance.OnLevelIncrease += OnLeveled;
 		}
 	}
 

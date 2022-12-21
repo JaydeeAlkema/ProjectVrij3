@@ -47,6 +47,11 @@ public class MiniBoss1 : BossBase
 		SyncOrbAnimations();
 	}
 
+	protected override void ListenToEvents()
+	{
+		//do not listen
+	}
+
 	public override void SpawnMobs()
 	{
 		foreach (Vector2 spawnPoint in innerSpawnPoints)
