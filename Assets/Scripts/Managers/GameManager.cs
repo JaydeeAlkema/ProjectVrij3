@@ -32,7 +32,10 @@ public class GameManager : MonoBehaviour
 	[SerializeField, BoxGroup("Runtime References")] private GameState currentGameState;
 	[SerializeField, BoxGroup("Runtime References")] private GameState lastGamestate;
 	[SerializeField, BoxGroup("Runtime References")] private int numberOfEnemiesAggrod = 0;
+	[SerializeField, BoxGroup("Runtime References")] private int maxDungeonFloor = 3;
+	[SerializeField, BoxGroup("Runtime References")] private int currentDungeonFloor = 1;
 
+	#region Properties
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
 	public UIManager UiManager { get => uiManager; private set => uiManager = value; }
@@ -44,6 +47,9 @@ public class GameManager : MonoBehaviour
 	public int NumberOfEnemiesAggrod { get => numberOfEnemiesAggrod; set => numberOfEnemiesAggrod = value; }
 	public GameState CurrentGameState { get => currentGameState; set => currentGameState = value; }
 	public GameState LastGamestate { get => lastGamestate; set => lastGamestate = value; }
+	public int MaxDungeonFloor { get => maxDungeonFloor; set => maxDungeonFloor = value; }
+	public int CurrentDungeonFloor { get => currentDungeonFloor; set => currentDungeonFloor = value; }
+	#endregion
 
 	#region Unity Callbacks
 	private void Awake()

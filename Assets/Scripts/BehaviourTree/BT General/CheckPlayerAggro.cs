@@ -28,9 +28,21 @@ public class CheckPlayerAggro : BTNode
 			}
 
 			Collider2D playerCollider = Physics2D.OverlapCircle(rb2d.transform.position, aggroRange, layerMask);
-
 			if (playerCollider != null)
 			{
+				Vector2 dir = playerCollider.transform.position - rb2d.transform.position;
+				RaycastHit2D hit = Physics2D.Raycast(rb2d.transform.position, dir, dir.magnitude, enemyScript.UnwalkableDetection);
+				Debug.DrawRay(rb2d.transform.position, dir, Color.yellow, 0.1f);
+				Debug.Log(hit.point);
+
+				if (hit.point != Vector2.zero)
+				{
+					state = BTNodeState.FAILURE;
+					//Debug.Log("TARGET NOT FOUND (RANGE: " + aggroRange + ")");
+					return state;
+				}
+
+				Debug.DrawRay(rb2d.transform.position, dir, Color.white, 1f);
 				parent.parent.SetData("target", playerCollider.transform);
 				enemyScript.Target = playerCollider.transform;
 				if (!enemyScript.IsAggro)
@@ -39,12 +51,10 @@ public class CheckPlayerAggro : BTNode
 					GameManager.Instance.EnemyAggroCount(true);
 				}
 			}
-
 			state = BTNodeState.FAILURE;
 			//Debug.Log("TARGET NOT FOUND (RANGE: " + aggroRange + ")");
 			return state;
 		}
-
 		state = BTNodeState.SUCCESS;
 		//Debug.Log("TARGET ACQUIRED");
 		return state;
