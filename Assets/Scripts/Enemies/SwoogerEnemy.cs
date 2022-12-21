@@ -124,7 +124,11 @@ public class SwoogerEnemy : EnemyBase
 
 	public override void Die()
 	{
-		GameManager.Instance.ExpManager.AddExp(ExpAmount);
+		if (GameManager.Instance != null)
+		{
+			DropExpOrbsOnDeath();
+			GameManager.Instance.EnemyAggroCount(false);
+		}
 		StopAllCoroutines();
 		Time.timeScale = 1f;
 

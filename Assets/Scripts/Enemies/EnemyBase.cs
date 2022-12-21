@@ -25,6 +25,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 	[SerializeField] protected GameObject castMarkDecal;
 	[SerializeField] protected GameObject meleeMarkDecal;
 
+	[SerializeField] private GameObject tinyOrb;
+	[SerializeField] private GameObject smallOrb;
+	[SerializeField] private GameObject mediumOrb;
+	[SerializeField] private GameObject bigOrb;
+
 	public Animator enemyAnimator;
 
 	[SerializeField] private bool hasHitbox = true;
@@ -293,7 +298,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		GameObject poof = Instantiate(deathPoof, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 20)));
 		if (GameManager.Instance != null)
 		{
-			GameManager.Instance.ExpManager.AddExp(expAmount);
+			//GameManager.Instance.ExpManager.AddExp(expAmount);
+			DropExpOrbsOnDeath();
 			GameManager.Instance.EnemyAggroCount(false);
 		}
 		StopAllCoroutines();
@@ -342,6 +348,48 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		beingCrowdControlled = true;
 		Physics.IgnoreLayerCollision(avoidEnemyLayerMask.value, avoidEnemyLayerMask.value, false);
 		this.pullPoint = pullPoint;
+	}
+
+	protected void DropExpOrbsOnDeath()
+	{
+		List<GameObject> orbList = new List<GameObject>();
+
+		// Calculate the number of big orb drops
+		int numBigOrbs = expAmount / 50;
+		for (int i = 0; i < numBigOrbs; i++)
+		{
+			orbList.Add(bigOrb);
+		}
+		expAmount -= numBigOrbs * 50;
+
+		// Calculate the number of medium orb drops
+		int numMediumOrbs = expAmount / 20;
+		for (int i = 0; i < numMediumOrbs; i++)
+		{
+			orbList.Add(mediumOrb);
+		}
+		expAmount -= numMediumOrbs * 20;
+
+		// Calculate the number of small orb drops
+		int numSmallOrbs = expAmount / 5; // Divide by 5
+		for (int i = 0; i < numSmallOrbs; i++)
+		{
+			orbList.Add(smallOrb);
+		}
+		expAmount -= numSmallOrbs * 5;
+
+		// Calculate the number of tiny orb drops
+		int numTinyOrbs = expAmount;
+		for (int i = 0; i < numTinyOrbs; i++)
+		{
+			orbList.Add(tinyOrb);
+		}
+
+		// Spawn exp orbs
+		foreach (GameObject orb in orbList)
+		{
+			Instantiate(orb, transform.position, transform.rotation);
+		}
 	}
 
 	public IEnumerator HitStop(float duration)
