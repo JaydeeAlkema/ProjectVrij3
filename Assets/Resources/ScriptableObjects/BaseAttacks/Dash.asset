@@ -24,8 +24,8 @@ MonoBehaviour:
   baseForce: 30
   baseBoxSize: {x: 4, y: 6}
   baseCircleSize: 0
-  baseDashSpeed: 30
-  baseDashDuration: 0.13
+  baseDashSpeed: 25
+  baseDashDuration: 0.2
   baseAttackTime: 200
   baseTrailUpgrade: 0
   baseBurnDamage: 1
@@ -48,8 +48,8 @@ MonoBehaviour:
   force: 30
   burnObject: {fileID: 0}
   trailUpgrade: 0
-  dashSpeed: 2
-  dashDuration: 1
+  dashSpeed: 30
+  dashDuration: 0.2
   attackTime: 200
   markHits: 1
   burnDamage: 1

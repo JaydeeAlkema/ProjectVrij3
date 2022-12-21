@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
@@ -152,6 +151,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (Time.timeScale != 1f)
 		{
+			StopCoroutine("HitSlow");
 			Time.timeScale = 1f;
 		}
 	}
@@ -182,11 +182,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentDash = currentDash;
 			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
-
-			if (GameManager.Instance != null)
-			{
-				GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
-			}
+		}
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
 		}
 	}
 
@@ -225,7 +224,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				bufferCounterMelee -= Time.fixedDeltaTime;
+				bufferCounterMelee -= Time.deltaTime;
 			}
 			if (bufferCounterMelee > 0f) MeleeAttack();
 
@@ -236,7 +235,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				bufferCounterCast -= Time.fixedDeltaTime;
+				bufferCounterCast -= Time.deltaTime;
 			}
 			if (bufferCounterCast > 0f) RangedAttack();
 
@@ -253,7 +252,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				bufferCounterDash -= Time.fixedDeltaTime;
+				bufferCounterDash -= Time.deltaTime;
 			}
 			if (bufferCounterDash > 0f) DashAbility();
 
@@ -263,10 +262,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing && !isDying)
 		{
-			playerSprite.flipX = lookDir.x > 0 ? true : false;
+			playerSprite.flipX = lookDir.x > 0;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
+			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3(horizontal, vertical).normalized;
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
@@ -311,7 +310,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
 
-			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
+			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0;
 		}
 	}
 
@@ -438,7 +437,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (GameManager.Instance != null)
 		{
-			if (!invulnerable && GameManager.Instance.currentGameState == GameState.Dungeon)
+			if (!invulnerable && GameManager.Instance.CurrentGameState == GameState.Dungeon)
 			{
 				AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 				GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
@@ -451,6 +450,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				outOfCombatCounter = 0f;
 				StartCoroutine(PlayerIFrames(hitInvulTime));
 				GameManager.Instance.UiManager.PlayerHitScreenEffect();
+				CameraShake.Instance.ShakeCamera(1f, 0.05f);
 			}
 			else //If in testing scene, damage visuals without changing HP
 			{
@@ -531,6 +531,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public void RemoveStatusEffect(IStatusEffect statusEffect)
 	{
 
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (isDashing && collision.gameObject.layer == LayerMask.NameToLayer("Breakable Objects"))
+		{
+			collision.GetComponent<IDamageable>()?.TakeDamage(1);
+		}
 	}
 
 	//void Die()

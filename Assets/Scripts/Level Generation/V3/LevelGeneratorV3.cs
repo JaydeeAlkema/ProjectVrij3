@@ -63,6 +63,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 	private Dictionary<ConnectionPoint, Vector2> connectionPointsInScene = new Dictionary<ConnectionPoint, Vector2>();
 	private Vector2 overlapSize = new Vector2(20, 20);
 
+	public Dictionary<GameObject, Vector2> MapPiecesInScene { get => mapPiecesInScene; private set => mapPiecesInScene = value; }
+	public Vector2 OverlapSize { get => overlapSize; private set => overlapSize = value; }
+
 	private void Start()
 	{
 		if (GameManager.Instance) GameManager.Instance.FetchDungeonReferences();
@@ -190,6 +193,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 		SpawnEnemies();
 		AddDeadEnds();
 		SpawnLevelStatue();
+		DecorateLevel();
 
 		// Set GridGraph position and size.
 		Bounds mapBounds = GetMaxBounds(connectedMapPiecesParent.gameObject);
@@ -540,7 +544,14 @@ public class LevelGeneratorV3 : MonoBehaviour
 			Instantiate(levelStatuePrefab, levelStatueSpawnPoint.transform.position, Quaternion.identity, interactablesParent);
 		}
 	}
-
+	private void DecorateLevel()
+	{
+		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+		{
+			MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
+			if (mapPiece != null) mapPiece.Decorate();
+		}
+	}
 
 	#region Helper Functions
 	[Button]

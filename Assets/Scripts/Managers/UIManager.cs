@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Image playerHitEffect;
 	[SerializeField] private float playerHitEffectDuration;
 	[SerializeField] private Canvas shaderCanvas;
+	[SerializeField] private GameObject map;
 	[SerializeField] private IconTray meleeUpgradeIcons;
 	[SerializeField] private IconTray rangedUpgradeIcons;
 	private String playerHitEffectPropertyName = "_Amount";
@@ -188,6 +189,14 @@ public class UIManager : MonoBehaviour
 		if (shaderCanvas.worldCamera == null)
 		{
 			shaderCanvas.worldCamera = camera;
+		}
+	}
+
+	public void ToggleMapOverlay(bool isEnabled)
+	{
+		if (map.activeSelf != isEnabled)
+		{
+			map.SetActive(isEnabled);
 		}
 	}
 
