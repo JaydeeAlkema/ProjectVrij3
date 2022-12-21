@@ -9,33 +9,29 @@ public class GameManager : MonoBehaviour
 {
 	private static GameManager instance;
 
-	[SerializeField, Expandable] private ScriptableInt playerHP;
-	[SerializeField, Expandable] private ScriptableFloat playerSpeed;
-	[SerializeField] private bool isPaused = false;
-	[SerializeField] private AK.Wwise.State SoundStateCalm;
-	[SerializeField] private AK.Wwise.State SoundStateCrowded;
-	[SerializeField] private AK.Wwise.State CurrentSoundState;
-	[SerializeField] private AK.Wwise.Event startMusic;
-	[SerializeField] private AK.Wwise.Event stopMusic;
+	[SerializeField, BoxGroup("Audio")] private bool isPaused = false;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.State SoundStateCalm;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.State SoundStateCrowded;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.State CurrentSoundState;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.Event startMusic;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.Event stopMusic;
 
-	[SerializeField] private int numberOfEnemiesAggrod = 0;
+	[SerializeField, BoxGroup("Managers")] private LevelGeneratorV3 levelGenerator = null;
+	[SerializeField, BoxGroup("Managers")] private HubSceneManager HubSceneManager = null;
+	[SerializeField, BoxGroup("Managers")] private ExpManager expManager = null;
+	[SerializeField, BoxGroup("Managers")] private UIManager uiManager = null;
+	[SerializeField, BoxGroup("Managers")] private CheatsManager cheatsManager = null;
 
+	[SerializeField, BoxGroup("Player")] private GameObject playerInstance = null;
+	[SerializeField, BoxGroup("Player")] private ScriptablePlayer scriptablePlayer = null;
+	[SerializeField, BoxGroup("Player")] private ScriptableInt playerHP;
+	[SerializeField, BoxGroup("Player")] private ScriptableFloat playerSpeed;
 
-	[Header("Managers")]
-	[SerializeField] private LevelGeneratorV3 levelGenerator = null;
-	[SerializeField] private HubSceneManager HubSceneManager = null;
-	[SerializeField] private ExpManager expManager = null;
-	[SerializeField] private UIManager uiManager = null;
-	[SerializeField] private CheatsManager cheatsManager = null;
+	[SerializeField, BoxGroup("Minimap")] private GameObject minimapCamera = null;
 
-	[Header("Player")]
-	[SerializeField] private GameObject playerInstance = null;
-	[SerializeField] private ScriptablePlayer scriptablePlayer = null;
-
-	[SerializeField] private GameObject minimapCamera = null;
-
-	public GameState currentGameState;
-	public GameState lastGamestate;
+	[SerializeField, BoxGroup("Runtime References")] private GameState currentGameState;
+	[SerializeField, BoxGroup("Runtime References")] private GameState lastGamestate;
+	[SerializeField, BoxGroup("Runtime References")] private int numberOfEnemiesAggrod = 0;
 
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
@@ -46,6 +42,8 @@ public class GameManager : MonoBehaviour
 	public ScriptableFloat PlayerSpeed { get => playerSpeed; set => playerSpeed = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
 	public int NumberOfEnemiesAggrod { get => numberOfEnemiesAggrod; set => numberOfEnemiesAggrod = value; }
+	public GameState CurrentGameState { get => currentGameState; set => currentGameState = value; }
+	public GameState LastGamestate { get => lastGamestate; set => lastGamestate = value; }
 
 	#region Unity Callbacks
 	private void Awake()

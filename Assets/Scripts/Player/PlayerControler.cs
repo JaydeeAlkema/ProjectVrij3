@@ -437,7 +437,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (GameManager.Instance != null)
 		{
-			if (!invulnerable && GameManager.Instance.currentGameState == GameState.Dungeon)
+			if (!invulnerable && GameManager.Instance.CurrentGameState == GameState.Dungeon)
 			{
 				AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 				GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
@@ -535,7 +535,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(isDashing && collision.gameObject.layer == LayerMask.NameToLayer("Breakable Objects"))
+		if (isDashing && collision.gameObject.layer == LayerMask.NameToLayer("Breakable Objects"))
 		{
 			collision.GetComponent<IDamageable>()?.TakeDamage(1);
 		}

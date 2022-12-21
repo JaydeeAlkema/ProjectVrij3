@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraToMouseFollow : MonoBehaviour
@@ -13,7 +11,7 @@ public class CameraToMouseFollow : MonoBehaviour
 	{
 		if (GameManager.Instance != null)
 		{
-			if (!GameManager.Instance.IsPaused && GameManager.Instance.currentGameState != GameState.GameOver)
+			if (!GameManager.Instance.IsPaused && GameManager.Instance.CurrentGameState != GameState.GameOver)
 			{
 
 				Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);

@@ -185,71 +185,6 @@ Transform:
   m_Father: {fileID: 1726747652}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &178882625
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 178882626}
-  - component: {fileID: 178882627}
-  m_Layer: 0
-  m_Name: Level Generator V2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &178882626
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178882625}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1343459905}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &178882627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178882625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9e42f3fb90bde74e9f5eb3aa764b35c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SLGS: {fileID: 11400000, guid: 167b10d332259dc4ebdff90e12601837, type: 2}
-  seed: 0
-  chunks: []
-  path: []
-  rooms: []
-  decorations: []
-  astarData:
-    dataString: 
-    upgradeData: 
-    file_cachedStartup: {fileID: 0}
-    data_cachedStartup: 
-    cacheStartup: 0
-  chunksParent: {fileID: 10108052}
-  roomsParent: {fileID: 1345135754}
-  pathwaysParent: {fileID: 1618383058}
-  defaultSpriteMaterial: {fileID: 2100000, guid: c75dcee266e4a654d96fd7f804fcc6ba, type: 2}
-  showGizmos: 0
-  diagnosticTimes: []
-  totalGenerationTimeInMilliseconds: 0
-  bossFightPortal: {fileID: 7033657127096513241, guid: 35d4ecfc122a8b6428c3102f1d2565eb, type: 3}
-  levelUpStatue: {fileID: 1038451240231863062, guid: b55da232d2716e04d8f31473bc19baa2, type: 3}
 --- !u!1 &210837384
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,67 +216,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &264922598
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 264922599}
-  - component: {fileID: 264922600}
-  m_Layer: 0
-  m_Name: Level Generator V1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &264922599
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 264922598}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1343459905}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &264922600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 264922598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e817404c63c0fbc4e8711b3cd265498c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 1197919917
-  roomCount: {x: 24, y: 30}
-  roomWidth: {x: 9, y: 17}
-  roomHeight: {x: 9, y: 17}
-  pathwayLength: {x: 18, y: 23}
-  groundSprites:
-  - {fileID: 21300000, guid: 8d6ce6728c56ed344b60ae53bdf123d4, type: 3}
-  wallSprites:
-  - {fileID: 21300000, guid: d6ccebcb9a2a9594f980bda944759e09, type: 3}
-  innerCornerWallSprites:
-  - {fileID: 21300000, guid: 845fef7591ce91242994bc292ab90509, type: 3}
-  outerCornerWallSprites:
-  - {fileID: 21300000, guid: 4fa51ec8ac209c04a9359c21651821b1, type: 3}
-  mainDungeonAssetsParent: {fileID: 1726747652}
-  drawGizmos: 1
-  pathwayGizmoPlacementSpeed: 0
-  roomGizmoTilePlacementSpeed: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,8 +609,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 264922599}
-  - {fileID: 178882626}
   - {fileID: 1752952304}
   - {fileID: 1269124203}
   m_Father: {fileID: 0}
