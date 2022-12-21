@@ -5896,16 +5896,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expBarSlider: {fileID: 2487521904893554837}
-  hpBarSlider: {fileID: 1079074818506147720}
-  pointText: {fileID: 1389322777}
-  hpAmountText: {fileID: 708694186}
   expAmountText: {fileID: 1279037890}
+  pointText: {fileID: 1389322777}
+  hpBarSlider: {fileID: 1079074818506147720}
+  hpBarSliderDelayed: {fileID: 1079074818506147719}
+  hpAmountText: {fileID: 708694186}
+  barIsMoving: 0
+  hpBarSliderDelayedTime: 2
   playerHitEffect: {fileID: 821918985}
   playerHitEffectDuration: 0.5
   shaderCanvas: {fileID: 1747034432}
   map: {fileID: 1265061576}
   meleeUpgradeIcons: {fileID: 364874844}
   rangedUpgradeIcons: {fileID: 1088969426}
+  DevUIComponents:
+  - {fileID: 1253026354}
+  - {fileID: 1849282339}
   uiStates:
   - {fileID: 1266266371}
   - {fileID: 786431209}
@@ -5914,9 +5920,6 @@ MonoBehaviour:
   - {fileID: 1923676933}
   - {fileID: 1787528486}
   - {fileID: 1232222160}
-  DevUIComponents:
-  - {fileID: 1253026354}
-  - {fileID: 1849282339}
   abilityUIElements:
   - abilityIcon: {fileID: 5558382899175781267}
     cooldownClock: {fileID: 5558382899175781266}
@@ -6446,9 +6449,25 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1378954249030125184, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4042872705956893245, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
       propertyPath: m_Name
       value: PlayerHPBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046798720686003763, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046798720686003763, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144265014603751298, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
+      propertyPath: m_Value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7597371418352665888, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
       propertyPath: m_Pivot.x
@@ -6542,6 +6561,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7597371418352665888, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
   m_PrefabInstance: {fileID: 1079074818506147717}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1079074818506147719 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1378954249030125184, guid: 322529e2560d2664da70cf73aee304ef, type: 3}
+  m_PrefabInstance: {fileID: 1079074818506147717}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1079074818506147720 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6144265014603751298, guid: 322529e2560d2664da70cf73aee304ef, type: 3}

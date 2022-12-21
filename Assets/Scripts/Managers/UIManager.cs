@@ -1,32 +1,36 @@
+using NaughtyAttributes;
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-	[SerializeField] private Slider expBarSlider;
-	[SerializeField] private Slider hpBarSlider;
-	[SerializeField] private TMP_Text pointText;
-	[SerializeField] private TMP_Text hpAmountText;
-	[SerializeField] private TMP_Text expAmountText;
-	[SerializeField] private Image playerHitEffect;
-	[SerializeField] private float playerHitEffectDuration;
-	[SerializeField] private Canvas shaderCanvas;
-	[SerializeField] private GameObject map;
-	[SerializeField] private IconTray meleeUpgradeIcons;
-	[SerializeField] private IconTray rangedUpgradeIcons;
-	private String playerHitEffectPropertyName = "_Amount";
-	private Material playerHitEffectMaterial;
+	[SerializeField, BoxGroup("EXP Bar")] private Slider expBarSlider;
+	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text expAmountText;
+	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text pointText;
 
-	//TODO: Create custom struct that holds UI elements so we don't have to user indeces for enabling/disabling UI, but instead call them by name/type etc.
-	[SerializeField] private GameObject[] uiStates;
+	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSlider;
+	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSliderDelayed;
+	[SerializeField, BoxGroup("HP Bar")] private TMP_Text hpAmountText;
+	[SerializeField, BoxGroup("HP Bar")] private bool barIsMoving = false;
+	[SerializeField, BoxGroup("HP Bar")] private float hpBarSliderSmoothing = 100f;
 
-	public GameObject[] UiStates { get => uiStates; private set => uiStates = value; }
-	public IconTray MeleeUpgradeIcons { get => meleeUpgradeIcons; set => meleeUpgradeIcons = value; }
-	public IconTray RangedUpgradeIcons { get => rangedUpgradeIcons; set => rangedUpgradeIcons = value; }
+	[SerializeField, BoxGroup("Player On Hit")] private Image playerHitEffect;
+	[SerializeField, BoxGroup("Player On Hit")] private float playerHitEffectDuration;
 
+	[SerializeField, BoxGroup("Map")] private Canvas shaderCanvas;
+	[SerializeField, BoxGroup("Map")] private GameObject map;
+
+	[SerializeField, BoxGroup("Upgrades")] private IconTray meleeUpgradeIcons;
+	[SerializeField, BoxGroup("Upgrades")] private IconTray rangedUpgradeIcons;
+	[SerializeField, BoxGroup("Upgrades")] private Transform[] DevUIComponents;
+	// 0 = Melee Upgrades
+	// 1 = Cast Upgrades
+
+	//TODO: Create custom struct that holds UI elements so we don't have to use indeces for enabling/disabling UI, but instead call them by name/type etc.
+	[SerializeField, BoxGroup("UI States")] private GameObject[] uiStates;
 	// 0 = Hub UI
 	// 1 = Dungeon UI
 	// 2 = Generation Loading Screen
@@ -35,9 +39,12 @@ public class UIManager : MonoBehaviour
 	// 5 = Cheat Menu
 	// 6 = Empower enemies UI
 
-	[SerializeField] private Transform[] DevUIComponents;
-	// 0 = Melee Upgrades
-	// 1 = Cast Upgrades
+	private const string playerHitEffectPropertyName = "_Amount";
+	private Material playerHitEffectMaterial;
+
+	public GameObject[] UiStates { get => uiStates; private set => uiStates = value; }
+	public IconTray MeleeUpgradeIcons { get => meleeUpgradeIcons; set => meleeUpgradeIcons = value; }
+	public IconTray RangedUpgradeIcons { get => rangedUpgradeIcons; set => rangedUpgradeIcons = value; }
 
 	[Serializable]
 	private class abilityUI
@@ -104,6 +111,8 @@ public class UIManager : MonoBehaviour
 	{
 		hpBarSlider.maxValue = maxHP;
 		hpBarSlider.value = maxHP;
+		hpBarSliderDelayed.maxValue = maxHP;
+		hpBarSliderDelayed.value = maxHP;
 	}
 
 	public void SetExpBar(int maxExp)
@@ -114,8 +123,29 @@ public class UIManager : MonoBehaviour
 
 	public void SetHP(int hp, int maxHP)
 	{
-		hpBarSlider.value = hp;
-		hpAmountText.text = hp.ToString() + "/" + maxHP;
+		if (hp != hpBarSlider.value)
+		{
+			hpBarSlider.value = hp;
+			hpAmountText.text = hp.ToString() + "/" + maxHP;
+
+			StopCoroutine(SetDelayedHP());
+			StartCoroutine(SetDelayedHP());
+		}
+	}
+
+	private IEnumerator SetDelayedHP()
+	{
+		barIsMoving = true;
+		float vel = 0;
+		yield return new WaitForSeconds(1f);
+		while (Mathf.Approximately(hpBarSlider.value, hpBarSliderDelayed.value) == false)
+		{
+			float smoothedValue = Mathf.SmoothDamp(hpBarSliderDelayed.value, hpBarSlider.value, ref vel, hpBarSliderSmoothing * Time.deltaTime);
+			hpBarSliderDelayed.value = smoothedValue;
+			yield return null;
+		}
+		barIsMoving = false;
+		yield return null;
 	}
 
 	public void SetExp(int exp, int maxExp)
