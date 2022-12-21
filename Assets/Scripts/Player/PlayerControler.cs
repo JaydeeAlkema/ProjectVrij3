@@ -151,6 +151,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 		if (Time.timeScale != 1f)
 		{
+			StopCoroutine("HitSlow");
 			Time.timeScale = 1f;
 		}
 	}
@@ -530,6 +531,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public void RemoveStatusEffect(IStatusEffect statusEffect)
 	{
 
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if(isDashing && collision.gameObject.layer == LayerMask.NameToLayer("Breakable Objects"))
+		{
+			collision.GetComponent<IDamageable>()?.TakeDamage(1);
+		}
 	}
 
 	//void Die()

@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private float playerHitEffectDuration;
 	[SerializeField] private Canvas shaderCanvas;
 	[SerializeField] private GameObject map;
+	[SerializeField] private IconTray meleeUpgradeIcons;
+	[SerializeField] private IconTray rangedUpgradeIcons;
 	private String playerHitEffectPropertyName = "_Amount";
 	private Material playerHitEffectMaterial;
 
@@ -22,6 +24,8 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject[] uiStates;
 
 	public GameObject[] UiStates { get => uiStates; private set => uiStates = value; }
+	public IconTray MeleeUpgradeIcons { get => meleeUpgradeIcons; set => meleeUpgradeIcons = value; }
+	public IconTray RangedUpgradeIcons { get => rangedUpgradeIcons; set => rangedUpgradeIcons = value; }
 
 	// 0 = Hub UI
 	// 1 = Dungeon UI

@@ -73,5 +73,6 @@ public class EmpowerEnemiesFunctionality : MonoBehaviour
 	public void CloseEmpowerWindow()
 	{
 		GameManager.Instance.UiManager.SetUIActive(6, false);
+		GameManager.Instance.SetPauseState(false);
 	}
 }

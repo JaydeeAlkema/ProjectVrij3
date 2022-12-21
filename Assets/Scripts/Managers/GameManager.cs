@@ -74,6 +74,11 @@ public class GameManager : MonoBehaviour
 			playerHP.value = playerHP.startValue;
 		}
 
+		if (isPaused)
+		{
+			Time.timeScale = 0f;
+		}
+
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			TogglePauseGame();
