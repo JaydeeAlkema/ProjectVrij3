@@ -32,6 +32,9 @@ public class RewardChoice : MonoBehaviour
 	[SerializeField] private TMP_Text AbilityTitle;
 	[SerializeField] private TMP_Text MeleeTitle;
 	[SerializeField] private TMP_Text RangedTitle;
+	[SerializeField] private TMP_Text abilityCost;
+	[SerializeField] private TMP_Text meleeCost;
+	[SerializeField] private TMP_Text rangedCost;
 	//chances are based on a roll of 1-1000000
 	[SerializeField] private int t1Chance = 1; //1-700000
 	[SerializeField] private int t2Chance = 700001; //700001-995000
@@ -110,6 +113,9 @@ public class RewardChoice : MonoBehaviour
 	private void Update()
 	{
 		currentRewardCost = Mathf.RoundToInt( ( rewardCost * Mathf.Pow(rewardCostMultiplier * LevelManager.LevelManagerInstance.DificultyModifier, LevelManager.LevelManagerInstance.UpgradeCount)));
+		abilityCost.text = currentRewardCost.ToString();
+		meleeCost.text = currentRewardCost.ToString();
+		rangedCost.text = currentRewardCost.ToString();
 	}
 
 	public void ChooseAbility()

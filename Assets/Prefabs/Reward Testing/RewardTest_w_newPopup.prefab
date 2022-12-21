@@ -1938,6 +1938,9 @@ MonoBehaviour:
   AbilityTitle: {fileID: 852111430370375505}
   MeleeTitle: {fileID: 8991729710676441052}
   RangedTitle: {fileID: 6024386907317945715}
+  abilityCost: {fileID: 1666028092546808834}
+  meleeCost: {fileID: 5415471124531558962}
+  rangedCost: {fileID: 2907446095891735345}
   t1Chance: 1
   t2Chance: 1000001
   t3Chance: 1000001
@@ -2632,6 +2635,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1666028092546808834 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3870084629619850789, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
+  m_PrefabInstance: {fileID: 2498273823831507495}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2598963160161055562 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 484974749225300333, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
@@ -2641,6 +2655,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2907446095891735345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 788961301007917334, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
+  m_PrefabInstance: {fileID: 2498273823831507495}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5415471124531558962 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7605516018633734165, guid: 3716425f752c126469a1b338c4c40f09, type: 3}
+  m_PrefabInstance: {fileID: 2498273823831507495}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5637701946161535610 stripped
