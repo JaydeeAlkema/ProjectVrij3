@@ -36,7 +36,7 @@ public class MeleeAttack : Ability
 		}
 		//player.IsAttackPositionLocked = true;
 		player.IsDashing = true;
-		Vector2 dashDir = new Vector3( player.Horizontal, player.Vertical ).normalized;
+		Vector2 dashDir = LookDir.normalized;
 		Rb2d.velocity = dashDir.normalized * baseStats.DashSpeed;
 		caller.CallCoroutine(TestCoroutine());
 

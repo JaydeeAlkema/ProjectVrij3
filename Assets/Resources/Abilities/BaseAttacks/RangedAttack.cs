@@ -20,22 +20,44 @@ public class RangedAttack : Ability
 	}
 	public override void AbilityBehavior()
 	{
-		if (AudioManager.Instance != null)
+		if( !Charging )
 		{
-			AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
+			if( AudioManager.Instance != null )
+			{
+				AudioManager.Instance.PostEventLocal( abilitySound, player.gameObject );
+			}
+			CastedObject = Object.Instantiate( castObject, CastFromPoint.transform.position + ( Vector3 )LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform );
+			Projectile proj = CastedObject.GetComponent<Projectile>();
+			//TrailUpgrade = BaseStats.TrailUpgrade;
+			proj.BurnDamage = BurnDamage;
+			Debug.Log( "the burn damage i give is: " + BurnDamage + ", but the burn damage proj has is: " + proj.BurnDamage );
+			proj.TrailUpgrade = TrailUpgrade;
+			proj.TurnOnTrail();
+			proj.Damage = damage;
+			proj.LifeSpan = lifeSpan;
+			proj.Force = force;
+			proj.CastedFrom = this;
+			CastedObject.transform.SetParent( null );
 		}
-		CastedObject = Object.Instantiate(castObject, CastFromPoint.transform.position + (Vector3)LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform);
-		Projectile proj = CastedObject.GetComponent<Projectile>();
-		//TrailUpgrade = BaseStats.TrailUpgrade;
-		proj.BurnDamage = BurnDamage;
-		Debug.Log("the burn damage i give is: " + BurnDamage + ", but the burn damage proj has is: " + proj.BurnDamage);
-		proj.TrailUpgrade = TrailUpgrade;
-		proj.TurnOnTrail();
-		proj.Damage = damage;
-		proj.LifeSpan = lifeSpan;
-		proj.Force = force;
-		proj.CastedFrom = this;
-		CastedObject.transform.SetParent(null);
+		else if(Charging)
+		{
+			if( AudioManager.Instance != null )
+			{
+				AudioManager.Instance.PostEventLocal( abilitySound, player.gameObject );
+			}
+			CastedObject = Object.Instantiate( castObject, CastFromPoint.transform.position + ( Vector3 )LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform );
+			Projectile proj = CastedObject.GetComponent<Projectile>();
+			//TrailUpgrade = BaseStats.TrailUpgrade;
+			proj.BurnDamage = BurnDamage;
+			Debug.Log( "the burn damage i give is: " + BurnDamage + ", but the burn damage proj has is: " + proj.BurnDamage );
+			proj.TrailUpgrade = TrailUpgrade;
+			proj.TurnOnTrail();
+			proj.Damage = damage + (int)chargeTime;
+			proj.LifeSpan = lifeSpan + chargeTime;
+			proj.Force = force + chargeTime;
+			proj.CastedFrom = this;
+			CastedObject.transform.SetParent( null );
+		}
 	}
 
 	void SetAbilityStats()
