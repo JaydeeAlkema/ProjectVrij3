@@ -8,15 +8,16 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 	[SerializeField, BoxGroup("EXP Bar")] private Slider expBarSlider;
+	[SerializeField, BoxGroup("EXP Bar")] private Slider expBarSliderDelayed;
+	[SerializeField, BoxGroup("EXP Bar")] private float expBarSliderSmoothing = 0.5f;
 	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text expAmountText;
 	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text pointText;
 	[SerializeField, BoxGroup("EXP Bar")] private GameObject getPointVFX;
 
 	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSlider;
 	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSliderDelayed;
-	[SerializeField, BoxGroup("HP Bar")] private TMP_Text hpAmountText;
-	[SerializeField, BoxGroup("HP Bar")] private bool barIsMoving = false;
 	[SerializeField, BoxGroup("HP Bar")] private float hpBarSliderSmoothing = 0.5f;
+	[SerializeField, BoxGroup("HP Bar")] private TMP_Text hpAmountText;
 
 	[SerializeField, BoxGroup("Player On Hit")] private Image playerHitEffect;
 	[SerializeField, BoxGroup("Player On Hit")] private float playerHitEffectDuration;
@@ -121,6 +122,8 @@ public class UIManager : MonoBehaviour
 	{
 		expBarSlider.maxValue = maxExp;
 		expBarSlider.value = maxExp;
+		expBarSliderDelayed.maxValue = maxExp;
+		expBarSliderDelayed.value = maxExp;
 	}
 
 	public void SetHP(int hp, int maxHP)
@@ -136,7 +139,6 @@ public class UIManager : MonoBehaviour
 
 	private IEnumerator SetDelayedHP()
 	{
-		barIsMoving = true;
 		yield return new WaitForSeconds(1f);
 
 		float startValue = hpBarSliderDelayed.value;
@@ -152,13 +154,36 @@ public class UIManager : MonoBehaviour
 		}
 
 		hpBarSliderDelayed.value = endValue;
-		barIsMoving = false;
 	}
 
 	public void SetExp(int exp, int maxExp)
 	{
-		expBarSlider.value = exp;
-		expAmountText.text = exp.ToString() + "/" + maxExp;
+		if (exp != expBarSliderDelayed.value)
+		{
+			expBarSliderDelayed.value = exp;
+			expAmountText.text = exp.ToString() + "/" + maxExp;
+
+			StartCoroutine(SetDelayedExp());
+		}
+	}
+
+	private IEnumerator SetDelayedExp()
+	{
+		yield return new WaitForSeconds(1f);
+
+		float startValue = expBarSlider.value;
+		float endValue = expBarSliderDelayed.value;
+		float timeElapsed = 0;
+		while (timeElapsed < expBarSliderSmoothing)
+		{
+			float smoothedValue = Mathf.Lerp(startValue, endValue, timeElapsed / expBarSliderSmoothing);
+			timeElapsed += Time.deltaTime;
+
+			expBarSlider.value = smoothedValue;
+			yield return null;
+		}
+
+		expBarSlider.value = endValue;
 	}
 
 	public void AddDevText(int textComponent, string addText)
