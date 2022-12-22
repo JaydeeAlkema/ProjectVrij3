@@ -128,8 +128,7 @@ public class UIManager : MonoBehaviour
 			hpBarSlider.value = hp;
 			hpAmountText.text = hp.ToString() + "/" + maxHP;
 
-			StopCoroutine(SetDelayedHP());
-			StartCoroutine(SetDelayedHP());
+			if (!barIsMoving) StartCoroutine(SetDelayedHP());
 		}
 	}
 
