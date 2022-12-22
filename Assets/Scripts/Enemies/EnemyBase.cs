@@ -363,20 +363,20 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		expAmount -= numBigOrbs * 50;
 
 		// Calculate the number of medium orb drops
-		int numMediumOrbs = expAmount / 20;
+		int numMediumOrbs = expAmount / 10;
 		for (int i = 0; i < numMediumOrbs; i++)
 		{
 			orbList.Add(mediumOrb);
 		}
-		expAmount -= numMediumOrbs * 20;
+		expAmount -= numMediumOrbs * 10;
 
-		// Calculate the number of small orb drops
-		int numSmallOrbs = expAmount / 5; // Divide by 5
-		for (int i = 0; i < numSmallOrbs; i++)
-		{
-			orbList.Add(smallOrb);
-		}
-		expAmount -= numSmallOrbs * 5;
+		//// Calculate the number of small orb drops
+		//int numSmallOrbs = expAmount / 5; // Divide by 5
+		//for (int i = 0; i < numSmallOrbs; i++)
+		//{
+		//	orbList.Add(smallOrb);
+		//}
+		//expAmount -= numSmallOrbs * 5;
 
 		// Calculate the number of tiny orb drops
 		int numTinyOrbs = expAmount;

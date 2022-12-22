@@ -2545,15 +2545,27 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 2
-    m_TransformParent: {fileID: 4363236059571348223}
+    m_TransformParent: {fileID: 4363236059571348224}
     m_Modifications:
     - target: {fileID: 1350490991604544831, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
       propertyPath: m_Name
       value: UIPointGetVFX
       objectReference: {fileID: 0}
+    - target: {fileID: 3978559158251111647, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
       propertyPath: m_RootOrder
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4337,7 +4349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1428760151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6932,6 +6944,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &4363236059571348224 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4363236060550700908, guid: 4f229c83ef6f05d47929d185df79092d, type: 3}
+  m_PrefabInstance: {fileID: 4363236059571348222}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5558382899175781266 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9099145305644377481, guid: 8280ec0f9798a6044a3baca131a52632, type: 3}

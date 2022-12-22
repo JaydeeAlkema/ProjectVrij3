@@ -63,7 +63,7 @@ public class ExpOrb : MonoBehaviour
 
 			if (Vector2.Distance(transform.position, playerInArea.transform.position) < 0.2f)
 			{
-				PlayerPickupOrb(playerInArea.transform.position);
+				PlayerPickupOrb(playerInArea.gameObject);
 			}
 		}
 	}
@@ -73,16 +73,19 @@ public class ExpOrb : MonoBehaviour
 		transform.position = Vector2.MoveTowards(transform.position, player.transform.position, flySpeed * Time.deltaTime);
 	}
 
-	void PlayerPickupOrb(Vector2 spawnPosition)
+	void PlayerPickupOrb(GameObject player)
 	{
 		GameManager.Instance.ExpManager.AddExp(expToGive);
-		GameObject vfxPickup = Instantiate(vfxPickupParticles, transform.position, Quaternion.identity);
+		GameObject vfxPickup = Instantiate(vfxPickupParticles, player.transform.position, Quaternion.identity);
 		ParticleSystem particles = vfxPickup.GetComponent<ParticleSystem>();
 		ParticleSystem.MainModule particlesMain = particles.main;
 		particlesMain.startSpeedMultiplier = 30 + 1.2f * expToGive;
 		ParticleSystem.Burst particleBurst = particles.emission.GetBurst(0);
 		particleBurst.count = 7 + expToGive;
 		vfxPickup.GetComponent<ParticleSystem>().emission.SetBurst(0, particleBurst);
+		PlayerControler playerScript = player.GetComponent<PlayerControler>();
+		playerScript.StopCoroutine(playerScript.GetExpVFX(1f));
+		playerScript.StartCoroutine(playerScript.GetExpVFX(1f));
 		Destroy(this.gameObject);
 	}
 }

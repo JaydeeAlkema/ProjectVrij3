@@ -53,8 +53,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private float bufferTimeDash = 0.2f;
 
 
+	[SerializeField] private SpriteMask flashBlueMask;
+	[SerializeField] private SpriteRenderer flashBlue;
+
 	public Material materialDefault = null;
 	public Material materialHit = null;
+
 
 	public bool isDying = false;
 
@@ -233,25 +237,25 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (bufferCounterMelee > 0f) MeleeAttack();
 
 			//Cast input
-			if(Input.GetMouseButtonDown(1)) { holdTime = 0; }
-			if( Input.GetMouseButton( 1 ) )
+			if (Input.GetMouseButtonDown(1)) { holdTime = 0; }
+			if (Input.GetMouseButton(1))
 			{
-				if( currentRangedAttack.CooledDown )
+				if (currentRangedAttack.CooledDown)
 				{
-					Debug.Log( "Holding" );
+					Debug.Log("Holding");
 					currentRangedAttack.Charging = true;
 					holdTime++;
 					currentRangedAttack.ChargeTime = holdTime;
-					
+
 				}
 				else
 				{
-					Debug.Log( "fizzle******" );
+					Debug.Log("fizzle******");
 				}
 			}
 			else
 			{
-				if(holdTime <= 5){ currentRangedAttack.Charging = false; }
+				if (holdTime <= 5) { currentRangedAttack.Charging = false; }
 				if (Input.GetMouseButtonUp(1))
 				{
 					bufferCounterCast = bufferTimeCast;
@@ -315,7 +319,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			selfSlowMultiplier = 0.0f;
 		}
 		//slow player on charging
-		else if(holdTime > 5)
+		else if (holdTime > 5)
 		{
 			selfSlowMultiplier = 0.5f;
 		}
@@ -498,6 +502,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 		}
 	}
+
 	public void GameOverVFX(int vfx)
 	{
 		switch (vfx)
@@ -535,6 +540,22 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				selfSlowMultiplier = 2f;
 				//Debug.Log("Out of combat boost granted");
 			}
+		}
+	}
+
+	void SetSpriteMaskSpriteToPlayerSprite()
+	{
+		if (flashBlueMask.sprite != playerSprite.sprite)
+		{
+			flashBlueMask.sprite = playerSprite.sprite;
+		}
+		if (playerSprite.flipX)
+		{
+			flashBlueMask.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+		}
+		else
+		{
+			flashBlueMask.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		}
 	}
 
@@ -597,6 +618,24 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//	isDying = false;
 	//	yield return null;
 	//}
+
+	public IEnumerator GetExpVFX(float flashSpeed)
+	{
+		Color flashBlueColor = flashBlue.color;
+		flashBlueColor.a = 0.6f;
+		flashBlue.color = flashBlueColor;
+		while (flashBlue.color.a > 0f)
+		{
+			SetSpriteMaskSpriteToPlayerSprite();
+			flashBlueColor = flashBlue.color;
+			flashBlueColor.a -= flashSpeed * Time.deltaTime;
+			flashBlue.color = flashBlueColor;
+			yield return new WaitForEndOfFrame();
+		}
+		flashBlueColor.a = 0f;
+		flashBlue.color = flashBlueColor;
+		yield return new WaitForEndOfFrame();
+	}
 
 	public IEnumerator HitSlow(float duration)
 	{
