@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Slash
   abilityIcon: {fileID: 0}
   toolTipText: 
-  baseCooldown: 400
+  baseCooldown: 300
   baseDamage: 50
   basePierce: 1
   baseCritChance: 0
@@ -24,8 +24,8 @@ MonoBehaviour:
   baseForce: 30
   baseBoxSize: {x: 4.2, y: 1.8}
   baseCircleSize: 0
-  baseDashSpeed: 15
-  baseDashDuration: 0.1
+  baseDashSpeed: 5
+  baseDashDuration: 0.2
   baseAttackTime: 200
   baseTrailUpgrade: 0
   baseBurnDamage: 1
@@ -33,7 +33,7 @@ MonoBehaviour:
   baseSlowDuration: 4
   baseMarkHits: 1
   baseStatusEffectType: 0
-  coolDown: 400
+  coolDown: 300
   damage: 50
   pierce: 1
   critChance: 0
@@ -48,8 +48,8 @@ MonoBehaviour:
   force: 30
   burnObject: {fileID: 3246640220694370058, guid: f03f18e478811944e971e5f2638900a1, type: 3}
   trailUpgrade: 0
-  dashSpeed: 15
-  dashDuration: 0.1
+  dashSpeed: 7
+  dashDuration: 0.15
   attackTime: 200
   markHits: 1
   burnDamage: 1

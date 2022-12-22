@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
@@ -18,6 +19,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//[SerializeField]
 	//private Camera cam;
 	public Vector2 lookDir;
+	public Vector2 playerMoveDir;
 	[SerializeField] private Transform castFromPoint;
 	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
 	[SerializeField] private float circleSize = 3f;
@@ -310,7 +312,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			playerSprite.flipX = lookDir.x > 0;
 			horizontal = ( int )Input.GetAxisRaw( "Horizontal" );
 			vertical = ( int )Input.GetAxisRaw( "Vertical" );
-			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3( horizontal, vertical ).normalized;
+			playerMoveDir = new Vector3(horizontal, vertical).normalized;
+			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * playerMoveDir;
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
