@@ -2539,6 +2539,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &903382890
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 2
+    m_TransformParent: {fileID: 4363236059571348223}
+    m_Modifications:
+    - target: {fileID: 1350490991604544831, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_Name
+      value: UIPointGetVFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_AddedGameObjects: []
+  m_SourcePrefab: {fileID: 100100000, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+--- !u!4 &903382891 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7115770061764168095, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+  m_PrefabInstance: {fileID: 903382890}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &903382892 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1350490991604544831, guid: 27407562b07b4e740ac11e0e8f155ce6, type: 3}
+  m_PrefabInstance: {fileID: 903382890}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &927188474
 GameObject:
   m_ObjectHideFlags: 0
@@ -4380,7 +4449,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_TargetDisplay: 0
 --- !u!224 &1450911289
 RectTransform:
@@ -5899,13 +5968,15 @@ MonoBehaviour:
   expBarSlider: {fileID: 2487521904893554837}
   expAmountText: {fileID: 1279037890}
   pointText: {fileID: 1389322777}
+  getPointVFX: {fileID: 903382892}
   hpBarSlider: {fileID: 1079074818506147720}
   hpBarSliderDelayed: {fileID: 1079074818506147719}
   hpAmountText: {fileID: 708694186}
   barIsMoving: 0
-  hpBarSliderDelayedTime: 2
+  hpBarSliderSmoothing: 0.5
   playerHitEffect: {fileID: 821918985}
   playerHitEffectDuration: 0.5
+  mainCanvas: {fileID: 1450911288}
   shaderCanvas: {fileID: 1747034432}
   map: {fileID: 1265061576}
   meleeUpgradeIcons: {fileID: 364874844}
@@ -6832,8 +6903,16 @@ PrefabInstance:
       value: PlayerExpBar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4363236060550700908, guid: 4f229c83ef6f05d47929d185df79092d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 903382891}
   m_SourcePrefab: {fileID: 100100000, guid: 4f229c83ef6f05d47929d185df79092d, type: 3}
+--- !u!224 &4363236059571348223 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4363236060550700908, guid: 4f229c83ef6f05d47929d185df79092d, type: 3}
+  m_PrefabInstance: {fileID: 4363236059571348222}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5558382899175781266 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9099145305644377481, guid: 8280ec0f9798a6044a3baca131a52632, type: 3}
