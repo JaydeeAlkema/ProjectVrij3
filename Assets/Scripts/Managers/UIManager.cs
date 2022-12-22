@@ -236,6 +236,11 @@ public class UIManager : MonoBehaviour
 		StartCoroutine(ScreenVFXOnPlayerHit());
 	}
 
+	public void PlaySoundOnClick(AK.Wwise.Event soundEvent)
+	{
+		AudioManager.Instance.PostEventGlobal(soundEvent);
+	}
+
 	IEnumerator ScreenVFXOnPlayerHit()
 	{
 		playerHitEffect.gameObject.SetActive(true);

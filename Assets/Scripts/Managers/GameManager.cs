@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField, BoxGroup("Audio")] private AK.Wwise.State CurrentSoundState;
 	[SerializeField, BoxGroup("Audio")] private AK.Wwise.Event startMusic;
 	[SerializeField, BoxGroup("Audio")] private AK.Wwise.Event stopMusic;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.Event dungeonAmbience;
 
 	[SerializeField, BoxGroup("Managers")] private LevelGeneratorV3 levelGenerator = null;
 	[SerializeField, BoxGroup("Managers")] private HubSceneManager HubSceneManager = null;
@@ -215,6 +216,10 @@ public class GameManager : MonoBehaviour
 				AudioManager.Instance.PostEventGlobal(stopMusic);
 				Debug.Log("Stopping music.");
 				AudioManager.Instance.PostEventGlobal(startMusic);
+				//if (dungeonAmbience != null)
+				//{
+				//	AudioManager.Instance.PostEventGlobal(dungeonAmbience); //Start ambience, also implement stop ambience when ready
+				//}
 				Debug.Log("Starting music.");
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;

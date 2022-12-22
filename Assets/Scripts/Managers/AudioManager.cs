@@ -43,6 +43,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] public AK.Wwise.Event MainMusic_Play;
     [SerializeField] public AK.Wwise.Event MainMusic_Stop;
 
+    [SerializeField] public AK.Wwise.Event UI_Confirm;
+    [SerializeField] public AK.Wwise.Event UI_Cancel;
+    [SerializeField] public AK.Wwise.Event UI_Upgrade;
+    [SerializeField] public AK.Wwise.Event UI_Select;
+
     // Awake is called on awake
     private void Awake()
     {

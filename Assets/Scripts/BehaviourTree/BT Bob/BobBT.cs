@@ -32,7 +32,7 @@ public class BobBT : BTTree
 				{
 					new RaycastToTarget(enemyScript),
 					new CheckBehindWall(),
-					new BobWindup(enemyScript, rb2d),
+					new BobWindup((BobEnemy)enemyScript, rb2d),
 					new ShootEnemyProjectile(enemyScript),
 					new CastEndLag(enemyScript),
 				}),

@@ -32,6 +32,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private GameObject playerDeathPoof = null;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
 
+	private bool isMoving;
+	[SerializeField] private AK.Wwise.Event playerMoveSoundEvent;
+	[SerializeField] private AK.Wwise.Event playerStopMoveSoundEvent;
+
 	[SerializeField] Animator animPlayer;
 
 	//hold right mousebutton
@@ -290,6 +294,22 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
 			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3(horizontal, vertical).normalized;
+			//if(rb2d.velocity == Vector2.zero)
+			//{
+			//	if (isMoving && playerStopMoveSoundEvent != null)
+			//	{
+			//		AudioManager.Instance.PostEventLocal(playerStopMoveSoundEvent, this.gameObject);
+			//	}
+			//	isMoving = false;
+			//}
+			//else
+			//{
+			//	if (!isMoving && playerMoveSoundEvent != null)
+			//	{
+			//		AudioManager.Instance.PostEventLocal(playerMoveSoundEvent, this.gameObject);
+			//	}
+			//	isMoving = true;
+			//}
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();

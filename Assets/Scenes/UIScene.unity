@@ -5903,7 +5903,7 @@ MonoBehaviour:
   hpBarSliderDelayed: {fileID: 1079074818506147719}
   hpAmountText: {fileID: 708694186}
   barIsMoving: 0
-  hpBarSliderDelayedTime: 2
+  hpBarSliderSmoothing: 100
   playerHitEffect: {fileID: 821918985}
   playerHitEffectDuration: 0.5
   shaderCanvas: {fileID: 1747034432}
@@ -7340,6 +7340,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1232222162}
         m_TargetAssemblyTypeName: EmpowerEnemiesFunctionality, Assembly-CSharp
         m_MethodName: EmpowerEnemies
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2020171075}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

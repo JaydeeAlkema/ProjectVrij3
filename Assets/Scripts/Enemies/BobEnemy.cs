@@ -23,7 +23,11 @@ public class BobEnemy : EnemyBase
 
 	public AK.Wwise.Event Event;
 
+	[SerializeField] private AK.Wwise.Event bobDmg;
+	[SerializeField] private AK.Wwise.Event bobAtk;
+
 	public GameObject EnemyProjectile { get => enemyProjectile; set => enemyProjectile = value; }
+	public AK.Wwise.Event BobAtk { get => bobAtk; set => bobAtk = value; }
 
 	void Awake()
 	{
@@ -60,6 +64,57 @@ public class BobEnemy : EnemyBase
 	{
 		int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
 		playerObject.GetComponent<PlayerControler>()?.TakeDamage(damageToDeal);
+	}
+
+	public override void TakeDamage(int damage, int damageType)
+	{
+		int damageToTake = damage;
+		if (damageType == 0 && meleeTarget)
+		{
+			HealthPoints -= ((int)(damage * markHits));
+			meleeTarget = false;
+			meleeMarkDecal.SetActive(false);
+			damageToTake = ((int)(damageToTake * markHits));
+			damageToTake += damage;
+		}
+		if (damageType == 1 && castTarget)
+		{
+			HealthPoints -= ((int)(damage * markHits));
+			castTarget = false;
+			castMarkDecal.SetActive(false);
+			damageToTake = ((int)(damageToTake * markHits));
+			damageToTake += damage;
+		}
+
+		if (damageType == 0)
+		{
+			//AkSoundEngine.PostEvent("npc_dmg_melee", this.gameObject);
+			if (Time.timeScale == 1f)
+			{
+				StartCoroutine(HitStop(0.02f));
+			}
+		}
+
+		if (damageType == 1)
+		{
+		}
+		OnHitVFX();
+		//if (bobDmg != null)
+		//{
+		//	AudioManager.Instance.PostEventLocal(bobDmg, this.gameObject);
+		//}
+		DamagePopup(damageToTake);
+		HealthPoints -= damage;
+		if (!IsAggro)
+		{
+			IsAggro = true;
+			if (GameManager.Instance != null)
+			{
+				GameManager.Instance.EnemyAggroCount(true);
+			}
+		}
+		StartCoroutine(FlashColor());
+		if (HealthPoints <= 0) Die();
 	}
 
 	public override void MoveToTarget(Transform target)

@@ -8,9 +8,9 @@ public class BobWindup : BTNode
 {
 	private float counter;
 	private Rigidbody2D rb2d;
-	private EnemyBase enemyScript;
+	private BobEnemy enemyScript;
 
-	public BobWindup(EnemyBase enemyScript, Rigidbody2D rb2d)
+	public BobWindup(BobEnemy enemyScript, Rigidbody2D rb2d)
 	{
 		this.enemyScript = enemyScript;
 		this.rb2d = rb2d;
@@ -42,7 +42,7 @@ public class BobWindup : BTNode
 			else
 			{
 				object a = GetData("inAttackSequence");
-				if(a == null)
+				if (a == null)
 				{
 					bool inAttackSequence = true;
 					parent.parent.parent.SetData("inAttackSequence", inAttackSequence);
@@ -51,6 +51,10 @@ public class BobWindup : BTNode
 				if (!enemyScript.enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("BobAttack"))
 				{
 					enemyScript.enemyAnimator.Play("BobAttack");
+					//if (enemyScript.BobAtk != null)
+					//{
+					//	AudioManager.Instance.PostEventLocal(enemyScript.BobAtk);
+					//}
 				}
 				enemyScript.StopMovingToTarget();
 				counter += Time.deltaTime;

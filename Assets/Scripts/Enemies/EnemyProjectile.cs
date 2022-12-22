@@ -21,6 +21,8 @@ public class EnemyProjectile : MonoBehaviour
 	[SerializeField] private int typeOfLayer = 8;
 	//private GameObject addedTrail = null;
 
+	[SerializeField] private AK.Wwise.Event bobProjectileImpact;
+
 	private void Awake()
 	{
 		
@@ -77,6 +79,7 @@ public class EnemyProjectile : MonoBehaviour
 		//	addedTrail.GetComponent<TrailRenderer>().autodestruct = true;
 		//	addedTrail.GetComponent<TrailWithTrigger>().enabled = true;
 		//}
+		AudioManager.Instance.PostEventGlobal(bobProjectileImpact);
 		Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 	}
 }

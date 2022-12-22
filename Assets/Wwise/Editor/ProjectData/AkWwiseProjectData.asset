@@ -231,6 +231,113 @@ MonoBehaviour:
         guid: 99c33cca48068b439cf0e7d85d5fbcc5
       Path: SoundBanks\Run SoundBanks\MainSoundbank
   EventWwu:
+  - PhysicalPath: Events\Ambience.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Ambience
+      ObjectType: 12
+      guid: ab66d65db1c9bb45aba9fcc1d5ebd6ad
+    ParentPath: Events\Ambience
+    guid: ab66d65db1c9bb45aba9fcc1d5ebd6ad
+    GuidInternal: 
+    m_lastTime: -8585299016355523105
+    List:
+    - name: sx_uni_amb_run
+      guid: e9bdff3bf9107349bd7acc65c667ee57
+      id: 738347340
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Ambience
+        ObjectType: 12
+        guid: ab66d65db1c9bb45aba9fcc1d5ebd6ad
+      - ElementName: sx_uni_amb_run
+        ObjectType: 3
+        guid: e9bdff3bf9107349bd7acc65c667ee57
+      Path: Events\Ambience\sx_uni_amb_run
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events\Bob.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Bob
+      ObjectType: 12
+      guid: d244ff000c2e4e46bedd05b4fd5d76f5
+    ParentPath: Events\Bob
+    guid: d244ff000c2e4e46bedd05b4fd5d76f5
+    GuidInternal: 
+    m_lastTime: -8585299016355423374
+    List:
+    - name: bob_attck
+      guid: 9386d8bf7b0271439a8ac4648bf6f1ba
+      id: 4144729364
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Bob
+        ObjectType: 12
+        guid: d244ff000c2e4e46bedd05b4fd5d76f5
+      - ElementName: bob_attck
+        ObjectType: 3
+        guid: 9386d8bf7b0271439a8ac4648bf6f1ba
+      Path: Events\Bob\bob_attck
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: bob_dmg
+      guid: 25d6ebd3f33e80409c419ac6d9bed311
+      id: 765132959
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Bob
+        ObjectType: 12
+        guid: d244ff000c2e4e46bedd05b4fd5d76f5
+      - ElementName: bob_dmg
+        ObjectType: 3
+        guid: 25d6ebd3f33e80409c419ac6d9bed311
+      Path: Events\Bob\bob_dmg
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events\Bob_Projectile.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Bob_Projectile
+      ObjectType: 12
+      guid: 189b9ad2a58a954985b1c7c296aef9d7
+    ParentPath: Events\Bob_Projectile
+    guid: 189b9ad2a58a954985b1c7c296aef9d7
+    GuidInternal: 
+    m_lastTime: -8585299016355290183
+    List:
+    - name: bob_projectile_impact
+      guid: 8409d0bac5e89f46b17c6d16e61093c6
+      id: 2232199173
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Bob_Projectile
+        ObjectType: 12
+        guid: 189b9ad2a58a954985b1c7c296aef9d7
+      - ElementName: bob_projectile_impact
+        ObjectType: 3
+        guid: 8409d0bac5e89f46b17c6d16e61093c6
+      Path: Events\Bob_Projectile\bob_projectile_impact
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   - PhysicalPath: Events\Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Events
@@ -271,9 +378,35 @@ MonoBehaviour:
         ObjectType: 3
         guid: a9d886ada3f61042a6f7495cb491d650
       Path: Events\Environment\env_torch_burning
-      maxAttenuation: 0
+      maxAttenuation: 100
       maxDuration: -1
       minDuration: -1
+  - PhysicalPath: Events\Fodder.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Fodder
+      ObjectType: 12
+      guid: 85e1c38d30a3314c966b008cea7380ea
+    ParentPath: Events\Fodder
+    guid: 85e1c38d30a3314c966b008cea7380ea
+    GuidInternal: 
+    m_lastTime: -8585299016355184469
+    List: []
+  - PhysicalPath: Events\Mini Boss.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Mini Boss
+      ObjectType: 12
+      guid: 7bb48d53af097146b60ff5c01465b96c
+    ParentPath: Events\Mini Boss
+    guid: 7bb48d53af097146b60ff5c01465b96c
+    GuidInternal: 
+    m_lastTime: -8585299016355089906
+    List: []
   - PhysicalPath: Events\Music.wwu
     PathAndIcons:
     - ElementName: Events
@@ -349,8 +482,8 @@ MonoBehaviour:
         guid: 70b083d16f221c48830eb456cbc58b4b
       Path: Events\NPC\fdr_attck_jump
       maxAttenuation: 0
-      maxDuration: 0.614826
-      minDuration: 0.251148
+      maxDuration: 0.642868
+      minDuration: 0.271067
     - name: npc_dmg_cast
       guid: 3fac3a27ba39b3459e230f22eae37101
       id: 3509614367
@@ -494,8 +627,54 @@ MonoBehaviour:
     ParentPath: Events\Player\Player Locomotion\Player Movement
     guid: e45c1d228f069e4fa1552d2b9296478f
     GuidInternal: 
-    m_lastTime: -8585347445283299737
-    List: []
+    m_lastTime: -8585299016354971557
+    List:
+    - name: plr_mv_loop
+      guid: 67617d8317cfd54aa628464fb3473717
+      id: 3481224674
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Player
+        ObjectType: 12
+        guid: 183791ff7f3e3c43a8c1b839025a22e8
+      - ElementName: Player Locomotion
+        ObjectType: 12
+        guid: 8237310c62a17546a120fe42b746b52e
+      - ElementName: Player Movement
+        ObjectType: 12
+        guid: e45c1d228f069e4fa1552d2b9296478f
+      - ElementName: plr_mv_loop
+        ObjectType: 3
+        guid: 67617d8317cfd54aa628464fb3473717
+      Path: Events\Player\Player Locomotion\Player Movement\plr_mv_loop
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: plr_mv_release
+      guid: 2480e90d4132e24d8b00bfad5a558065
+      id: 2501765879
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Player
+        ObjectType: 12
+        guid: 183791ff7f3e3c43a8c1b839025a22e8
+      - ElementName: Player Locomotion
+        ObjectType: 12
+        guid: 8237310c62a17546a120fe42b746b52e
+      - ElementName: Player Movement
+        ObjectType: 12
+        guid: e45c1d228f069e4fa1552d2b9296478f
+      - ElementName: plr_mv_release
+        ObjectType: 3
+        guid: 2480e90d4132e24d8b00bfad5a558065
+      Path: Events\Player\Player Locomotion\Player Movement\plr_mv_release
+      maxAttenuation: 0
+      maxDuration: 1.379521
+      minDuration: 1.108
   - PhysicalPath: Events\Player.wwu
     PathAndIcons:
     - ElementName: Events
@@ -508,6 +687,19 @@ MonoBehaviour:
     guid: 183791ff7f3e3c43a8c1b839025a22e8
     GuidInternal: 
     m_lastTime: -8585347445283279117
+    List: []
+  - PhysicalPath: Events\Swooger.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: Swooger
+      ObjectType: 12
+      guid: 7226fc17763ffe4492d327d6146b4336
+    ParentPath: Events\Swooger
+    guid: 7226fc17763ffe4492d327d6146b4336
+    GuidInternal: 
+    m_lastTime: -8585299016354849674
     List: []
   - PhysicalPath: Events\Test Events.wwu
     PathAndIcons:
@@ -570,6 +762,87 @@ MonoBehaviour:
         ObjectType: 3
         guid: 293ba1ec90e8e444945da9743ee37b53
       Path: Events\Test Events\Stop_Test_Beep_Loop
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events\UI.wwu
+    PathAndIcons:
+    - ElementName: Events
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: UI
+      ObjectType: 12
+      guid: 357db7c0ba9f2549ad1cd526be83a2b3
+    ParentPath: Events\UI
+    guid: 357db7c0ba9f2549ad1cd526be83a2b3
+    GuidInternal: 
+    m_lastTime: -8585299016354733801
+    List:
+    - name: Cancel
+      guid: b187d10182380a4199f2f7318846d6d5
+      id: 2760337059
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: UI
+        ObjectType: 12
+        guid: 357db7c0ba9f2549ad1cd526be83a2b3
+      - ElementName: Cancel
+        ObjectType: 3
+        guid: b187d10182380a4199f2f7318846d6d5
+      Path: Events\UI\Cancel
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Confirm
+      guid: 1ce9a3cef7cc694fb5e36d132f751615
+      id: 1517537939
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: UI
+        ObjectType: 12
+        guid: 357db7c0ba9f2549ad1cd526be83a2b3
+      - ElementName: Confirm
+        ObjectType: 3
+        guid: 1ce9a3cef7cc694fb5e36d132f751615
+      Path: Events\UI\Confirm
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Select
+      guid: 6f7ddc5d4dd49d44b452741af745a97e
+      id: 1432588725
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: UI
+        ObjectType: 12
+        guid: 357db7c0ba9f2549ad1cd526be83a2b3
+      - ElementName: Select
+        ObjectType: 3
+        guid: 6f7ddc5d4dd49d44b452741af745a97e
+      Path: Events\UI\Select
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Upgrade
+      guid: b13c5a2e9f1c64468d7a34f3b946f789
+      id: 1323090623
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: UI
+        ObjectType: 12
+        guid: 357db7c0ba9f2549ad1cd526be83a2b3
+      - ElementName: Upgrade
+        ObjectType: 3
+        guid: b13c5a2e9f1c64468d7a34f3b946f789
+      Path: Events\UI\Upgrade
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -812,7 +1085,7 @@ MonoBehaviour:
     m_lastTime: -8585347445281295045
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 0500000007000000
+  ExpandedWaapiItemIds: 050000000600000007000000090000000b0000001a00000022000000230000003d000000
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0
