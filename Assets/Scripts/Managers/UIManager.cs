@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSliderDelayed;
 	[SerializeField, BoxGroup("HP Bar")] private TMP_Text hpAmountText;
 	[SerializeField, BoxGroup("HP Bar")] private bool barIsMoving = false;
-	[SerializeField, BoxGroup("HP Bar")] private float hpBarSliderSmoothing = 100f;
+	[SerializeField, BoxGroup("HP Bar")] private float hpBarSliderSmoothing = 0.5f;
 
 	[SerializeField, BoxGroup("Player On Hit")] private Image playerHitEffect;
 	[SerializeField, BoxGroup("Player On Hit")] private float playerHitEffectDuration;
@@ -128,23 +128,29 @@ public class UIManager : MonoBehaviour
 			hpBarSlider.value = hp;
 			hpAmountText.text = hp.ToString() + "/" + maxHP;
 
-			if (!barIsMoving) StartCoroutine(SetDelayedHP());
+			StartCoroutine(SetDelayedHP());
 		}
 	}
 
 	private IEnumerator SetDelayedHP()
 	{
 		barIsMoving = true;
-		float vel = 0;
 		yield return new WaitForSeconds(1f);
-		while (Mathf.Approximately(hpBarSlider.value, hpBarSliderDelayed.value) == false)
+
+		float startValue = hpBarSliderDelayed.value;
+		float endValue = hpBarSlider.value;
+		float timeElapsed = 0;
+		while (timeElapsed < hpBarSliderSmoothing)
 		{
-			float smoothedValue = Mathf.SmoothDamp(hpBarSliderDelayed.value, hpBarSlider.value, ref vel, hpBarSliderSmoothing * Time.deltaTime);
+			float smoothedValue = Mathf.Lerp(startValue, endValue, timeElapsed / hpBarSliderSmoothing);
+			timeElapsed += Time.deltaTime;
+
 			hpBarSliderDelayed.value = smoothedValue;
 			yield return null;
 		}
+
+		hpBarSliderDelayed.value = endValue;
 		barIsMoving = false;
-		yield return null;
 	}
 
 	public void SetExp(int exp, int maxExp)
