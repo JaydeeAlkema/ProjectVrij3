@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using TMPro;
 
 
 [CreateAssetMenu( fileName = "Ability", menuName = "ScriptableObjects/Ability" )]
 public class AbilityScriptable : ScriptableObject
 {
+	#region Ability Info
+	[Header( "Ability Info" )]
+	[SerializeField] private string abilityName;
+	[SerializeField] private Sprite abilityIcon;
+	[SerializeField] private string toolTipText;
+	#endregion
 	#region basestats
+	[Header("BaseStats")]
 	[SerializeField] private float baseCooldown = 0.001f;
 	[SerializeField] private int baseDamage = 0;
 	[SerializeField] private int basePierce = 1;
@@ -28,7 +36,6 @@ public class AbilityScriptable : ScriptableObject
 	//[SerializeField] private List<IStatusEffect> baseStatusEffects = new List<IStatusEffect>();
 	[SerializeField] private StatusEffectType baseStatusEffectType;
 	#endregion
-	[SerializeField] private Sprite abilityIcon;
 	[SerializeField] private float coolDown = 0.001f;
 	[SerializeField] private int damage = 0;
 	[SerializeField] private int pierce = 1;
@@ -81,6 +88,8 @@ public class AbilityScriptable : ScriptableObject
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }
 	public AK.Wwise.Event AbilitySound1 { get => abilitySound1; set => abilitySound1 = value; }
 	public Sprite AbilityIcon { get => abilityIcon; set => abilityIcon = value; }
+	public string ToolTipText { get => toolTipText; set => toolTipText = value; }
+	public string AbilityName { get => abilityName; set => abilityName = value; }
 
 	public int markType;
 

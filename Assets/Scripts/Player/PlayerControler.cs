@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
@@ -24,15 +23,19 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] private SpriteRenderer playerSprite;
-	[SerializeField] GameObject pivot_AttackAnimation;
-	[SerializeField] GameObject attackAnimation;
+	[SerializeField] private GameObject pivot_AttackAnimation;
+	[SerializeField] private GameObject pivot_DashAnimation;
+	[SerializeField] private GameObject attackAnimation;
+	[SerializeField] private GameObject dashVFX;
 	[SerializeField] Animator animAttack;
-	[SerializeField] private TrailRenderer trail;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
 
 	[SerializeField] Animator animPlayer;
+
+	//hold right mousebutton
+	[SerializeField] private float holdTime = 0;
 
 	//[SerializeField] PlayerHealthBar healthBar;
 	private float selfSlowTime = 0.25f;
@@ -53,9 +56,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public Material materialDefault = null;
 	public Material materialHit = null;
 
-	//Temporary, remove when implementing real death screen
-	//[SerializeField] Transform deathScreenTest;
-	//private bool isDying = false;
+	public bool isDying = false;
 
 	public Animator AnimPlayer { get => animPlayer; set => animPlayer = value; }
 	public GameObject AttackAnimation { get => attackAnimation; set => attackAnimation = value; }
@@ -70,7 +71,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public int Horizontal { get => horizontal; set => horizontal = value; }
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
-	public TrailRenderer Trail { get => trail; set => trail = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
 	[Header("Abilities")]
@@ -111,6 +111,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
 	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
 	public GameObject Pivot_AttackAnimation { get => pivot_AttackAnimation; set => pivot_AttackAnimation = value; }
+	public GameObject DashVFX { get => dashVFX; set => dashVFX = value; }
+	public GameObject Pivot_DashAnimation { get => pivot_DashAnimation; set => pivot_DashAnimation = value; }
 
 	#endregion
 
@@ -121,17 +123,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	private void Awake()
 	{
-		if( GameManager.Instance != null )
+		if (GameManager.Instance != null)
 		{
 			GameManager.Instance.OnGameStateChanged += OnStart;
-			Debug.Log( "subscribed to ongamestatechanged" );
+			Debug.Log("subscribed to ongamestatechanged");
 		}
 	}
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		trail.emitting = false;
 
 		materialDefault = playerSprite.material;
 
@@ -149,19 +150,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		currentRangedAttack.SetStartValues();
 		currentDash.SetStartValues();
 		abilityController.SetAttacks();
+		initAbilities();
 
-		//currentHealthPoints = maxHealthPoints;
-		//if (healthBar != null)
-		//{
-		//	healthBar.SetMaxHP(maxHealthPoints);
-		//}
-
-		//Death screen test, remove later
-		//if (deathScreenTest != null)
-		//{
-		//	deathScreenTest.gameObject.SetActive(false);
-		//}
-
+		if (Time.timeScale != 1f)
+		{
+			StopCoroutine("HitSlow");
+			Time.timeScale = 1f;
+		}
 	}
 
 	public void OnStart(GameState gameState, GameState lastGameState)
@@ -188,8 +183,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentMeleeAttack = currentMeleeAttack;
 			abilityController.CurrentRangedAttack = currentRangedAttack;
 			abilityController.CurrentDash = currentDash;
-			Debug.Log(currentMeleeAttack.BurnDamage);
+			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
+		}
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
 		}
 	}
 
@@ -206,20 +205,20 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void initAbilities()
 	{
-		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; }
-		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; }
-		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; }
-		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; }
+		GameManager.Instance.UiManager.ResetAbilityUIValues();
+		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues(0, currentAbility1.BaseStats.AbilityIcon); }
+		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues(1, currentAbility2.BaseStats.AbilityIcon); }
+		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues(2, currentAbility3.BaseStats.AbilityIcon); }
+		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues(3, currentAbility4.BaseStats.AbilityIcon); }
 		abilityController.SetAbility();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-
 		vel = rb2d.velocity.magnitude;
 
-		if (GameManager.Instance == null || !GameManager.Instance.IsPaused)
+		if ((GameManager.Instance == null || !GameManager.Instance.IsPaused) && !isDying)
 		{
 			//Melee input
 			if (Input.GetMouseButtonDown(0))
@@ -228,20 +227,41 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				bufferCounterMelee -= Time.fixedDeltaTime;
+				bufferCounterMelee -= Time.deltaTime;
 			}
 			if (bufferCounterMelee > 0f) MeleeAttack();
 
 			//Cast input
-			if (Input.GetMouseButtonDown(1))
+			if(Input.GetMouseButtonDown(1)) { holdTime = 0; }
+			if( Input.GetMouseButton( 1 ) )
 			{
-				bufferCounterCast = bufferTimeCast;
+				if( currentRangedAttack.CooledDown )
+				{
+					Debug.Log( "Holding" );
+					currentRangedAttack.Charging = true;
+					holdTime++;
+					currentRangedAttack.ChargeTime = holdTime;
+					
+				}
+				else
+				{
+					Debug.Log( "fizzle******" );
+				}
 			}
 			else
 			{
-				bufferCounterCast -= Time.fixedDeltaTime;
+				if(holdTime <= 5){ currentRangedAttack.Charging = false; }
+				if (Input.GetMouseButtonUp(1))
+				{
+					bufferCounterCast = bufferTimeCast;
+				}
+				else
+				{
+					bufferCounterCast -= Time.deltaTime;
+				}
+				if (bufferCounterCast > 0f) RangedAttack();
+				holdTime = 0;
 			}
-			if (bufferCounterCast > 0f) RangedAttack();
 
 
 			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
@@ -250,28 +270,26 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (Input.GetKeyDown(KeyCode.T)) AbilityFourAttack();
 
 			//Dash input
-			if (Input.GetKeyDown(KeyCode.Space))
+			if (Input.GetKeyDown(KeyCode.Space) && vel != 0f)
 			{
 				bufferCounterDash = bufferTimeDash;
 			}
 			else
 			{
-				bufferCounterDash -= Time.fixedDeltaTime;
+				bufferCounterDash -= Time.deltaTime;
 			}
 			if (bufferCounterDash > 0f) DashAbility();
 
 			MouseLook();
-
-			playerSprite.flipX = lookDir.x > 0 ? true : false;
 		}
 
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
-		if (!isDashing)
+		if (!isDashing && !isDying)
 		{
-			trail.emitting = false;
+			playerSprite.flipX = lookDir.x > 0;
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = new Vector3(horizontal * Time.fixedDeltaTime, vertical * Time.fixedDeltaTime).normalized * MoveSpeed.value * selfSlowMultiplier;
+			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3(horizontal, vertical).normalized;
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
@@ -295,6 +313,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			selfSlowCounter += Time.deltaTime;
 			selfSlowMultiplier = 0.0f;
 		}
+		//slow player on charging
+		else if(holdTime > 5)
+		{
+			selfSlowMultiplier = 0.5f;
+		}
 		//Speed-up player while melee attacking
 		else if (isAttackPositionLocked)
 		{
@@ -316,10 +339,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
 
-			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0 ? true : false;
+			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0;
 		}
 	}
-
 
 	void MeleeAttack()
 	{
@@ -354,7 +376,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(CurrentAbility1);
+			//Debug.Log(CurrentAbility1);
 			abilityController.CurrentAbility1.BaseStats = ability1;
 			abilityController.CurrentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityOneAttacked(currentAbility1);
@@ -367,7 +389,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(CurrentAbility2);
+			//Debug.Log(CurrentAbility2);
 			abilityController.CurrentAbility2.BaseStats = ability2;
 			abilityController.CurrentAbility2.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityTwoAttacked(currentAbility2);
@@ -380,7 +402,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(CurrentAbility3);
+			//Debug.Log(CurrentAbility3);
 			abilityController.CurrentAbility3.BaseStats = ability3;
 			abilityController.CurrentAbility3.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityThreeAttacked(currentAbility3);
@@ -393,7 +415,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
-			Debug.Log(currentAbility4);
+			//Debug.Log(currentAbility4);
 			abilityController.CurrentAbility4.BaseStats = ability4;
 			abilityController.CurrentAbility4.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 			abilityController.AbilityFourAttacked(currentAbility4);
@@ -444,7 +466,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		if (GameManager.Instance != null)
 		{
-			if (!invulnerable && GameManager.Instance.currentGameState == GameState.Dungeon)
+			if (!invulnerable && GameManager.Instance.CurrentGameState == GameState.Dungeon)
 			{
 				AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
 				GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
@@ -456,6 +478,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				invulnerable = true;
 				outOfCombatCounter = 0f;
 				StartCoroutine(PlayerIFrames(hitInvulTime));
+				GameManager.Instance.UiManager.PlayerHitScreenEffect();
+				CameraShake.Instance.ShakeCamera(1f, 0.05f);
 			}
 			else //If in testing scene, damage visuals without changing HP
 			{
@@ -496,7 +520,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			outOfCombatCounter += Time.deltaTime;
 			inCombat = true;
-			Debug.Log("In combat, no boost");
+			//Debug.Log("In combat, no boost");
 		}
 		else
 		{
@@ -508,7 +532,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (!inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1)
 			{
 				selfSlowMultiplier = 2f;
-				Debug.Log("Out of combat boost granted");
+				//Debug.Log("Out of combat boost granted");
 			}
 		}
 	}
@@ -536,6 +560,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public void RemoveStatusEffect(IStatusEffect statusEffect)
 	{
 
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (isDashing && collision.gameObject.layer == LayerMask.NameToLayer("Breakable Objects"))
+		{
+			collision.GetComponent<IDamageable>()?.TakeDamage(1);
+		}
 	}
 
 	//void Die()

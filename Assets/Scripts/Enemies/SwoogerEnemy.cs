@@ -124,7 +124,11 @@ public class SwoogerEnemy : EnemyBase
 
 	public override void Die()
 	{
-		GameManager.Instance.ExpManager.AddExp(ExpAmount);
+		if (GameManager.Instance != null)
+		{
+			DropExpOrbsOnDeath();
+			GameManager.Instance.EnemyAggroCount(false);
+		}
 		StopAllCoroutines();
 		Time.timeScale = 1f;
 
@@ -132,7 +136,7 @@ public class SwoogerEnemy : EnemyBase
 		rewardObject.GetComponent<RewardChoice>().AbilityStats = abilityStats;
 		rewardObject.GetComponent<RewardChoice>().AbilityToGive = ability;
 		rewardObject.GetComponent<RewardChoice>().Reward = reward;
-		Debug.Log(rewardObject.GetComponent<RewardChoice>().AbilityToGive);
+		//Debug.Log(rewardObject.GetComponent<RewardChoice>().AbilityToGive);
 		Destroy(this.gameObject);
 	}
 

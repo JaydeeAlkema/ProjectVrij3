@@ -24,6 +24,10 @@ public class BossBase : EnemyBase
 		base.Update();
 	}
 
+	protected override void ListenToEvents()
+	{
+		//do not listen
+	}
 
 	public virtual void SpawnMobs()
 	{
@@ -105,21 +109,19 @@ public class BossBase : EnemyBase
 
 	public override IEnumerator FlashColor()
 	{
-		weakSpotSprite.enabled = true;
 		Color orbColor = weakSpotSprite.color;
 		orbColor.a = 1f;
 		weakSpotSprite.color = orbColor;
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForSeconds(0.2f);
 		while (orbColor.a > 0 && !invulnerable)
 		{
 			orbColor = weakSpotSprite.color;
-			orbColor.a -= 5f * Time.deltaTime;
+			orbColor.a -= 10f * Time.deltaTime;
 			weakSpotSprite.color = orbColor;
 			yield return new WaitForEndOfFrame();
 		}
 		orbColor.a = 0f;
 		weakSpotSprite.color = orbColor;
-		weakSpotSprite.enabled = false;
 	}
 
 }

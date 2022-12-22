@@ -33,6 +33,8 @@ public interface IAbility
 	public float SlowDuration { get; set; }
 	public StatusEffectType statusEffectType { get; set; }
 	public List<IStatusEffect> statusEffects { get; set; }
+	public bool Charging { get; set; }
+	public float ChargeTime { get; set; }
 
 	virtual void CallAbility(PlayerControler _player) { }
 	virtual void CallAbility( bool resetCooldown ) { }

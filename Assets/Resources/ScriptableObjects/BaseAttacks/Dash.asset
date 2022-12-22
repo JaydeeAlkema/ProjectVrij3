@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3f1c01467b3842867e977b13dd394, type: 3}
   m_Name: Dash
   m_EditorClassIdentifier: 
+  abilityName: Dash
+  abilityIcon: {fileID: 0}
+  toolTipText: {fileID: 0}
   baseCooldown: 1000
   baseDamage: 0
   basePierce: 1
@@ -21,8 +24,8 @@ MonoBehaviour:
   baseForce: 30
   baseBoxSize: {x: 4, y: 6}
   baseCircleSize: 0
-  baseDashSpeed: 60
-  baseDashDuration: 0.06
+  baseDashSpeed: 25
+  baseDashDuration: 0.2
   baseAttackTime: 200
   baseTrailUpgrade: 0
   baseBurnDamage: 1
@@ -30,7 +33,6 @@ MonoBehaviour:
   baseSlowDuration: 0
   baseMarkHits: 1
   baseStatusEffectType: 0
-  abilityIcon: {fileID: 0}
   coolDown: 1000
   damage: 0
   pierce: 1
@@ -47,7 +49,7 @@ MonoBehaviour:
   burnObject: {fileID: 0}
   trailUpgrade: 0
   dashSpeed: 30
-  dashDuration: 0.15
+  dashDuration: 0.2
   attackTime: 200
   markHits: 1
   burnDamage: 1

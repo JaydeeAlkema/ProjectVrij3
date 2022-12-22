@@ -32,7 +32,7 @@ public class BobRunAway : BTNode
 		if (nearestEnemy != null)
 		{
 			bobScript.Target = nearestEnemy.transform;
-			Debug.Log("Running Away!");
+			//Debug.Log("Running Away!");
 			state = BTNodeState.RUNNING;
 			return state;
 		}

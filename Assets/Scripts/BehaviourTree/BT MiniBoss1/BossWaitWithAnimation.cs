@@ -58,6 +58,10 @@ public class BossWaitWithAnimation : BTNode
 		if (timer >= waitDuration)
 		{
 			timer = 0f;
+			if (orbAnimation != null)
+			{
+				bossScript.WeakspotAnimator.Play("Nothing");
+			}
 			parent.SetData("currentAttackStep", currentAttackStep + 1);
 			Debug.Log("DONE. Our step: " + attackStep + ", current step: " + (currentAttackStep + 1));
 			state = BTNodeState.SUCCESS;

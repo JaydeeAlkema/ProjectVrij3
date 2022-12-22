@@ -26,7 +26,7 @@ public class LineUpFunctionality : MonoBehaviour
 	public void LineUp()
 	{
 		Collider2D[] enemiesInBox = Physics2D.OverlapBoxAll(transform.position, boxSize, angle, layerMask);
-		Debug.Log("Enemies: " + enemiesInBox.Length);
+		//Debug.Log("Enemies: " + enemiesInBox.Length);
 		abNormal = transform.parent.rotation * Vector3.right;
 		Debug.DrawRay(transform.position, abNormal, Color.blue, 10f);
 		foreach (Collider2D enemy in enemiesInBox)
