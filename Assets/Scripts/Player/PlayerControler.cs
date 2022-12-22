@@ -19,7 +19,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//private Camera cam;
 	public Vector2 lookDir;
 	[SerializeField] private Transform castFromPoint;
-	[SerializeField] private Vector2 boxSize = new Vector2(4, 6);
+	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
 	[SerializeField] private float circleSize = 3f;
 	[SerializeField] private Rigidbody2D rb2d = default;
 	[SerializeField] private SpriteRenderer playerSprite;
@@ -30,6 +30,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] Animator animAttack;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
+	private bool onStartRun;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
 
 	[SerializeField] Animator animPlayer;
@@ -73,7 +74,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
 
-	[Header("Abilities")]
+	[Header( "Abilities" )]
 	#region ability fields
 	[SerializeField] private AbilityScriptable meleeAttack;
 	[SerializeField] private AbilityScriptable rangedAttack;
@@ -123,55 +124,63 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	private void Awake()
 	{
-		if (GameManager.Instance != null)
+		if( GameManager.Instance != null )
 		{
 			GameManager.Instance.OnGameStateChanged += OnStart;
-			Debug.Log("subscribed to ongamestatechanged");
+			Debug.Log( "subscribed to ongamestatechanged" );
 		}
 	}
 
 	// Start is called before the first frame update
 	void Start()
 	{
+		Debug.Log( currentMeleeAttack );
 
 		materialDefault = playerSprite.material;
 
 		selfSlowCounter = selfSlowTime;
-		abilityController = AbilityController.AbilityControllerInstance;
-		abilityController.CurrentMeleeAttack = currentMeleeAttack;
-		abilityController.CurrentRangedAttack = currentRangedAttack;
-		abilityController.CurrentDash = currentDash;
-		rb2d = GetComponent<Rigidbody2D>();
-		abilityController.Player = this;
-		currentMeleeAttack.BaseStats = meleeAttack;
-		currentRangedAttack.BaseStats = rangedAttack;
-		currentDash.BaseStats = dash;
-		currentMeleeAttack.SetStartValues();
-		currentRangedAttack.SetStartValues();
-		currentDash.SetStartValues();
-		abilityController.SetAttacks();
-		initAbilities();
-
-		if (Time.timeScale != 1f)
+		if( !onStartRun )
 		{
-			StopCoroutine("HitSlow");
+			abilityController = AbilityController.AbilityControllerInstance;
+			abilityController.CurrentMeleeAttack = currentMeleeAttack;
+			abilityController.CurrentRangedAttack = currentRangedAttack;
+			abilityController.CurrentDash = currentDash;
+			rb2d = GetComponent<Rigidbody2D>();
+			abilityController.Player = this;
+			currentMeleeAttack.BaseStats = meleeAttack;
+			currentRangedAttack.BaseStats = rangedAttack;
+			Debug.Log( "called start" );
+			currentDash.BaseStats = dash;
+			currentMeleeAttack.SetStartValues();
+			currentRangedAttack.SetStartValues();
+			currentDash.SetStartValues();
+			abilityController.SetAttacks();
+			initAbilities();
+		}
+
+		if( Time.timeScale != 1f )
+		{
+			StopCoroutine( "HitSlow" );
 			Time.timeScale = 1f;
 		}
 	}
 
-	public void OnStart(GameState gameState, GameState lastGameState)
+	public void OnStart( GameState gameState, GameState lastGameState )
 	{
-		Debug.Log("ongamestatechanged got called with state: " + gameState + " and with last state: " + lastGameState);
-		if (gameState == GameState.Dungeon && lastGameState != gameState)
+		Debug.Log( "ongamestatechanged got called with state: " + gameState + " and with last state: " + lastGameState );
+		if( ( gameState == GameState.Dungeon && lastGameState != gameState ) || gameState == GameState.Hub )
 		{
 			currentMeleeAttack = new MeleeAttack();
+			Debug.Log( currentMeleeAttack );
 			currentRangedAttack = new RangedAttack();
 			currentDash = new Dash();
+			Debug.Log( "called onstart" );
 			abilityController = AbilityController.AbilityControllerInstance;
-			Debug.Log(abilityController);
+			Debug.Log( abilityController );
 			rb2d = GetComponent<Rigidbody2D>();
 			abilityController.Player = this;
 			currentMeleeAttack.BaseStats = meleeAttack;
+			Debug.Log( currentMeleeAttack.BaseStats );
 			currentMeleeAttack.BaseStats.SetBaseStats();
 			currentRangedAttack.BaseStats = rangedAttack;
 			currentRangedAttack.BaseStats.SetBaseStats();
@@ -185,10 +194,16 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentDash = currentDash;
 			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
+			Debug.Log( currentMeleeAttack );
+			onStartRun = true;
 		}
-		if (GameManager.Instance != null)
+		else
 		{
-			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
+			onStartRun = false;
+		}
+		if( GameManager.Instance != null )
+		{
+			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas( GetComponentInChildren<Camera>() );
 		}
 	}
 
@@ -206,10 +221,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public void initAbilities()
 	{
 		GameManager.Instance.UiManager.ResetAbilityUIValues();
-		if (currentAbility1 != null) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues(0, currentAbility1.BaseStats.AbilityIcon); }
-		if (currentAbility2 != null) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues(1, currentAbility2.BaseStats.AbilityIcon); }
-		if (currentAbility3 != null) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues(2, currentAbility3.BaseStats.AbilityIcon); }
-		if (currentAbility4 != null) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues(3, currentAbility4.BaseStats.AbilityIcon); }
+		if( currentAbility1 != null ) { currentAbility1.BaseStats = ability1; abilityController.CurrentAbility1 = currentAbility1; GameManager.Instance.UiManager.SetAbilityUIValues( 0, currentAbility1.BaseStats.AbilityIcon ); }
+		if( currentAbility2 != null ) { currentAbility2.BaseStats = ability2; abilityController.CurrentAbility2 = currentAbility2; GameManager.Instance.UiManager.SetAbilityUIValues( 1, currentAbility2.BaseStats.AbilityIcon ); }
+		if( currentAbility3 != null ) { currentAbility3.BaseStats = ability3; abilityController.CurrentAbility3 = currentAbility3; GameManager.Instance.UiManager.SetAbilityUIValues( 2, currentAbility3.BaseStats.AbilityIcon ); }
+		if( currentAbility4 != null ) { currentAbility4.BaseStats = ability4; abilityController.CurrentAbility4 = currentAbility4; GameManager.Instance.UiManager.SetAbilityUIValues( 3, currentAbility4.BaseStats.AbilityIcon ); }
 		abilityController.SetAbility();
 	}
 
@@ -218,10 +233,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	{
 		vel = rb2d.velocity.magnitude;
 
-		if ((GameManager.Instance == null || !GameManager.Instance.IsPaused) && !isDying)
+		if( ( GameManager.Instance == null || !GameManager.Instance.IsPaused ) && !isDying )
 		{
 			//Melee input
-			if (Input.GetMouseButtonDown(0))
+			if( Input.GetMouseButtonDown( 0 ) )
 			{
 				bufferCounterMelee = bufferTimeMelee;
 			}
@@ -229,10 +244,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			{
 				bufferCounterMelee -= Time.deltaTime;
 			}
-			if (bufferCounterMelee > 0f) MeleeAttack();
+			if( bufferCounterMelee > 0f ) MeleeAttack();
 
 			//Cast input
-			if(Input.GetMouseButtonDown(1)) { holdTime = 0; }
+			if( Input.GetMouseButtonDown( 1 ) ) { holdTime = 0; }
 			if( Input.GetMouseButton( 1 ) )
 			{
 				if( currentRangedAttack.CooledDown )
@@ -241,7 +256,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 					currentRangedAttack.Charging = true;
 					holdTime++;
 					currentRangedAttack.ChargeTime = holdTime;
-					
+
 				}
 				else
 				{
@@ -250,8 +265,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				if(holdTime <= 5){ currentRangedAttack.Charging = false; }
-				if (Input.GetMouseButtonUp(1))
+				if( holdTime <= 5 && currentRangedAttack != null )
+				{ currentRangedAttack.Charging = false; }
+				if( Input.GetMouseButtonUp( 1 ) )
 				{
 					bufferCounterCast = bufferTimeCast;
 				}
@@ -259,18 +275,18 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				{
 					bufferCounterCast -= Time.deltaTime;
 				}
-				if (bufferCounterCast > 0f) RangedAttack();
+				if( bufferCounterCast > 0f ) RangedAttack();
 				holdTime = 0;
 			}
 
 
-			if (Input.GetKeyDown(KeyCode.Q)) AbilityOneAttack();
-			if (Input.GetKeyDown(KeyCode.E)) AbilityTwoAttack();
-			if (Input.GetKeyDown(KeyCode.R)) AbilityThreeAttack();
-			if (Input.GetKeyDown(KeyCode.T)) AbilityFourAttack();
+			if( Input.GetKeyDown( KeyCode.Q ) ) AbilityOneAttack();
+			if( Input.GetKeyDown( KeyCode.E ) ) AbilityTwoAttack();
+			if( Input.GetKeyDown( KeyCode.R ) ) AbilityThreeAttack();
+			if( Input.GetKeyDown( KeyCode.T ) ) AbilityFourAttack();
 
 			//Dash input
-			if (Input.GetKeyDown(KeyCode.Space) && vel != 0f)
+			if( Input.GetKeyDown( KeyCode.Space ) && vel != 0f )
 			{
 				bufferCounterDash = bufferTimeDash;
 			}
@@ -278,18 +294,18 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			{
 				bufferCounterDash -= Time.deltaTime;
 			}
-			if (bufferCounterDash > 0f) DashAbility();
+			if( bufferCounterDash > 0f ) DashAbility();
 
 			MouseLook();
 		}
 
-		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
-		if (!isDashing && !isDying)
+		Debug.DrawRay( rb2d.position, lookDir, Color.magenta );
+		if( !isDashing && !isDying )
 		{
 			playerSprite.flipX = lookDir.x > 0;
-			horizontal = (int)Input.GetAxisRaw("Horizontal");
-			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3(horizontal, vertical).normalized;
+			horizontal = ( int )Input.GetAxisRaw( "Horizontal" );
+			vertical = ( int )Input.GetAxisRaw( "Vertical" );
+			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3( horizontal, vertical ).normalized;
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
@@ -298,8 +314,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void OnDrawGizmos()
 	{
 		Gizmos.color = Color.blue;
-		Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * meleeAttack.Distance, castFromPoint.transform.rotation, meleeAttack.BoxSize);
-		Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+		Gizmos.matrix = Matrix4x4.TRS( rb2d.transform.position + castFromPoint.transform.up * meleeAttack.Distance, castFromPoint.transform.rotation, meleeAttack.BoxSize );
+		Gizmos.DrawWireCube( Vector3.zero, Vector3.one );
 		//Gizmos.color = Color.red;
 		//Gizmos.matrix = Matrix4x4.TRS(rb2d.transform.position + castFromPoint.transform.up * 5, castFromPoint.transform.rotation, new Vector3(circleSize, circleSize, 0));
 		//Gizmos.DrawWireSphere(Vector3.zero, 1);
@@ -308,18 +324,18 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	void CastSelfSlow()
 	{
 		//Slow player while using ranged attack
-		if (selfSlowCounter < selfSlowTime)
+		if( selfSlowCounter < selfSlowTime )
 		{
 			selfSlowCounter += Time.deltaTime;
 			selfSlowMultiplier = 0.0f;
 		}
 		//slow player on charging
-		else if(holdTime > 5)
+		else if( holdTime > 5 )
 		{
 			selfSlowMultiplier = 0.5f;
 		}
 		//Speed-up player while melee attacking
-		else if (isAttackPositionLocked)
+		else if( isAttackPositionLocked )
 		{
 			selfSlowMultiplier = 1.5f;
 		}
@@ -331,13 +347,13 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	void MouseLook()
 	{
-		if (!isAttackPositionLocked)
+		if( !isAttackPositionLocked )
 		{
-			mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			mousePos = Camera.main.ScreenToWorldPoint( Input.mousePosition );
 			lookDir = mousePos - rb2d.transform.position;
-			angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-			castFromPoint.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
+			angle = Mathf.Atan2( lookDir.y, lookDir.x ) * Mathf.Rad2Deg - 90f;
+			castFromPoint.transform.rotation = Quaternion.Euler( 0f, 0f, angle );
+			pivot_AttackAnimation.transform.rotation = Quaternion.Euler( 0f, 0f, angle + 180 );
 
 			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0;
 		}
@@ -348,8 +364,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		CheckAbilityUpdate();
 		outOfCombatCounter = 0f;
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
-		abilityController.CurrentMeleeAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-		abilityController.MeleeAttacked(currentMeleeAttack);
+		abilityController.CurrentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.MeleeAttacked( currentMeleeAttack );
 	}
 
 	void RangedAttack()
@@ -357,157 +373,157 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		CheckAbilityUpdate();
 		outOfCombatCounter = 0f;
 		abilityController.CurrentRangedAttack.BaseStats = rangedAttack;
-		abilityController.CurrentRangedAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-		abilityController.RangeAttacked(currentRangedAttack);
+		abilityController.CurrentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.RangeAttacked( currentRangedAttack );
 	}
 
 	void DashAbility()
 	{
 		CheckAbilityUpdate();
 		abilityController.CurrentDash.BaseStats = dash;
-		abilityController.CurrentDash.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-		abilityController.Dashing(currentDash);
-		StartCoroutine(PlayerIFrames(dashInvulTime));
+		abilityController.CurrentDash.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		abilityController.Dashing( currentDash );
+		StartCoroutine( PlayerIFrames( dashInvulTime ) );
 	}
 
 	void AbilityOneAttack()
 	{
-		if (currentAbility1 != null)
+		if( currentAbility1 != null )
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
 			//Debug.Log(CurrentAbility1);
 			abilityController.CurrentAbility1.BaseStats = ability1;
-			abilityController.CurrentAbility1.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-			abilityController.AbilityOneAttacked(currentAbility1);
+			abilityController.CurrentAbility1.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityOneAttacked( currentAbility1 );
 		}
 	}
 
 	void AbilityTwoAttack()
 	{
-		if (currentAbility2 != null)
+		if( currentAbility2 != null )
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
 			//Debug.Log(CurrentAbility2);
 			abilityController.CurrentAbility2.BaseStats = ability2;
-			abilityController.CurrentAbility2.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-			abilityController.AbilityTwoAttacked(currentAbility2);
+			abilityController.CurrentAbility2.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityTwoAttacked( currentAbility2 );
 		}
 	}
 
 	void AbilityThreeAttack()
 	{
-		if (currentAbility3 != null)
+		if( currentAbility3 != null )
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
 			//Debug.Log(CurrentAbility3);
 			abilityController.CurrentAbility3.BaseStats = ability3;
-			abilityController.CurrentAbility3.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-			abilityController.AbilityThreeAttacked(currentAbility3);
+			abilityController.CurrentAbility3.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityThreeAttacked( currentAbility3 );
 		}
 	}
 
 	void AbilityFourAttack()
 	{
-		if (currentAbility4 != null)
+		if( currentAbility4 != null )
 		{
 			CheckAbilityUpdate();
 			outOfCombatCounter = 0f;
 			//Debug.Log(currentAbility4);
 			abilityController.CurrentAbility4.BaseStats = ability4;
-			abilityController.CurrentAbility4.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-			abilityController.AbilityFourAttacked(currentAbility4);
+			abilityController.CurrentAbility4.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+			abilityController.AbilityFourAttacked( currentAbility4 );
 		}
 	}
 
 	void CheckAbilityUpdate()
 	{
-		AbilityController.AbilityControllerInstance.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
-		if (meleeAttack != null)
+		AbilityController.AbilityControllerInstance.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
+		if( meleeAttack != null )
 		{
 			meleeAttack.UpdateStatusEffects();
 		}
 
-		if (rangedAttack != null)
+		if( rangedAttack != null )
 		{
 			rangedAttack.UpdateStatusEffects();
 		}
 
-		if (dash != null)
+		if( dash != null )
 		{
 			dash.UpdateStatusEffects();
 		}
 
-		if (ability1 != null)
+		if( ability1 != null )
 		{
 			ability1.UpdateStatusEffects();
 		}
 
-		if (ability2 != null)
+		if( ability2 != null )
 		{
 			ability2.UpdateStatusEffects();
 		}
 
-		if (ability3 != null)
+		if( ability3 != null )
 		{
 			ability3.UpdateStatusEffects();
 		}
 
-		if (ability4 != null)
+		if( ability4 != null )
 		{
 			ability4.UpdateStatusEffects();
 		}
-		AbilityController.AbilityControllerInstance.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3, ability4, dash);
+		AbilityController.AbilityControllerInstance.UpdateCoolDown( meleeAttack, rangedAttack, ability1, ability2, ability3, ability4, dash );
 	}
 
-	public void TakeDamage(int damage)
+	public void TakeDamage( int damage )
 	{
-		if (GameManager.Instance != null)
+		if( GameManager.Instance != null )
 		{
-			if (!invulnerable && GameManager.Instance.CurrentGameState == GameState.Dungeon)
+			if( !invulnerable && GameManager.Instance.CurrentGameState == GameState.Dungeon )
 			{
-				AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
-				GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
-				onHitSpark.GetComponent<SpriteRenderer>().color = new Color32(149, 43, 84, 255);
-				StartCoroutine(HitSlow(0.12f));
-				StartCoroutine(playerFlashColor());
+				AkSoundEngine.PostEvent( "plr_dmg_npc", this.gameObject );
+				GameObject onHitSpark = Instantiate( playerDeathSpark, transform.position, Quaternion.Euler( 0, 0, Random.Range( 0, 360 ) ) );
+				onHitSpark.GetComponent<SpriteRenderer>().color = new Color32( 149, 43, 84, 255 );
+				StartCoroutine( HitSlow( 0.12f ) );
+				StartCoroutine( playerFlashColor() );
 				GameManager.Instance.PlayerHP.value -= damage;
 				//healthBar.SetHP(currentHealthPoints);
 				invulnerable = true;
 				outOfCombatCounter = 0f;
-				StartCoroutine(PlayerIFrames(hitInvulTime));
+				StartCoroutine( PlayerIFrames( hitInvulTime ) );
 				GameManager.Instance.UiManager.PlayerHitScreenEffect();
-				CameraShake.Instance.ShakeCamera(1f, 0.05f);
+				CameraShake.Instance.ShakeCamera( 1f, 0.05f );
 			}
 			else //If in testing scene, damage visuals without changing HP
 			{
-				if (!invulnerable)
+				if( !invulnerable )
 				{
-					AkSoundEngine.PostEvent("plr_dmg_npc", this.gameObject);
-					GameObject onHitSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
-					onHitSpark.GetComponent<SpriteRenderer>().color = new Color32(149, 43, 84, 255);
-					StartCoroutine(HitSlow(0.12f));
-					StartCoroutine(playerFlashColor());
+					AkSoundEngine.PostEvent( "plr_dmg_npc", this.gameObject );
+					GameObject onHitSpark = Instantiate( playerDeathSpark, transform.position, Quaternion.Euler( 0, 0, Random.Range( 0, 360 ) ) );
+					onHitSpark.GetComponent<SpriteRenderer>().color = new Color32( 149, 43, 84, 255 );
+					StartCoroutine( HitSlow( 0.12f ) );
+					StartCoroutine( playerFlashColor() );
 					invulnerable = true;
 					outOfCombatCounter = 0f;
-					StartCoroutine(PlayerIFrames(hitInvulTime));
+					StartCoroutine( PlayerIFrames( hitInvulTime ) );
 				}
 			}
 		}
 	}
-	public void GameOverVFX(int vfx)
+	public void GameOverVFX( int vfx )
 	{
-		switch (vfx)
+		switch( vfx )
 		{
 			case 1:
-				GameObject deathSpark = Instantiate(playerDeathSpark, transform.position, Quaternion.identity);
-				deathSpark.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+				GameObject deathSpark = Instantiate( playerDeathSpark, transform.position, Quaternion.identity );
+				deathSpark.transform.localScale = new Vector3( 0.8f, 0.8f, 0.8f );
 				deathSpark.GetComponent<SpriteRenderer>().color = Color.red;
 				break;
 			case 2:
-				Instantiate(playerDeathPoof, transform.position, Quaternion.identity);
+				Instantiate( playerDeathPoof, transform.position, Quaternion.identity );
 				break;
 
 		}
@@ -516,7 +532,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 	public void OutOfCombatSpeed()
 	{
-		if (outOfCombatCounter < outOfCombatTimer)
+		if( outOfCombatCounter < outOfCombatTimer )
 		{
 			outOfCombatCounter += Time.deltaTime;
 			inCombat = true;
@@ -527,9 +543,9 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			inCombat = false;
 		}
 
-		if (GameManager.Instance != null)
+		if( GameManager.Instance != null )
 		{
-			if (!inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1)
+			if( !inCombat && GameManager.Instance.ExpManager.PlayerPoints >= 1 )
 			{
 				selfSlowMultiplier = 2f;
 				//Debug.Log("Out of combat boost granted");
@@ -537,36 +553,36 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		}
 	}
 
-	public void TakeDamage(int damage, int damageType)
+	public void TakeDamage( int damage, int damageType )
 	{
 
 	}
 
-	public void GetSlowed(float slowAmount)
+	public void GetSlowed( float slowAmount )
 	{
 
 	}
 
-	public void GetMarked(int markType, float markHits)
+	public void GetMarked( int markType, float markHits )
 	{
 
 	}
 
-	public void ApplyStatusEffect(IStatusEffect statusEffect)
+	public void ApplyStatusEffect( IStatusEffect statusEffect )
 	{
 
 	}
 
-	public void RemoveStatusEffect(IStatusEffect statusEffect)
+	public void RemoveStatusEffect( IStatusEffect statusEffect )
 	{
 
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	private void OnTriggerEnter2D( Collider2D collision )
 	{
-		if (isDashing && collision.gameObject.layer == LayerMask.NameToLayer("Breakable Objects"))
+		if( isDashing && collision.gameObject.layer == LayerMask.NameToLayer( "Breakable Objects" ) )
 		{
-			collision.GetComponent<IDamageable>()?.TakeDamage(1);
+			collision.GetComponent<IDamageable>()?.TakeDamage( 1 );
 		}
 	}
 
@@ -597,10 +613,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//	yield return null;
 	//}
 
-	public IEnumerator HitSlow(float duration)
+	public IEnumerator HitSlow( float duration )
 	{
 		Time.timeScale = 0.2f;
-		yield return new WaitForSecondsRealtime(duration);
+		yield return new WaitForSecondsRealtime( duration );
 		Time.timeScale = 1f;
 		yield return null;
 	}
@@ -608,14 +624,14 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	IEnumerator playerFlashColor()
 	{
 		playerSprite.material = materialHit;
-		yield return new WaitForSeconds(0.09f);
+		yield return new WaitForSeconds( 0.09f );
 		playerSprite.material = materialDefault;
 	}
 
-	IEnumerator PlayerIFrames(float invulTime)
+	IEnumerator PlayerIFrames( float invulTime )
 	{
 		invulnerable = true;
-		yield return new WaitForSeconds(invulTime);
+		yield return new WaitForSeconds( invulTime );
 		invulnerable = false;
 		yield return new WaitForEndOfFrame();
 	}

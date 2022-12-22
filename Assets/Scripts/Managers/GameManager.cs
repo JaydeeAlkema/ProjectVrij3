@@ -287,14 +287,14 @@ public class GameManager : MonoBehaviour
 		uiManager.SetUIActive(4, true);
 		yield return new WaitForSecondsRealtime(3f);
 
-		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name, GameState.Hub);
 
 		PlayerHP.ResetValue();
 		ExpManager.ResetExp();
 
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(0, true);
-		ChangeGameState(GameState.Hub);
+		//ChangeGameState(GameState.Hub);
 		yield return null;
 	}
 
