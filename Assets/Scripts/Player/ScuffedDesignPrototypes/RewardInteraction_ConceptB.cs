@@ -23,6 +23,10 @@ public class RewardInteraction_ConceptB : MonoBehaviour
 			{
 				ChooseUI.gameObject.SetActive(true);
 				GameManager.Instance.TogglePauseGame();
+				if (GameManager.Instance != null)
+				{
+					GameManager.Instance.SetCursorImage(1);
+				}
 			}
 		}
 	}

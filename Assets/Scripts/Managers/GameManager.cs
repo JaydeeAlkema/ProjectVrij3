@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField, BoxGroup("Runtime References")] private int maxDungeonFloor = 3;
 	[SerializeField, BoxGroup("Runtime References")] private int currentDungeonFloor = 1;
 
+	[SerializeField, BoxGroup("Cursors")] private Texture2D menuCursor;
+	[SerializeField, BoxGroup("Cursors")] private Texture2D reticle;
 	#region Properties
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
@@ -63,6 +65,7 @@ public class GameManager : MonoBehaviour
 		//scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance("ScriptablePlayer");
 
 		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+		ChangeGameState(GameState.Menu);
 	}
 	#endregion
 
@@ -119,14 +122,24 @@ public class GameManager : MonoBehaviour
 
 	public void TogglePauseGame()
 	{
-		isPaused = !isPaused;
-		Time.timeScale = isPaused ? 0f : 1f;
+		SetPauseState(!isPaused);
 	}
 
 	public void SetPauseState(bool pause)
 	{
 		isPaused = pause;
 		Time.timeScale = isPaused ? 0f : 1f;
+		if (isPaused)
+		{
+			SetCursorImage(1);
+		}
+		else
+		{
+			if (currentGameState == GameState.Dungeon)
+			{
+				SetCursorImage(2);
+			}			
+		}
 	}
 
 	private void SetupMinimapCamera()
@@ -201,6 +214,7 @@ public class GameManager : MonoBehaviour
 		switch (currentGameState)
 		{
 			case GameState.Dungeon:
+				SetCursorImage(2);
 				CurrentSoundState = SoundStateCrowded;
 				CurrentSoundState.SetValue();
 				AudioManager.Instance.PostEventGlobal(stopMusic);
@@ -210,10 +224,12 @@ public class GameManager : MonoBehaviour
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.GameOver:
+				SetCursorImage(0);
 				StartCoroutine(GameOver());
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.Hub:
+				SetCursorImage(1);
 				AudioManager.Instance.PostEventGlobal(stopMusic);
 				Debug.Log("Stopping music.");
 				PlayerHP.ResetValue();
@@ -221,6 +237,7 @@ public class GameManager : MonoBehaviour
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.Menu:
+				SetCursorImage(1);
 				//startMusic.Stop( AudioManager.Instance.gameObject );
 				AudioManager.Instance.PostEventGlobal(stopMusic);
 				Debug.Log("Stopping music.");
@@ -230,6 +247,22 @@ public class GameManager : MonoBehaviour
 				break;
 		}
 		//}
+	}
+
+	public void SetCursorImage(int cursorType) //0 = none, 1 = menu cursor, 2 = reticle
+	{
+		switch (cursorType)
+		{
+			case 0:
+				Cursor.SetCursor(default, Vector2.zero, CursorMode.ForceSoftware);
+				break;
+			case 1:
+				Cursor.SetCursor(menuCursor, new Vector2(16f, 16f), CursorMode.ForceSoftware);
+				break;
+			case 2:
+				Cursor.SetCursor(reticle, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+				break;
+		}
 	}
 
 	/// <summary>
