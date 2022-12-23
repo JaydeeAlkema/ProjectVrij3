@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 			ChangeGameState(GameState.GameOver);
 		}
 
-		if (Input.GetKeyDown(KeyCode.Escape))
+		if (Input.GetKeyDown(KeyCode.Escape) && (currentGameState == GameState.Dungeon || currentGameState == GameState.Hub))
 		{
 			TogglePauseGame();
 			uiManager.SetUIActive(3, isPaused);
