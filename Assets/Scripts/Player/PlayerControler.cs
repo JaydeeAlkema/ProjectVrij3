@@ -28,8 +28,6 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private GameObject pivot_AttackAnimation;
 	[SerializeField] private GameObject pivot_DashAnimation;
 	[SerializeField] private GameObject attackAnimation;
-	[SerializeField] private GameObject dashVFX;
-	[SerializeField] private ParticleSystem castParticlesVFX;
 	[SerializeField] Animator animAttack;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
@@ -119,8 +117,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
 	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
 	public GameObject Pivot_AttackAnimation { get => pivot_AttackAnimation; set => pivot_AttackAnimation = value; }
+
+	#endregion
+
+	[Header("VFX")]
+	#region vfx fields
+	[SerializeField] private GameObject dashVFX;
+	[SerializeField] private ParticleSystem dashParticlesVFX;
+	[SerializeField] private ParticleSystem castParticlesVFX;
 	public GameObject DashVFX { get => dashVFX; set => dashVFX = value; }
 	public GameObject Pivot_DashAnimation { get => pivot_DashAnimation; set => pivot_DashAnimation = value; }
+	public ParticleSystem DashParticlesVFX { get => dashParticlesVFX; set => dashParticlesVFX = value; }
 
 	#endregion
 

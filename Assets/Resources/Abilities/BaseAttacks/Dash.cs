@@ -22,6 +22,7 @@ public class Dash : Ability
 	public override void AbilityBehavior()
 	{
 		Timer();
+		Player.DashParticlesVFX.Play();
 		Vector2 dashDir = new Vector3(Player.Horizontal, Player.Vertical).normalized;
 		float dashAngle = Mathf.Atan2(dashDir.y, dashDir.x) * Mathf.Rad2Deg;
 		Debug.Log("Dash angle: " + dashAngle);
