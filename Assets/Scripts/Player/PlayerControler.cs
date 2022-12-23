@@ -29,6 +29,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private GameObject pivot_DashAnimation;
 	[SerializeField] private GameObject attackAnimation;
 	[SerializeField] private GameObject dashVFX;
+	[SerializeField] private ParticleSystem castParticlesVFX;
 	[SerializeField] Animator animAttack;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
@@ -575,6 +576,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		{
 			flashBlueMask.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		}
+	}
+
+	public void CastParticles()
+	{
+		castParticlesVFX.Play();
 	}
 
 	public void TakeDamage(int damage, int damageType)

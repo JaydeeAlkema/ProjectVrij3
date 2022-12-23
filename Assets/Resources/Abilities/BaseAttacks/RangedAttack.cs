@@ -26,6 +26,7 @@ public class RangedAttack : Ability
 			{
 				AudioManager.Instance.PostEventLocal( abilitySound, player.gameObject );
 			}
+			player.CastParticles();
 			CastedObject = Object.Instantiate( castObject, CastFromPoint.transform.position + ( Vector3 )LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform );
 			Projectile proj = CastedObject.GetComponent<Projectile>();
 			//TrailUpgrade = BaseStats.TrailUpgrade;
@@ -45,6 +46,7 @@ public class RangedAttack : Ability
 			{
 				AudioManager.Instance.PostEventLocal( abilitySound, player.gameObject );
 			}
+			player.CastParticles();
 			CastedObject = Object.Instantiate( castObject, CastFromPoint.transform.position + ( Vector3 )LookDir.normalized, CastFromPoint.rotation, CastFromPoint.transform );
 			Projectile proj = CastedObject.GetComponent<Projectile>();
 			//TrailUpgrade = BaseStats.TrailUpgrade;
