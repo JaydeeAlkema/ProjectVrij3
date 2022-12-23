@@ -65,25 +65,19 @@ public class GameManager : MonoBehaviour
 		//scriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance("ScriptablePlayer");
 
 		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
-		ChangeGameState(GameState.Menu);
 	}
 	#endregion
 
 	public void Update()
 	{
-		if (PlayerHP.value <= 0 && currentGameState == GameState.Dungeon)
-		{
-			ChangeGameState(GameState.GameOver);
-		}
-
 		if (PlayerHP.value > playerHP.startValue)
 		{
 			playerHP.value = playerHP.startValue;
 		}
 
-		if (isPaused)
+		if (PlayerHP.value <= 0 && currentGameState == GameState.Dungeon)
 		{
-			Time.timeScale = 0f;
+			ChangeGameState(GameState.GameOver);
 		}
 
 		if (Input.GetKeyDown(KeyCode.Escape))
@@ -122,7 +116,8 @@ public class GameManager : MonoBehaviour
 
 	public void TogglePauseGame()
 	{
-		SetPauseState(!isPaused);
+		bool pause = !isPaused;
+		SetPauseState(pause);
 	}
 
 	public void SetPauseState(bool pause)
@@ -138,7 +133,7 @@ public class GameManager : MonoBehaviour
 			if (currentGameState == GameState.Dungeon)
 			{
 				SetCursorImage(2);
-			}			
+			}
 		}
 	}
 
@@ -214,6 +209,7 @@ public class GameManager : MonoBehaviour
 		switch (currentGameState)
 		{
 			case GameState.Dungeon:
+				Cursor.visible = true;
 				SetCursorImage(2);
 				CurrentSoundState = SoundStateCrowded;
 				CurrentSoundState.SetValue();
@@ -224,11 +220,12 @@ public class GameManager : MonoBehaviour
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.GameOver:
-				SetCursorImage(0);
+				Cursor.visible = false;
 				StartCoroutine(GameOver());
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.Hub:
+				Cursor.visible = true;
 				SetCursorImage(1);
 				AudioManager.Instance.PostEventGlobal(stopMusic);
 				Debug.Log("Stopping music.");
@@ -237,6 +234,7 @@ public class GameManager : MonoBehaviour
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.Menu:
+				Cursor.visible = false;
 				SetCursorImage(1);
 				//startMusic.Stop( AudioManager.Instance.gameObject );
 				AudioManager.Instance.PostEventGlobal(stopMusic);
@@ -249,13 +247,10 @@ public class GameManager : MonoBehaviour
 		//}
 	}
 
-	public void SetCursorImage(int cursorType) //0 = none, 1 = menu cursor, 2 = reticle
+	public void SetCursorImage(int cursorType) //1 = menu cursor, 2 = reticle
 	{
 		switch (cursorType)
 		{
-			case 0:
-				Cursor.SetCursor(default, Vector2.zero, CursorMode.ForceSoftware);
-				break;
 			case 1:
 				Cursor.SetCursor(menuCursor, new Vector2(16f, 16f), CursorMode.ForceSoftware);
 				break;

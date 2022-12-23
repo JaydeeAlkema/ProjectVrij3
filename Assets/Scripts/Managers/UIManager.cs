@@ -75,7 +75,7 @@ public class UIManager : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.P) && uiStates[5].activeInHierarchy == false)
 		{
-			GameManager.Instance.ExpManager.AddExp(5);
+			GameManager.Instance.ExpManager.AddExp(30);
 		}
 		if (Input.GetKeyDown(KeyCode.F1))
 		{
