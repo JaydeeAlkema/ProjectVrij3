@@ -159,6 +159,19 @@ public class LevelGeneratorV3 : MonoBehaviour
 					newMapPieceGO.transform.parent = connectedMapPiecesParent;
 					mapPiecesInScene.Add(newMapPieceGO, newMapPiecePos);
 					newMapPieceGO = null;
+					// Temp
+					foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+					{
+						MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
+						SetMapPieceNeighbours(mapPiece);
+						foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
+						{
+							if (connectionPoint.ConnectedTo == null && connectionPoint.Status == ConnectionPointStatus.Connected)
+							{
+								connectionPoint.Status = ConnectionPointStatus.Disconnected;
+							}
+						}
+					}
 				}
 				else
 				{
@@ -173,18 +186,19 @@ public class LevelGeneratorV3 : MonoBehaviour
 					retryLimit--;
 				}
 
-				// Temp
-				foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+			}
+		}
+
+		// Temp
+		foreach (KeyValuePair<GameObject, Vector2> mapPieceInScene in mapPiecesInScene)
+		{
+			MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
+			SetMapPieceNeighbours(mapPiece);
+			foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
+			{
+				if (connectionPoint.ConnectedTo == null && connectionPoint.Status == ConnectionPointStatus.Connected)
 				{
-					MapPiece mapPiece = mapPieceInScene.Key.GetComponent<MapPiece>();
-					SetMapPieceNeighbours(mapPiece);
-					foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
-					{
-						if (connectionPoint.ConnectedTo == null && connectionPoint.Status == ConnectionPointStatus.Connected)
-						{
-							connectionPoint.Status = ConnectionPointStatus.Disconnected;
-						}
-					}
+					connectionPoint.Status = ConnectionPointStatus.Disconnected;
 				}
 			}
 		}
