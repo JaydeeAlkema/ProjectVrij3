@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MapPiece : MonoBehaviour
 {
-	[SerializeField] private Transform connectionPointsParent = null;
 	[SerializeField] private List<ConnectionPoint> connectionPoints = new List<ConnectionPoint>();
 	[SerializeField] private List<GameObject> neighbours = new List<GameObject>();
 	[SerializeField] private List<GameObject> statueSpawnPoints = new List<GameObject>();
@@ -15,18 +14,6 @@ public class MapPiece : MonoBehaviour
 	public List<GameObject> StatueSpawnPoints { get => statueSpawnPoints; private set => statueSpawnPoints = value; }
 	public List<GameObject> BreakableObjects { get => breakableObjects; set => breakableObjects = value; }
 
-	public void GetConnectionPointsFromChildren()
-	{
-		foreach (Transform childTransform in connectionPointsParent.GetComponentsInChildren<Transform>())
-		{
-			ConnectionPoint connectionPoint = childTransform.GetComponent<ConnectionPoint>();
-			if (connectionPoint != null)
-			{
-				connectionPoints.Add(connectionPoint);
-			}
-		}
-	}
-
 	public void AddNeighbour(GameObject neighbour)
 	{
 		if (neighbours.Contains(neighbour) == false && neighbour != null)
@@ -37,8 +24,16 @@ public class MapPiece : MonoBehaviour
 
 	public void Decorate()
 	{
+		if (breakableObjects.Count == 0) return;
+
 		foreach (GameObject breakableObject in breakableObjects)
 		{
+			if (breakableObject == null)
+			{
+				Debug.Log($"<color=red>Array Element is null! Please delete this array element to avoid errors like this!</color>");
+				continue;
+			}
+
 			int spawnChance = Random.Range(0, 100);
 			if (spawnChance > breakableObjectSpawnChance)
 			{
