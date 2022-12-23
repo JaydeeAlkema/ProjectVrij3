@@ -257,7 +257,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 			}
 		}
 	}
-
 	private void AddDeadEnds()
 	{
 		// Get all the map pieces with Unoccupied connection points and store them in a list for later use.
@@ -474,9 +473,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 			}
 		}
 	}
-
-
-
 	private void SpawnEnemies()
 	{
 		int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset - 1;
