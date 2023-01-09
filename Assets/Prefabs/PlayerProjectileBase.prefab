@@ -140,12 +140,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileAnimation: {fileID: 5538143781778905922}
+  typeOfLayer: 6
   lifeSpan: 0
-  trail: {fileID: 1788556927361173705, guid: 946506ebe76157943b7b48aefdd63098, type: 3}
+  trail: {fileID: 6863625429953767869, guid: 946506ebe76157943b7b48aefdd63098, type: 3}
   explosion: {fileID: 9010442052002947422, guid: 0b2e9bd2195c3034785b58b72a95a584, type: 3}
   trailUpgrade: 0
   force: 0
-  typeOfLayer: 6
+  chargeRadius: 0
 --- !u!114 &8631467547771518718
 MonoBehaviour:
   m_ObjectHideFlags: 0

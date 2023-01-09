@@ -6,6 +6,7 @@ using UnityEngine.Android;
 public class ExpOrb : MonoBehaviour
 {
 	[SerializeField] private GameObject vfxPickupParticles;
+	[SerializeField] private TrailRenderer expOrbTrail;
 	[SerializeField] private float pickupRange;
 	[SerializeField] private float flySpeed;
 	[SerializeField] private int expToGive;
@@ -18,6 +19,7 @@ public class ExpOrb : MonoBehaviour
 	private void Start()
 	{
 		scatterDestination = (Vector2)transform.position + new Vector2(Random.Range(0.5f, 2f), Random.Range(0.5f, 2f));
+		expOrbTrail.enabled = false;
 	}
 
 	void Update()
@@ -59,11 +61,12 @@ public class ExpOrb : MonoBehaviour
 		Collider2D playerInArea = Physics2D.OverlapCircle(transform.position, pickupRange, layerMask); //Add boss layer later maybe to damage orb? Test!
 		if (playerInArea != null)
 		{
+			expOrbTrail.enabled = true;
 			OrbFlyTowardsPlayer(playerInArea.gameObject);
 
 			if (Vector2.Distance(transform.position, playerInArea.transform.position) < 0.2f)
 			{
-				PlayerPickupOrb(playerInArea.transform.position);
+				PlayerPickupOrb(playerInArea.gameObject);
 			}
 		}
 	}
@@ -73,16 +76,19 @@ public class ExpOrb : MonoBehaviour
 		transform.position = Vector2.MoveTowards(transform.position, player.transform.position, flySpeed * Time.deltaTime);
 	}
 
-	void PlayerPickupOrb(Vector2 spawnPosition)
+	void PlayerPickupOrb(GameObject player)
 	{
 		GameManager.Instance.ExpManager.AddExp(expToGive);
-		GameObject vfxPickup = Instantiate(vfxPickupParticles, transform.position, Quaternion.identity);
+		GameObject vfxPickup = Instantiate(vfxPickupParticles, player.transform.position, Quaternion.identity);
 		ParticleSystem particles = vfxPickup.GetComponent<ParticleSystem>();
 		ParticleSystem.MainModule particlesMain = particles.main;
-		particlesMain.startSpeedMultiplier = 30 + 1.2f * expToGive;
+		particlesMain.startSpeedMultiplier = 25 + 0.5f * expToGive;
 		ParticleSystem.Burst particleBurst = particles.emission.GetBurst(0);
 		particleBurst.count = 7 + expToGive;
 		vfxPickup.GetComponent<ParticleSystem>().emission.SetBurst(0, particleBurst);
+		PlayerControler playerScript = player.GetComponent<PlayerControler>();
+		playerScript.StopCoroutine(playerScript.GetExpVFX(1f));
+		playerScript.StartCoroutine(playerScript.GetExpVFX(1f));
 		Destroy(this.gameObject);
 	}
 }

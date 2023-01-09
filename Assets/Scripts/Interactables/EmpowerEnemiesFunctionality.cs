@@ -32,11 +32,15 @@ public class EmpowerEnemiesFunctionality : MonoBehaviour
 		{
 			expMan = GameManager.Instance.ExpManager;
 		}
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.SetCursorImage(1);
+		}
 	}
 
 	void Update()
 	{
-		if(expMan != null)
+		if (expMan != null)
 		{
 			UpdateEmpowerUI();
 		}
@@ -49,8 +53,8 @@ public class EmpowerEnemiesFunctionality : MonoBehaviour
 		currentLevelText.text = levelMan.CurrentLevel.ToString();
 		int newLevelNumber = levelMan.CurrentLevel + 1;
 		newLevelText.text = newLevelNumber.ToString();
-		currentStat =((Mathf.Pow(levelMan.DificultyModifier , levelMan.CurrentLevel)) -1f) * 100;
-		increasedStat = ((Mathf.Pow(levelMan.DificultyModifier , newLevelNumber)) -1f) * 100;
+		currentStat = ((Mathf.Pow(levelMan.DificultyModifier, levelMan.CurrentLevel)) - 1f) * 100;
+		increasedStat = ((Mathf.Pow(levelMan.DificultyModifier, newLevelNumber)) - 1f) * 100;
 		foreach (TMP_Text statText in currentStatTexts)
 		{
 			statText.text = currentStat.ToString() + "%";

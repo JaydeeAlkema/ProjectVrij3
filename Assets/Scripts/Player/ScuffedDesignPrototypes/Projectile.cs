@@ -101,7 +101,7 @@ public class Projectile : MonoBehaviour
 	private void OnDestroy()
 	{
 		SpawnProjectileExplosion();
-		//if (addedTrail != null)
+		//if( addedTrail != null )
 		//{
 		//	addedTrail.transform.parent = null;
 		//	addedTrail.GetComponent<TrailRenderer>().autodestruct = true;

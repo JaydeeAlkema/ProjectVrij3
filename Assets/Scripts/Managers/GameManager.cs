@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField, BoxGroup("Runtime References")] private int maxDungeonFloor = 3;
 	[SerializeField, BoxGroup("Runtime References")] private int currentDungeonFloor = 1;
 
+	[SerializeField, BoxGroup("Cursors")] private Texture2D menuCursor;
+	[SerializeField, BoxGroup("Cursors")] private Texture2D reticle;
 	#region Properties
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
@@ -68,22 +70,17 @@ public class GameManager : MonoBehaviour
 
 	public void Update()
 	{
-		if (PlayerHP.value <= 0 && currentGameState == GameState.Dungeon)
-		{
-			ChangeGameState(GameState.GameOver);
-		}
-
 		if (PlayerHP.value > playerHP.startValue)
 		{
 			playerHP.value = playerHP.startValue;
 		}
 
-		if (isPaused)
+		if (PlayerHP.value <= 0 && currentGameState == GameState.Dungeon)
 		{
-			Time.timeScale = 0f;
+			ChangeGameState(GameState.GameOver);
 		}
 
-		if (Input.GetKeyDown(KeyCode.Escape))
+		if (Input.GetKeyDown(KeyCode.Escape) && (currentGameState == GameState.Dungeon || currentGameState == GameState.Hub))
 		{
 			TogglePauseGame();
 			uiManager.SetUIActive(3, isPaused);
@@ -119,14 +116,25 @@ public class GameManager : MonoBehaviour
 
 	public void TogglePauseGame()
 	{
-		isPaused = !isPaused;
-		Time.timeScale = isPaused ? 0f : 1f;
+		bool pause = !isPaused;
+		SetPauseState(pause);
 	}
 
 	public void SetPauseState(bool pause)
 	{
 		isPaused = pause;
 		Time.timeScale = isPaused ? 0f : 1f;
+		if (isPaused)
+		{
+			SetCursorImage(1);
+		}
+		else
+		{
+			if (currentGameState == GameState.Dungeon)
+			{
+				SetCursorImage(2);
+			}
+		}
 	}
 
 	private void SetupMinimapCamera()
@@ -201,6 +209,8 @@ public class GameManager : MonoBehaviour
 		switch (currentGameState)
 		{
 			case GameState.Dungeon:
+				Cursor.visible = true;
+				SetCursorImage(2);
 				CurrentSoundState = SoundStateCrowded;
 				CurrentSoundState.SetValue();
 				AudioManager.Instance.PostEventGlobal(stopMusic);
@@ -210,10 +220,13 @@ public class GameManager : MonoBehaviour
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.GameOver:
+				Cursor.visible = false;
 				StartCoroutine(GameOver());
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.Hub:
+				Cursor.visible = true;
+				SetCursorImage(1);
 				AudioManager.Instance.PostEventGlobal(stopMusic);
 				Debug.Log("Stopping music.");
 				PlayerHP.ResetValue();
@@ -221,6 +234,8 @@ public class GameManager : MonoBehaviour
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.Menu:
+				Cursor.visible = true;
+				SetCursorImage(1);
 				//startMusic.Stop( AudioManager.Instance.gameObject );
 				AudioManager.Instance.PostEventGlobal(stopMusic);
 				Debug.Log("Stopping music.");
@@ -230,6 +245,19 @@ public class GameManager : MonoBehaviour
 				break;
 		}
 		//}
+	}
+
+	public void SetCursorImage(int cursorType) //1 = menu cursor, 2 = reticle
+	{
+		switch (cursorType)
+		{
+			case 1:
+				Cursor.SetCursor(menuCursor, new Vector2(16f, 16f), CursorMode.ForceSoftware);
+				break;
+			case 2:
+				Cursor.SetCursor(reticle, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+				break;
+		}
 	}
 
 	/// <summary>
@@ -293,7 +321,7 @@ public class GameManager : MonoBehaviour
 		uiManager.SetUIActive(4, true);
 		yield return new WaitForSecondsRealtime(3f);
 
-		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name, GameState.Hub);
 
 		PlayerHP.ResetValue();
 		ExpManager.ResetExp();
@@ -301,7 +329,7 @@ public class GameManager : MonoBehaviour
 
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(0, true);
-		ChangeGameState(GameState.Hub);
+		//ChangeGameState(GameState.Hub);
 		yield return null;
 	}
 

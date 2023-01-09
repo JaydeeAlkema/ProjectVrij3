@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField, BoxGroup("EXP Bar")] private float expBarSliderSmoothing = 0.5f;
 	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text expAmountText;
 	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text pointText;
+	[SerializeField, BoxGroup("EXP Bar")] private GameObject getPointVFX;
 
 	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSlider;
 	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSliderDelayed;
@@ -21,6 +22,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField, BoxGroup("Player On Hit")] private Image playerHitEffect;
 	[SerializeField, BoxGroup("Player On Hit")] private float playerHitEffectDuration;
 
+	[SerializeField, BoxGroup("Map")] private Canvas mainCanvas;
 	[SerializeField, BoxGroup("Map")] private Canvas shaderCanvas;
 	[SerializeField, BoxGroup("Map")] private GameObject map;
 
@@ -73,7 +75,7 @@ public class UIManager : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.P) && uiStates[5].activeInHierarchy == false)
 		{
-			GameManager.Instance.ExpManager.AddExp(5);
+			GameManager.Instance.ExpManager.AddExp(30);
 		}
 		if (Input.GetKeyDown(KeyCode.F1))
 		{
@@ -250,6 +252,14 @@ public class UIManager : MonoBehaviour
 		{
 			shaderCanvas.worldCamera = camera;
 		}
+	}	
+	
+	public void AssignPlayerCameraToMainCanvas(Camera camera)
+	{
+		if (mainCanvas.worldCamera == null)
+		{
+			mainCanvas.worldCamera = camera;
+		}
 	}
 
 	public void ToggleMapOverlay(bool isEnabled)
@@ -264,6 +274,11 @@ public class UIManager : MonoBehaviour
 	{
 		StopCoroutine(ScreenVFXOnPlayerHit());
 		StartCoroutine(ScreenVFXOnPlayerHit());
+	}
+
+	public void GetPointParticleEffect()
+	{
+		getPointVFX.GetComponent<ParticleSystem>().Play();
 	}
 
 	IEnumerator ScreenVFXOnPlayerHit()

@@ -36,6 +36,7 @@ public class ExpManager : MonoBehaviour
 		{
 			AddPoint();
 			playerExp.value -= expToNextPoint;
+			GameManager.Instance.UiManager.GetPointParticleEffect();
 		}
 	}
 

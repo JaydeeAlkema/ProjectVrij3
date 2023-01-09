@@ -215,7 +215,6 @@ public class AbilityController : MonoBehaviour
 
 		//Reset buffer counter
 		player.BufferCounterDash = 0f;
-
 		return currentDash;
 	}
 
