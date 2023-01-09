@@ -220,7 +220,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		}
 		if (GameManager.Instance != null)
 		{
-			GameManager.Instance.UiManager.AssignPlayerCameraToMainCanvas(GetComponentInChildren<Camera>());
+			//GameManager.Instance.UiManager.AssignPlayerCameraToMainCanvas(GetComponentInChildren<Camera>());
 			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
 		}
 	}
