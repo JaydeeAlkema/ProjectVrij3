@@ -31,6 +31,7 @@ public class IconTray : MonoBehaviour
 		spriteObject.AddComponent<Image>();
 		spriteObject.GetComponent<Image>().sprite = icon;
 		spriteObject.transform.SetParent(transform);
+		spriteObject.transform.localScale = new Vector3( 1, 1, 1 );
 		if( index > 1 )
 		{
 			spriteObject.transform.localPosition = new Vector3( ( GetComponent<RectTransform>().sizeDelta.y / sprite.Length ) * index, 0, 0 );
