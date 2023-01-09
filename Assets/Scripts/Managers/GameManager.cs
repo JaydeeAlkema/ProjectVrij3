@@ -325,6 +325,7 @@ public class GameManager : MonoBehaviour
 
 		PlayerHP.ResetValue();
 		ExpManager.ResetExp();
+		currentDungeonFloor = 0;
 
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(0, true);
