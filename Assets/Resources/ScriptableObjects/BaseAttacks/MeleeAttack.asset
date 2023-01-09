@@ -19,10 +19,10 @@ MonoBehaviour:
   baseDamage: 50
   basePierce: 1
   baseCritChance: 0
-  baseDistance: 1.41
+  baseDistance: 1.5
   baseLifeSpan: 10
   baseForce: 30
-  baseBoxSize: {x: 4.2, y: 1.8}
+  baseBoxSize: {x: 2.5, y: 1.8}
   baseCircleSize: 0
   baseDashSpeed: 5.8
   baseDashDuration: 0.25
@@ -37,8 +37,8 @@ MonoBehaviour:
   damage: 50
   pierce: 1
   critChance: 0
-  distance: 1.41
-  boxSize: {x: 4.2, y: 1.8}
+  distance: 1.5
+  boxSize: {x: 2.5, y: 1.8}
   circleSize: 0
   layerMask:
     serializedVersion: 2
@@ -48,7 +48,7 @@ MonoBehaviour:
   force: 30
   burnObject: {fileID: 3246640220694370058, guid: f03f18e478811944e971e5f2638900a1, type: 3}
   trailUpgrade: 0
-  dashSpeed: 6.8
+  dashSpeed: 5.8
   dashDuration: 0.25
   attackTime: 200
   markHits: 1
