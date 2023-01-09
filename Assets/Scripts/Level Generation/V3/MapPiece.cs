@@ -30,7 +30,7 @@ public class MapPiece : MonoBehaviour
 		{
 			if (breakableObject == null)
 			{
-				Debug.Log($"<color=red>Array Element is null! Please delete this array element to avoid errors like this!</color>");
+				Debug.Log($"<color=red>Array Element is null! Please delete this array element to avoid errors like this!</color>", gameObject);
 				continue;
 			}
 

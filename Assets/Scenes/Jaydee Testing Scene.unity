@@ -855,10 +855,20 @@ MonoBehaviour:
       weight: 1
   mapPieces:
     list:
-    - item: {fileID: 7242182623989245689, guid: b68abe4c2427ca342aac58a33d585a73, type: 3}
-      weight: 1
+    - item: {fileID: 7242182623989245689, guid: e704ceb96e6174745b46f512f43b14e9, type: 3}
+      weight: 10
     - item: {fileID: 7242182623989245689, guid: 95c0d4d5c2ad5de4294e24b6ca0e1c26, type: 3}
-      weight: 1
+      weight: 10
+    - item: {fileID: 7242182623989245689, guid: 2833651dd82fa1a458ac7a685fca2183, type: 3}
+      weight: 10
+    - item: {fileID: 7242182623989245689, guid: 3e7670d4ea4d7a646b8b1e22fef7bcdb, type: 3}
+      weight: 10
+    - item: {fileID: 7242182623989245689, guid: b68abe4c2427ca342aac58a33d585a73, type: 3}
+      weight: 10
+    - item: {fileID: 7242182623989245689, guid: a96081c42732d184ab876e87a8c697aa, type: 3}
+      weight: 10
+    - item: {fileID: 7242182623989245689, guid: f0836a427e44b8b45acc9b5bec405990, type: 3}
+      weight: 10
   northDeadEndMapPieces:
     list:
     - item: {fileID: 7242182623989245689, guid: e4eb46ab88b548646bf87d4eb46b5fca, type: 3}
@@ -870,6 +880,8 @@ MonoBehaviour:
   southDeadEndMapPieces:
     list:
     - item: {fileID: 7242182623989245689, guid: b83da130a75cf5f45be410986004f847, type: 3}
+      weight: 1
+    - item: {fileID: 7242182623989245689, guid: 7d8f6a3b235761e4b9fa7b2db563f8f1, type: 3}
       weight: 1
   westDeadEndMapPieces:
     list:
