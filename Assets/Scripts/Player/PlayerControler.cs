@@ -31,6 +31,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] Animator animAttack;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
+	private Vector3 attackAnimBaseScale;
 	private bool onStartRun;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
 
@@ -78,6 +79,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
+	public Vector3 AttackAnimBaseScale { get => attackAnimBaseScale; set => attackAnimBaseScale = value; }
 
 	[Header("Abilities")]
 	#region ability fields
@@ -209,6 +211,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentMeleeAttack = currentMeleeAttack;
 			abilityController.CurrentRangedAttack = currentRangedAttack;
 			abilityController.CurrentDash = currentDash;
+			attackAnimBaseScale = animAttack.transform.localScale;
 			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
 			Debug.Log(currentMeleeAttack);
@@ -408,6 +411,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		CheckAbilityUpdate();
 		outOfCombatCounter = 0f;
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
+		abilityController.CurrentMeleeAttack.SizeScale = CurrentMeleeAttack.BoxSize.x / CurrentMeleeAttack.BaseStats.BaseBoxSize.x;
 		abilityController.CurrentMeleeAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		abilityController.MeleeAttacked(currentMeleeAttack);
 	}
