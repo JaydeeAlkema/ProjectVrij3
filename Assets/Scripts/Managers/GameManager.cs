@@ -234,7 +234,7 @@ public class GameManager : MonoBehaviour
 				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
 				break;
 			case GameState.Menu:
-				Cursor.visible = false;
+				Cursor.visible = true;
 				SetCursorImage(1);
 				//startMusic.Stop( AudioManager.Instance.gameObject );
 				AudioManager.Instance.PostEventGlobal(stopMusic);
@@ -325,6 +325,7 @@ public class GameManager : MonoBehaviour
 
 		PlayerHP.ResetValue();
 		ExpManager.ResetExp();
+		currentDungeonFloor = 0;
 
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(0, true);

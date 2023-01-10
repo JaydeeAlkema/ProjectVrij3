@@ -223,7 +223,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		}
 		if (GameManager.Instance != null)
 		{
-			GameManager.Instance.UiManager.AssignPlayerCameraToMainCanvas(GetComponentInChildren<Camera>());
+			//GameManager.Instance.UiManager.AssignPlayerCameraToMainCanvas(GetComponentInChildren<Camera>());
 			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
 		}
 	}
@@ -323,11 +323,32 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing && !isDying)
 		{
-			playerSprite.flipX = lookDir.x > 0;
+			if (playerMoveDir != Vector2.zero)
+			{
+				playerSprite.flipX = lookDir.x > 0;
+			}
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
 			playerMoveDir = new Vector3(horizontal, vertical).normalized;
 			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * playerMoveDir;
+			if (!IsAttackPositionLocked)
+			{
+				if (playerMoveDir.x != 0f)
+				{
+					animPlayer.SetTrigger("isWalking");
+					if (animPlayer.GetCurrentAnimatorStateInfo(0).IsName("PlayerWalking1"))
+					{
+						playerSprite.flipX = playerMoveDir.x > 0;
+					}
+				}
+
+				//Idle animation when not moving to a side. Rework this when we have an animation for walking up/down to only idle when playerMoveDir == Vector2.zero instead.
+				else if (playerMoveDir.x == 0f)
+				{
+					animPlayer.SetTrigger("stopWalking");
+				}
+
+			}
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
@@ -378,6 +399,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			pivot_AttackAnimation.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180);
 
 			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0;
+		}
+		else
+		{
+			playerSprite.flipX = lookDir.x > 0f;
 		}
 	}
 

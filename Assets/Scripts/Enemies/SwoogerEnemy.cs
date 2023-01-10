@@ -12,6 +12,8 @@ public class SwoogerEnemy : EnemyBase
 	//Enemy
 	public LayerMask playerLayerMask;
 
+	public Animator coilAnimator;
+
 	[SerializeField] private GameObject player;
 	private float baseSpeed;
 
@@ -37,6 +39,18 @@ public class SwoogerEnemy : EnemyBase
 			HitBox();
 		}
 		LookAtTarget();
+
+		//Very scuffed, change when we have a seperate behaviour tree for this enemy
+		if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerAttack") && !coilAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerCoil"))
+		{
+			coilAnimator.SetTrigger("StartCoiling");
+		}
+		
+		if (enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerLanding") && coilAnimator.GetCurrentAnimatorStateInfo(0).IsName("SwoogerCoil"))
+		{
+			coilAnimator.SetTrigger("StopCoiling");
+		}
+
 	}
 
 	void HitBox()
@@ -46,7 +60,7 @@ public class SwoogerEnemy : EnemyBase
 			if (Target.gameObject != null && HasHitbox)
 			{
 				AttackPlayer(Target.gameObject);
-				//HasHitbox = false;
+				HasHitbox = false;
 			}
 		}
 		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);

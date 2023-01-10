@@ -373,8 +373,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1261354564871183732}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.2, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalScale: {x: 0.5, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7001735565655860238}
@@ -10554,7 +10554,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3778431377053427336}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10563,7 +10563,7 @@ Transform:
   - {fileID: 8309542362575138728}
   m_Father: {fileID: 8334970476083683795}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!1 &7174218216623666659
 GameObject:
   m_ObjectHideFlags: 0
@@ -10658,6 +10658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 200913126937271939}
   - component: {fileID: 5412664997434337675}
+  - component: {fileID: 989576856395241408}
   m_Layer: 8
   m_Name: FlashBlueMask
   m_TagString: Untagged
@@ -10732,6 +10733,18 @@ SpriteMask:
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 0
   m_SpriteSortPoint: 0
+--- !u!210 &989576856395241408
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8114156822986729854}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
+  m_SortAtRoot: 0
 --- !u!1 &8334970474968766864
 GameObject:
   m_ObjectHideFlags: 0
@@ -11037,8 +11050,8 @@ MonoBehaviour:
   animPlayer: {fileID: 2846144575864148852}
   holdTime: 0
   outOfCombatTimer: 3
-  bufferTimeMelee: 0.25
-  bufferTimeCast: 0.3
+  bufferTimeMelee: 0.2
+  bufferTimeCast: 0.2
   bufferTimeDash: 0.65
   flashBlueMask: {fileID: 5412664997434337675}
   flashBlue: {fileID: 2875432366243225896}
