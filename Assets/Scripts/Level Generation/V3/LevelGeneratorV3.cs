@@ -78,8 +78,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	public IEnumerator Generate()
 	{
-		if (Application.isEditor)
-			CleanUp();
+		CleanUp();
 
 		if (generateRandomSeed) seed = Random.Range(0, int.MaxValue);
 		Random.InitState(seed);
@@ -185,7 +184,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 					newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 					retryLimit--;
 				}
-
 			}
 		}
 
@@ -204,8 +202,8 @@ public class LevelGeneratorV3 : MonoBehaviour
 		}
 
 		RemoveDisconnectedMapPieces();
-		SpawnEnemies();
 		AddDeadEnds();
+		SpawnEnemies();
 		SpawnLevelStatue();
 		DecorateLevel();
 
@@ -489,28 +487,13 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	private void SpawnEnemies()
 	{
-		int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset - 1;
-		Bounds safeZoneBounds = new Bounds
-		{
-			center = Vector2.zero,
-			size = new Vector2(playerSafeZoneSize, playerSafeZoneSize)
-		};
-
 		// Spawn Regular Enemies
 		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
 		{
-			float distanceToSpawn = Vector2.Distance(Vector2.zero, mapPiece.Value);
-
-			Bounds mapPieceBounds = new Bounds()
-			{
-				center = mapPiece.Value,
-				size = new Vector2(mapPieceOffset, mapPieceOffset)
-			};
-
-			if (safeZoneBounds.Intersects(mapPieceBounds)) continue;
-			if (debugMapPiecesOutsidePlayerSafeZone) Debug.Log($"<color=magenta>{mapPiece.Key.name} is outside of the Player Safe Zone and can spawn enemies</color>", mapPiece.Key);
-
+			// Check if the current map piece is the first map piece (player spawn map piece). If so, we do not spawn any enemies.
 			GameObject mapPieceGO = mapPiece.Key;
+			if (Vector2.Distance(mapPieceGO.transform.position, Vector2.zero) < mapPieceOffset) continue;
+
 			Transform mapPieceFloorParentTransform = mapPieceGO.transform.Find("Tiles").Find("Floor");
 			Transform[] floorTiles = mapPieceFloorParentTransform.GetComponentsInChildren<Transform>();
 
@@ -646,9 +629,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	private bool IsMapPieceBlockedFromConnecting(GameObject newMapPieceGO)
 	{
-		bool blocked = false;
 		MapPiece mapPiece = newMapPieceGO.GetComponent<MapPiece>();
 		Vector2 newMapPiecePosition = new Vector2(newMapPieceGO.transform.position.x, newMapPieceGO.transform.position.y);
+		List<bool> blockages = new List<bool>();
 
 		Bounds neighbourBounds = new Bounds { size = overlapSize };
 		foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
@@ -681,11 +664,19 @@ public class LevelGeneratorV3 : MonoBehaviour
 					size = overlapSize
 				};
 
-				if (mapPieceInSceneBounds.Intersects(neighbourBounds)) blocked = true;
+				blockages.Add(mapPieceInSceneBounds.Intersects(neighbourBounds));
 			}
 		}
 
-		return blocked;
+		foreach (bool blockage in blockages)
+		{
+			if (blockage == false)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 	private void SetMapPieceNeighbours(MapPiece mapPiece)
 	{
