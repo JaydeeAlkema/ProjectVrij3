@@ -98,7 +98,7 @@ MonoBehaviour:
   damage: 0
   speed: 7
   aggroRange: 16
-  attackRange: 5
+  attackRange: 2.2
   expAmount: 5
   expAmountBase: 5
   markHits: 1
@@ -121,8 +121,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   windUpTime: 0.4
-  dashSpeed: 20
-  dashDistance: 8
+  dashSpeed: 13
+  dashDistance: 4
   endLag: 0.7
   materialDefault: {fileID: 0}
   materialHit: {fileID: 2100000, guid: 865304ebcfe39dc4d8e479ef5ed32c27, type: 2}
