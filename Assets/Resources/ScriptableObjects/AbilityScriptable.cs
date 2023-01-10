@@ -71,6 +71,7 @@ public class AbilityScriptable : ScriptableObject
 	public int Damage { get => damage; set => damage = value; }
 	public float Force { get => force; set => force = value; }
 	public float Distance { get => distance; set => distance = value; }
+	public Vector2 BaseBoxSize { get => baseBoxSize;}
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
 	public float CircleSize { get => circleSize; set => circleSize = value; }
 	public LayerMask Layer { get => layerMask; set => layerMask = value; }

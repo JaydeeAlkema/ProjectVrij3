@@ -53,6 +53,7 @@ public class Dash : Ability
 			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 			anim.CallAbility(Player);
 		}
+		
 		Player.Pivot_DashAnimation.transform.rotation = Quaternion.Euler(0f, 0f, dashAngle + 270);
 		Player.DashVFX.GetComponent<Animator>().SetTrigger("doDashTrail");
 		Rb2d.velocity = dashDir.normalized * baseStats.DashSpeed;
@@ -64,6 +65,7 @@ public class Dash : Ability
 		coolDownTimer.Interval = baseStats.DashDuration * 1000;
 		coolDownTimer.AutoReset = false;
 		coolDownTimer.Enabled = true;
+		if(coolDownTimer.Enabled == true) { Player.IsDashing = true; }
 	}
 
 	private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)

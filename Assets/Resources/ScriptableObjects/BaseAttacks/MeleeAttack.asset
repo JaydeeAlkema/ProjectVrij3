@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Slash
   abilityIcon: {fileID: 0}
   toolTipText: 
+  baseEndLag: 0.08
   baseCooldown: 300
   baseDamage: 50
   basePierce: 1
@@ -33,6 +34,7 @@ MonoBehaviour:
   baseSlowDuration: 4
   baseMarkHits: 1
   baseStatusEffectType: 0
+  endLag: 0.08
   coolDown: 300
   damage: 50
   pierce: 1
