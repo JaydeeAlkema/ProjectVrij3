@@ -53,6 +53,7 @@ public class AbilityDecorator : IAbility
 	public bool CooledDown { get; set; }
 	public bool Charging { get => charging; set => charging =  value ; }
 	public float ChargeTime { get => chargeTime; set => chargeTime = value; }
+	public float SizeScale { get; set; }
 
 	public AbilityDecorator(IAbility _ability)
 	{
