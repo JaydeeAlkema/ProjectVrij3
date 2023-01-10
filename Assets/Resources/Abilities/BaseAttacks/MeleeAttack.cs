@@ -15,7 +15,6 @@ public class MeleeAttack : Ability
 	private AK.Wwise.Event abilitySound;
 	private int comboCounter = 0;
 	private float comboTimer = 0f;
-	private float sizeScale = 0f;
 	private IEnumerator comboTimerCoroutine;
 	private bool thirdHit = false;
 
@@ -128,7 +127,7 @@ public class MeleeAttack : Ability
 
 			if (comboCounter == 2)
 			{
-				IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack1", "isAttacking2");
+				IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack1", "isAttacking2", sizeScale);
 				anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 				anim.CallAbility(player);
 				//AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
@@ -138,7 +137,7 @@ public class MeleeAttack : Ability
 		{
 			thirdHit = true;
 			//Debug.Log("Full combo!");
-			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3");
+			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3", sizeScale);
 			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 			anim.CallAbility(player);
 			//AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
