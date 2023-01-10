@@ -36,7 +36,7 @@ public class MeleeAttack : Ability
 		}
 		//player.IsAttackPositionLocked = true;
 		caller.CallCoroutine(TestCoroutine());
-		player.IsDashing = true;
+
 		caller.CallCoroutine( DashRoutine() );
 
 
@@ -72,6 +72,7 @@ public class MeleeAttack : Ability
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
 		statusEffects = BaseStats.statusEffects;
+		endLag = baseStats.EndLag;
 	}
 
 	public void ResetComboTimer()
@@ -87,10 +88,17 @@ public class MeleeAttack : Ability
 
 	public IEnumerator DashRoutine()
 	{
-		Vector2 dashDir = LookDir.normalized;
-		Rb2d.velocity = dashDir.normalized * baseStats.DashSpeed;
-		yield return new WaitForSeconds( baseStats.DashDuration );
-		player.IsDashing = false;
+		if( !player.IsDashing )
+		{
+			player.IsDashing = true;
+			Vector2 dashDir = LookDir.normalized;
+			Rb2d.velocity = dashDir.normalized * baseStats.DashSpeed;
+			yield return new WaitForSeconds( baseStats.DashDuration );
+			Rb2d.velocity = dashDir.normalized * 0f;
+			yield return new WaitForSeconds( endLag );
+			player.IsDashing = false;
+			yield return null;
+		}
 		yield return null;
 	}
 
