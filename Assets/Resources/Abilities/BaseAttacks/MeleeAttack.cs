@@ -15,6 +15,7 @@ public class MeleeAttack : Ability
 	private AK.Wwise.Event abilitySound;
 	private int comboCounter = 0;
 	private float comboTimer = 0f;
+	private float sizeScale = 0f;
 	private IEnumerator comboTimerCoroutine;
 	private bool thirdHit = false;
 
@@ -35,6 +36,9 @@ public class MeleeAttack : Ability
 			AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
 		}
 		//player.IsAttackPositionLocked = true;
+
+		sizeScale = boxSize.x / baseStats.BaseBoxSize.x;
+		Debug.Log( sizeScale + " this is the sizeScale" );
 		caller.CallCoroutine(TestCoroutine());
 
 		caller.CallCoroutine( DashRoutine() );
@@ -94,7 +98,10 @@ public class MeleeAttack : Ability
 			Vector2 dashDir = LookDir.normalized;
 			Rb2d.velocity = dashDir.normalized * baseStats.DashSpeed;
 			yield return new WaitForSeconds( baseStats.DashDuration );
-			Rb2d.velocity = dashDir.normalized * 0f;
+			if( player.CurrentDash.CooledDown )
+			{
+				Rb2d.velocity = dashDir.normalized * 0f;
+			}
 			yield return new WaitForSeconds( endLag );
 			player.IsDashing = false;
 			yield return null;
