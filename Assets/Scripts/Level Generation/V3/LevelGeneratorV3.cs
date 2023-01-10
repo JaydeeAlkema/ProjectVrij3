@@ -489,26 +489,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 	}
 	private void SpawnEnemies()
 	{
-		int playerSafeZoneSize = playerSafeZoneRadii * mapPieceOffset - 1;
-		Bounds safeZoneBounds = new Bounds
-		{
-			center = Vector2.zero,
-			size = new Vector2(playerSafeZoneSize, playerSafeZoneSize)
-		};
-
 		// Spawn Regular Enemies
 		foreach (KeyValuePair<GameObject, Vector2> mapPiece in mapPiecesInScene)
 		{
-			float distanceToSpawn = Vector2.Distance(Vector2.zero, mapPiece.Value);
-
-			Bounds mapPieceBounds = new Bounds()
-			{
-				center = mapPiece.Value,
-				size = new Vector2(mapPieceOffset, mapPieceOffset)
-			};
-
-			if (safeZoneBounds.Intersects(mapPieceBounds)) continue;
-			if (debugMapPiecesOutsidePlayerSafeZone) Debug.Log($"<color=magenta>{mapPiece.Key.name} is outside of the Player Safe Zone and can spawn enemies</color>", mapPiece.Key);
+			Vector2 mapPiecePos = mapPiece.Value;
+			if (mapPiecePos == Vector2.zero) continue;
 
 			GameObject mapPieceGO = mapPiece.Key;
 			Transform mapPieceFloorParentTransform = mapPieceGO.transform.Find("Tiles").Find("Floor");
