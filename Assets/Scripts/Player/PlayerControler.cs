@@ -12,6 +12,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	private int horizontal = 0;
 	private int vertical = 0;
 	[SerializeField] private bool isDashing = false;
+	private bool meleeInterupt = false;
 	[SerializeField] private bool invulnerable = false;
 	[SerializeField] private float hitInvulTime = 1;
 	[SerializeField] private float dashInvulTime = 1;
@@ -265,7 +266,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			{
 				bufferCounterMelee -= Time.deltaTime;
 			}
-			if( bufferCounterMelee > 0f ) { MeleeAttack(); holdTime = 0; }
+			if( bufferCounterMelee > 0f ) { MeleeAttack(); holdTime = 0; meleeInterupt = true; }
 
 			//Cast input
 			if (Input.GetMouseButtonDown(1)) { holdTime = 0; }
@@ -277,6 +278,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 					if( holdTime > 5 && currentRangedAttack != null )
 					{
 						currentRangedAttack.Charging = true;
+						currentRangedAttack.ChargeTime = holdTime;
 					}
 					holdTime++;
 					
@@ -299,7 +301,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				{
 					bufferCounterCast -= Time.deltaTime;
 				}
-				if (bufferCounterCast > 0f) currentRangedAttack.ChargeTime = holdTime; RangedAttack();
+				if (bufferCounterCast > 0f)  RangedAttack();
 				holdTime = 0;
 			}
 
