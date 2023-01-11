@@ -75,6 +75,13 @@ public class LevelGeneratorV3 : MonoBehaviour
 	public void GenerateInScene()
 	{
 		StartCoroutine(Generate());
+
+		if (mapPiecesInScene.Count < mapPieceLimit)
+		{
+			ClearLog();
+			CleanUp();
+			Debug.Log($"<color=red> Bad seed, {seed}</color>");
+		}
 	}
 	public IEnumerator Generate()
 	{
@@ -631,7 +638,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 	{
 		MapPiece mapPiece = newMapPieceGO.GetComponent<MapPiece>();
 		Vector2 newMapPiecePosition = new Vector2(newMapPieceGO.transform.position.x, newMapPieceGO.transform.position.y);
-		List<bool> blockages = new List<bool>();
 
 		Bounds neighbourBounds = new Bounds { size = overlapSize };
 		foreach (ConnectionPoint connectionPoint in mapPiece.ConnectionPoints)
@@ -664,19 +670,11 @@ public class LevelGeneratorV3 : MonoBehaviour
 					size = overlapSize
 				};
 
-				blockages.Add(mapPieceInSceneBounds.Intersects(neighbourBounds));
+				if (mapPieceInSceneBounds.Intersects(neighbourBounds)) return true;
 			}
 		}
 
-		foreach (bool blockage in blockages)
-		{
-			if (blockage == false)
-			{
-				return false;
-			}
-		}
-
-		return true;
+		return false;
 	}
 	private void SetMapPieceNeighbours(MapPiece mapPiece)
 	{
