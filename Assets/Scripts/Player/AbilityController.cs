@@ -117,7 +117,8 @@ public class AbilityController : MonoBehaviour
                     }
                 }
             }
-            IAbility anim = new AnimationDecorator( currentMeleeAttack, "MeleeAttack1", "isAttacking" );
+            Debug.Log("sizescale of first attack is : " + currentMeleeAttack.SizeScale);
+            IAbility anim = new AnimationDecorator( currentMeleeAttack, "MeleeAttack1", "isAttacking", currentMeleeAttack.SizeScale );
             anim.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             anim.CallAbility( this.GetComponent<PlayerControler>() );
             currentMeleeAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
@@ -169,7 +170,7 @@ public class AbilityController : MonoBehaviour
                 //currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
                 //return currentRangedAttack;
             }
-            IAbility anim = new AnimationDecorator( currentMeleeAttack, "", "isAttacking" );
+            IAbility anim = new AnimationDecorator( currentRangedAttack, "", "isAttacking" ,currentRangedAttack.SizeScale);
             anim.CallAbility( this.GetComponent<PlayerControler>() );
             currentRangedAttack.SetPlayerValues( rb2d, mousePos, lookDir, castFromPoint, angle );
             currentRangedAttack.CallAbility( player );
@@ -215,7 +216,6 @@ public class AbilityController : MonoBehaviour
 
 		//Reset buffer counter
 		player.BufferCounterDash = 0f;
-
 		return currentDash;
 	}
 

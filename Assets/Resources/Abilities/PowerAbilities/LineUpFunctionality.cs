@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LineUpFunctionality : MonoBehaviour
 {
+	[SerializeField] private Animator coilAnimator;
+
 	private Vector2 boxSize;
 	private Vector2 lookDir;
 	private float angle;
@@ -21,6 +23,7 @@ public class LineUpFunctionality : MonoBehaviour
 	void Start()
 	{
 		storedRotation = transform.parent.rotation;
+		coilAnimator.SetTrigger("StartCoiling");
 	}
 
 	public void LineUp()

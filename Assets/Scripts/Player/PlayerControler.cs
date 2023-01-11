@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerControler : MonoBehaviour, IDamageable
 {
@@ -18,6 +19,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//[SerializeField]
 	//private Camera cam;
 	public Vector2 lookDir;
+	public Vector2 playerMoveDir;
 	[SerializeField] private Transform castFromPoint;
 	[SerializeField] private Vector2 boxSize = new Vector2(4, 6);
 	[SerializeField] private float circleSize = 3f;
@@ -26,10 +28,11 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private GameObject pivot_AttackAnimation;
 	[SerializeField] private GameObject pivot_DashAnimation;
 	[SerializeField] private GameObject attackAnimation;
-	[SerializeField] private GameObject dashVFX;
 	[SerializeField] Animator animAttack;
 	[SerializeField] private GameObject playerDeathSpark = null;
 	[SerializeField] private GameObject playerDeathPoof = null;
+	private Vector3 attackAnimBaseScale;
+	private bool onStartRun;
 	public Animator AnimAttack { get => animAttack; set => animAttack = value; }
 
 	private bool isMoving;
@@ -57,8 +60,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	[SerializeField] private float bufferTimeDash = 0.2f;
 
 
+	[SerializeField] private SpriteMask flashBlueMask;
+	[SerializeField] private SpriteRenderer flashBlue;
+
 	public Material materialDefault = null;
 	public Material materialHit = null;
+
 
 	public bool isDying = false;
 
@@ -76,6 +83,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public int Vertical { get => vertical; set => vertical = value; }
 	public bool IsDashing { get => isDashing; set => isDashing = value; }
 	public SpriteRenderer PlayerSprite { get => playerSprite; set => playerSprite = value; }
+	public Vector3 AttackAnimBaseScale { get => attackAnimBaseScale; set => attackAnimBaseScale = value; }
 
 	[Header("Abilities")]
 	#region ability fields
@@ -115,8 +123,17 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public float SelfSlowCounter { get => selfSlowCounter; set => selfSlowCounter = value; }
 	public bool Invulnerable { get => invulnerable; set => invulnerable = value; }
 	public GameObject Pivot_AttackAnimation { get => pivot_AttackAnimation; set => pivot_AttackAnimation = value; }
+
+	#endregion
+
+	[Header("VFX")]
+	#region vfx fields
+	[SerializeField] private GameObject dashVFX;
+	[SerializeField] private ParticleSystem dashParticlesVFX;
+	[SerializeField] private ParticleSystem castParticlesVFX;
 	public GameObject DashVFX { get => dashVFX; set => dashVFX = value; }
 	public GameObject Pivot_DashAnimation { get => pivot_DashAnimation; set => pivot_DashAnimation = value; }
+	public ParticleSystem DashParticlesVFX { get => dashParticlesVFX; set => dashParticlesVFX = value; }
 
 	#endregion
 
@@ -137,25 +154,33 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	// Start is called before the first frame update
 	void Start()
 	{
+		Debug.Log(currentMeleeAttack);
 
 		materialDefault = playerSprite.material;
 
 		selfSlowCounter = selfSlowTime;
-		abilityController = AbilityController.AbilityControllerInstance;
-		abilityController.CurrentMeleeAttack = currentMeleeAttack;
-		abilityController.CurrentRangedAttack = currentRangedAttack;
-		abilityController.CurrentDash = currentDash;
-		rb2d = GetComponent<Rigidbody2D>();
-		abilityController.Player = this;
-		currentMeleeAttack.BaseStats = meleeAttack;
-		currentRangedAttack.BaseStats = rangedAttack;
-		currentDash.BaseStats = dash;
-		currentMeleeAttack.SetStartValues();
-		currentRangedAttack.SetStartValues();
-		currentDash.SetStartValues();
-		abilityController.SetAttacks();
-		initAbilities();
-
+		if (!onStartRun)
+		{
+			abilityController = AbilityController.AbilityControllerInstance;
+			abilityController.CurrentMeleeAttack = currentMeleeAttack;
+			abilityController.CurrentRangedAttack = currentRangedAttack;
+			abilityController.CurrentDash = currentDash;
+			rb2d = GetComponent<Rigidbody2D>();
+			abilityController.Player = this;
+			currentMeleeAttack.BaseStats = meleeAttack;
+			currentRangedAttack.BaseStats = rangedAttack;
+			Debug.Log("called start");
+			currentDash.BaseStats = dash;
+			currentMeleeAttack.SetStartValues();
+			currentRangedAttack.SetStartValues();
+			currentDash.SetStartValues();
+			abilityController.SetAttacks();
+			initAbilities();
+		}
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.SetPauseState(false);
+		}
 		if (Time.timeScale != 1f)
 		{
 			StopCoroutine("HitSlow");
@@ -166,16 +191,19 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	public void OnStart(GameState gameState, GameState lastGameState)
 	{
 		Debug.Log("ongamestatechanged got called with state: " + gameState + " and with last state: " + lastGameState);
-		if (gameState == GameState.Dungeon && lastGameState != gameState)
+		if ((gameState == GameState.Dungeon && lastGameState != gameState) || gameState == GameState.Hub)
 		{
 			currentMeleeAttack = new MeleeAttack();
+			Debug.Log(currentMeleeAttack);
 			currentRangedAttack = new RangedAttack();
 			currentDash = new Dash();
+			Debug.Log("called onstart");
 			abilityController = AbilityController.AbilityControllerInstance;
 			Debug.Log(abilityController);
 			rb2d = GetComponent<Rigidbody2D>();
 			abilityController.Player = this;
 			currentMeleeAttack.BaseStats = meleeAttack;
+			Debug.Log(currentMeleeAttack.BaseStats);
 			currentMeleeAttack.BaseStats.SetBaseStats();
 			currentRangedAttack.BaseStats = rangedAttack;
 			currentRangedAttack.BaseStats.SetBaseStats();
@@ -187,11 +215,19 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			abilityController.CurrentMeleeAttack = currentMeleeAttack;
 			abilityController.CurrentRangedAttack = currentRangedAttack;
 			abilityController.CurrentDash = currentDash;
+			attackAnimBaseScale = animAttack.transform.localScale;
 			//Debug.Log(currentMeleeAttack.BurnDamage);
 			abilityController.SetAttacks();
+			Debug.Log(currentMeleeAttack);
+			onStartRun = true;
+		}
+		else
+		{
+			onStartRun = false;
 		}
 		if (GameManager.Instance != null)
 		{
+			//GameManager.Instance.UiManager.AssignPlayerCameraToMainCanvas(GetComponentInChildren<Camera>());
 			GameManager.Instance.UiManager.AssignPlayerCameraToShaderCanvas(GetComponentInChildren<Camera>());
 		}
 	}
@@ -236,25 +272,26 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			if (bufferCounterMelee > 0f) MeleeAttack();
 
 			//Cast input
-			if(Input.GetMouseButtonDown(1)) { holdTime = 0; }
-			if( Input.GetMouseButton( 1 ) )
+			if (Input.GetMouseButtonDown(1)) { holdTime = 0; }
+			if (Input.GetMouseButton(1))
 			{
-				if( currentRangedAttack.CooledDown )
+				if (currentRangedAttack.CooledDown)
 				{
-					Debug.Log( "Holding" );
+					Debug.Log("Holding");
 					currentRangedAttack.Charging = true;
 					holdTime++;
 					currentRangedAttack.ChargeTime = holdTime;
-					
+
 				}
 				else
 				{
-					Debug.Log( "fizzle******" );
+					Debug.Log("fizzle******");
 				}
 			}
 			else
 			{
-				if(holdTime <= 5){ currentRangedAttack.Charging = false; }
+				if (holdTime <= 5 && currentRangedAttack != null)
+				{ currentRangedAttack.Charging = false; }
 				if (Input.GetMouseButtonUp(1))
 				{
 					bufferCounterCast = bufferTimeCast;
@@ -290,26 +327,32 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		Debug.DrawRay(rb2d.position, lookDir, Color.magenta);
 		if (!isDashing && !isDying)
 		{
-			playerSprite.flipX = lookDir.x > 0;
+			if (playerMoveDir != Vector2.zero)
+			{
+				playerSprite.flipX = lookDir.x > 0;
+			}
 			horizontal = (int)Input.GetAxisRaw("Horizontal");
 			vertical = (int)Input.GetAxisRaw("Vertical");
-			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * new Vector3(horizontal, vertical).normalized;
-			//if(rb2d.velocity == Vector2.zero)
-			//{
-			//	if (isMoving && playerStopMoveSoundEvent != null)
-			//	{
-			//		AudioManager.Instance.PostEventLocal(playerStopMoveSoundEvent, this.gameObject);
-			//	}
-			//	isMoving = false;
-			//}
-			//else
-			//{
-			//	if (!isMoving && playerMoveSoundEvent != null)
-			//	{
-			//		AudioManager.Instance.PostEventLocal(playerMoveSoundEvent, this.gameObject);
-			//	}
-			//	isMoving = true;
-			//}
+			playerMoveDir = new Vector3(horizontal, vertical).normalized;
+			rb2d.velocity = MoveSpeed.value * selfSlowMultiplier * playerMoveDir;
+			if (!IsAttackPositionLocked)
+			{
+				if (playerMoveDir.x != 0f)
+				{
+					animPlayer.SetTrigger("isWalking");
+					if (animPlayer.GetCurrentAnimatorStateInfo(0).IsName("PlayerWalking1"))
+					{
+						playerSprite.flipX = playerMoveDir.x > 0;
+					}
+				}
+
+				//Idle animation when not moving to a side. Rework this when we have an animation for walking up/down to only idle when playerMoveDir == Vector2.zero instead.
+				else if (playerMoveDir.x == 0f)
+				{
+					animPlayer.SetTrigger("stopWalking");
+				}
+
+			}
 		}
 		CastSelfSlow();
 		OutOfCombatSpeed();
@@ -334,7 +377,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			selfSlowMultiplier = 0.0f;
 		}
 		//slow player on charging
-		else if(holdTime > 5)
+		else if (holdTime > 5)
 		{
 			selfSlowMultiplier = 0.5f;
 		}
@@ -361,6 +404,10 @@ public class PlayerControler : MonoBehaviour, IDamageable
 
 			attackAnimation.GetComponent<SpriteRenderer>().flipX = lookDir.x > 0;
 		}
+		else
+		{
+			playerSprite.flipX = lookDir.x > 0f;
+		}
 	}
 
 	void MeleeAttack()
@@ -368,6 +415,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		CheckAbilityUpdate();
 		outOfCombatCounter = 0f;
 		abilityController.CurrentMeleeAttack.BaseStats = meleeAttack;
+		abilityController.CurrentMeleeAttack.SizeScale = CurrentMeleeAttack.BoxSize.x / CurrentMeleeAttack.BaseStats.BaseBoxSize.x;
 		abilityController.CurrentMeleeAttack.SetPlayerValues(rb2d, mousePos, lookDir, castFromPoint, angle);
 		abilityController.MeleeAttacked(currentMeleeAttack);
 	}
@@ -557,6 +605,27 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		}
 	}
 
+	void SetSpriteMaskSpriteToPlayerSprite()
+	{
+		if (flashBlueMask.sprite != playerSprite.sprite)
+		{
+			flashBlueMask.sprite = playerSprite.sprite;
+		}
+		if (playerSprite.flipX)
+		{
+			flashBlueMask.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+		}
+		else
+		{
+			flashBlueMask.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+		}
+	}
+
+	public void CastParticles()
+	{
+		castParticlesVFX.Play();
+	}
+
 	public void TakeDamage(int damage, int damageType)
 	{
 
@@ -616,6 +685,24 @@ public class PlayerControler : MonoBehaviour, IDamageable
 	//	isDying = false;
 	//	yield return null;
 	//}
+
+	public IEnumerator GetExpVFX(float flashSpeed)
+	{
+		Color flashBlueColor = flashBlue.color;
+		flashBlueColor.a = 0.6f;
+		flashBlue.color = flashBlueColor;
+		while (flashBlue.color.a > 0f)
+		{
+			SetSpriteMaskSpriteToPlayerSprite();
+			flashBlueColor = flashBlue.color;
+			flashBlueColor.a -= flashSpeed * Time.deltaTime;
+			flashBlue.color = flashBlueColor;
+			yield return new WaitForEndOfFrame();
+		}
+		flashBlueColor.a = 0f;
+		flashBlue.color = flashBlueColor;
+		yield return new WaitForEndOfFrame();
+	}
 
 	public IEnumerator HitSlow(float duration)
 	{

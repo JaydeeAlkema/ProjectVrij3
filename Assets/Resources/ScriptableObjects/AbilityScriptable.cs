@@ -15,7 +15,8 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private string toolTipText;
 	#endregion
 	#region basestats
-	[Header("BaseStats")]
+	[Header( "BaseStats" )]
+	[SerializeField] private float baseEndLag = 0.1f;
 	[SerializeField] private float baseCooldown = 0.001f;
 	[SerializeField] private int baseDamage = 0;
 	[SerializeField] private int basePierce = 1;
@@ -36,6 +37,7 @@ public class AbilityScriptable : ScriptableObject
 	//[SerializeField] private List<IStatusEffect> baseStatusEffects = new List<IStatusEffect>();
 	[SerializeField] private StatusEffectType baseStatusEffectType;
 	#endregion
+	[SerializeField] private float endLag = 0.1f;
 	[SerializeField] private float coolDown = 0.001f;
 	[SerializeField] private int damage = 0;
 	[SerializeField] private int pierce = 1;
@@ -62,12 +64,14 @@ public class AbilityScriptable : ScriptableObject
 
 	private Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
+	public float EndLag { get => endLag; set => endLag = value; }
 	public float CoolDown { get => coolDown; set => coolDown = value; }
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
 	public int Damage { get => damage; set => damage = value; }
 	public float Force { get => force; set => force = value; }
 	public float Distance { get => distance; set => distance = value; }
+	public Vector2 BaseBoxSize { get => baseBoxSize;}
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
 	public float CircleSize { get => circleSize; set => circleSize = value; }
 	public LayerMask Layer { get => layerMask; set => layerMask = value; }
@@ -121,6 +125,7 @@ public class AbilityScriptable : ScriptableObject
 
 	public void SetBaseStats()
 	{
+		endLag = baseEndLag;
 		coolDown = baseCooldown;
 		damage = baseDamage;
 		pierce = basePierce;
@@ -144,6 +149,7 @@ public class AbilityScriptable : ScriptableObject
 
 	public void SetHoldStats(AbilityScriptable stats)
 	{
+		endLag = stats.endLag;
 		coolDown = stats.coolDown;
 		damage = stats.damage;
 		pierce = stats.pierce;

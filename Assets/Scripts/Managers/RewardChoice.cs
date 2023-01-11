@@ -193,6 +193,10 @@ public class RewardChoice : MonoBehaviour
 					GameManager.Instance.SetPauseState( false );
 					player.initAbilities();
 					LevelManager.LevelManagerInstance.UpgradeCount++;
+					if (GameManager.Instance != null)
+					{
+						GameManager.Instance.SetCursorImage(2);
+					}
 					Destroy( this.gameObject );
 				}
 			}

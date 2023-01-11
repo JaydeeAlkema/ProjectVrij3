@@ -6,6 +6,7 @@ public class HubSceneManager : MonoBehaviour
 	public static HubSceneManager sceneManagerInstance { get; private set; }
 	private string loadScene;
 	private string lastScene;
+	private GameState state;
 	[SerializeField] private PlayerControler playerValues;
 	[SerializeField] private PlayerControler player;
 
@@ -22,11 +23,12 @@ public class HubSceneManager : MonoBehaviour
 		}
 	}
 
-	public void ChangeScene(string sceneToLoad, string currentScene)
+	public void ChangeScene(string sceneToLoad, string currentScene, GameState _state)
 	{
+		loadScene = sceneToLoad;
+		state = _state;
 		if ((GameManager.Instance.CurrentGameState == GameState.Dungeon || GameManager.Instance.CurrentGameState == GameManager.Instance.LastGamestate) && GameManager.Instance.PlayerInstance != null)
 		{
-			loadScene = sceneToLoad;
 			if (GameManager.Instance.ScriptablePlayer != null) { GameManager.Instance.ScriptablePlayer = null; }
 			GameManager.Instance.ScriptablePlayer = (ScriptablePlayer)ScriptableObject.CreateInstance("ScriptablePlayer");
 			GameManager.Instance.ScriptablePlayer.Player = GameManager.Instance.PlayerInstance.GetComponent<PlayerControler>();
@@ -44,9 +46,8 @@ public class HubSceneManager : MonoBehaviour
 	private void HubSceneManager_completed(AsyncOperation obj)
 	{
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(loadScene));
-		Debug.Log(loadScene.ToString());
+		GameManager.Instance.ChangeGameState( state );
 		if (loadScene != "Hub Prototype" && lastScene != "Hub Prototype") { HoldPlayerOnSceneLoad(); }
-		Debug.Log("hold player stats");
 	}
 
 	public void StartFirstScenes()
