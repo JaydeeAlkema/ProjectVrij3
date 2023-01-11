@@ -78,8 +78,6 @@ public class LevelGeneratorV3 : MonoBehaviour
 
 		if (mapPiecesInScene.Count < mapPieceLimit)
 		{
-			ClearLog();
-			CleanUp();
 			Debug.Log($"<color=red> Bad seed, {seed}</color>");
 		}
 	}
@@ -93,8 +91,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
 
-		GameObject spawnMapPieceGO = Instantiate(spawnMapPieces.GetRandom());
-		spawnMapPieceGO.name += $" [Spawn]";
+		GameObject spawnOriginal = spawnMapPieces.GetRandom();
+		GameObject spawnMapPieceGO = Instantiate(spawnOriginal);
+		spawnMapPieceGO.name = spawnOriginal.name += $" [Spawn]";
 		spawnMapPieceGO.transform.position = Vector2.zero;
 		spawnMapPieceGO.transform.parent = connectedMapPiecesParent;
 		mapPiecesInScene.Add(spawnMapPieceGO, Vector2.zero);
@@ -104,8 +103,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 		for (int i = 0; i < mapPieceLimit; i++)
 		{
 			// Instantiate a new Map Piece. if this is the first Map Piece, then it must be the spawn Map Piece.
-			GameObject newMapPieceGO = Instantiate(mapPieces.GetRandom());
-
+			GameObject original = mapPieces.GetRandom();
+			GameObject newMapPieceGO = Instantiate(original);
+			newMapPieceGO.name = original.name;
 			newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 
 			int retryLimit = mapPiecePlacementTryLimit;
@@ -134,7 +134,7 @@ public class LevelGeneratorV3 : MonoBehaviour
 					{
 						ConnectionPointStatus mapPieceInSceneConnectionPointStatus = mapPieceInSceneConnectionPoint.Status;
 
-						if (mapPieceInSceneConnectionPointStatus == ConnectionPointStatus.Connected || connected) continue;
+						if (mapPieceInSceneConnectionPointStatus == ConnectionPointStatus.Connected || mapPieceInSceneConnectionPointStatus == ConnectionPointStatus.Blocked || connected) continue;
 
 						switch (mapPieceInSceneConnectionPoint.Direction)
 						{
@@ -187,7 +187,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 					DestroyImmediate(newMapPieceGO);
 
 					// Generate a new map piece and set its parent to the disconnected map pieces parent
-					newMapPieceGO = Instantiate(mapPieces.GetRandom());
+					GameObject newOriginalMapPiece = mapPieces.GetRandom();
+					newMapPieceGO = Instantiate(newOriginalMapPiece);
+					newMapPieceGO.name = newOriginalMapPiece.name;
 					newMapPieceGO.transform.parent = disconnectedMapPiecesParent;
 					retryLimit--;
 				}
@@ -367,7 +369,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 			if (northConnectionPointReference != null && northConnectionPointReference.Status == ConnectionPointStatus.Disconnected && northNeighbour == null)
 			{
 				// Create a new dead end map piece in the north direction and add it to the scene
-				GameObject deadEndMapPiece = Instantiate(northDeadEndMapPieces.GetRandom(), mapPiecePos + northNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				GameObject original = northDeadEndMapPieces.GetRandom();
+				GameObject deadEndMapPiece = Instantiate(original, mapPiecePos + northNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				deadEndMapPiece.name = original.name;
 				if (Overlap(deadEndMapPiece, deadEndMapPiece.transform.position, overlapSize))
 				{
 					DestroyImmediate(deadEndMapPiece);
@@ -399,7 +403,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 			if (eastConnectionPointReference != null && eastConnectionPointReference.Status == ConnectionPointStatus.Disconnected && eastNeighbour == null)
 			{
 				// Create a new dead end map piece in the east direction and add it to the scene
-				GameObject deadEndMapPiece = Instantiate(eastDeadEndMapPieces.GetRandom(), mapPiecePos + eastNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				GameObject original = eastDeadEndMapPieces.GetRandom();
+				GameObject deadEndMapPiece = Instantiate(original, mapPiecePos + eastNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				deadEndMapPiece.name = original.name;
 				if (Overlap(deadEndMapPiece, deadEndMapPiece.transform.position, overlapSize))
 				{
 					DestroyImmediate(deadEndMapPiece);
@@ -431,7 +437,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 			if (southConnectionPointReference != null && southConnectionPointReference.Status == ConnectionPointStatus.Disconnected && southNeighbour == null)
 			{
 				// Create a new dead end map piece in the south direction and add it to the scene
-				GameObject deadEndMapPiece = Instantiate(southDeadEndMapPieces.GetRandom(), mapPiecePos + southNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				GameObject original = southDeadEndMapPieces.GetRandom();
+				GameObject deadEndMapPiece = Instantiate(original, mapPiecePos + southNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				deadEndMapPiece.name = original.name;
 				if (Overlap(deadEndMapPiece, deadEndMapPiece.transform.position, overlapSize))
 				{
 					DestroyImmediate(deadEndMapPiece);
@@ -463,7 +471,9 @@ public class LevelGeneratorV3 : MonoBehaviour
 			if (westConnectionPointReference != null && westConnectionPointReference.Status == ConnectionPointStatus.Disconnected && westNeighbour == null)
 			{
 				// Create a new dead end map piece in the west direction and add it to the scene
-				GameObject deadEndMapPiece = Instantiate(westDeadEndMapPieces.GetRandom(), mapPiecePos + westNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				GameObject original = westDeadEndMapPieces.GetRandom();
+				GameObject deadEndMapPiece = Instantiate(original, mapPiecePos + westNeighbourPosition, Quaternion.identity, connectedMapPiecesParent);
+				deadEndMapPiece.name = original.name;
 				if (Overlap(deadEndMapPiece, deadEndMapPiece.transform.position, overlapSize))
 				{
 					DestroyImmediate(deadEndMapPiece);
