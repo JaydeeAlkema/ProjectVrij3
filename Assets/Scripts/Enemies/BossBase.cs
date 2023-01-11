@@ -24,6 +24,10 @@ public class BossBase : EnemyBase
 		base.Update();
 	}
 
+	protected override void ListenToEvents()
+	{
+		//do not listen
+	}
 
 	public virtual void SpawnMobs()
 	{

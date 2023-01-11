@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 78604046762419362}
   - component: {fileID: 4681532973551074177}
+  - component: {fileID: 4264144816294475512}
   m_Layer: 9
   m_Name: Sprite Mask
   m_TagString: Untagged
@@ -28,7 +29,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1778259015101956368}
   m_Father: {fileID: 3246640220694370062}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -83,6 +85,18 @@ SpriteMask:
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 0
   m_SpriteSortPoint: 0
+--- !u!210 &4264144816294475512
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090263052169672833}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -1
+  m_SortAtRoot: 0
 --- !u!1 &3246640220694370058
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,7 +130,6 @@ Transform:
   m_LocalScale: {x: 1.9258583, y: 1.9258583, z: 1.9258583}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1778259015101956368}
   - {fileID: 78604046762419362}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -270,12 +283,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7669526632006595698}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0982731, y: 0.0982731, z: 0.0982731}
+  m_LocalScale: {x: 0.098273106, y: 0.098273106, z: 0.098273106}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3246640220694370062}
+  m_Father: {fileID: 78604046762419362}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8121051357188123598

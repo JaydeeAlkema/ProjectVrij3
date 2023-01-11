@@ -1,27 +1,39 @@
+using NaughtyAttributes;
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-	[SerializeField] private Slider expBarSlider;
-	[SerializeField] private Slider hpBarSlider;
-	[SerializeField] private TMP_Text pointText;
-	[SerializeField] private TMP_Text hpAmountText;
-	[SerializeField] private TMP_Text expAmountText;
-	[SerializeField] private Image playerHitEffect;
-	[SerializeField] private float playerHitEffectDuration;
-	[SerializeField] private Canvas shaderCanvas;
-	private String playerHitEffectPropertyName = "_Amount";
-	private Material playerHitEffectMaterial;
+	[SerializeField, BoxGroup("EXP Bar")] private Slider expBarSlider;
+	[SerializeField, BoxGroup("EXP Bar")] private Slider expBarSliderDelayed;
+	[SerializeField, BoxGroup("EXP Bar")] private float expBarSliderSmoothing = 0.5f;
+	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text expAmountText;
+	[SerializeField, BoxGroup("EXP Bar")] private TMP_Text pointText;
+	[SerializeField, BoxGroup("EXP Bar")] private GameObject getPointVFX;
 
-	//TODO: Create custom struct that holds UI elements so we don't have to user indeces for enabling/disabling UI, but instead call them by name/type etc.
-	[SerializeField] private GameObject[] uiStates;
+	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSlider;
+	[SerializeField, BoxGroup("HP Bar")] private Slider hpBarSliderDelayed;
+	[SerializeField, BoxGroup("HP Bar")] private float hpBarSliderSmoothing = 0.5f;
+	[SerializeField, BoxGroup("HP Bar")] private TMP_Text hpAmountText;
 
-	public GameObject[] UiStates { get => uiStates; private set => uiStates = value; }
+	[SerializeField, BoxGroup("Player On Hit")] private Image playerHitEffect;
+	[SerializeField, BoxGroup("Player On Hit")] private float playerHitEffectDuration;
 
+	[SerializeField, BoxGroup("Map")] private Canvas mainCanvas;
+	[SerializeField, BoxGroup("Map")] private Canvas shaderCanvas;
+	[SerializeField, BoxGroup("Map")] private GameObject map;
+
+	[SerializeField, BoxGroup("Upgrades")] private IconTray meleeUpgradeIcons;
+	[SerializeField, BoxGroup("Upgrades")] private IconTray rangedUpgradeIcons;
+	[SerializeField, BoxGroup("Upgrades")] private Transform[] DevUIComponents;
+	// 0 = Melee Upgrades
+	// 1 = Cast Upgrades
+
+	//TODO: Create custom struct that holds UI elements so we don't have to use indeces for enabling/disabling UI, but instead call them by name/type etc.
+	[SerializeField, BoxGroup("UI States")] private GameObject[] uiStates;
 	// 0 = Hub UI
 	// 1 = Dungeon UI
 	// 2 = Generation Loading Screen
@@ -30,9 +42,12 @@ public class UIManager : MonoBehaviour
 	// 5 = Cheat Menu
 	// 6 = Empower enemies UI
 
-	[SerializeField] private Transform[] DevUIComponents;
-	// 0 = Melee Upgrades
-	// 1 = Cast Upgrades
+	private const string playerHitEffectPropertyName = "_Amount";
+	private Material playerHitEffectMaterial;
+
+	public GameObject[] UiStates { get => uiStates; private set => uiStates = value; }
+	public IconTray MeleeUpgradeIcons { get => meleeUpgradeIcons; set => meleeUpgradeIcons = value; }
+	public IconTray RangedUpgradeIcons { get => rangedUpgradeIcons; set => rangedUpgradeIcons = value; }
 
 	[Serializable]
 	private class abilityUI
@@ -60,7 +75,7 @@ public class UIManager : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.P) && uiStates[5].activeInHierarchy == false)
 		{
-			GameManager.Instance.ExpManager.AddExp(5);
+			GameManager.Instance.ExpManager.AddExp(30);
 		}
 		if (Input.GetKeyDown(KeyCode.F1))
 		{
@@ -99,24 +114,76 @@ public class UIManager : MonoBehaviour
 	{
 		hpBarSlider.maxValue = maxHP;
 		hpBarSlider.value = maxHP;
+		hpBarSliderDelayed.maxValue = maxHP;
+		hpBarSliderDelayed.value = maxHP;
 	}
 
 	public void SetExpBar(int maxExp)
 	{
 		expBarSlider.maxValue = maxExp;
 		expBarSlider.value = maxExp;
+		expBarSliderDelayed.maxValue = maxExp;
+		expBarSliderDelayed.value = maxExp;
 	}
 
 	public void SetHP(int hp, int maxHP)
 	{
-		hpBarSlider.value = hp;
-		hpAmountText.text = hp.ToString() + "/" + maxHP;
+		if (hp != hpBarSlider.value)
+		{
+			hpBarSlider.value = hp;
+			hpAmountText.text = hp.ToString() + "/" + maxHP;
+
+			StartCoroutine(SetDelayedHP());
+		}
+	}
+
+	private IEnumerator SetDelayedHP()
+	{
+		yield return new WaitForSeconds(1f);
+
+		float startValue = hpBarSliderDelayed.value;
+		float endValue = hpBarSlider.value;
+		float timeElapsed = 0;
+		while (timeElapsed < hpBarSliderSmoothing)
+		{
+			float smoothedValue = Mathf.Lerp(startValue, endValue, timeElapsed / hpBarSliderSmoothing);
+			timeElapsed += Time.deltaTime;
+
+			hpBarSliderDelayed.value = smoothedValue;
+			yield return null;
+		}
+
+		hpBarSliderDelayed.value = endValue;
 	}
 
 	public void SetExp(int exp, int maxExp)
 	{
-		expBarSlider.value = exp;
-		expAmountText.text = exp.ToString() + "/" + maxExp;
+		if (exp != expBarSliderDelayed.value)
+		{
+			expBarSliderDelayed.value = exp;
+			expAmountText.text = exp.ToString() + "/" + maxExp;
+
+			StartCoroutine(SetDelayedExp());
+		}
+	}
+
+	private IEnumerator SetDelayedExp()
+	{
+		yield return new WaitForSeconds(1f);
+
+		float startValue = expBarSlider.value;
+		float endValue = expBarSliderDelayed.value;
+		float timeElapsed = 0;
+		while (timeElapsed < expBarSliderSmoothing)
+		{
+			float smoothedValue = Mathf.Lerp(startValue, endValue, timeElapsed / expBarSliderSmoothing);
+			timeElapsed += Time.deltaTime;
+
+			expBarSlider.value = smoothedValue;
+			yield return null;
+		}
+
+		expBarSlider.value = endValue;
 	}
 
 	public void AddDevText(int textComponent, string addText)
@@ -185,12 +252,33 @@ public class UIManager : MonoBehaviour
 		{
 			shaderCanvas.worldCamera = camera;
 		}
+	}	
+	
+	public void AssignPlayerCameraToMainCanvas(Camera camera)
+	{
+		if (mainCanvas.worldCamera == null)
+		{
+			mainCanvas.worldCamera = camera;
+		}
+	}
+
+	public void ToggleMapOverlay(bool isEnabled)
+	{
+		if (map.activeSelf != isEnabled)
+		{
+			map.SetActive(isEnabled);
+		}
 	}
 
 	public void PlayerHitScreenEffect()
 	{
 		StopCoroutine(ScreenVFXOnPlayerHit());
 		StartCoroutine(ScreenVFXOnPlayerHit());
+	}
+
+	public void GetPointParticleEffect()
+	{
+		getPointVFX.GetComponent<ParticleSystem>().Play();
 	}
 
 	IEnumerator ScreenVFXOnPlayerHit()

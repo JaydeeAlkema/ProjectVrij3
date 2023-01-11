@@ -36,25 +36,25 @@ public class BobEnemy : EnemyBase
 	void Update()
 	{
 		base.Update();
-		if (Target != null)
-		{
-			HitBox();
-		}
+		//if (Target != null)
+		//{
+		//	//HitBox();
+		//}
 		LookAtTarget();
 	}
 
-	void HitBox()
-	{
-		if (Vector2.Distance(transform.position, Target.position) <= 1)
-		{
-			if (Target.gameObject != null && HasHitbox)
-			{
-				AttackPlayer(Target.gameObject);
-				//HasHitbox = false;
-			}
-		}
-		//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
-	}
+	//void HitBox()
+	//{
+	//	if (Vector2.Distance(transform.position, Target.position) <= 1)
+	//	{
+	//		if (Target.gameObject != null && HasHitbox)
+	//		{
+	//			AttackPlayer(Target.gameObject);
+	//			//HasHitbox = false;
+	//		}
+	//	}
+	//	//Collider2D playerBody = Physics2D.OverlapCapsule((Vector2)this.transform.position, hurtbox.size, hurtbox.direction, playerLayerMask);
+	//}
 
 	void AttackPlayer(GameObject playerObject)
 	{
@@ -92,7 +92,11 @@ public class BobEnemy : EnemyBase
 
 	public override void Die()
 	{
-		GameManager.Instance.ExpManager.AddExp(ExpAmount);
+		if (GameManager.Instance != null)
+		{
+			DropExpOrbsOnDeath();
+			GameManager.Instance.EnemyAggroCount(false);
+		}
 		StopAllCoroutines();
 		Time.timeScale = 1f;
 

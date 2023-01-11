@@ -35,7 +35,12 @@ public class MeleeAttack : Ability
 			AudioManager.Instance.PostEventLocal(abilitySound, player.gameObject);
 		}
 		//player.IsAttackPositionLocked = true;
+
+		sizeScale = boxSize.x / baseStats.BaseBoxSize.x;
+		Debug.Log( sizeScale + " this is the sizeScale" );
 		caller.CallCoroutine(TestCoroutine());
+
+		caller.CallCoroutine( DashRoutine() );
 
 
 	}
@@ -70,6 +75,7 @@ public class MeleeAttack : Ability
 		AttackTime = BaseStats.AttackTime;
 		abilitySound = BaseStats.AbilitySound1;
 		statusEffects = BaseStats.statusEffects;
+		endLag = baseStats.EndLag;
 	}
 
 	public void ResetComboTimer()
@@ -81,6 +87,25 @@ public class MeleeAttack : Ability
 		comboTimerCoroutine = ComboTimer();
 		caller.CallCoroutine(comboTimerCoroutine);
 		//Debug.Log("Combo timer has been reset");
+	}
+
+	public IEnumerator DashRoutine()
+	{
+		if( !player.IsDashing )
+		{
+			player.IsDashing = true;
+			Vector2 dashDir = LookDir.normalized;
+			Rb2d.velocity = dashDir.normalized * baseStats.DashSpeed;
+			yield return new WaitForSeconds( baseStats.DashDuration );
+			if( player.CurrentDash.CooledDown )
+			{
+				Rb2d.velocity = dashDir.normalized * 0f;
+			}
+			yield return new WaitForSeconds( endLag );
+			player.IsDashing = false;
+			yield return null;
+		}
+		yield return null;
 	}
 
 	public IEnumerator TestCoroutine()
@@ -102,7 +127,7 @@ public class MeleeAttack : Ability
 
 			if (comboCounter == 2)
 			{
-				IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack1", "isAttacking2");
+				IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack1", "isAttacking2", sizeScale);
 				anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 				anim.CallAbility(player);
 				//AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
@@ -112,7 +137,7 @@ public class MeleeAttack : Ability
 		{
 			thirdHit = true;
 			//Debug.Log("Full combo!");
-			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3");
+			IAbility anim = new AnimationDecorator(AbilityController.AbilityControllerInstance.CurrentMeleeAttack, "MeleeAttack2", "isAttacking3", sizeScale);
 			anim.SetPlayerValues(Rb2d, MousePos, LookDir, CastFromPoint, Angle);
 			anim.CallAbility(player);
 			//AbilityController.AbilityControllerInstance.CurrentDash.CallAbility(true);
@@ -121,6 +146,7 @@ public class MeleeAttack : Ability
 
 		hitDetecting = true;
 		yield return new WaitForFixedUpdate();
+
 
 		//while ((player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl")) && player.AnimAttack.GetComponent<AttackAnimationEventHandler>().HitDetection)
 		while (player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttack") || player.AnimAttack.GetCurrentAnimatorStateInfo(0).IsName("MeleeAttackTwirl"))
@@ -181,6 +207,7 @@ public class MeleeAttack : Ability
 		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
 		enemiesInBox = null;
+
 		yield return null;
 	}
 

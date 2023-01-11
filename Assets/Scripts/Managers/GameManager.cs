@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,32 +9,35 @@ public class GameManager : MonoBehaviour
 {
 	private static GameManager instance;
 
-	[SerializeField, Expandable] private ScriptableInt playerHP;
-	[SerializeField, Expandable] private ScriptableFloat playerSpeed;
-	[SerializeField] private bool isPaused = false;
-	[SerializeField] private AK.Wwise.State SoundStateCalm;
-	[SerializeField] private AK.Wwise.State SoundStateCrowded;
-	[SerializeField] private AK.Wwise.State CurrentSoundState;
-	[SerializeField] private AK.Wwise.Event startMusic;
-	[SerializeField] private AK.Wwise.Event stopMusic;
+	[SerializeField, BoxGroup("Audio")] private bool isPaused = false;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.State SoundStateCalm;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.State SoundStateCrowded;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.State CurrentSoundState;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.Event startMusic;
+	[SerializeField, BoxGroup("Audio")] private AK.Wwise.Event stopMusic;
 
-	[SerializeField] private int numberOfEnemiesAggrod = 0;
+	[SerializeField, BoxGroup("Managers")] private LevelGeneratorV3 levelGenerator = null;
+	[SerializeField, BoxGroup("Managers")] private HubSceneManager HubSceneManager = null;
+	[SerializeField, BoxGroup("Managers")] private ExpManager expManager = null;
+	[SerializeField, BoxGroup("Managers")] private UIManager uiManager = null;
+	[SerializeField, BoxGroup("Managers")] private CheatsManager cheatsManager = null;
 
+	[SerializeField, BoxGroup("Player")] private GameObject playerInstance = null;
+	[SerializeField, BoxGroup("Player")] private ScriptablePlayer scriptablePlayer = null;
+	[SerializeField, BoxGroup("Player")] private ScriptableInt playerHP;
+	[SerializeField, BoxGroup("Player")] private ScriptableFloat playerSpeed;
 
-	[Header("Managers")]
-	[SerializeField] private LevelGeneratorV3 levelGenerator = null;
-	[SerializeField] private HubSceneManager HubSceneManager = null;
-	[SerializeField] private ExpManager expManager = null;
-	[SerializeField] private UIManager uiManager = null;
-	[SerializeField] private CheatsManager cheatsManager = null;
+	[SerializeField, BoxGroup("Minimap")] private GameObject minimapCamera = null;
 
-	[Header("Player")]
-	[SerializeField] private GameObject playerInstance = null;
-	[SerializeField] private ScriptablePlayer scriptablePlayer = null;
+	[SerializeField, BoxGroup("Runtime References")] private GameState currentGameState;
+	[SerializeField, BoxGroup("Runtime References")] private GameState lastGamestate;
+	[SerializeField, BoxGroup("Runtime References")] private int numberOfEnemiesAggrod = 0;
+	[SerializeField, BoxGroup("Runtime References")] private int maxDungeonFloor = 3;
+	[SerializeField, BoxGroup("Runtime References")] private int currentDungeonFloor = 1;
 
-	public GameState currentGameState;
-	public GameState lastGamestate;
-
+	[SerializeField, BoxGroup("Cursors")] private Texture2D menuCursor;
+	[SerializeField, BoxGroup("Cursors")] private Texture2D reticle;
+	#region Properties
 	public static GameManager Instance { get => instance; private set => instance = value; }
 	public ExpManager ExpManager { get => expManager; private set => expManager = value; }
 	public UIManager UiManager { get => uiManager; private set => uiManager = value; }
@@ -43,6 +47,11 @@ public class GameManager : MonoBehaviour
 	public ScriptableFloat PlayerSpeed { get => playerSpeed; set => playerSpeed = value; }
 	public bool IsPaused { get => isPaused; private set => isPaused = value; }
 	public int NumberOfEnemiesAggrod { get => numberOfEnemiesAggrod; set => numberOfEnemiesAggrod = value; }
+	public GameState CurrentGameState { get => currentGameState; set => currentGameState = value; }
+	public GameState LastGamestate { get => lastGamestate; set => lastGamestate = value; }
+	public int MaxDungeonFloor { get => maxDungeonFloor; set => maxDungeonFloor = value; }
+	public int CurrentDungeonFloor { get => currentDungeonFloor; set => currentDungeonFloor = value; }
+	#endregion
 
 	#region Unity Callbacks
 	private void Awake()
@@ -61,23 +70,33 @@ public class GameManager : MonoBehaviour
 
 	public void Update()
 	{
+		if (PlayerHP.value > playerHP.startValue)
+		{
+			playerHP.value = playerHP.startValue;
+		}
+
 		if (PlayerHP.value <= 0 && currentGameState == GameState.Dungeon)
 		{
 			ChangeGameState(GameState.GameOver);
 		}
 
-		if(PlayerHP.value > playerHP.startValue)
-		{
-			playerHP.value = playerHP.startValue;
-		}
-
-		if( Input.GetKeyDown( KeyCode.Escape ) )
+		if (Input.GetKeyDown(KeyCode.Escape) && (currentGameState == GameState.Dungeon || currentGameState == GameState.Hub))
 		{
 			TogglePauseGame();
 			uiManager.SetUIActive(3, isPaused);
+			uiManager.ToggleMapOverlay(false);
 		}
 
-		StopMusicForTesting();
+		//Hold tab to show static dungeon map
+		if (Input.GetKeyDown(KeyCode.Tab) && !isPaused)
+		{
+			uiManager.ToggleMapOverlay(true);
+		}
+
+		if (Input.GetKeyUp(KeyCode.Tab))
+		{
+			uiManager.ToggleMapOverlay(false);
+		}
 	}
 
 	public void EnemyAggroCount(bool isAggro)
@@ -97,8 +116,8 @@ public class GameManager : MonoBehaviour
 
 	public void TogglePauseGame()
 	{
-		isPaused = !isPaused;
-		Time.timeScale = isPaused ? 0f : 1f;
+		bool pause = !isPaused;
+		SetPauseState(pause);
 	}
 
 	public void StopMusicForTesting()
@@ -113,6 +132,34 @@ public class GameManager : MonoBehaviour
 	{
 		isPaused = pause;
 		Time.timeScale = isPaused ? 0f : 1f;
+		if (isPaused)
+		{
+			SetCursorImage(1);
+		}
+		else
+		{
+			if (currentGameState == GameState.Dungeon)
+			{
+				SetCursorImage(2);
+			}
+		}
+	}
+
+	private void SetupMinimapCamera()
+	{
+		Bounds levelBounds = new Bounds();
+		foreach (KeyValuePair<GameObject, Vector2> mappiece in levelGenerator.MapPiecesInScene)
+		{
+			Bounds mappieceBounds = new Bounds()
+			{
+				size = levelGenerator.OverlapSize,
+				center = mappiece.Value
+			};
+			levelBounds.Encapsulate(mappieceBounds);
+		}
+		minimapCamera = GameObject.FindGameObjectWithTag("MinimapCamera");
+		minimapCamera.transform.position = new Vector3(levelBounds.center.x, levelBounds.center.y, -100);
+		minimapCamera.GetComponent<Camera>().orthographicSize = Mathf.Max(levelBounds.size.x, levelBounds.size.y) * 0.5f;
 	}
 
 	public void FetchDungeonReferences()
@@ -166,39 +213,59 @@ public class GameManager : MonoBehaviour
 		lastGamestate = currentGameState;
 		//if (newGameState != currentGameState)
 		//{
-			currentGameState = newGameState;
-			switch (currentGameState)
-			{
-				case GameState.Dungeon:
-					CurrentSoundState = SoundStateCrowded;
-					CurrentSoundState.SetValue();
-					AudioManager.Instance.PostEventGlobal(stopMusic);
-					Debug.Log("Stopping music.");
-					AudioManager.Instance.PostEventGlobal(startMusic);
-					Debug.Log("Starting music.");
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-				case GameState.GameOver:
-					StartCoroutine(GameOver());
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-				case GameState.Hub:
-					AudioManager.Instance.PostEventGlobal(stopMusic);
-					Debug.Log("Stopping music.");
-					PlayerHP.ResetValue();
-					ExpManager.ResetExp();
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-				case GameState.Menu:
-					//startMusic.Stop( AudioManager.Instance.gameObject );
-					AudioManager.Instance.PostEventGlobal(stopMusic);
-					Debug.Log("Stopping music.");
-					PlayerHP.ResetValue();
-					ExpManager.ResetExp();
-					OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
-					break;
-			}
+		currentGameState = newGameState;
+		switch (currentGameState)
+		{
+			case GameState.Dungeon:
+				Cursor.visible = true;
+				SetCursorImage(2);
+				CurrentSoundState = SoundStateCrowded;
+				CurrentSoundState.SetValue();
+				AudioManager.Instance.PostEventGlobal(stopMusic);
+				Debug.Log("Stopping music.");
+				AudioManager.Instance.PostEventGlobal(startMusic);
+				Debug.Log("Starting music.");
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+			case GameState.GameOver:
+				Cursor.visible = false;
+				StartCoroutine(GameOver());
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+			case GameState.Hub:
+				Cursor.visible = true;
+				SetCursorImage(1);
+				AudioManager.Instance.PostEventGlobal(stopMusic);
+				Debug.Log("Stopping music.");
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+			case GameState.Menu:
+				Cursor.visible = true;
+				SetCursorImage(1);
+				//startMusic.Stop( AudioManager.Instance.gameObject );
+				AudioManager.Instance.PostEventGlobal(stopMusic);
+				Debug.Log("Stopping music.");
+				PlayerHP.ResetValue();
+				ExpManager.ResetExp();
+				OnGameStateChanged?.Invoke(currentGameState, lastGamestate);
+				break;
+		}
 		//}
+	}
+
+	public void SetCursorImage(int cursorType) //1 = menu cursor, 2 = reticle
+	{
+		switch (cursorType)
+		{
+			case 1:
+				Cursor.SetCursor(menuCursor, new Vector2(16f, 16f), CursorMode.ForceSoftware);
+				break;
+			case 2:
+				Cursor.SetCursor(reticle, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+				break;
+		}
 	}
 
 	/// <summary>
@@ -212,6 +279,8 @@ public class GameManager : MonoBehaviour
 
 		yield return StartCoroutine(levelGenerator.Generate());
 		playerInstance.SetActive(true);
+		SetupMinimapCamera();
+		uiManager.ToggleMapOverlay(false);
 		ChangeGameState(GameState.Dungeon);
 
 		//Show dungeon HUD
@@ -260,14 +329,15 @@ public class GameManager : MonoBehaviour
 		uiManager.SetUIActive(4, true);
 		yield return new WaitForSecondsRealtime(3f);
 
-		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name);
+		HubSceneManager.sceneManagerInstance.ChangeScene("Hub Prototype", SceneManager.GetActiveScene().name, GameState.Hub);
 
 		PlayerHP.ResetValue();
 		ExpManager.ResetExp();
+		currentDungeonFloor = 0;
 
 		uiManager.DisableAllUI();
 		uiManager.SetUIActive(0, true);
-		ChangeGameState(GameState.Hub);
+		//ChangeGameState(GameState.Hub);
 		yield return null;
 	}
 

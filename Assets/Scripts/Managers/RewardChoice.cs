@@ -29,9 +29,19 @@ public class RewardChoice : MonoBehaviour
 	[SerializeField] private Image abilityImg;
 	[SerializeField] private Image meleeUpgradeImg;
 	[SerializeField] private Image rangedUpgradeImg;
+
 	[SerializeField] private TMP_Text AbilityTitle;
 	[SerializeField] private TMP_Text MeleeTitle;
 	[SerializeField] private TMP_Text RangedTitle;
+
+	[SerializeField] private TMP_Text abilityDescription;
+	[SerializeField] private TMP_Text meleeDescription;
+	[SerializeField] private TMP_Text rangedDescription;
+
+	[SerializeField] private TMP_Text abilityCost;
+	[SerializeField] private TMP_Text meleeCost;
+	[SerializeField] private TMP_Text rangedCost;
+
 	//chances are based on a roll of 1-1000000
 	[SerializeField] private int t1Chance = 1; //1-700000
 	[SerializeField] private int t2Chance = 700001; //700001-995000
@@ -105,11 +115,17 @@ public class RewardChoice : MonoBehaviour
 		MeleeTitle.text = upgradeToGive.UpgradeName + " Slash";
 		RangedTitle.text = upgradeToGive.UpgradeName + " Cast";
 		AbilityTitle.text = AbilityStats.AbilityName;
+		abilityDescription.text = abilityStats.ToolTipText;
+		meleeDescription.text = upgradeToGive.ToolTipInfo;
+		rangedDescription.text = upgradeToGive.ToolTipInfo;
 	}
 
 	private void Update()
 	{
 		currentRewardCost = Mathf.RoundToInt( ( rewardCost * Mathf.Pow(rewardCostMultiplier * LevelManager.LevelManagerInstance.DificultyModifier, LevelManager.LevelManagerInstance.UpgradeCount)));
+		abilityCost.text = currentRewardCost.ToString();
+		meleeCost.text = currentRewardCost.ToString();
+		rangedCost.text = currentRewardCost.ToString();
 	}
 
 	public void ChooseAbility()
@@ -177,6 +193,10 @@ public class RewardChoice : MonoBehaviour
 					GameManager.Instance.SetPauseState( false );
 					player.initAbilities();
 					LevelManager.LevelManagerInstance.UpgradeCount++;
+					if (GameManager.Instance != null)
+					{
+						GameManager.Instance.SetCursorImage(2);
+					}
 					Destroy( this.gameObject );
 				}
 			}
@@ -216,6 +236,8 @@ public class RewardChoice : MonoBehaviour
 			meleeAttack.BoxSize += new Vector2( upgradeToGive.HitBoxUpgrade, upgradeToGive.HitBoxUpgrade );
 			meleeAttack.Distance += upgradeToGive.DistanceUpgrade;
 			meleeAttack.CritChance += upgradeToGive.CritChanceUpgrade;
+
+			GameManager.Instance.UiManager.MeleeUpgradeIcons.AddNewSpriteToIcons( upgradeToGive.UpgradeImageMelee );
 
 			// Remove the upgrade object
 			Destroy( this.gameObject );
@@ -280,7 +302,7 @@ public class RewardChoice : MonoBehaviour
 			rangedAttack.CritChance += upgradeToGive.CritChanceUpgrade;
 
 			//Dev UI text, remove later
-			GameManager.Instance.UiManager.AddDevText( 1, upgradeToGive.name );
+			GameManager.Instance.UiManager.RangedUpgradeIcons.AddNewSpriteToIcons(upgradeToGive.UpgradeImageRanged);
 
 			Destroy( this.gameObject );
 		}

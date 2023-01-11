@@ -20,6 +20,8 @@ public class AbilityDecorator : IAbility
 	protected AbilityScriptable baseStats;
 	protected float critChance;
 	protected bool init = true;
+	protected bool charging = false;
+	protected float chargeTime;
 	protected Dictionary<StatusEffectType, bool> abilityUpgrades = new Dictionary<StatusEffectType, bool>();
 
 	public AbilityScriptable BaseStats { get => baseStats; set => baseStats = value; }
@@ -49,6 +51,9 @@ public class AbilityDecorator : IAbility
 	public List<IStatusEffect> statusEffects { get; set; }
 	public bool Init { get => init; set => init = value; }
 	public bool CooledDown { get; set; }
+	public bool Charging { get => charging; set => charging =  value ; }
+	public float ChargeTime { get => chargeTime; set => chargeTime = value; }
+	public float SizeScale { get; set; }
 
 	public AbilityDecorator(IAbility _ability)
 	{
