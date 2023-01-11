@@ -4,9 +4,10 @@ using UnityEngine;
 
 public interface IDamageable
 {
-	void TakeDamage(int damage);
+	void TakeDamage( int damage );
+	void TakeDamage(int damage, float critC, float critM);
 
-	void TakeDamage(int damage, int damageType);
+	void TakeDamage(int damage, int damageType, float critC, float critM);
 
 	void GetSlowed(float slowAmount);
 

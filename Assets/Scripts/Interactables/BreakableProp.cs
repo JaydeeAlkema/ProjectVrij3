@@ -29,7 +29,11 @@ public class BreakableProp : MonoBehaviour, IDamageable
 		animator.SetTrigger("Break");
 	}
 
-	public void TakeDamage(int damage, int damageType)
+	public void TakeDamage( int damage, float critChance, float critModifier )
+	{
+
+	}
+	public void TakeDamage(int damage, int damageType, float critChance, float critModifier )
 	{
 		animator.SetTrigger("Break");
 	}

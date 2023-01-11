@@ -39,6 +39,7 @@ public class RangedAttack : Ability
 			proj.Force = force;
 			proj.CastedFrom = this;
 			CastedObject.transform.SetParent( null );
+			AbilityController.AbilityControllerInstance.IsAttacking = false;
 		}
 		else if(Charging)
 		{
@@ -66,6 +67,7 @@ public class RangedAttack : Ability
 			proj.transform.localScale *= ( 1 + chargeTime / 100 );
 			proj.CastedFrom = this;
 			CastedObject.transform.SetParent( null );
+			AbilityController.AbilityControllerInstance.IsAttacking = false;
 		}
 	}
 

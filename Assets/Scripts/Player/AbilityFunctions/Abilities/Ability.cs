@@ -18,6 +18,7 @@ public abstract class Ability : IAbility
 	protected float force = 30f;
 	protected AbilityScriptable baseStats;
 	protected float critChance;
+	protected float critModifier;
 	protected bool init = true;
 	protected bool charging = false;
 	protected float chargeTime;
@@ -34,6 +35,7 @@ public abstract class Ability : IAbility
 	public float CoolDown { get => coolDown; set => coolDown = value; }
 	public int Damage { get => damage; set => damage = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
+	public float CritModifier { get => critModifier; set => critModifier = value; }
 	public Vector2 BoxSize { get => boxSize; set => boxSize = value; }
 	public GameObject CastObject { get => castObject; set => castObject = value; }
 	public Dictionary<StatusEffectType, bool> AbilityUpgrades { get => abilityUpgrades; set => abilityUpgrades = value; }

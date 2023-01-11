@@ -101,7 +101,7 @@ public class FodderEnemy : EnemyBase
 	//	StartCoroutine(FlashColor());
 	//	if (HealthPoints <= 0) Die();
 	//}
-	public override void TakeDamage(int damage, int damageType)
+	public override void TakeDamage(int damage, int damageType, float critChance, float critModifier)
 	{
 		int damageToTake = damage;
 		if( damageType == 0 && meleeTarget )

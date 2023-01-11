@@ -34,7 +34,7 @@ public class BossBase : EnemyBase
 
 	}
 
-	public override void TakeDamage(int damage, int damageType)
+	public override void TakeDamage(int damage, int damageType, float critChance, float critModifier)
 	{
 		int damageToTake = damage;
 		if (!invulnerable)

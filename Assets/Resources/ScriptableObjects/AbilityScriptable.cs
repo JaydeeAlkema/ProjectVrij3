@@ -21,6 +21,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private int baseDamage = 0;
 	[SerializeField] private int basePierce = 1;
 	[SerializeField] private float baseCritChance = 0f;
+	[SerializeField] private float baseCritModifier = 1f;
 	[SerializeField] private float baseDistance = 0f;
 	[SerializeField] private float baseLifeSpan = 10f;
 	[SerializeField] private float baseForce = 30f;
@@ -42,6 +43,7 @@ public class AbilityScriptable : ScriptableObject
 	[SerializeField] private int damage = 0;
 	[SerializeField] private int pierce = 1;
 	[SerializeField] private float critChance = 0f;
+	[SerializeField] private float critModifier = 1f;
 	[SerializeField] private float distance = 0f;
 	[SerializeField] private Vector2 boxSize = new Vector2( 4, 6 );
 	[SerializeField] private float circleSize = 0f;
@@ -68,6 +70,7 @@ public class AbilityScriptable : ScriptableObject
 	public float CoolDown { get => coolDown; set => coolDown = value; }
 	public float LifeSpan { get => lifeSpan; set => lifeSpan = value; }
 	public float CritChance { get => critChance; set => critChance = value; }
+	public float CritModifier { get => critModifier; set => critModifier = value; }
 	public int Damage { get => damage; set => damage = value; }
 	public float Force { get => force; set => force = value; }
 	public float Distance { get => distance; set => distance = value; }
@@ -130,6 +133,7 @@ public class AbilityScriptable : ScriptableObject
 		damage = baseDamage;
 		pierce = basePierce;
 		critChance = baseCritChance;
+		critModifier = baseCritModifier;
 		distance = baseDistance;
 		lifeSpan = baseLifeSpan;
 		force = baseForce;
@@ -154,6 +158,7 @@ public class AbilityScriptable : ScriptableObject
 		damage = stats.damage;
 		pierce = stats.pierce;
 		critChance = stats.critChance;
+		critModifier = stats.critModifier;
 		distance = stats.distance;
 		lifeSpan = stats.lifeSpan;
 		force = stats.force;

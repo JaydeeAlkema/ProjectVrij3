@@ -165,6 +165,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 
 	public void TakeDamage(int damage)
 	{
+
+	}
+
+	public void TakeDamage(int damage, float critC, float critM)
+	{
 		//Debug.Log("i took " + damage + " damage without type");
 		DamagePopup(damage);
 		healthPoints -= damage;
@@ -179,7 +184,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, ICrowdControllable
 		if (healthPoints <= 0) Die();
 	}
 
-	public virtual void TakeDamage(int damage, int damageType)
+	public virtual void TakeDamage(int damage, int damageType, float critC, float critM)
 	{
 		int damageToTake = damage;
 		if (damageType == 0 && meleeTarget)

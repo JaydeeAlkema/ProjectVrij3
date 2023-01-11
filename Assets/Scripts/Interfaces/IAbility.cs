@@ -21,6 +21,7 @@ public interface IAbility
 	public float AttackTime { get; set; }
 	public int Damage { get; set; }
 	public float CritChance { get; set; }
+	public float CritModifier{ get; set; }
 	public bool TrailUpgrade { get; set; }
 	public Vector2 BoxSize { get; set; }
 	public GameObject CastObject { get; set; }
@@ -74,6 +75,7 @@ public interface IAbility
 		AttackTime = BaseStats.AttackTime;
 		Damage = BaseStats.Damage;
 		CritChance = BaseStats.CritChance;
+		CritModifier = BaseStats.CritModifier;
 		BoxSize = BaseStats.BoxSize;
 		MarkType = BaseStats.markType;
 		BurnDamage = BaseStats.BurnDamage;

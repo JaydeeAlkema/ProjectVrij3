@@ -257,7 +257,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		if ((GameManager.Instance == null || !GameManager.Instance.IsPaused) && !isDying)
 		{
 			//Melee input
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonDown(0 ) && !AbilityController.AbilityControllerInstance.IsAttacking )
 			{
 				bufferCounterMelee = bufferTimeMelee;
 			}
@@ -265,18 +265,21 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			{
 				bufferCounterMelee -= Time.deltaTime;
 			}
-			if (bufferCounterMelee > 0f) MeleeAttack();
+			if( bufferCounterMelee > 0f ) { MeleeAttack(); holdTime = 0; }
 
 			//Cast input
 			if (Input.GetMouseButtonDown(1)) { holdTime = 0; }
-			if (Input.GetMouseButton(1))
+			if (Input.GetMouseButton(1) && !AbilityController.AbilityControllerInstance.IsAttacking)
 			{
 				if (currentRangedAttack.CooledDown)
 				{
 					Debug.Log("Holding");
-					currentRangedAttack.Charging = true;
+					if( holdTime > 5 && currentRangedAttack != null )
+					{
+						currentRangedAttack.Charging = true;
+					}
 					holdTime++;
-					currentRangedAttack.ChargeTime = holdTime;
+					
 
 				}
 				else
@@ -286,8 +289,8 @@ public class PlayerControler : MonoBehaviour, IDamageable
 			}
 			else
 			{
-				if (holdTime <= 5 && currentRangedAttack != null)
-				{ currentRangedAttack.Charging = false; }
+				//if (holdTime <= 5 && currentRangedAttack != null)
+				//{ currentRangedAttack.Charging = false; }
 				if (Input.GetMouseButtonUp(1))
 				{
 					bufferCounterCast = bufferTimeCast;
@@ -296,7 +299,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 				{
 					bufferCounterCast -= Time.deltaTime;
 				}
-				if (bufferCounterCast > 0f) RangedAttack();
+				if (bufferCounterCast > 0f) currentRangedAttack.ChargeTime = holdTime; RangedAttack();
 				holdTime = 0;
 			}
 
@@ -526,7 +529,7 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		AbilityController.AbilityControllerInstance.UpdateCoolDown(meleeAttack, rangedAttack, ability1, ability2, ability3, ability4, dash);
 	}
 
-	public void TakeDamage(int damage)
+	public void TakeDamage(int damage, float critC, float critM)
 	{
 		if (GameManager.Instance != null)
 		{
@@ -622,7 +625,12 @@ public class PlayerControler : MonoBehaviour, IDamageable
 		castParticlesVFX.Play();
 	}
 
-	public void TakeDamage(int damage, int damageType)
+	public void TakeDamage(int damage, int damageType, float critC, float critM )
+	{
+
+	}
+
+	public void TakeDamage(int damage)
 	{
 
 	}

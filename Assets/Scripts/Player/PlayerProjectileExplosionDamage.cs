@@ -30,7 +30,7 @@ public class PlayerProjectileExplosionDamage : MonoBehaviour
 			{
 				GameObject enemy = collider2D.gameObject;
 				int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
-				enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal, 1);
+				enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal, 1, castedFrom.CritChance, castedFrom.CritModifier);
 				castedFrom.OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
 				enemiesInArea.Add(collider2D.gameObject); //Add enemy gameobject to list to prevent double hits on multiple colliders on the same object
 			}

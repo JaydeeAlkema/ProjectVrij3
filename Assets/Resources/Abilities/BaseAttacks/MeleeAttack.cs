@@ -58,11 +58,12 @@ public class MeleeAttack : Ability
 			int damageToDeal = (int)(damage * Random.Range(0.8f, 1.2f));
 			if (enemy != null)
 			{
-				enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal + (20 * comboCounter), 0);
+				enemy.GetComponent<IDamageable>()?.TakeDamage(damageToDeal + (20 * comboCounter), 0, critChance, critModifier);
 				OnHitApplyStatusEffects(enemy.GetComponent<IDamageable>());
 			}
 			//Debug.Log("Enemy damaged: " + enemy + ", damage: " + damage);
 		}
+		AbilityController.AbilityControllerInstance.IsAttacking = false;
 	}
 
 	public void SetAbilityStats()
@@ -103,6 +104,7 @@ public class MeleeAttack : Ability
 			}
 			yield return new WaitForSeconds( endLag );
 			player.IsDashing = false;
+			AbilityController.AbilityControllerInstance.IsAttacking = false;
 			yield return null;
 		}
 		yield return null;
@@ -193,6 +195,7 @@ public class MeleeAttack : Ability
 						{
 							enemyList.Add(enemy.gameObject);
 							DamageDetectedEnemies(enemy.gameObject);
+							AbilityController.AbilityControllerInstance.IsAttacking = false;
 						}
 					}
 				}
@@ -200,14 +203,14 @@ public class MeleeAttack : Ability
 
 			//Debug.Log("Detecting Enemies");
 			//Debug.Log("Enemies: " + enemyList.Count);
-
+			
 			yield return new WaitForEndOfFrame();
 		}
 		thirdHit = false;
 		player.IsAttackPositionLocked = false;
 		enemyList.Clear();
 		enemiesInBox = null;
-
+		AbilityController.AbilityControllerInstance.IsAttacking = false;
 		yield return null;
 	}
 
