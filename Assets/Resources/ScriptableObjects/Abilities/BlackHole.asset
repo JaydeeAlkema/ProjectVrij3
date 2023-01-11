@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Black Hole
   abilityIcon: {fileID: 21300000, guid: 0614311a696460d48a66084791967ae7, type: 3}
-  toolTipText: Summon the slain enemy to let it create a black hole that pulls enemies
-    to the center
+  toolTipText: Summon a Beast that creates a vortex which pulls in enemies.
+  baseEndLag: 0.1
   baseCooldown: 7000
   baseDamage: 0
   basePierce: 1
@@ -34,6 +34,7 @@ MonoBehaviour:
   baseSlowDuration: 4
   baseMarkHits: 1
   baseStatusEffectType: 0
+  endLag: 0.1
   coolDown: 0.001
   damage: 0
   pierce: 1
